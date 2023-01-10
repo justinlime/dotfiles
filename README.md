@@ -39,4 +39,6 @@ install `lxappearance` for GTK themes
 
 install `qt5ct` for QT Themes
 
+unzip `Dracula.zip` in `.icons` and `.themes`
+
 
