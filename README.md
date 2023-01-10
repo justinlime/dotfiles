@@ -9,6 +9,8 @@ install `swaylock`
 
 install `swayidle`
 
+install `wofi`
+
 Might have do download `sddm` if sway is blackscreen when you login
 
 then enable with `sudo systemctl enable sddm -f`
