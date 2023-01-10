@@ -39,6 +39,12 @@ install `lxappearance` for GTK themes
 
 install `qt5ct` for QT Themes
 
+restart after installing `qt5ct` and `lxappearance`
+
 unzip `Dracula.zip` in `.icons` and `.themes`
+
+## SSH
+
+copy `.terminfo` into remote machine to support foot
 
 
