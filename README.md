@@ -9,8 +9,6 @@ install `swaylock`
 
 install `swayidle`
 
-install `wofi`
-
 Might have do download `sddm` if sway is blackscreen when you login
 
 then enable with `sudo systemctl enable sddm -f`
@@ -18,6 +16,8 @@ then enable with `sudo systemctl enable sddm -f`
 ## Applications
 
 install `waybar`
+
+install `wofi` for sexy launcher
 
 install `pavucontrol` for audio device control
 
