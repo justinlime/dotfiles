@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "custom/media"],
     "modules-center": ["sway/window"],
-    "modules-right": ["pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "battery", "battery#bat2", "clock", "tray"],
+    "modules-right": ["pulseaudio", "network", "cpu", "memory", "temperature", "battery", "battery#bat2", "clock", "tray"],
     // Modules configuration
     // "sway/workspaces": {
     //     "disable-scroll": true,
@@ -112,7 +112,7 @@
             "critical": 15
         },
         "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
+        "format-charging": "{capacity}% ",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
