@@ -45,6 +45,6 @@ unzip `Dracula.zip` in `.icons` and `.themes`
 
 ## SSH
 
-copy `.terminfo` into remote machine to support foot
+copy `.terminfo` into remote machine $HOME to support foot
 
 
