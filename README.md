@@ -61,6 +61,10 @@ use `:PlugInstall` to install plugins from already set in `.config/nvim/init.vim
 
 `sudo npm install -g yarn`  then `yarn install` followed by `yarn build` in the `~/.config/nvim/plugged/coc.nvim` folder
 
+`:CocInstall coc-python` for python, similar for other languages
+
+
+
 
 
 
