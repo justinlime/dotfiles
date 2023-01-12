@@ -55,7 +55,8 @@ install vim-plug for plugins
 
 use `:PlugInstall` to install plugins from already set in `.config/nvim/init.vim`
 
-`:colorscheme space-vim-dark` best theme
+`exuberant c-tags` needed for tagbar plguin
+
 
 
 
