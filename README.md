@@ -47,4 +47,6 @@ unzip `Dracula.zip` in `.icons` and `.themes`
 
 copy `.terminfo` into remote machine $HOME to support foot
 
+put `set clipboard=unnamed` in remove machines `.vimrc` if copy/paste is an issue
+
 
