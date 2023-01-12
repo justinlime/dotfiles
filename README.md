@@ -63,6 +63,8 @@ use `:PlugInstall` to install plugins from already set in `.config/nvim/init.vim
 
 `:CocInstall coc-python` for python, similar for other languages
 
+`pip install jedi` for python language server
+
 
 
 
