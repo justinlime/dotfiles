@@ -57,6 +57,9 @@ use `:PlugInstall` to install plugins from already set in `.config/nvim/init.vim
 
 `exuberant c-tags` needed for tagbar plguin
 
+`nodejs` and `npm` is needed for COC (Completion) 
+
+`sudo npm install -g yarn` in the `~/.config/nvim/plugged/coc.nvim` folder
 
 
 
