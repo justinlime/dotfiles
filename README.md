@@ -49,4 +49,14 @@ copy `.terminfo` into remote machine $HOME to support foot
 
 put `set clipboard=unnamed` in remote machines `.vimrc` if copy/paste is an issue
 
+## NeoVim
+
+install vim-plug for plugins
+
+use `:PlugInstall` to install plugins from already set in `.config/nvim/init.vim`
+
+`:colorscheme jellybeans` best theme
+
+
+
 
