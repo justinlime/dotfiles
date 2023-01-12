@@ -23,20 +23,20 @@ Plug 'https://github.com/mg979/vim-visual-multi'
 
 Plug 'https://github.com/preservim/tagbar'
 Plug 'https://github.com/neoclide/coc.nvim'
+
 " --- Notes ---
 "  :PlugClean cleans removed pluggins from config
 "  :UpdateRemotePlugins updates plugins
 "
 "  :CocInstall coc-python
-
-
+"
 call  plug#end()
 
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="-"
 let NERDTreeShowHidden=1
 
-:colorscheme space-vim-dark
+:colorscheme minimalist
 
 "Ctrl+d for NerdTree
 nnoremap <C-d> :NERDTreeToggle<CR>
@@ -44,5 +44,9 @@ nnoremap <C-d> :NERDTreeToggle<CR>
 nmap <C-x> :TagbarToggle <CR>
 "Tab to trigger autocomplete
 inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
-
+" Tab Naigation
+map <C-h> :tabp<CR>
+map <C-l> :tabn<CR>
+map <C-;> :tabnew<CR>
+map <C-'> :tabclose<CR>
 
