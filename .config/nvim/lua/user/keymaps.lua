@@ -27,7 +27,11 @@ map("n", "<S-j>", ":resize -2<CR>", opts)
 map("n", "<S-k>", ":resize +2<CR>", opts)
 map("n", "<S-l>", ":vertical resize +2<CR>", opts)
 
-
+--Write and Quit
+map("n", "<leader>wq", ":wq<CR>", opts)
+map("n", "<leader>w", ":w<CR>", opts)
+map("n", "<leader>q", ":q<CR>", opts)
+map("n", "<leader>qq", ":q!<CR>", opts)
 
 ---------- Insert Mode ----------
 map("i", "jkjk", "<ESC>", opts)
@@ -35,7 +39,6 @@ map("i", "<A-h>", "<Left>", opts)
 map("i", "<A-j>", "<Down>", opts)
 map("i", "<A-k>", "<Up>", opts)
 map("i", "<A-l>", "<Right>", opts)
-
 
 
 ---------- Visual Mode ----------
