@@ -9,6 +9,8 @@ map("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+
+
 ---------- Normal Mode ----------
 
 --Window Nav
@@ -27,21 +29,23 @@ map("n", "<S-j>", ":resize -2<CR>", opts)
 map("n", "<S-k>", ":resize +2<CR>", opts)
 map("n", "<S-l>", ":vertical resize +2<CR>", opts)
 
---Write and Quit
-map("n", "<leader>wq", ":wq<CR>", opts)
-map("n", "<leader>w", ":w<CR>", opts)
-map("n", "<leader>q", ":q<CR>", opts)
-map("n", "<leader>qq", ":q!<CR>", opts)
+
 
 ---------- Insert Mode ----------
-map("i", "jkjk", "<ESC>", opts)
+
+--Navigation
+map("i", "jj", "<ESC>", opts)
 map("i", "<A-h>", "<Left>", opts)
 map("i", "<A-j>", "<Down>", opts)
 map("i", "<A-k>", "<Up>", opts)
 map("i", "<A-l>", "<Right>", opts)
 
 
----------- Visual Mode ----------
-map("v", "<leader>j", ":m .+1<CR>==", opts)
-map("v", "<leader>k", ":m .-2<CR>==", opts) 
 
+---------- Visual Mode ----------
+
+--Move Selections
+map("v", "<A-h>", "< gv", opts) 
+map("v", "<A-j>", ":m '>+1<CR>gv=gv", opts)
+map("v", "<A-k>", ":m '<-2<CR>gv=gv", opts)
+map("v", "<A-l>", "> gv", opts)
