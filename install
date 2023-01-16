@@ -1,0 +1,23 @@
+#!/bin/bash
+
+sudo cp scripts/* /usr/local/bin/
+
+cp .bashrc ~
+cp .bash_profile ~
+cp .zshrc ~
+cp .vimrc ~
+cp -r .terminfo ~
+cp ascii/* ~
+
+cp .themes/* ~/.themes/
+cp .icons/* ~/.icons/
+cp .fonts/* ~/.fonts/
+cp .ssh/* ~/.ssh/
+
+cp -r .config/* ~/config/
+
+unzip ~/.themes/dracula.zip -d ~/.themes
+unzip ~/.icons/dracula.zip -d ~/.icons
+
+sudo echo "export QT_QPA_PLATFORMTHEME=qt5ct" >> /etc/environment
+
