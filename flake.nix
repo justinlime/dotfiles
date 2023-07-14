@@ -8,7 +8,6 @@
     outputs = {  nixpkgs, home-manager, ... }:
     let
         system = "x86_64-linux";
-        # username = "justinlime";
         pkgs = import nixpkgs {
             inherit system;
             config = {
@@ -30,13 +29,13 @@
             japtop = nixpkgs.lib.nixosSystem {
                 inherit system;
                 modules = [
-                    ./nix/systems/laptop/laptop.nix
+                    ./nix/systems/main/laptop/laptop.nix
                 ];
             };
             jesktop = nixpkgs.lib.nixosSystem {
                 inherit system;
                 modules = [
-                    ./nix/systems/main/desktop.nix
+                    ./nix/systems/main/desktop/desktop.nix
                 ];
             };
         };

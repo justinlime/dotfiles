@@ -3,9 +3,9 @@
     imports =
         [ # Include the results of the hardware scan.
         ./hardware-configuration.nix
-        ../main/configuration.nix
-        ../main/packages.nix
-        ../main/services.nix
+        ../base/configuration.nix
+        ../base/packages.nix
+        ../base/services.nix
         ];
 
     # System
