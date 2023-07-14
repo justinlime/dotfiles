@@ -1,0 +1,11 @@
+plugin/
+/result
+
+lazy-lock.json
+data/
+
+result/**
+
+.undo/
+.swp/
+.backup/
