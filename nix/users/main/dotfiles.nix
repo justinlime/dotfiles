@@ -7,6 +7,9 @@ let
     opacity = ".85";
 in
 {
+    xdg.configFile = {
+        "nvim".source = ../../../.config/nvim;
+    };
     fonts.fontconfig.enable = true;
     gtk = {
         enable = true;
