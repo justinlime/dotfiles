@@ -32,7 +32,7 @@ in
     #Packages
     home.packages = with pkgs; [
         brave
-        (discord.override { withOpenASAR = true; withVencord = true;})
+        # (discord.override { withOpenASAR = true; withVencord = true;})
         firefox
         foot
         gimp
@@ -53,6 +53,7 @@ in
         swayidle
         tdesktop
         waybar
+        webcord-vencord
         wofi
         zig
         (nerdfonts.override { fonts = [ "JetBrainsMono" "Iosevka" "RobotoMono" "AnonymousPro" ]; })

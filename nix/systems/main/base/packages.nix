@@ -28,9 +28,10 @@
             spice-protocol
             win-spice
             win-virtio
-            gnome.adwaita-icon-theme
+            wireplumber
             wget
             wl-clipboard
+            xdg-desktop-portal-hyprland
             zip
         ];
         variables = { EDITOR = "vim"; };
