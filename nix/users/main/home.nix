@@ -48,9 +48,9 @@ in
         pavucontrol
         slurp
         swaybg
-        # swaylock
-        swaylock-effects
         swayidle
+        swaylock-effects
+        swaynotificationcenter
         tdesktop
         waybar
         webcord-vencord

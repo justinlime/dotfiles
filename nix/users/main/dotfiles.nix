@@ -5,6 +5,7 @@ let
     accent = "cba6f7";
     background = "11111B";
     opacity = ".85";
+    cursor = "Numix-Cursor";
 in
 {
     xdg.configFile = {
@@ -19,7 +20,7 @@ in
             package = pkgs.catppuccin-papirus-folders;
         };
         cursorTheme = {
-            name = "Numix-Cursor";
+            name = "${cursor}";
             package = pkgs.numix-cursor-theme;
         };
         theme = {
@@ -275,9 +276,9 @@ in
         monitor=eDP-1,1920x1080@60,0x0,1
         exec-once=waybar
         exec-once=swaybg -i ~/photos/wallpapers/wallpaper.png
-        # exec-once=gsettings set $gnome-scheme gtk-theme "gtk-master"
-        # exec-once=gsettings set $gnome-scheme icon-theme "Dracula"
         exec-once=swayidle -w timeout 1800 'swaylock -f -i ~/photos/wallpapers/wallpaper.png' timeout 1805 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -i ~/photos/wallpapers/wallpaper.png'
+        exec-once=hyprctl setcursor ${cursor} ${fontsize}
+        exec-once=swaync-client -t -sw
       
      # See https://wiki.hyprland.org/Configuring/Keywords/ for more
 
@@ -442,6 +443,10 @@ in
 
      #screenshots
         bind=$mainMod,P,exec,mkdir -p ~/photos/screenshots; grim -t png -g "$(slurp)" ~/photos/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png
+
+     #Notifications
+        bind = $mainMod SHIFT,N,exec,swaync-client -t -sw
+
 
      #swaylock
         bind=$mainMod SHIFT,M,exec, swaylock -f -i ~/photos/wallpapers/wallpaper.png
