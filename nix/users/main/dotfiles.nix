@@ -78,10 +78,13 @@ in
         waybar = {
             enable = true;
             settings.mainBar = {
+                layer = "top";
                 height = 35;
                 spacing = 4;
-                modules-left = ["wlr/workspaces" "sway/mode" "sway/scratchpad" "custom/media"];
-                modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "battery" "clock" "tray"];
+                modules-left = ["wlr/workspaces"];
+                modules-center = ["clock"];
+                # modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "battery" "clock" "tray"];
+                modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "battery" "tray"];
                 clock = {
                     timezone = "America/Chicago";
                     tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
@@ -100,12 +103,13 @@ in
                         format-icons = ["" "" "" "" ""];
                 };
                 network = {
-                    format-wifi = "{essid} ({signalStrength}%) ";
-                        format-ethernet = "Ethernet ";
-                        tooltip-format = "{ifname} via {gwaddr}";
+                    # format-wifi = "{essid} ({signalStrength}%) ";
+                    format-wifi = "{signalStrength}% ";
+                        format-ethernet = "100% 󰈀";
+                        tooltip-format = "Connected to {essid} {ifname} via {gwaddr}";
                         format-linked = "{ifname} (No IP)";
-                        format-disconnected = "Disconnected ⚠";
-                        format-alt = "{ifname}: {ipaddr}/{cidr}";
+                        format-disconnected = "0% 󰖪";
+                        # format-alt = "{ifname}: {ipaddr}/{cidr}";
                 };
                 pulseaudio = {
                     format = "{volume}% {icon} {format_source}";
@@ -142,43 +146,15 @@ in
             };
             style = ''
                 * {
-                    font-family: ${font}, FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+                    font-family: ${font}, sans-serif;
                     font-size: 16px;
                     color: #${accent};
                 }
 
                 window#waybar {
-                    background-color: rgba(43, 48, 59, 0);
-                    border-bottom: 3px solid rgba(100, 114, 125, 0);
-                    transition-property: background-color;
+                    background: none;
+                    border-bottom: none;
                     transition-duration: .5s;
-                }
-
-                window#waybar.hidden {
-                    opacity: 0.2;
-                }
-
-                button {
-                    /* Use box-shadow instead of border so the text isn't offset */
-                    box-shadow: inset 0 -3px transparent;
-                    /* Avoid rounded borders under each button name */
-                    border: none;
-                    border-radius: 0;
-                }
-
-                button:hover {
-                    background: inherit;
-                    box-shadow: inset 0 -3px #ffffff;
-                }
-
-                #workspaces button {
-                    padding: 5px;
-                    background-color: transparent;
-                    color: #${accent}; 
-                }
-
-                #workspaces button:hover {
-                    background: rgba(0, 0, 0, 0.2);
                 }
 
                 #workspaces button.active{
@@ -186,34 +162,9 @@ in
                     border-radius: 10px;
                     box-shadow: inset 0 -3px #${accent};
                 }
-
-                #workspaces button.urgent {
-                    background-color: #eb4d4b;
-                }
-
-                #mode {
-                    background-color: #64727D;
-                    border-bottom: 3px solid #ffffff;
-                }
-
-                #clock,
-                #battery,
-                #cpu,
-                #memory,
-                #disk,
-                #temperature,
-                #backlight,
-                #network,
-                #pulseaudio,
-                #wireplumber,
-                #custom-media,
-                #tray,
-                #mode,
-                #idle_inhibitor,
-                #scratchpad,
-                #mpd,
-                #window,
-                #workspaces {
+                
+                #clock,#battery,#cpu,#memory,#temperature,
+                #network,#pulseaudio,#tray, #workspaces {
                     margin-top: .70rem;
                     background: #${background};
                     opacity: ${opacity};
