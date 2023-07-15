@@ -51,6 +51,7 @@ in
         swayidle
         swaylock-effects
         swaynotificationcenter
+        speedtest-cli
         tdesktop
         waybar
         webcord-vencord
