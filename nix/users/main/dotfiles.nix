@@ -278,7 +278,7 @@ in
         exec-once=swaybg -i ~/photos/wallpapers/wallpaper.png
         exec-once=swayidle -w timeout 1800 'swaylock -f -i ~/photos/wallpapers/wallpaper.png' timeout 1805 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -i ~/photos/wallpapers/wallpaper.png'
         exec-once=hyprctl setcursor ${cursor} ${fontsize}
-        exec-once=swaync-client -t -sw
+        exec-once=swaync
       
      # See https://wiki.hyprland.org/Configuring/Keywords/ for more
 
@@ -445,7 +445,7 @@ in
         bind=$mainMod,P,exec,mkdir -p ~/photos/screenshots; grim -t png -g "$(slurp)" ~/photos/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png
 
      #Notifications
-        bind = $mainMod SHIFT,N,exec,swaync-client -t -sw
+        bind=$mainMod SHIFT,N,exec, swaync-client -t -sw
 
 
      #swaylock
