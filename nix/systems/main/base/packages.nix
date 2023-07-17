@@ -25,6 +25,7 @@
             virt-viewer
             spice
             spice-gtk
+            minecraft
             spice-protocol
             win-spice
             win-virtio
@@ -46,6 +47,7 @@
     #Programs
     programs = {
         dconf.enable = true;
+        direnv.enable = true;
         hyprland.enable = true;
         thunar = {
             enable = true;

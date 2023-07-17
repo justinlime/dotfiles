@@ -44,6 +44,7 @@ in
         style.name = "gtk2";
     };
     programs = {
+        direnv.enable = true;
         foot = {
             enable = true;
             server.enable = true;
