@@ -24,6 +24,11 @@
         #     ];
         # };
     };
+    xdg.portal = {
+        enable = true;
+        wlr.enable = true;
+        extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+    };
     virtualisation = {
         docker.enable = true;
         docker.storageDriver = "btrfs";

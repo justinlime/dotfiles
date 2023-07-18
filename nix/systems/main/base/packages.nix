@@ -12,6 +12,7 @@
             git
             home-manager
             htop
+            jdk17
             lua
             neovim
             nodejs
@@ -32,7 +33,6 @@
             wireplumber
             wget
             wl-clipboard
-            xdg-desktop-portal-hyprland
             zip
         ];
         variables = { EDITOR = "vim"; };
@@ -44,6 +44,7 @@
     #     (nerdfonts.override { fonts = ["JetBrainsMono"]; })
     # ];
     
+    hardware.opengl.enable = true;
     #Programs
     programs = {
         dconf.enable = true;

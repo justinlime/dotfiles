@@ -46,6 +46,7 @@ in
         neovim
         obs-studio
         pavucontrol
+        prismlauncher
         slurp
         swaybg
         swayidle
