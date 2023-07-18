@@ -8,11 +8,15 @@
     outputs = {  nixpkgs, home-manager, ... }:
     let
         system = "x86_64-linux";
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+            inherit system;
+            config = {
+                allowUnfree = true;
+            };
+        };
     in
     {
         homeConfigurations = {
-            nixpkgs.config.allowedUnfreePredicate = _: true;
             justinlime = home-manager.lib.homeManagerConfiguration {
                 inherit pkgs;
                 extraSpecialArgs = { inherit nixpkgs system; };
