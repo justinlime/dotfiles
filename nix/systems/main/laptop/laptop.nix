@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
     imports =
         [ # Include the results of the hardware scan.
@@ -6,6 +6,7 @@
         ../base/configuration.nix 
         ../base/packages.nix 
         ../base/services.nix 
+        ../base/networking.nix
         ];
 
     # System
