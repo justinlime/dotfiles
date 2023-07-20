@@ -12,6 +12,7 @@
 
     networking = {
         networkmanager.enable = true;
+        firewall.checkReversePath = false; 
     };
     
     nix.settings.experimental-features= [ "nix-command" "flakes" ];
