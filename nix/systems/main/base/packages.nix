@@ -4,6 +4,7 @@
     environment = {
         systemPackages = with pkgs; [
             cargo
+            cava
             compsize
             curl
             dconf

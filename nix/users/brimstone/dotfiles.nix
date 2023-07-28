@@ -84,8 +84,25 @@ in
                 spacing = 4;
                 modules-left = ["wlr/workspaces"];
                 modules-center = ["clock"];
-                # modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "battery" "clock" "tray"];
-                modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "battery" "tray"];
+                modules-right = ["cava" "pulseaudio" "network" "cpu" "memory" "temperature" "battery" "tray"];
+                                cava = {
+                    framerate = 30;
+                    autosens = 1;
+                    sensitivity = 100;
+                    bars = 14;
+                    lower_cutoff_freq = 50;
+                    higher_cutoff_freq = 10000;
+                    method = "pipewire";
+                    source = "auto";
+                    stereo = true;
+                    reverse = false;
+                    bar_delimiter = 0;
+                    monstercat = false;
+                    waves = false;
+                    noise_reduction = 0.77;
+                    input_delay = 2;
+                    format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+                };
                 clock = {
                     timezone = "America/Chicago";
                     tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
@@ -165,7 +182,7 @@ in
                 }
                 
                 #clock,#battery,#cpu,#memory,#temperature,
-                #network,#pulseaudio,#tray, #workspaces {
+                #network,#pulseaudio,#tray, #workspaces, #cava{
                     margin-top: .70rem;
                     background: #${background};
                     opacity: ${opacity};
