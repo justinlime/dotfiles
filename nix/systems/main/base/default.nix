@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ username, pkgs, ... }:
 {
     imports = [
         ./networking.nix
@@ -24,12 +24,12 @@
     users = {
         defaultUserShell = pkgs.zsh;
         groups = {
-            justinlime = {};
+            "${username}" = {};
         };
         users.justinlime = {
             isNormalUser = true;
             initialPassword = "gigachad";
-            extraGroups = [ "wheel" "docker" "video" "libvirtd" "plugdev" "justinlime" ];
+            extraGroups = [ "wheel" "docker" "video" "libvirtd" "plugdev" "${username}" ];
             packages = with pkgs; [
             ];
         };

@@ -1,4 +1,4 @@
-{ username, ... }:
+{ username, flake_path, ... }:
 {
     imports =
         [ 
@@ -11,7 +11,7 @@
     nixpkgs.config.allowUnfree = true; # This is borked for some reason :D
     nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for above borked option
     home.shellAliases = {
-        home-switch = "home-manager switch --flake ~/dotfiles#${username}";
+        home-switch = "home-manager switch --flake ${flake_path}#${username}";
     };
 
     # Home Manager needs a bit of information about you and the

@@ -12,12 +12,15 @@
         system = "x86_64-linux";
         username = "justinlime";
         pkgs = nixpkgs.legacyPackages.${system};
+        # Directs home-switch, nix-switch, all-switch, and all-update 
+        # aliases to directory that contains the flake
+        flake_path = "~/dotfiles";
     in
     {
         homeConfigurations = {
             "${username}" = home-manager.lib.homeManagerConfiguration {
                 inherit pkgs;
-                extraSpecialArgs = { inherit username inputs; };
+                extraSpecialArgs = { inherit flake_path username inputs; };
                 modules = [
                     ./nix/users/brimstone
                     # Pin registry to flake
@@ -30,7 +33,7 @@
         nixosConfigurations = {
             japtop = nixpkgs.lib.nixosSystem {
                 inherit system;
-                specialArgs = { inherit inputs; }; 
+                specialArgs = { inherit username flake_path inputs; }; 
                 modules = [
                     ./nix/systems/main/laptop
                     { nix.registry.nixpkgs.flake = nixpkgs; }
@@ -39,7 +42,7 @@
             };
             jesktop = nixpkgs.lib.nixosSystem {
                 inherit system;
-                specialArgs = { inherit inputs; }; 
+                specialArgs = { inherit username flake_path inputs; }; 
                 modules = [
                     ./nix/systems/main/desktop
                     { nix.registry.nixpkgs.flake = nixpkgs; }

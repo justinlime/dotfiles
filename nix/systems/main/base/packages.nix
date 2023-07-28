@@ -1,4 +1,4 @@
-{ pkgs , ... }:
+{ pkgs , flake_path, ... }:
 {
     # List packages installed in system profile
     environment = {
@@ -78,6 +78,8 @@
                 gchb = "git checkout -b";
                 gcoe = "git config user.email";
                 gcon = "git config user.name";
+                all-switch = "nix-switch && home-switch";
+                all-update = "sudo nix flake update ${flake_path}# && all-switch";
             };
         };
     };

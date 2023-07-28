@@ -1,4 +1,4 @@
-{ ... }:
+{ flake_path, ... }:
 {
     imports =
         [ # Include the results of the hardware scan.
@@ -11,7 +11,7 @@
 
     #Programs
     programs = {
-        zsh.shellAliases.nix-switch = "sudo nixos-rebuild switch --flake /home/justinlime/dotfiles#japtop";
+        zsh.shellAliases.nix-switch = "sudo nixos-rebuild switch --flake ${flake_path}#japtop";
         light.enable = true;
     };
 
