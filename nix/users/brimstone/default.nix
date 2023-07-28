@@ -1,7 +1,4 @@
-{ config, pkgs, lib, ... }:
-let
-    username = "justinlime";
-in
+{ pkgs, username, ... }:
 {
     imports =
         [ 
@@ -10,10 +7,10 @@ in
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
-    nixpkgs.config.allowUnfree = true;
-    nixpkgs.config.allowUnfreePredicate = _: true;
+    nixpkgs.config.allowUnfree = true; # This is borked for some reason :D
+    nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for above borked option
     home.shellAliases = {
-        home-switch = "home-manager switch --flake ~/dotfiles#justinlime";
+        home-switch = "home-manager switch --flake ~/dotfiles#${username}";
     };
 
     # Home Manager needs a bit of information about you and the

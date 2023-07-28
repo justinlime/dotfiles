@@ -5,18 +5,19 @@
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = {  self, nixpkgs, home-manager, ... } @inputs:
+    outputs = {  self, nixpkgs, home-manager, ... }@inputs:
     let
         system = "x86_64-linux";
+        username = "justinlime";
         pkgs = nixpkgs.legacyPackages.${system};
     in
     {
         homeConfigurations = {
-            justinlime = home-manager.lib.homeManagerConfiguration {
+            "${username}" = home-manager.lib.homeManagerConfiguration {
                 inherit pkgs;
-                extraSpecialArgs = { inherit inputs; };
+                extraSpecialArgs = { inherit username inputs; };
                 modules = [
-                    ./nix/users/justinlime
+                    ./nix/users/brimstone
                 ];
             };
         };
