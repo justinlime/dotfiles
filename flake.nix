@@ -5,7 +5,7 @@
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = {  nixpkgs, home-manager, ... }:
+    outputs = {  self, nixpkgs, home-manager, ... } @inputs:
     let
         system = "x86_64-linux";
         pkgs = import nixpkgs {
@@ -28,6 +28,7 @@
         nixosConfigurations = {
             japtop = nixpkgs.lib.nixosSystem {
                 inherit system;
+                specialArgs = { inherit inputs; }; 
                 modules = [
                     ./nix/systems/main/laptop/laptop.nix 
                 ];
