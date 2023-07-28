@@ -11,6 +11,7 @@ in
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
     nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.allowUnfreePredicate = _: true;
     home.shellAliases = {
         home-switch = "home-manager switch --flake ~/dotfiles#justinlime";
     };
