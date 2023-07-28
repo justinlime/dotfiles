@@ -32,7 +32,6 @@ in
     #Packages
     home.packages = with pkgs; [
         brave
-        # (discord.override { withOpenASAR = true; withVencord = true;})
         firefox
         foot
         gimp

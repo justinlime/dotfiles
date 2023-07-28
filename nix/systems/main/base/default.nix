@@ -4,6 +4,11 @@
 
 { config, pkgs, ... }:
 {
+    imports = [
+        ./networking.nix
+        ./packages.nix
+        ./services.nix
+    ];
     # Use the systemd-boot EFI boot loader.
     boot.loader = {
         systemd-boot.enable = true;

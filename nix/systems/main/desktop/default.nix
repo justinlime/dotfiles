@@ -3,10 +3,7 @@
     imports =
         [ # Include the results of the hardware scan.
         ./hardware-configuration.nix
-        ../base/configuration.nix
-        ../base/packages.nix
-        ../base/services.nix
-        ../base/networking.nix
+        ../base
         ];
 
     # System

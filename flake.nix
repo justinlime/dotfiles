@@ -19,9 +19,9 @@
         homeConfigurations = {
             justinlime = home-manager.lib.homeManagerConfiguration {
                 inherit pkgs;
-                extraSpecialArgs = { inherit nixpkgs system; };
+                extraSpecialArgs = { inherit inputs system; };
                 modules = [
-                    ./nix/users/main/home.nix 
+                    ./nix/users/justinlime
                 ];
             };
         };
@@ -30,13 +30,14 @@
                 inherit system;
                 specialArgs = { inherit inputs; }; 
                 modules = [
-                    ./nix/systems/main/laptop/laptop.nix 
+                    ./nix/systems/main/laptop
                 ];
             };
             jesktop = nixpkgs.lib.nixosSystem {
                 inherit system;
+                specialArgs = { inherit inputs; }; 
                 modules = [
-                    ./nix/systems/main/desktop/desktop.nix
+                    ./nix/systems/main/desktop
                 ];
             };
         };
