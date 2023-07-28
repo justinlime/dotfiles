@@ -20,7 +20,7 @@
         homeConfigurations = {
             "${username}" = home-manager.lib.homeManagerConfiguration {
                 inherit pkgs;
-                extraSpecialArgs = { inherit flake_path username inputs; };
+                extraSpecialArgs = { inherit username flake_path inputs; };
                 modules = [
                     ./nix/users/brimstone
                     # Pin registry to flake
@@ -37,7 +37,7 @@
                 modules = [
                     ./nix/systems/main/laptop
                     { nix.registry.nixpkgs.flake = nixpkgs; }
-                    { nix.nixPath = [ "nixpkgs=flake:nixpkgs" ]; }
+                    { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
                 ];
             };
             jesktop = nixpkgs.lib.nixosSystem {
