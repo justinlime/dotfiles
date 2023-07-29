@@ -77,447 +77,146 @@ in
             };
         };
         waybar = {
-        enable = true;
-        settings.mainBar = {
-    position= "top";
-    layer= "top";
-    height= 35;
-    margin-top= 0;
-    margin-bottom= 0;
-    margin-left= 0;
-    margin-right= 0;
-    modules-left= ["custom/launcher" "custom/playerctl#backward" "custom/playerctl#play" "custom/playerctl#foward" "custom/playerlabel"];
-    modules-center= [
-            "cava#left"
-			"wlr/workspaces"
-            "cava#right"
-    ];
-    modules-right= [
-			"tray" 
-			"pulseaudio" 
-			"network"
-			"clock" 
-    ];
-		clock= {
-	        format = " {:%a, %d %b, %I:%M %p}";
-			tooltip= "true";
-			tooltip-format= "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-			format-alt= " {:%d/%m}";
-		};
-	
+            enable = true;
+            settings.mainBar = {
+                layer = "top";
+                height = 35;
+                spacing = 4;
+                modules-left = ["wlr/workspaces"];
+                modules-center = ["clock"];
+                modules-right = ["cava" "pulseaudio" "network" "cpu" "memory" "temperature" "battery" "tray"];
+                cava = {
+                    framerate = 30;
+                    autosens = 1;
+                    sensitivity = 100;
+                    bars = 14;
+                    lower_cutoff_freq = 50;
+                    higher_cutoff_freq = 10000;
+                    method = "pipewire";
+                    source = "auto";
+                    stereo = true;
+                    reverse = false;
+                    bar_delimiter = 0;
+                    monstercat = false;
+                    waves = false;
+                    noise_reduction = 0.77;
+                    input_delay = 2;
+                    format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+                };
+                clock = {
+                    timezone = "America/Chicago";
+                    tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+	                format = "{:%a, %d %b, %I:%M %p}";
+                };
+                battery = {
+                    states = {
+                        good = 95;
+                        warning = 30;
+                        critical = 15;
+                    };
+                        format = "{capacity}% {icon}";
+                        format-charging = "{capacity}% ";
+                        format-plugged = "{capacity}% ";
+                        format-alt = "{time} {icon}";
+                        format-icons = ["" "" "" "" ""];
+                };
+                network = {
+                    # format-wifi = "{essid} ({signalStrength}%) ";
+                    format-wifi = "{signalStrength}% ";
+                        format-ethernet = "100% 󰈀";
+                        tooltip-format = "Connected to {essid} {ifname} via {gwaddr}";
+                        format-linked = "{ifname} (No IP)";
+                        format-disconnected = "0% 󰖪";
+                        # format-alt = "{ifname}: {ipaddr}/{cidr}";
+                };
+                pulseaudio = {
+                    format = "{volume}% {icon} {format_source}";
+                        format-bluetooth = "{volume}% {icon} {format_source}";
+                        format-bluetooth-muted = "{icon} {format_source}";
+                        format-muted = "{format_source}";
+                        format-source = "{volume}% ";
+                        format-source-muted = "";
+                        format-icons = {
+                            headphone = "";
+                            hands-free = "";
+                            headset = "";
+                            phone = "";
+                            portable = "";
+                            car = "";
+                            default = ["" "" ""];
+                        };
+                        on-click = "pavucontrol";
+                };
+                tray = {
+                    spacing = 10;
+                };
+                cpu = {
+                    format = "{usage}% ";
+                        tooltip = false;
+                };
+                memory = {
+                    format = "{}% ";
+                };
+                temperature = {
+                        format = "{temperatureC}°C {icon}";
+                        format-icons = [""];
+                };
+            };
+            style = ''
+                * {
+                    font-family: ${font}, sans-serif;
+                    font-size: 16px;
+                    color: #${accent};
+                }
 
-		"wlr/workspaces"= {
-			active-only= false;
-			all-outputs= false;
-			disable-scroll= false;
-			on-scroll-up= "hyprctl dispatch workspace e-1";
-			on-scroll-down= "hyprctl dispatch workspace e+1";
-			format = "{name}";
-			on-click= "activate";
-			format-icons= {
-                urgent= "";
-				active= "";
-                default = "";
-			    sort-by-number= true;
-			};
-		};
-    "cava#left" = {
-        framerate = 60;
-        autosens = 1;
-        sensitivity = 100;
-        bars = 12;
-        lower_cutoff_freq = 50;
-        higher_cutoff_freq = 10000;
-        method = "pipewire";
-        source = "auto";
-        stereo = true;
-        reverse = false;
-        bar_delimiter = 0;
-        monstercat = false;
-        waves = false;
-        input_delay = 2;
-        format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
-    };
-    "cava#right" = {
-        framerate = 60;
-        autosens = 1;
-        sensitivity = 100;
-        bars = 18;
-        lower_cutoff_freq = 50;
-        higher_cutoff_freq = 10000;
-        method = "pipewire";
-        source = "auto";
-        stereo = true;
-        reverse = false;
-        bar_delimiter = 0;
-        monstercat = false;
-        waves = false;
-        input_delay = 2;
-        format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
-    };
-    "custom/playerctl#backward"= {
-      format= "{icon}";
-      return-type= "json";
-      max-length= 64;
-      exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
-      on-click= "playerctl previous";
-      format-icons= {
-        Playing= "<span foreground='#${accent}'>󰙣 </span>";
-        Paused= "<span foreground='#${accent}'>󰙣 </span>";
-      };
-    };
-    "custom/playerctl#play"= {
-      format= "{icon}";
-      return-type= "json";
-      max-length= 64;
-      exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
-      on-click= "playerctl play-pause";
-      format-icons= {
-        Playing= "<span foreground='#6791eb'> </span>";
-        Paused= "<span foreground='#cdd6f4'>󰏥 </span>";
-      };
-    };
-    "custom/playerctl#foward"= {
-      format= "{icon}";
-      return-type= "json";
-      max-length= 64;
-      exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
-      on-click= "playerctl next";
-      format-icons= {
-        Playing= "<span foreground='#${accent}'>󰙡 </span>";
-        Paused= "<span foreground='#${accent}'>󰙡 </span>";
-      };
-    };
-    "custom/playerlabel"= {
-      format= "<span>{}</span>";
-      return-type= "json";
-      max-length= 48;
-      exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
-      on-click-middle= "playerctl play-pause";
-      on-click= "playerctl previous";
-      on-click-right= "playerctl next";
-      format-icons= {
-        Playing= "<span foreground='#6791eb'>󰐌 </span>";
-        Paused= "<span foreground='#cdd6f4'>󰏥 </span>";
-      };
-    };
+                window#waybar {
+                    background: none;
+                    border-bottom: none;
+                    transition-duration: .5s;
+                }
 
-		battery= {
-			states= {
-				good= 95;
-				warning= 30;
-				critical= 15;
-			};
-			format="{icon}  {capacity}%";
-			format-charging= "{capacity}% ";
-			format-plugged= "{capacity}% ";
-			format-alt= "{icon} {time}";
-			# "format-good"= "", // An empty format will hide the module
-			# "format-full"= "";
-			format-icons= ["" "" "" "" ""];
-		};
+                #workspaces button.active{
+                    color: #${accent};
+                    border-radius: 10px;
+                    box-shadow: inset 0 -3px #${accent};
+                }
+                
+                #clock,#battery,#cpu,#memory,#temperature,
+                #network,#pulseaudio,#tray, #workspaces, #cava{
+                    margin-top: .70rem;
+                    background: #${background};
+                    opacity: ${opacity};
+                    padding: 0 1rem;
+                    border-radius: .75rem;
+                }
+                #battery{
+                    padding-right: 1.75rem;
+                }
+                #network{
+                    padding-right: 1.5rem;
+                }
+                #memory,
+                #cpu{
+                    padding-right: 1.25rem;
+                }
+                #tray{
+                    margin-right: .5rem;
+                }
+                /* If workspaces is the leftmost module, omit left margin */
+                .modules-left > widget:first-child > #workspaces {
+                    margin-left: .9rem;
+                }
 
-		memory= {
-			format= "󰍛 {}%";
-			format-alt= "󰍛 {used}/{total} GiB";
-			interval= 5;
-		};
+                .modules-right{
+                    margin-right: .70rem;
+                }
 
-		cpu= {
-			format= "󰻠 {usage}%";
-			format-alt= "󰻠 {avg_frequency} GHz";
-			interval= 5;
-		};
-		disk= {
-			format= "󰋊 {}%";
-			format-alt= "󰋊 {used}/{total} GiB";
-			interval= 5;
-			path= "/";
-		};
-	    	
-        network = {
-                # format-wifi = "{essid} ({signalStrength}%) ";
-                format-wifi = " {signalStrength}%";
-                    format-ethernet = "󰈀 100% ";
-                    tooltip-format = "Connected to {essid} {ifname} via {gwaddr}";
-                    format-linked = "{ifname} (No IP)";
-                    format-disconnected = "󰖪 0% ";
-                    # format-alt = "{ifname}: {ipaddr}/{cidr}";
-        };
+                /* If workspaces is the rightmost module, omit right margin */
+                .modules-right > widget:last-child > #workspaces {
+                    margin-right: .9rem;
+                }
 
-		tray= {
-			icon-size= 20;
-			spacing= 8;
-		};
-
-		backlight= {
-			# "device"= "acpi_video1";
-			format= "{icon} {percent}%";
-			format-icons= ["" "" "" "" "" "" "" "" ""];
-			#	"on-scroll-up"=;
-			#	"on-scroll-down"=;
-		};
-
-		pulseaudio= {
-			format= "{icon} {volume}%";
-			format-muted= "󰝟";
-			format-icons= {
-				default= ["󰕿" "󰖀" "󰕾"];
-			};
-			on-click= "bash ~/.scripts/volume mute";
-			on-scroll-up= "bash ~/.scripts/volume up";
-			on-scroll-down= "bash ~/.scripts/volume down";
-			scroll-step= 5;
-			on-click-right= "pavucontrol";
-		};
-		"custom/randwall"= {
-			format= "󰏘";
-			on-click= "bash $HOME/.config/hypr/randwall.sh";
-			on-click-right= "bash $HOME/.config/hypr/wall.sh";
-		};
-		"custom/launcher"= {
-			format= "";
-			on-click= "bash $HOME/.config/rofi/launcher.sh";
-			on-click-right= "bash $HOME/.config/rofi/run.sh"; 
-			tooltip= "false";
-		};
-
-		"custom/wf-recorder"= {
-			format= "{}";
-			interval= "once";
-			exec= "echo ''";
-			tooltip= "false";
-			exec-if= "pgrep 'wf-recorder'";
-			on-click= "exec ./scripts/wlrecord.sh";
-			signal= 8;
-		};
-
-		"custom/hyprpicker"= {
-			format= "󰈋";
-			on-click= "hyprpicker -a -f hex";
-			on-click-right= "hyprpicker -a -f rgb";
-		};
-  };
-style = 
-''
-* {
-    border: none;
-    border-radius: 0px;
-    font-family: ${font}, LigaSFMono Nerd Font, Iosevka, FontAwesome, Noto Sans CJK;
-    font-size: 14px;
-    min-height: 0;
-	}
-
-window#waybar {
-    background: rgba(16, 18, 19, 0.8);
-    border-bottom: 1px solid #0c0e0f;
-}
-
-#workspaces {
-  background: #${background};
-  margin: 5px 5px;
-  padding: 8px 5px;
-  border-radius: 16px;
-  border: solid 0px #cdd6f4;
-  font-weight: normal;
-  font-style: normal;
-}
-
-#cava.left {
-    background: #${background};
-	margin: 5px 5px;
-    padding: 8px 16px;
-    color: #${accent};
-	border-radius: 16px;
-    border-radius: 24px 10px 24px 10px;
-}
-#cava.right {
-    background: #${background};
-	margin: 5px 5px;
-    padding: 8px 16px;
-    color: #${accent};
-    border-radius: 10px 24px 10px 24px;
-}
-#workspaces button {
-    padding: 0px 5px;
-    margin: 0px 3px;
-    border-radius: 16px;
-    color: #2f354a;
-    background-color: #2f354a;
-    transition: all 0.3s ease-in-out;
-}
-
-#workspaces button.active {
-    background-color: #${accent};
-    border-radius: 16px;
-    min-width: 50px;
-    background-size: 400% 400%;
-    transition: all 0.3s ease-in-out;
-}
-
-#workspaces button:hover {
-	background-color: #cdd6f4;
-	color: #cdd6f4;
-	border-radius: 16px;
-  min-width: 50px;
-  background-size: 400% 400%;
-}
-
-#tray, #pulseaudio, #network{
-    background: #0c0e0f;
-    margin: 5px 5px 5px 5px;
-    padding: 0 12px;
-    background-color: #0c0e0f;
-    border-radius: 10px 24px 10px 24px;
-    /*border-right: solid 1px #282738;*/
-}
-
-#clock {
-    color: #cdd6f4;
-    background-color: #${background};
-    border-radius: 0px 0px 0px 24px;
-    padding: 0 20px;
-    margin-right: 0px;
-    margin-left: 10px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    font-weight: bold;
-}
-
-
-#battery {
-    color: #9ece6a;
-}
-
-#battery.charging {
-    color: #9ece6a;
-}
-
-#battery.warning:not(.charging) {
-    background-color: #f7768e;
-    color: #24283b;
-    border-radius: 5px 5px 5px 5px;
-}
-
-#network, #pulseaudio {
-    color: #cdd6f4;
-    margin-right: 5px;
-    font-weight: bold;
-    padding: 0 20px;
-}
-
-#pulseaudio.muted {
-    color: #242f33;
-    margin-left: 0px;
-    font-weight: bold;
-}
-
-#custom-launcher {
-    color: #cdd6f4;
-    background-color: #${background};
-    border-radius: 0px 0px 24px 0px;
-    margin: 0px 0px 0px 0px;
-    padding: 0 20px 0 13px;
-    /*border-right: solid 1px #282738;*/
-    font-size: 24px;
-}
-
-#custom-launcher button:hover {
-    background-color: #FB4934;
-    color: transparent;
-    border-radius: 8px;
-    margin-right: -5px;
-    margin-left: 10px;
-}
-
-#custom-playerctl.backward {
-	background: #${background};
-    padding-left: 20px;
-    padding-right: 10px;
-    border-radius: 24px 0px 0px 10px;
-  /*border-left: solid 1px #282738;*/
-  /*border-right: solid 1px #282738;*/
-  margin: 5px 0px;
-  margin-left: 10px;
-  color: whitesmoke;
-  font-weight: bold;
-  font-style: normal;
-  font-size: 18px;
-}
-#custom-playerctl.play {
-	background: #${background};
-  /*border-left: solid 1px #282738;*/
-  /*border-right: solid 1px #282738;*/
-  margin: 5px 0px;
-  color: whitesmoke;
-  font-weight: bold;
-  font-style: normal;
-  font-size: 18px;
-}
-#custom-playerctl.foward {
-	background: #${background};
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 0px 10px 24px 0px;
-  margin: 5px 0px;
-  /*border-left: solid 1px #282738;*/
-  /*border-right: solid 1px #282738;*/
-  color: whitesmoke;
-  font-weight: bold;
-  font-style: normal;
-  font-size: 18px;
-  margin-right: 10px;
-}
-
-#custom-playerlabel {
-    background: #${background};
-    padding: 0 20px;
-    border-radius: 24px 10px 24px 10px;
-    /*border-left: solid 1px #282738;*/
-    /*border-right: solid 1px #282738;*/
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-weight: normal;
-    font-style: normal;
-    color: whitesmoke;
-}
-
-#window{
-    background: #0c0e0f;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 16px;
-    /*border-left: solid 1px #282738;*/
-    /*border-right: solid 1px #282738;*/
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-weight: normal;
-    font-style: normal;
-}
-
-#cpu {
-    background-color: #0c0e0f;
-    /*color: #FABD2D;*/
-    border-radius: 16px;
-    margin: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 0px 10px 0px 10px;
-    font-weight: bold;
-}
-
-#memory {
-    background-color: #0c0e0f;
-    /*color: #83A598;*/
-    border-radius: 16px;
-    margin: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 0px 10px 0px 10px;
-    font-weight: bold;
-}
-
-'';
+                '';
         };
         zsh = {
             enable = true;

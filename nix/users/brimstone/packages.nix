@@ -37,6 +37,7 @@
             webcord-vencord
             wofi
             zig
+            playerctl
             (nerdfonts.override { fonts = [ "JetBrainsMono" "Iosevka" "RobotoMono" "AnonymousPro" ]; })
 
             #language servers:
