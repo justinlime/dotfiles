@@ -173,8 +173,8 @@ in
       exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
       on-click= "playerctl play-pause";
       format-icons= {
-        Playing= "<span foreground='#6791eb'> </span>";
-        Paused= "<span foreground='#cdd6f4'>󰏥 </span>";
+        Playing= "<span foreground='#6791eb'>󰏥 </span>";
+        Paused= "<span foreground='#cdd6f4'> </span>";
       };
     };
     "custom/playerctl#foward"= {
