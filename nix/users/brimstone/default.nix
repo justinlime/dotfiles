@@ -1,15 +1,28 @@
-{ username, flake_path, ... }:
+{ inputs, pkgs, username, flake_path, ... }:
+let 
+    # Variables to share accross configs
+    custom = {
+        font = "RobotoMono Nerd Font";
+        fontsize = "12";
+        accent = "cba6f7";
+        background = "11111B";
+        opacity = ".85";
+        cursor = "Numix-Cursor";
+    };
+in
 {
     imports =
         [ 
-        ./dotfiles.nix 
-        ./packages.nix
+            ./packages.nix
+            (import ./general {inherit (inputs) self;})
+            (import ./themes {inherit pkgs custom;})
+            (import ./wayland {inherit pkgs custom;})
         ];
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
     nixpkgs.config.allowUnfree = true; # This is borked for some reason :D
-    nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for above borked option
+    nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for the above borked option
     home.shellAliases = {
         home-switch = "home-manager switch --flake ${flake_path}#${username}";
     };

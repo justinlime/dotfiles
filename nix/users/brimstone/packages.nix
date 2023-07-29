@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{ pkgs, ... }:
 {
         #Overlays/Overrides
         nixpkgs.overlays = [
@@ -8,6 +8,9 @@
                      });
              })
         ];
+
+        programs.direnv.enable = true;
+        fonts.fontconfig.enable = true;
 
         #Packages
         home.packages = with pkgs; [
