@@ -364,10 +364,9 @@ window#waybar {
 }
 
 #tray, #pulseaudio, #network{
-    background: #0c0e0f;
+    background: #${background};
     margin: 5px 5px 5px 5px;
     padding: 0 12px;
-    background-color: #0c0e0f;
     border-radius: 10px 24px 10px 24px;
     /*border-right: solid 1px #282738;*/
 }
