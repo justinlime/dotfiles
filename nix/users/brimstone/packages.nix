@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
         #Overlays/Overrides
         nixpkgs.overlays = [
@@ -41,6 +41,7 @@
             wofi
             zig
             playerctl
+            inputs.maxfetch.packages."x86_64-linux".default
             (nerdfonts.override { fonts = [ "JetBrainsMono" "Iosevka" "RobotoMono" "AnonymousPro" ]; })
 
             #language servers:

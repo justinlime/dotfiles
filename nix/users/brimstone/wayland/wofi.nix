@@ -1,57 +1,54 @@
-{ custom, ... }:
+{ 
+    custom ? {
+        font = "RobotoMono Nerd Font";
+        primary_accent = "cba6f7";
+        secondary_accent = "89b4fa";
+        tertiary_accent = "f5f5f5";
+        background = "11111B";
+    },
+    ... 
+}:
 {
-    home.file.".config/wofi/style.css".text = ''
-        *{
-        font-family: ${custom.font},monospace;
+    programs.wofi = {
+        enable = true;
+        settings = {
+            allow_images = true;
+            width = "25%";
+            hide_scroll = true;
+            term = "foot";
+        };
+        style =''
+        * {
+          font-family: ${custom.font},monospace;
+          font-weight: bold;
         }
-
-        window {
-        margin: 0px;
-        border: 2px solid #${custom.accent};
-        background-color: #${custom.background};
-        border-radius: 20px;
+        #window {
+          border-radius: 40px;
+          background-color: #${custom.background};
         }
-
         #input {
-        margin: 5px;
-        border: none;
-        color: #F5F5F5;
-        background-color: #${custom.background};
-        border: 2px solid #${custom.accent};
-        border-radius: 10px;
-        margin: 10px;
+          border-radius: 100px;
+          margin: 20px;
+          padding: 15px 25px;
+          background-color: #${custom.background};
+          color: #${custom.tertiary_accent};
         }
-
-        #inner-box {
-        margin: 5px;
-        border: none;
-        background-color: #${custom.background};
-        border-radius: 20px;
-        }
-
         #outer-box {
-        margin: 5px;
-        border: none;
-        background-color: #${custom.background};
-        border-radius: 20px;
+          font-weight: bold;
+          font-size: 14px;
         }
-
-        #scroll {
-        margin: 0px;
-        border: none;
+        #entry {
+          margin: 10px 80px;
+          padding: 20px 20px;
+          border-radius: 200px;
         }
-
-        #text {
-        margin: 5px;
-        border: none;
-        color: #${custom.accent};
-        } 
-        #text:selected{
-        color:#F5F5F5;
+        #entry:selected{
+          background-color:#${custom.primary_accent};
+          color: #${custom.background};
+          transition: all .5s ease-in-out;
         }
-
-        #entry:selected {
-        background-color: #${custom.accent};
+        #entry:hover {
         }
         '';
+    };
 }

@@ -26,3 +26,4 @@ opt.termguicolors = true
 opt.scrolloff = 8
 opt.updatetime = 50
 opt.cursorline = true
+vim.cmd.set("noshowmode")

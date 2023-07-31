@@ -17,12 +17,6 @@
             alsa.support32Bit = true;
             pulse.enable = true;
         };
-        # udev = {
-        #     enable = true;
-        #     packages = with pkgs; [
-        #         ledger-udev-rules
-        #     ];
-        # };
     };
     xdg.portal = {
         enable = true;
@@ -43,9 +37,9 @@
         };
     };
     security.pam.services.swaylock = { #Swaylock fix for wrong password
-    text = ''
-        auth include login
-        '';
+        text = ''
+            auth include login
+            '';
     };
 }
 

@@ -1,13 +1,27 @@
-{ custom, ... }:
+{ 
+    custom ? {
+        font = "RobotoMono Nerd Font";
+        fontsize = "12";
+        primary_accent = "cba6f7";
+        background = "11111B";
+        opacity = ".85";
+    },
+    ... 
+}:
 {
     programs.foot = {
         enable = true;
         server.enable = true;
         settings = {
             main = {
+                term = "xterm-256color";
                 font = "${custom.font}:size=${custom.fontsize}";
                 pad = "25x15 center";
                 dpi-aware = "no";
+            };
+            cursor = {
+                color = "${custom.primary_accent} ${custom.primary_accent}";
+                style = "beam";
             };
             colors = {
                 alpha="${custom.opacity}";
@@ -28,6 +42,9 @@
                 bright5="ff84cd";   # bright magenta
                 bright6="53d6c7";   # bright cyan
                 bright7="cad8d9";   # bright white
+            };
+            tweak = {
+                sixel = "yes";
             };
         };
     };

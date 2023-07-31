@@ -5,6 +5,7 @@
             url = "github:nix-community/home-manager";
             inputs.nixpkgs.follows = "nixpkgs";
         };
+        maxfetch.url = "github:justinlime/maxfetch";
     };
 
     outputs = {  self, nixpkgs, home-manager, ... }@inputs:

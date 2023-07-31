@@ -1,4 +1,12 @@
-{ pkgs, custom, ... }:
+{ 
+    pkgs, 
+    custom ? {
+        font = "RobotoMono Nerd Font";
+        fontsize = "12";
+        cursor = "Numix-Cursor";
+    },
+    ... 
+}:
 {
     gtk = {
         enable = true;

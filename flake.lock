@@ -20,7 +20,41 @@
         "type": "github"
       }
     },
+    "maxfetch": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1690763948,
+        "narHash": "sha256-9UIawZPPWk4HE0aeHqxy2mDIjY3aBjJt5YYAcbqGI64=",
+        "owner": "justinlime",
+        "repo": "maxfetch",
+        "rev": "3933f1d3438a6efcf98764843d8c72061cd021de",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justinlime",
+        "repo": "maxfetch",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1690640159,
+        "narHash": "sha256-5DZUYnkeMOsVb/eqPYb9zns5YsnQXRJRC8Xx/nPMcno=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e6ab46982debeab9831236869539a507f670a129",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1690367991,
         "narHash": "sha256-2VwOn1l8y6+cu7zjNE8MgeGJNNz1eat1HwHrINeogFA=",
@@ -39,7 +73,8 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "maxfetch": "maxfetch",
+        "nixpkgs": "nixpkgs_2"
       }
     }
   },
