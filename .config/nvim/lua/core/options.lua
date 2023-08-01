@@ -27,3 +27,8 @@ opt.scrolloff = 8
 opt.updatetime = 50
 opt.cursorline = true
 vim.cmd.set("noshowmode")
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "nix",
+	command = "setlocal shiftwidth=2 tabstop=2"
+})

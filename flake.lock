@@ -25,15 +25,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1690763948,
-        "narHash": "sha256-9UIawZPPWk4HE0aeHqxy2mDIjY3aBjJt5YYAcbqGI64=",
-        "owner": "justinlime",
+        "lastModified": 1690770330,
+        "narHash": "sha256-LzOhrFFjGs9GIDjk1lUFKhlnzJuEUrKjBcv1eT3kaY8=",
+        "owner": "jobcmax",
         "repo": "maxfetch",
-        "rev": "3933f1d3438a6efcf98764843d8c72061cd021de",
+        "rev": "17baa4047073e20572403b70703c69696af6b68d",
         "type": "github"
       },
       "original": {
-        "owner": "justinlime",
+        "owner": "jobcmax",
         "repo": "maxfetch",
         "type": "github"
       }
