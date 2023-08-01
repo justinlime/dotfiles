@@ -16,6 +16,7 @@ in
     imports =
         [ 
             ./packages.nix
+            ./programs
             (import ./general {inherit (inputs) self;})
             (import ./themes {inherit pkgs custom;})
             (import ./wayland {inherit pkgs custom;})

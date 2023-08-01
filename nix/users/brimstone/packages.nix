@@ -37,7 +37,6 @@
             speedtest-cli
             tdesktop
             waybar
-            webcord-vencord
             wofi
             zig
             playerctl

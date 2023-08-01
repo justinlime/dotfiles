@@ -28,6 +28,7 @@ in {
       };
 
       # # share my webcord configuration across devices
-      # "WebCord/config.json".source = config.lib.file.mkOutOfStoreSymlink "./config.json";
+      # This shit doesnt work lulz
+      # "WebCord/config.json".source = ./vencord.json;
     };
 }

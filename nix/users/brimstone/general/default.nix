@@ -2,7 +2,7 @@
 {
     imports = [
         ./zsh.nix
-        ./webcord.nix
+        ./tmux.nix
         (import ./neovim.nix { inherit self; })
     ];
 }

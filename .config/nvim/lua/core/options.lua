@@ -1,7 +1,7 @@
 local opt = vim.opt
 opt.clipboard = "unnamedplus"
-opt.guicursor = "a:blinkon0"
-opt.guicursor = "i:ver25-iCursor"
+opt.guicursor = "a:blinkon0" --Disable cursor blink
+opt.guicursor = "i:ver25-iCursor" --Change to beam cursor when in insert mode
 opt.mouse = "a"
 opt.smartcase = true
 opt.smartindent = true
@@ -26,9 +26,8 @@ opt.termguicolors = true
 opt.scrolloff = 8
 opt.updatetime = 50
 opt.cursorline = true
-vim.cmd.set("noshowmode")
-
-vim.api.nvim_create_autocmd("FileType", {
+vim.cmd.set("noshowmode") -- Hide mode mode at bottom
+vim.api.nvim_create_autocmd("FileType", { --Set indentation to 2 spaces for nix files
 	pattern = "nix",
 	command = "setlocal shiftwidth=2 tabstop=2"
 })
