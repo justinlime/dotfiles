@@ -2,5 +2,6 @@
 {
   imports = [
     ./webcord
+    ./mpd.nix
   ];
 }

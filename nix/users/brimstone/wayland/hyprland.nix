@@ -167,6 +167,7 @@
                 "float,title:^(branchdialog)$"
                 "float,title:^(Confirm to replace files)$"
                 "float,title:^(File Operation Progress)$"
+                "float,title:^(mpv)$"
             ];
         };
         # Submaps
