@@ -12,6 +12,7 @@
     home.shellAliases = {
         home-switch = "home-manager switch --flake ${flake_path}#${username}";
         sudo = "sudo -E";
+        sudopath = "sudo env 'PATH=$PATH'";
     };
 
     # Home Manager needs a bit of information about you and the
