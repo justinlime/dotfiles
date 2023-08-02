@@ -29,6 +29,7 @@
         spiceUSBRedirection.enable = true;
         libvirtd = {
             enable = true;
+            allowedBridges = ["wlo1"];
             qemu = {
                 swtpm.enable = true;
                 ovmf.enable = true;

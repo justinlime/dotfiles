@@ -12,6 +12,7 @@
   let
     system = "x86_64-linux";
     username = "justinlime";
+    user = "brimstone";
     pkgs = nixpkgs.legacyPackages.${system};
     # Directs home-switch, nix-switch, all-switch, and all-update 
     # aliases to directory that contains the flake
@@ -23,7 +24,7 @@
         inherit pkgs;
         extraSpecialArgs = { inherit username flake_path inputs; };
         modules = [
-          ./nix/users/brimstone
+          ./nix/users/${user}
           # Pin registry to flake
           { nix.registry.nixpkgs.flake = nixpkgs; }
           # Pin channel to flake 
