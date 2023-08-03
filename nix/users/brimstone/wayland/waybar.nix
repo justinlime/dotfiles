@@ -110,8 +110,9 @@
                 on-scroll-up = "playerctl volume .05+";
                 on-scroll-down = "playerctl volume .05-";
                 format-icons= {
-                    Playing= "<span>󰏥 </span>";
-                    Paused= "<span> </span>";
+                    Playing = "<span>󰏥 </span>";
+                    Paused = "<span> </span>";
+                    Stopped = "<span> </span>";
                 };
             };
             "custom/playerctl#foward"= {
