@@ -12,10 +12,9 @@
   let
     system = "x86_64-linux";
     username = "justinlime";
-    user = "brimstone";
+    home_profile = "brimstone";
     pkgs = nixpkgs.legacyPackages.${system};
-    # Directs home-switch, nix-switch, all-switch, and all-update 
-    # aliases to directory that contains the flake
+    # The path to this very repo 
     flake_path = "~/dotfiles";
   in
   {
@@ -24,7 +23,7 @@
         inherit pkgs;
         extraSpecialArgs = { inherit username flake_path inputs; };
         modules = [
-          ./nix/users/${user}
+          ./nix/users/${home_profile}
           # Pin registry to flake
           { nix.registry.nixpkgs.flake = nixpkgs; }
           # Pin channel to flake 

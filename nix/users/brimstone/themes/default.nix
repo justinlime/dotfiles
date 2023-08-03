@@ -1,7 +1,7 @@
-{ pkgs, custom, ... }:
+{ ... }:
 {
     imports = [
-        (import ./gtk.nix { inherit pkgs custom; })
+        ./gtk.nix
         ./qt.nix
     ];
 }

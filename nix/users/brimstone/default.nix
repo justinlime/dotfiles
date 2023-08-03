@@ -1,4 +1,4 @@
-{ inputs, pkgs, username, flake_path, ... }:
+{ inputs, username, flake_path, ... }:
 let 
     # Variables to share accross configs
     custom = {
@@ -13,14 +13,15 @@ let
     };
 in
 {
-    imports =
-        [ 
-            ./packages.nix
-            ./programs
-            (import ./general {inherit (inputs) self;})
-            (import ./themes {inherit pkgs custom;})
-            (import ./wayland {inherit pkgs custom;})
-        ];
+    # Brimstone is my main everyday home configuration, including a number
+    # of tools and services i use on a daily basis
+    _module.args = { inherit inputs username custom; };
+    imports = [ 
+      ./general
+      ./programs
+      ./themes
+      ./wayland
+    ];
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
@@ -29,6 +30,7 @@ in
     home.shellAliases = {
         home-switch = "home-manager switch --flake ${flake_path}#${username}";
         sudo = "sudo -E";
+        sudopath = "sudo -E PATH=$PATH";
     };
 
     # Home Manager needs a bit of information about you and the
@@ -46,4 +48,4 @@ in
     # the Home Manager release notes for a list of state version
     # changes in each release.
     home.stateVersion = "22.11";
-    }
+}
