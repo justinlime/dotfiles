@@ -10,7 +10,6 @@
     ];
 
     programs.direnv.enable = true;
-    fonts.fontconfig.enable = true;
 
     #Packages
     home.packages = with pkgs; [
@@ -40,7 +39,6 @@
         wofi
         zig
         playerctl
-        inputs.maxfetch.packages."x86_64-linux".default
-        (nerdfonts.override { fonts = [ "JetBrainsMono" "Iosevka" "RobotoMono" "AnonymousPro" ]; })
+        inputs.maxfetch.packages.${pkgs.system}.default
     ];
 }
