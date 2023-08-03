@@ -8,11 +8,14 @@
         opacity = ".85";
         cursor = "Numix-Cursor";
     },
+    inputs,
+    pkgs,
     ... 
 }:
 {
     wayland.windowManager.hyprland = {
         enable = true;
+        package = inputs.hyprland.packages.${pkgs.system}.hyprland;
         enableNvidiaPatches = false;
         settings = {
             "$mainMod" = "ALT";
@@ -47,18 +50,24 @@
             decoration = {
                 rounding = 10;
                 multisample_edges = true;
-                blur = true;
-                blur_size = 6;
-                blur_passes = 3;
                 shadow_ignore_window = true;
-                blur_new_optimizations = true;
-                blur_ignore_opacity = true;
                 drop_shadow = true;
                 shadow_range = 35;
                 shadow_render_power = 2;
                 # "col.shadow" = "rgb(${custom.primary_accent})";
                 "col.shadow" = "rgb(${custom.background})";
                 "col.shadow_inactive" = "rgba(${custom.background}00)";
+                blur = {
+                  enabled = true;
+                  size = 6;
+                  passes = 3;
+                  new_optimizations = true;
+                  ignore_opacity = true;
+                  noise = 0.0117;
+                  contrast = 1.2;
+                  xray = false;
+                  brightness = 1;
+                };
             };
             animations = {
                 enabled = true;

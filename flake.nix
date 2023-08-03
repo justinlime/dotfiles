@@ -6,6 +6,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     maxfetch.url = "github:jobcmax/maxfetch";
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs = {  self, nixpkgs, home-manager, ... }@inputs:
