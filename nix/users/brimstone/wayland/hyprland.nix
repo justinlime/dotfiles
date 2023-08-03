@@ -64,7 +64,7 @@
                   new_optimizations = true;
                   ignore_opacity = true;
                   noise = 0.0117;
-                  contrast = 1.2;
+                  contrast = 1.5;
                   xray = false;
                   brightness = 1;
                 };
