@@ -97,43 +97,34 @@
                 format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
             };
             "custom/playerctl#backward"= {
-                format= "{icon}";
-                return-type= "json";
-                max-length= 64;
-                exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
+                format= "󰙣 "; 
                 on-click= "playerctl previous";
-                format-icons= {
-                    Playing= "<span>󰙣 </span>";
-                    Paused= "<span>󰙣 </span>";
-                };
+                on-scroll-up = "playerctl volume .05+";
+                on-scroll-down = "playerctl volume .05-";
             };
             "custom/playerctl#play"= {
                 format= "{icon}";
                 return-type= "json";
-                max-length= 40;
                 exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
                 on-click= "playerctl play-pause";
+                on-scroll-up = "playerctl volume .05+";
+                on-scroll-down = "playerctl volume .05-";
                 format-icons= {
                     Playing= "<span>󰏥 </span>";
                     Paused= "<span> </span>";
                 };
             };
             "custom/playerctl#foward"= {
-                format= "{icon}";
-                return-type= "json";
-                max-length= 40;
-                exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
+                format= "󰙡 ";
                 on-click= "playerctl next";
-                format-icons= {
-                    Playing= "<span>󰙡 </span>";
-                    Paused= "<span>󰙡 </span>";
-                };
+                on-scroll-up = "playerctl volume .05+";
+                on-scroll-down = "playerctl volume .05-";
             };
             "custom/playerlabel"= {
                 format= "<span>󰎈 {} 󰎈</span>";
                 return-type= "json";
                 max-length= 40;
-                exec= "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
+                exec = "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
                 on-click= "";
             };
             battery= {
