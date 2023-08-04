@@ -20,6 +20,6 @@
     nodePackages_latest.yaml-language-server #Yaml
   ];
   xdg.configFile = {
-    "nvim".source = "${inputs.self}/.config/nvim";
+    "nvim".source = "${inputs.self}/nvim";
   };
 }
