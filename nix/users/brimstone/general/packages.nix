@@ -20,7 +20,6 @@
         go
         grim
         glibc
-        libsForQt5.dolphin
         mpv
         neofetch
         neovide
@@ -40,5 +39,6 @@
         zig
         playerctl
         inputs.maxfetch.packages.${pkgs.system}.default
+        haskell.compiler.native-bignum.ghcHEAD
     ];
 }

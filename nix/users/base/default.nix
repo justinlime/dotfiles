@@ -1,10 +1,10 @@
 { ... }:
 {
-    imports =
-        [ 
-        ./neovim.nix
-        ./tmux.nix
-        ./zsh.nix
-        ./packages.nix
-        ];
+  imports =
+  [ 
+    ./neovim.nix
+    ./tmux.nix
+    ./zsh.nix
+    ./packages.nix
+  ];
 }
