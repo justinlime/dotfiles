@@ -36,7 +36,6 @@
             wget
             wl-clipboard
             zip
-            goverlay
         ];
         variables = { EDITOR = "vim"; };
         pathsToLink = [ "/share/zsh" ];
