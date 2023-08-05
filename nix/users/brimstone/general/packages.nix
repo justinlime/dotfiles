@@ -39,6 +39,7 @@
         zig
         playerctl
         inputs.maxfetch.packages.${pkgs.system}.default
+        # haskell
         haskell.compiler.native-bignum.ghcHEAD
     ];
 }

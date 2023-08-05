@@ -140,7 +140,11 @@ lspconfig.gopls.setup({
     on_attach = on_attach,
     capabilities = capabilities,
 })
-lspconfig.nil_ls.setup({
+-- lspconfig.nil_ls.setup({
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+-- })
+lspconfig.nixd.setup({
     on_attach = on_attach,
     capabilities = capabilities,
 })

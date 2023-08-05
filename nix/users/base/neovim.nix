@@ -5,7 +5,8 @@
     #Language Servers
 
     lua-language-server #Lua
-    nil #Nix
+    # nil #Nix
+    nixd 
     gopls #Golang
     rust-analyzer #Rust
     zls #Zig

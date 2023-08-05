@@ -77,7 +77,16 @@
                 monstercat = false;
                 waves = false;
                 input_delay = 2;
-                format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+                format-icons = [ 
+                  "<span foreground='#${custom.primary_accent}'>▁</span>" 
+                  "<span foreground='#${custom.primary_accent}'>▂</span>" 
+                  "<span foreground='#${custom.primary_accent}'>▃</span>" 
+                  "<span foreground='#${custom.primary_accent}'>▄</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>▅</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>▆</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>▇</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>█</span>" 
+                ];
             };
             "cava#right" = {
                 framerate = 60;
@@ -94,7 +103,17 @@
                 monstercat = false;
                 waves = false;
                 input_delay = 2;
-                format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+                # format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+                format-icons = [ 
+                  "<span foreground='#${custom.primary_accent}'>▁</span>" 
+                  "<span foreground='#${custom.primary_accent}'>▂</span>" 
+                  "<span foreground='#${custom.primary_accent}'>▃</span>" 
+                  "<span foreground='#${custom.primary_accent}'>▄</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>▅</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>▆</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>▇</span>" 
+                  "<span foreground='#${custom.secondary_accent}'>█</span>" 
+                ];
             };
             "custom/playerctl#backward"= {
                 format= "󰙣 "; 

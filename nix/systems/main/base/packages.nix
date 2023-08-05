@@ -16,7 +16,8 @@
             jdk17
             lua
             neovim
-            nodejs
+            # nodejs
+            nodejs_20
             powertop
             pulseaudio #Needed for volume keys even with pipewire
             python3Full
