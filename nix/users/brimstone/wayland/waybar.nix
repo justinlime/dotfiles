@@ -103,7 +103,6 @@
                 monstercat = false;
                 waves = false;
                 input_delay = 2;
-                # format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
                 format-icons = [ 
                   "<span foreground='#${custom.primary_accent}'>▁</span>" 
                   "<span foreground='#${custom.primary_accent}'>▂</span>" 
