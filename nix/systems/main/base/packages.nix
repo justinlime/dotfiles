@@ -36,6 +36,7 @@
             wget
             wl-clipboard
             zip
+            goverlay
         ];
         variables = { EDITOR = "vim"; };
         pathsToLink = [ "/share/zsh" ];
@@ -46,7 +47,6 @@
     #     (nerdfonts.override { fonts = ["JetBrainsMono"]; })
     # ];
     
-    hardware.opengl.enable = true;
     #Programs
     programs = {
         dconf.enable = true;

@@ -17,6 +17,7 @@
         enable = true;
         package = inputs.hyprland.packages.${pkgs.system}.hyprland;
         enableNvidiaPatches = false;
+        xwayland.enable = true;
         settings = {
             "$mainMod" = "ALT";
             monitor = [
@@ -64,7 +65,7 @@
                   new_optimizations = true;
                   ignore_opacity = true;
                   noise = 0.0117;
-                  contrast = 1.5;
+                  contrast = 1.2;
                   xray = false;
                   brightness = 1;
                 };
