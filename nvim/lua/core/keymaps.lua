@@ -16,7 +16,7 @@ map("n", "<S-l>", ":vertical resize -2<CR>", opts)
 
 ---------- Insert Mode ----------
 
---Navigation
+--jj gang rise up
 map("i", "jj", "<ESC>", opts)
 
 ---------- Visual Mode -----------
