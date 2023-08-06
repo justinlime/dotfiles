@@ -2,7 +2,7 @@
 
 ![Imgur Image](https://imgur.com/Jy49zJT.png)
 ![Imgur](https://imgur.com/YrT4gxf.png)
-Plugins:
+## Plugins:
 ```lua
 lazy.nvim -- Plugin Manager
 indent-blankline.nvim -- Shows indentation lines for easier tracking
@@ -18,7 +18,7 @@ lualine.nvim --Status Bar
 telescope --Fuzzy Finder, instantly find a file
 dashboard.nvim --Dope Dashboard
 ```
-Colorschemes:
+## Colorschemes:
 ```lua
 onedarkpro
 dracula
@@ -28,7 +28,7 @@ toykonight
 gruvbox
 ```
 
-Requirements:
+## Requirements:
 ```lua
 --Use appimage version if 0.9 isnt in your repositories
 --Or use nix :))))
@@ -36,13 +36,7 @@ neovim 0.9
 gcc
 ```
 
-Installation:
-First, just clone the repo
+##  Installation:
 ```
-git clone https://github.com/justinlime/dotfiles
+sh <(curl https://raw.githubusercontent.com/justinlime/dotfiles/main/nvim/install.sh)
 ```
-Then CD into the dotfiles/.config/nvim and run  
-```
-./install.sh
-```
-

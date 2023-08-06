@@ -13,6 +13,12 @@ if [ $? -eq 1 ]; then
     echo "Please install git to and try again"
     exit 1
 fi
+which gcc
+if [ $? -eq 1 ]; then
+    clear
+    echo "Please install gcc and try again"
+    exit 1
+fi
 }
 install() {
     git clone --depth 1 https://github.com/justinlime/dotfiles
