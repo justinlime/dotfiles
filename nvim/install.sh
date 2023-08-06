@@ -27,7 +27,6 @@ install() {
     mv ~/.config/nvim ~/.config/nvim.old
     mv ~/.local/share/nvim ~/.local/share/nvim.old
     mv ~/.local/state/nvim ~/.local/state/nvim.old
-    mkdir ~/.config/nvim
     cp -r ./nvim ~/.config/nvim
     nvim
 }
