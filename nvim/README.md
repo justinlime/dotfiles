@@ -1,4 +1,4 @@
-My neovim config
+# Justinlime's Neovim Config
 
 ![Imgur Image](https://imgur.com/Jy49zJT.png)
 ![Imgur](https://imgur.com/YrT4gxf.png)
@@ -17,7 +17,6 @@ bufferline.nvim --Neovim Tabs
 lualine.nvim --Status Bar
 telescope --Fuzzy Finder, instantly find a file
 dashboard.nvim --Dope Dashboard
-lsp-zero --Easy LSP support, Easy installation of LSP Servers from mason menu
 ```
 Colorschemes:
 ```lua
@@ -31,14 +30,10 @@ gruvbox
 
 Requirements:
 ```lua
-neovim 0.9 --Use appimage version if 0.9 isnt in your repositories
+--Use appimage version if 0.9 isnt in your repositories
+--Or use nix :))))
+neovim 0.9 
 gcc
-tar
-curl
-git
-wget
-unzip
-gzip
 ```
 
 Installation:
