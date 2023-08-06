@@ -58,7 +58,7 @@ map("n", "<leader>gcoe", ":G config user.email<Space>", opts)
 map("n", "<leader>gcon", ":G config user.name<Space>", opts)
 
 --Nvim Tree
-map("n", "<leader>td", ":NvimTreeToggle<CR>", opts)
+map("n", "<leader>dt", ":NvimTreeToggle<CR>", opts)
 
 --Transparency
 map("n", "<leader>tt", ":TransparentToggle<CR>", opts)
@@ -87,7 +87,7 @@ map("n", "<leader>9", ":BufferLineGoToBuffer 9<CR>", opts)
 map("n", "<leader>h", ":BufferLineCyclePrev<CR>", opts)
 map("n", "<leader>l", ":BufferLineCycleNext<CR>", opts)
 
-map("n", "<C-A>h", ":BufferLineMovePrev<CR>", opts)
-map("n", "<C-A>l", ":BufferLineMoveNext<CR>", opts)
+map("n", "<leader><S-h>", ":BufferLineMovePrev<CR>", opts)
+map("n", "<leader><S-l>", ":BufferLineMoveNext<CR>", opts)
 
-map("n", "<leader>qq", ":bdelete<CR>", opts)
+map("n", "<leader>qq", ":bdelete<CR>", opts) -- Close current buffer

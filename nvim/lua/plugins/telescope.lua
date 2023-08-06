@@ -7,6 +7,14 @@ plugin.setup{
     defaults = {
         -- Default configuration for telescope goes here:
         -- config_key = value,
+        layout_strategy = "vertical",
+        layout_config = {
+          height = vim.o.lines, -- maximally available lines
+          width = vim.o.columns, -- maximally available columns
+          prompt_position = "top",
+          preview_height = 0.6, -- 60% of available lines
+        },
+        border = true;
         mappings = {
             i = {
                 -- map actions.which_key to <C-h> (default: <C-/>)
@@ -18,8 +26,9 @@ plugin.setup{
     },
     pickers = {
         find_files = {
-            hidden=true,
             file_ignore_patterns = { ".git/", ".undo/",".backup/"},
+        },
+        live_grep = {
         },
         -- Default configuration for builtin pickers goes here:
         -- picker_name = {
@@ -36,5 +45,4 @@ plugin.setup{
                 -- }
                 -- please take a look at the readme of the extension you want to configure
             }
-
 }

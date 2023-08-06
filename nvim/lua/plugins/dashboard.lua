@@ -25,7 +25,7 @@ plugin.setup({
                 desc = 'File Browser',
                 desc_hl = 'String',
                 key = 'd',
-                keymap = 'SPC td',
+                keymap = 'SPC dt',
                 key_hl = 'Number',
                 action = 'NvimTreeToggle'
             },
