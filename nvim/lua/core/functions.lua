@@ -7,7 +7,6 @@ end
 function randomquote()
     local quote = {
         "Bing Chilling",
-        "https://justincode.us",
         "The Stink Boys",
         "Whopper Whopper Whopper Whopper Junior Double Triple Whopper",
         "White Monster",

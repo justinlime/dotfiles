@@ -16,7 +16,7 @@
             main = {
                 term = "xterm-256color";
                 font = "${custom.font}:size=${custom.fontsize}";
-                pad = "25x15 center";
+                pad = "10x5 center";
                 dpi-aware = "no";
             };
             cursor = {

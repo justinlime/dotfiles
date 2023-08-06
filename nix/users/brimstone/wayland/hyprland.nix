@@ -64,7 +64,7 @@
                   new_optimizations = true;
                   ignore_opacity = true;
                   noise = 0.0117;
-                  contrast = 1.5;
+                  contrast = 1.2;
                   xray = false;
                   brightness = 1;
                 };
@@ -89,6 +89,11 @@
             };
             gestures = {
                 workspace_swipe = false;
+            };
+            misc = {
+              vrr = 1;
+              disable_hyprland_logo  = true;
+              disable_splash_rendering = true;
             };
             bind = [
                 # Exit to tty
