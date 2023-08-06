@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     neovim
+    ripgrep
     #Language Servers
 
     lua-language-server #Lua

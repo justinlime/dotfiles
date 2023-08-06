@@ -65,7 +65,13 @@ map("n", "<leader>tt", ":TransparentToggle<CR>", opts)
 
 --Telescope
 map('n', '<leader>ff', ":Telescope find_files<CR>", opts)
-map('n', '<leader>fg', ":Telescope git_files<CR>", opts)
+map('n', '<leader>fw', ":Telescope live_grep<CR>", opts)
+map('n', '<leader>fgc', ":Telescope git_commits<CR>", opts)
+map('n', '<leader>fgs', ":Telescope git_stash<CR>", opts)
+map('n', '<leader>fgb', ":Telescope git_branches<CR>", opts)
+map('n', '<leader>fv', ":Telescope treesitter<CR>", opts)
+map('n', '<leader>fs', ":Telescope spell_suggest<CR>", opts)
+map('n', '<leader>fc', ":Telescope colorscheme<CR>", opts)
 
 --BufferLine
 map("n", "<leader>1", ":BufferLineGoToBuffer 1<CR>", opts)

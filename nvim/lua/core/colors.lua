@@ -5,6 +5,7 @@ if not status then
 end
 
 vim.opt.fillchars:append { eob = " " } -- Gets rid of tilde after line numbers
+vim.cmd.set("noshowmode") -- Hide mode mode at bottom
 
 ---------- These are now handled by the transparent nvim plugin --------
 -- vim.api.nvim_set_hl(0, "Normal", {bg = "none"})

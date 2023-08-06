@@ -46,6 +46,7 @@
     #     (nerdfonts.override { fonts = ["JetBrainsMono"]; })
     # ];
     
+    hardware.opengl.enable = true;
     #Programs
     programs = {
         dconf.enable = true;

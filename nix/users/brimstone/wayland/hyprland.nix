@@ -17,7 +17,6 @@
         enable = true;
         package = inputs.hyprland.packages.${pkgs.system}.hyprland;
         enableNvidiaPatches = false;
-        xwayland.enable = true;
         settings = {
             "$mainMod" = "ALT";
             monitor = [
@@ -65,7 +64,7 @@
                   new_optimizations = true;
                   ignore_opacity = true;
                   noise = 0.0117;
-                  contrast = 1.2;
+                  contrast = 1.5;
                   xray = false;
                   brightness = 1;
                 };
@@ -90,11 +89,6 @@
             };
             gestures = {
                 workspace_swipe = false;
-            };
-            misc = {
-              disable_hyprland_logo = true;
-              disable_splash_rendering = true;
-              vrr = 1;
             };
             bind = [
                 # Exit to tty

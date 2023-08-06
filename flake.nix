@@ -48,6 +48,7 @@
         modules = [
           ./nix/systems/main/desktop
           { nix.registry.nixpkgs.flake = nixpkgs; }
+          { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
         ];
       };
     };
