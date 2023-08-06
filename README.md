@@ -15,6 +15,7 @@
 ⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 </p>
+
 ## My general dotfiles and configurations for linux
 ![Imgur](https://imgur.com/BsWkXCz.png)
 ![Imgur](https://imgur.com/F4gGRqa.png)
