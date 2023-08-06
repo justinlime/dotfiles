@@ -3,15 +3,18 @@
 check_deps(){
 which nvim
 if [ $? -eq 1 ]; then
+    clear
     echo "Please install neovim and try again"
     exit 1
+fi
 which git
 if [ $? -eq 1 ]; then
+    clear
     echo "Please install git to and try again"
     exit 1
+fi
 }
 install() {
-    check_deps
     git clone --depth 1 https://github.com/justinlime/dotfiles
     cd dotfiles
     # Backup old dirs
@@ -23,6 +26,7 @@ install() {
     nvim
 }
 
+check_deps
 cat << EOF
 
 ⠀⣞⢽⢪⢣⢣⢣⢫⡺⡵⣝⡮⣗⢷⢽⢽⢽⣮⡷⡽⣜⣜⢮⢺⣜⢷⢽⢝⡽⣝
