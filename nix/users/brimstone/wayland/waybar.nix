@@ -213,7 +213,7 @@
             }
 
             window#waybar {
-                background: rgba(16, 18, 19, 0.8);
+                background: rgba(16, 18, 19, ${custom.opacity});
             }
 
             #cava.left, #cava.right {

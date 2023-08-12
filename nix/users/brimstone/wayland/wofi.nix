@@ -5,6 +5,7 @@
         secondary_accent = "89b4fa";
         tertiary_accent = "f5f5f5";
         background = "11111B";
+        opacity = "1";
     },
     ... 
 }:
@@ -24,7 +25,7 @@
         }
         #window {
           border-radius: 40px;
-          background-color: #${custom.background};
+          background-color: rgba(17,17,27,${custom.opacity});
         }
         #input {
           border-radius: 100px;
@@ -45,7 +46,6 @@
         #entry:selected{
           background-color:#${custom.primary_accent};
           color: #${custom.background};
-          transition: all .5s ease-in-out;
         }
         #entry:hover {
         }
