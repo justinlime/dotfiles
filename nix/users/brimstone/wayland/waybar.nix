@@ -213,11 +213,11 @@
             }
 
             window#waybar {
-                background: rgba(16, 18, 19, ${custom.opacity});
+                background: ${custom.palette.primary_background_rgba};
             }
 
             #cava.left, #cava.right {
-                background: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 margin: 5px; 
                 padding: 8px 16px;
                 color: #${custom.primary_accent};
@@ -229,7 +229,7 @@
                 border-radius: 10px 24px 10px 24px;
             }
             #workspaces {
-                background: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 margin: 5px 5px;
                 padding: 8px 5px;
                 border-radius: 16px;
@@ -240,7 +240,7 @@
                 margin: 0px 3px;
                 border-radius: 16px;
                 color: transparent;
-                background-color: #2f354a;
+                background: ${custom.palette.primary_background_rgba};
                 transition: all 0.3s ease-in-out;
             }
 
@@ -263,7 +263,7 @@
 
             #tray, #pulseaudio, #network, #battery,
             #custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.foward{
-                background: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 font-weight: bold;
                 margin: 5px 0px;
             }
@@ -275,7 +275,7 @@
             }
             #clock {
                 color: #${custom.tertiary_accent};
-                background-color: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 border-radius: 0px 0px 0px 40px;
                 padding: 10px 10px 15px 25px;
                 margin-left: 7px;
@@ -284,7 +284,7 @@
             }
             #custom-launcher {
                 color: #${custom.secondary_accent};
-                background-color: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 border-radius: 0px 0px 40px 0px;
                 margin: 0px;
                 padding: 0px 35px 0px 15px;
@@ -292,7 +292,7 @@
             }
 
             #custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.foward {
-                background: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 font-size: 22px;
             }
             #custom-playerctl.backward:hover, #custom-playerctl.play:hover, #custom-playerctl.foward:hover{
@@ -315,7 +315,7 @@
                 margin-right: 7px
             }
             #custom-playerlabel {
-                background: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 color: #${custom.tertiary_accent};
                 padding: 0 20px;
                 border-radius: 24px 10px 24px 10px;
@@ -323,7 +323,7 @@
                 font-weight: bold;
             }
             #window{
-                background: #${custom.background};
+                background: #${custom.palette.tertiary_background_hex};
                 padding-left: 15px;
                 padding-right: 15px;
                 border-radius: 16px;

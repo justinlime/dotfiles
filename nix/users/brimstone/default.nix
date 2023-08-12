@@ -10,6 +10,7 @@ let
     background = "11111B";
     opacity = ".85";
     cursor = "Numix-Cursor";
+    palette = import ./colors;
   };
 in
 {
