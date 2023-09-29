@@ -17,6 +17,9 @@
             alsa.support32Bit = true;
             pulse.enable = true;
         };
+        udev.packages = with pkgs; [
+          via
+        ];
     };
     xdg.portal = {
         enable = true;

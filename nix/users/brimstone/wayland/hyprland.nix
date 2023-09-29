@@ -45,6 +45,7 @@
                 # "col.active_border" = "rgb(${custom.primary_accent})";
                 "col.active_border" = "rgb(${custom.background})";
                 "col.inactive_border" = "rgba(${custom.background}00)";
+                # allow_tearing = true;
                 layout = "dwindle";
             };
             decoration = {
@@ -182,6 +183,8 @@
                 "float,title:^(Confirm to replace files)$"
                 "float,title:^(File Operation Progress)$"
                 "float,title:^(mpv)$"
+                # Ensure tearing for specific games
+                # "immediate, class:^(cs2)$"
             ];
             layerrule = [
               "blur, waybar"
@@ -209,6 +212,9 @@
 
             # will reset the submap, meaning end the current one and return to the global one
             submap=reset
+
+            # For tearing
+            env = WLR_DRM_NO_ATOMIC,1
         '';
     };
 }

@@ -34,6 +34,7 @@
         swaynotificationcenter
         speedtest-cli
         tdesktop
+        via
         waybar
         wofi
         zig
