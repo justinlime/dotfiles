@@ -45,12 +45,11 @@
                 # "col.active_border" = "rgb(${custom.primary_accent})";
                 "col.active_border" = "rgb(${custom.background})";
                 "col.inactive_border" = "rgba(${custom.background}00)";
-                # allow_tearing = true;
+                allow_tearing = true;
                 layout = "dwindle";
             };
             decoration = {
                 rounding = 10;
-                multisample_edges = true;
                 shadow_ignore_window = true;
                 drop_shadow = true;
                 shadow_range = 35;
@@ -184,7 +183,9 @@
                 "float,title:^(File Operation Progress)$"
                 "float,title:^(mpv)$"
                 # Ensure tearing for specific games
-                # "immediate, class:^(cs2)$"
+                "immediate, class:^(cs2)$"
+                "immediate, class:^(love)$"
+                "immediate, title:^(Freesync test)$"
             ];
             layerrule = [
               "blur, waybar"
