@@ -124,7 +124,7 @@
 
     (leader
       "b" '(:ignore t :wk "buffer")
-      "bb" '(switch-to-buffer :wk "TEST4")
+      "bb" '(switch-to-buffer :wk "TEST5")
       "bi" '(ibuffer :wk "IBuffer")
       "bk" '(kill-this-buffer :wk "Kill this buffer")
       "br" '(revert-buffer :wk "Reload buffer"))
