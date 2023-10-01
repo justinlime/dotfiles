@@ -3,15 +3,26 @@
 #+DESCRIPTION: Justinlime's Emacs
 #+STARTUP: showeverything
 #+OPTIONS: toc:2
-* TABLE OF CONTENTS :toc:
-  - [[#general][General]]
-  - [[#packages][Packages]]
-  - [[#look--feel][Look & Feel]]
-  - [[#org-mode][Org Mode]]
-  - [[#misc][Misc]]
 
-** General
-*** Package Manger
+* TABLE OF CONTENTS :toc:
+- [[#general][General]]
+  - [[#package-manger][Package Manger]]
+- [[#packages][Packages]]
+  - [[#which-key][Which Key]]
+- [[#look--feel][Look & Feel]]
+  - [[#theme][Theme]]
+  - [[#gui][GUI]]
+  - [[#fonts][Fonts]]
+  - [[#dashboard][Dashboard]]
+- [[#org-mode][Org Mode]]
+  - [[#general-1][General]]
+  - [[#org-bullets][Org Bullets]]
+  - [[#org-table-of-contents][Org Table of Contents]]
+- [[#misc][Misc]]
+  - [[#splash-screen][Splash Screen]]
+
+* General
+** Package Manger
 #+begin_src emacs-lisp
       (defvar elpaca-installer-version 0.5)
       (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
@@ -119,9 +130,8 @@
   )
 #+end_src
 
-
-** Packages
-*** Which Key
+* Packages
+** Which Key
 #+begin_src emacs-lisp
 (use-package which-key
   :init
@@ -141,14 +151,14 @@
 	  which-key-separator " → " ))
 #+end_src
 
-** Look & Feel
-*** Theme
+* Look & Feel
+** Theme
 #+begin_src emacs-lisp
   (use-package catppuccin-theme
   :init
   (load-theme 'catppuccin :no-confirm))
 #+end_src
-*** GUI
+** GUI
 #+begin_src emacs-lisp
   (menu-bar-mode -1) ;;Disable menu
   (tool-bar-mode -1) ;;Disable toolbar
@@ -157,7 +167,7 @@
   (global-display-line-numbers-mode 1) ;;Display line numbers
   (global-visual-line-mode t) ;;Highlight currentl line number
 #+end_src
-*** Fonts
+** Fonts
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
@@ -188,7 +198,7 @@
 (setq-default line-spacing 0.12)
 #+end_src
 
-*** Dashboard
+** Dashboard
 #+begin_src emacs-lisp
 ;; use-package with Elpaca:
 (use-package dashboard
@@ -198,17 +208,24 @@
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (dashboard-setup-startup-hook))
 #+end_src
-** Org Mode
+* Org Mode
+** General
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook 'org-indent-mode)
+#+end_src
+** Org Bullets
+#+begin_src emacs-lisp
 (use-package org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+** Org Table of Contents
+#+begin_src emacs-lisp
 (use-package toc-org
     :commands toc-org-enable
     :init (add-hook 'org-mode-hook 'toc-org-enable))
 #+end_src
-** Misc
-*** Splash Screen
+* Misc
+** Splash Screen
 #+begin_src emacs-lisp
   (setq inhibit-startup-messags t)
 #+end_src 
