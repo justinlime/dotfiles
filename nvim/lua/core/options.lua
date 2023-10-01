@@ -8,6 +8,7 @@ opt.smartindent = true
 opt.number = true
 opt.relativenumber = true
 opt.cursorline = false
+opt.cursorlineopt='number'
 opt.wrap = false
 opt.shiftwidth = 4
 opt.softtabstop = 4
