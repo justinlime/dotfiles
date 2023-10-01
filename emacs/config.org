@@ -19,7 +19,6 @@
   - [[#org-bullets][Org Bullets]]
   - [[#org-table-of-contents][Org Table of Contents]]
 - [[#misc][Misc]]
-  - [[#splash-screen][Splash Screen]]
 
 * General
 ** Package Manger
@@ -225,7 +224,8 @@
     :init (add-hook 'org-mode-hook 'toc-org-enable))
 #+end_src
 * Misc
-** Splash Screen
 #+begin_src emacs-lisp
-  (setq inhibit-startup-messags t)
+  (setq inhibit-startup-messags t) ;; Disable splash screen
+  (setq make-backup-files nil) ;; stop creating ~ files
+  (setq auto-save-default nil) ;; Disable autosave # files
 #+end_src 
