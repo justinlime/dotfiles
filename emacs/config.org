@@ -4,18 +4,14 @@
 #+STARTUP: showeverything
 #+OPTIONS: toc:2
 * TABLE OF CONTENTS :toc:
-- [[#load-first][Load First]]
-  - [[#package-manger][Package Manger]]
-  - [[#evil-mode][Evil Mode]]
-  - [[#general-binds][General Binds]]
-  - [[#fonts][Fonts]]
-  - [[#gui][GUI]]
+  - [[#general][General]]
+  - [[#packages][Packages]]
+  - [[#look--feel][Look & Feel]]
   - [[#org-mode][Org Mode]]
-  - [[#which-key][Which Key]]
-  - [[#theme][Theme]]
+  - [[#misc][Misc]]
 
-* Load First
-** Package Manger
+** General
+*** Package Manger
 #+begin_src emacs-lisp
       (defvar elpaca-installer-version 0.5)
       (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
@@ -95,25 +91,25 @@
     (elpaca nil (message "deferred"))
 #+end_src
 
-** Evil Mode
+*** Evil Mode
 #+begin_src emacs-lisp
 
 #+end_src
 
-** General Binds
+*** General Binds
 #+begin_src emacs-lisp
   (use-package general
   :config
   (general-evil-setup)
 
   ;; set up 'SPC' as the global leader key
-  (general-create-definer dt/leader-keys
+  (general-create-definer leader
     :states '(normal insert visual emacs)
     :keymaps 'override
     :prefix "SPC" ;; set leader
     :global-prefix "M-SPC") ;; access leader in insert mode
 
-  (dt/leader-keys
+  (leader
     "b" '(:ignore t :wk "buffer")
     "bb" '(switch-to-buffer :wk "Switch buffer")
     "bk" '(kill-this-buffer :wk "Kill this buffer")
@@ -123,7 +119,45 @@
   )
 #+end_src
 
-** Fonts
+
+** Packages
+*** Which Key
+#+begin_src emacs-lisp
+(use-package which-key
+  :init
+    (which-key-mode 1)
+  :config
+  (setq which-key-side-window-location 'bottom
+	  which-key-sort-order #'which-key-key-order-alpha
+	  which-key-sort-uppercase-first nil
+	  which-key-add-column-padding 1
+	  which-key-max-display-columns nil
+	  which-key-min-display-lines 6
+	  which-key-side-window-slot -10
+	  which-key-side-window-max-height 0.25
+	  which-key-idle-delay 0.8
+	  which-key-max-description-length 25
+	  which-key-allow-imprecise-window-fit t
+	  which-key-separator " → " ))
+#+end_src
+
+** Look & Feel
+*** Theme
+#+begin_src emacs-lisp
+  (use-package catppuccin-theme
+  :init
+  (load-theme 'catppuccin :no-confirm))
+#+end_src
+*** GUI
+#+begin_src emacs-lisp
+  (menu-bar-mode -1) ;;Disable menu
+  (tool-bar-mode -1) ;;Disable toolbar
+  (scroll-bar-mode -1) ;;Disable scroll bar
+  (pixel-scroll-precision-mode 1) ;;Smooth scrolling
+  (global-display-line-numbers-mode 1) ;;Display line numbers
+  (global-visual-line-mode t) ;;Highlight currentl line number
+#+end_src
+*** Fonts
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
@@ -148,56 +182,33 @@
 ;; This sets the default font on all graphical frames created after restarting Emacs.
 ;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
 ;; are not right unless I also add this method of setting the default font.
-(add-to-list 'default-frame-alist '(font . "RobotoMono Nerd Font-11"))
+
 
 ;; Uncomment the following line if line spacing needs adjusting.
 (setq-default line-spacing 0.12)
 #+end_src
 
-** GUI
-
+*** Dashboard
 #+begin_src emacs-lisp
-      (menu-bar-mode -1)
-      (tool-bar-mode -1)
-      (scroll-bar-mode -1)
-    (pixel-scroll-precision-mode 1)
-    (global-display-line-numbers-mode 1)
-    (global-visual-line-mode t)
-  (setq display-line-numbers 'relative)
+;; use-package with Elpaca:
+(use-package dashboard
+  :elpaca t
+  :config
+  (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
+  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
+  (dashboard-setup-startup-hook))
 #+end_src
-
 ** Org Mode
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (use-package org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(add-hook 'org-mode-hook 'org-indent-mode)
+(use-package org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 (use-package toc-org
     :commands toc-org-enable
     :init (add-hook 'org-mode-hook 'toc-org-enable))
 #+end_src
-
-** Which Key
+** Misc
+*** Splash Screen
 #+begin_src emacs-lisp
-(use-package which-key
-  :init
-    (which-key-mode 1)
-  :config
-  (setq which-key-side-window-location 'bottom
-	  which-key-sort-order #'which-key-key-order-alpha
-	  which-key-sort-uppercase-first nil
-	  which-key-add-column-padding 1
-	  which-key-max-display-columns nil
-	  which-key-min-display-lines 6
-	  which-key-side-window-slot -10
-	  which-key-side-window-max-height 0.25
-	  which-key-idle-delay 0.8
-	  which-key-max-description-length 25
-	  which-key-allow-imprecise-window-fit t
-	  which-key-separator " → " ))
-#+end_src
-** Theme
-#+begin_src emacs-lisp
-  (use-package catppuccin-theme
-  :init
-  (load-theme 'catppuccin :no-confirm))
-#+end_src
+  (setq inhibit-startup-messags t)
+#+end_src 
