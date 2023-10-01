@@ -1,12 +1,15 @@
 #+TITLE: Justinlime's Emacs
 #+AUTHOR: Justinlime
 #+DESCRIPTION: Justinlime's Emacs
-#+STARTUP: showeverything
+#+PROPERTY: header-args :tangle yes
+#+STARTUP showeverything
 #+OPTIONS: toc:2
 
 * TABLE OF CONTENTS :toc:
 - [[#general][General]]
   - [[#package-manger][Package Manger]]
+  - [[#evil-mode][Evil Mode]]
+  - [[#binds][Binds]]
 - [[#packages][Packages]]
   - [[#which-key][Which Key]]
 - [[#look--feel][Look & Feel]]
@@ -22,7 +25,7 @@
 
 * General
 ** Package Manger
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
       (defvar elpaca-installer-version 0.5)
       (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
       (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -77,20 +80,6 @@
     ;;(use-package general :demand t)
     ;;(elpaca-wait)
 
-    ;; Expands to: (elpaca evil (use-package evil :demand t))
-  (use-package evil
-      :init      ;; tweak evil's configuration before loading it
-      (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-      (setq evil-want-keybinding nil)
-      (setq evil-vsplit-window-right t)
-      (setq evil-split-window-below t)
-      (evil-mode))
-    (use-package evil-collection
-      :after evil
-      :config
-      (setq evil-collection-mode-list '(dashboard dired ibuffer))
-      (evil-collection-init))
-    (use-package evil-tutor)
     
     ;;Turns off elpaca-use-package-mode current declartion
     ;;Note this will cause the declaration to be interpreted immediately (not deferred).
@@ -101,37 +90,77 @@
     (elpaca nil (message "deferred"))
 #+end_src
 
-*** Evil Mode
+** Evil Mode
 #+begin_src emacs-lisp
+   ;; Expands to: (elpaca evil (use-package evil :demand t))
+   (use-package evil
+       :init      ;; tweak evil's configuration before loading it
+       (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+       (setq evil-want-keybinding nil)
+       (setq evil-vsplit-window-right t)
+       (setq evil-split-window-below t)
+       (evil-mode))
+   (use-package evil-collection
+       :after evil
+       :config
+       (setq evil-collection-mode-list '(dashboard dired ibuffer))
+       (evil-collection-init))
+   (use-package evil-tutor)
 
 #+end_src
 
-*** General Binds
+** Binds
 #+begin_src emacs-lisp
   (use-package general
-  :config
-  (general-evil-setup)
+    :config
+    (general-evil-setup)
 
-  ;; set up 'SPC' as the global leader key
-  (general-create-definer leader
-    :states '(normal insert visual emacs)
-    :keymaps 'override
-    :prefix "SPC" ;; set leader
-    :global-prefix "M-SPC") ;; access leader in insert mode
+    ;; set up 'SPC' as the global leader key
+    (general-create-definer leader
+      :states '(normal insert visual emacs)
+      :keymaps 'override
+      :prefix "SPC" ;; set leader
+      :global-prefix "M-SPC") ;; access leader in insert mode
 
-  (leader
-    "b" '(:ignore t :wk "buffer")
-    "bb" '(switch-to-buffer :wk "Switch buffer")
-    "bk" '(kill-this-buffer :wk "Kill this buffer")
-    "bn" '(next-buffer :wk "Next buffer")
-    "bp" '(previous-buffer :wk "Previous buffer")
-    "br" '(revert-buffer :wk "Reload buffer"))
-  )
+    (leader
+      "b" '(:ignore t :wk "buffer")
+      "bb" '(switch-to-buffer :wk "TEST4")
+      "bi" '(ibuffer :wk "IBuffer")
+      "bk" '(kill-this-buffer :wk "Kill this buffer")
+      "br" '(revert-buffer :wk "Reload buffer"))
+    (leader
+      "e" '(:ignore t :wk "Evaluate")    
+      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+      "e e" '(eval-expression :wk "Evaluate and elisp expression")
+      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+      "e r" '(eval-region :wk "Evaluate elisp in region")) 
+    (leader
+      "h" '(:ignore t :wk "Help")
+      "h f" '(describe-function :wk "Describe function")
+      "h v" '(describe-variable :wk "Describe variable")
+      ;;"h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+      "h r r" '(reload-init-file :wk "Reload emacs config"))
+    (leader
+      "d" '(:ignore t :wk "Help")
+      "d t" '(dired :wk "Describe function"))
+    (leader
+      "f" '(:ignore t :wk "Help")
+      "f f" '(find-file :wk "Find file"))
+    (leader
+      "c" '(:ignore t :wk "Help")
+      "c r" '(comment-region :wk "Find file")
+      "c l" '(comment-line :wk "Find file"))
+    (leader
+      "t" '(:ignore t :wk "Help")
+      "t t" '(org-babel-tangle-file (expand-file-name "config.org" user-emacs-directory)
+      :wk "Find file"))
+    )
 #+end_src
 
 * Packages
 ** Which Key
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 (use-package which-key
   :init
     (which-key-mode 1)
@@ -210,7 +239,8 @@
 * Org Mode
 ** General
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-indent-mode)
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (setq org-src-preserve-indentation t)
 #+end_src
 ** Org Bullets
 #+begin_src emacs-lisp
