@@ -8,8 +8,9 @@
 * TABLE OF CONTENTS :toc:
 - [[#general][General]]
   - [[#package-manger][Package Manger]]
-  - [[#evil-mode][Evil Mode]]
-  - [[#binds][Binds]]
+  - [[#evil-mode-binds][Evil Mode Binds]]
+  - [[#gerneral-binds][Gerneral Binds]]
+  - [[#keychord-binds][Keychord Binds]]
 - [[#packages][Packages]]
   - [[#which-key][Which Key]]
 - [[#look--feel][Look & Feel]]
@@ -18,203 +19,215 @@
   - [[#fonts][Fonts]]
   - [[#dashboard][Dashboard]]
 - [[#org-mode][Org Mode]]
-  - [[#general-1][General]]
+  - [[#org-general][Org General]]
   - [[#org-bullets][Org Bullets]]
   - [[#org-table-of-contents][Org Table of Contents]]
+  - [[#org-modern][Org Modern]]
 - [[#misc][Misc]]
 
 * General
 ** Package Manger
 #+begin_src emacs-lisp 
-      (defvar elpaca-installer-version 0.5)
-      (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-      (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-      (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-      (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-				    :ref nil
-				    :files (:defaults (:exclude "extensions"))
-				    :build (:not elpaca--activate-package)))
-      (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-	     (build (expand-file-name "elpaca/" elpaca-builds-directory))
-	     (order (cdr elpaca-order))
-	     (default-directory repo))
-	(add-to-list 'load-path (if (file-exists-p build) build repo))
-	(unless (file-exists-p repo)
-	  (make-directory repo t)
-	  (when (< emacs-major-version 28) (require 'subr-x))
-	  (condition-case-unless-debug err
-	      (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-		       ((zerop (call-process "git" nil buffer t "clone"
-					     (plist-get order :repo) repo)))
-		       ((zerop (call-process "git" nil buffer t "checkout"
-					     (or (plist-get order :ref) "--"))))
-		       (emacs (concat invocation-directory invocation-name))
-		       ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-					     "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-		       ((require 'elpaca))
-		       ((elpaca-generate-autoloads "elpaca" repo)))
-		  (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-		(error "%s" (with-current-buffer buffer (buffer-string))))
-	    ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-	(unless (require 'elpaca-autoloads nil t)
-	  (require 'elpaca)
-	  (elpaca-generate-autoloads "elpaca" repo)
-	  (load "./elpaca-autoloads")))
-      (add-hook 'after-init-hook #'elpaca-process-queues)
-      (elpaca `(,@elpaca-order))
+(defvar elpaca-installer-version 0.5)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+							  :ref nil
+							  :files (:defaults (:exclude "extensions"))
+							  :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+	   (build (expand-file-name "elpaca/" elpaca-builds-directory))
+	   (order (cdr elpaca-order))
+	   (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+	(make-directory repo t)
+	(when (< emacs-major-version 28) (require 'subr-x))
+	(condition-case-unless-debug err
+		(if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+				 ((zerop (call-process "git" nil buffer t "clone"
+									   (plist-get order :repo) repo)))
+				 ((zerop (call-process "git" nil buffer t "checkout"
+									   (or (plist-get order :ref) "--"))))
+				 (emacs (concat invocation-directory invocation-name))
+				 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+									   "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+				 ((require 'elpaca))
+				 ((elpaca-generate-autoloads "elpaca" repo)))
+			(progn (message "%s" (buffer-string)) (kill-buffer buffer))
+		  (error "%s" (with-current-buffer buffer (buffer-string))))
+	  ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+	(require 'elpaca)
+	(elpaca-generate-autoloads "elpaca" repo)
+	(load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
-    ;; Install use-package support
-    (elpaca elpaca-use-package
-      ;; Enable :elpaca use-package keyword.
-      (elpaca-use-package-mode)
-      ;; Assume :elpaca t unless otherwise specified.
-      (setq elpaca-use-package-by-default t))
+;; Install use-package support
+(elpaca elpaca-use-package
+  ;; Enable :elpaca use-package keyword.
+  (elpaca-use-package-mode)
+  ;; Assume :elpaca t unless otherwise specified.
+  (setq elpaca-use-package-by-default t))
 
-    ;; Block until current queue processed.
-    (elpaca-wait)
+;; Block until current queue processed.
+(elpaca-wait)
 
-    ;;When installing a package which modifies a form used at the top-level
-    ;;(e.g. a package which adds a use-package key word),
-    ;;use `elpaca-wait' to block until that package has been installed/configured.
-    ;;For example:
-    ;;(use-package general :demand t)
-    ;;(elpaca-wait)
+;;When installing a package which modifies a form used at the top-level
+;;(e.g. a package which adds a use-package key word),
+;;use `elpaca-wait' to block until that package has been installed/configured.
+;;For example:
+;;(use-package general :demand t)
+;;(elpaca-wait)
 
+
+;;Turns off elpaca-use-package-mode current declartion
+;;Note this will cause the declaration to be interpreted immediately (not deferred).
+;;Useful for configuring built-in emacs features.
+(use-package emacs :elpaca nil :config (setq ring-bell-function #'ignore))
+
+;; Don't install anything. Defer execution of BODY
+(elpaca nil (message "deferred"))
+#+end_src
+
+** Evil Mode Binds
+#+begin_src emacs-lisp
+;; Expands to: (elpaca evil (use-package evil :demand t))
+(use-package evil
+  :init      ;; tweak evil's configuration before loading it
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  (setq evil-vsplit-window-right t)
+  (setq evil-split-window-below t)
+  (setq evil-shift-width 4)
+  (evil-mode))
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+  (setq evil-collection-mode-list '(dashboard dired ibuffer))
+  (evil-collection-init))
+(use-package evil-tutor)
+
+#+end_src
+
+** Gerneral Binds
+#+begin_src emacs-lisp
+(use-package general
+  :config
+  (general-evil-setup)
+  (general-define-key
+    :states '(normal insert visual emacs)
+    :keymaps 'override 
     
-    ;;Turns off elpaca-use-package-mode current declartion
-    ;;Note this will cause the declaration to be interpreted immediately (not deferred).
-    ;;Useful for configuring built-in emacs features.
-    (use-package emacs :elpaca nil :config (setq ring-bell-function #'ignore))
+  ;; set up 'SPC' as the global leader key
+  (general-create-definer leader
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC" ;; set leader
+    :global-prefix "M-SPC") ;; access leader in insert mode
 
-    ;; Don't install anything. Defer execution of BODY
-    (elpaca nil (message "deferred"))
+  (leader
+    "b" '(:ignore t :wk "buffer")
+    "bb" '(switch-to-buffer :wk "TEST5")
+    "bi" '(ibuffer :wk "IBuffer")
+    "bk" '(kill-this-buffer :wk "Kill this buffer")
+    "br" '(revert-buffer :wk "Reload buffer"))
+  (leader
+    "e" '(:ignore t :wk "Evaluate")    
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate and elisp expression")
+    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+    "e r" '(eval-region :wk "Evaluate elisp in region")) 
+  (leader
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h v" '(describe-variable :wk "Describe variable")
+    ;;"h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+    "h r r" '(reload-init-file :wk "Reload emacs config"))
+  (leader
+    "d" '(:ignore t :wk "Help")
+    "d t" '(dired :wk "Describe function"))
+  (leader
+    "f" '(:ignore t :wk "Help")
+    "f f" '(find-file :wk "Find file"))
+  (leader
+    "c" '(:ignore t :wk "Help")
+    "c r" '(comment-region :wk "Find file")
+    "c l" '(comment-line :wk "Find file"))
+  )
 #+end_src
 
-** Evil Mode
+** Keychord Binds
 #+begin_src emacs-lisp
-   ;; Expands to: (elpaca evil (use-package evil :demand t))
-   (use-package evil
-       :init      ;; tweak evil's configuration before loading it
-       (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-       (setq evil-want-keybinding nil)
-       (setq evil-vsplit-window-right t)
-       (setq evil-split-window-below t)
-       (evil-mode))
-   (use-package evil-collection
-       :after evil
-       :config
-       (setq evil-collection-mode-list '(dashboard dired ibuffer))
-       (evil-collection-init))
-   (use-package evil-tutor)
-
-#+end_src
-
-** Binds
-#+begin_src emacs-lisp
-  (use-package general
-    :config
-    (general-evil-setup)
-
-    ;; set up 'SPC' as the global leader key
-    (general-create-definer leader
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "M-SPC") ;; access leader in insert mode
-
-    (leader
-      "b" '(:ignore t :wk "buffer")
-      "bb" '(switch-to-buffer :wk "TEST5")
-      "bi" '(ibuffer :wk "IBuffer")
-      "bk" '(kill-this-buffer :wk "Kill this buffer")
-      "br" '(revert-buffer :wk "Reload buffer"))
-    (leader
-      "e" '(:ignore t :wk "Evaluate")    
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-      "e e" '(eval-expression :wk "Evaluate and elisp expression")
-      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "e r" '(eval-region :wk "Evaluate elisp in region")) 
-    (leader
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Describe function")
-      "h v" '(describe-variable :wk "Describe variable")
-      ;;"h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
-      "h r r" '(reload-init-file :wk "Reload emacs config"))
-    (leader
-      "d" '(:ignore t :wk "Help")
-      "d t" '(dired :wk "Describe function"))
-    (leader
-      "f" '(:ignore t :wk "Help")
-      "f f" '(find-file :wk "Find file"))
-    (leader
-      "c" '(:ignore t :wk "Help")
-      "c r" '(comment-region :wk "Find file")
-      "c l" '(comment-line :wk "Find file"))
-    (leader
-      "t" '(:ignore t :wk "Help")
-      "t t" '(org-babel-tangle-file (expand-file-name "config.org" user-emacs-directory)
-      :wk "Find file"))
-    )
-#+end_src
+(use-package key-chord
+  :init
+  (key-chord-mode 1)
+  :config
+  (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
+#+end_src 
 
 * Packages
 ** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
   :init
-    (which-key-mode 1)
+  (which-key-mode 1)
   :config
   (setq which-key-side-window-location 'bottom
-	  which-key-sort-order #'which-key-key-order-alpha
-	  which-key-sort-uppercase-first nil
-	  which-key-add-column-padding 1
-	  which-key-max-display-columns nil
-	  which-key-min-display-lines 6
-	  which-key-side-window-slot -10
-	  which-key-side-window-max-height 0.25
-	  which-key-idle-delay 0.8
-	  which-key-max-description-length 25
-	  which-key-allow-imprecise-window-fit t
-	  which-key-separator " → " ))
+		which-key-sort-order #'which-key-key-order-alpha
+		which-key-sort-uppercase-first nil
+		which-key-add-column-padding 1
+		which-key-max-display-columns nil
+		which-key-min-display-lines 6
+		which-key-side-window-slot -10
+		which-key-side-window-max-height 0.25
+		which-key-idle-delay 0.8
+		which-key-max-description-length 25
+		which-key-allow-imprecise-window-fit t
+		which-key-separator " → " ))
 #+end_src
 * Look & Feel
 ** Theme
 #+begin_src emacs-lisp
-  (use-package catppuccin-theme
+(use-package catppuccin-theme
   :init
+  (setq catppuccin-flavor 'mocha)
   (load-theme 'catppuccin :no-confirm))
 #+end_src
 ** GUI
 #+begin_src emacs-lisp
-  (menu-bar-mode -1) ;;Disable menu
-  (tool-bar-mode -1) ;;Disable toolbar
-  (scroll-bar-mode -1) ;;Disable scroll bar
-  (pixel-scroll-precision-mode 1) ;;Smooth scrolling
-  (global-display-line-numbers-mode 1) ;;Display line numbers
-  (global-visual-line-mode t) ;;Highlight currentl line number
+(menu-bar-mode -1) ;;Disable menu
+(tool-bar-mode -1) ;;Disable toolbar
+(scroll-bar-mode -1) ;;Disable scroll bar
+(pixel-scroll-precision-mode 1) ;;Smooth scrolling
+(global-display-line-numbers-mode 1) ;;Display line numbers
+(setq-default truncate-lines t) ;; Allow truncated lines
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
-  :font "RobotoMono Nerd Font"
-  :height 120
-  :weight 'medium)
-;;(set-face-attribute 'variable-pitch nil
-;;  :font "Ubuntu"
-;;  :height 120
-;;  :weight 'medium)
+                    :font "RobotoMono Nerd Font"
+                    :height 120
+                    :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+                    :font "Roboto"
+                    :height 120
+                    :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-  :font "RobotoMono Nerd Font"
-  :height 120
-  :weight 'medium)
+                    :font "RobotoMono Nerd Font"
+                    :height 120
+                    :weight 'medium)
 ;; Makes commented text and keywords italics.
 ;; This is working in emacsclient but not emacs.
 ;; Your font must have an italic face available.
 (set-face-attribute 'font-lock-comment-face nil
-  :slant 'italic)
+                    :slant 'italic)
 (set-face-attribute 'font-lock-keyword-face nil
-  :slant 'italic)
+                    :slant 'italic)
 
 ;; This sets the default font on all graphical frames created after restarting Emacs.
 ;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
@@ -233,14 +246,15 @@
   :config
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
   (dashboard-setup-startup-hook))
 #+end_src
 * Org Mode
-** General
+** Org General
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (setq org-src-preserve-indentation t)
-  (electric-indent-mode -1)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(setq org-src-preserve-indentation t)
+(electric-indent-mode -1)
 #+end_src
 ** Org Bullets
 #+begin_src emacs-lisp
@@ -253,10 +267,16 @@
     :commands toc-org-enable
     :init (add-hook 'org-mode-hook 'toc-org-enable))
 #+end_src
+** Org Modern
+#+begin_src emacs-lisp
+(use-package org-modern
+  :init 
+  (with-eval-after-load 'org (global-org-modern-mode)))
+#+end_src
 * Misc
 #+begin_src emacs-lisp
-  (setq inhibit-startup-messags t) ;; Disable splash screen
-  (setq make-backup-files nil) ;; stop creating ~ files
-  (setq auto-save-default nil) ;; Disable autosave # files
-  (global-visual-line-mode t)
+(setq inhibit-startup-messags t) ;; Disable splash screen
+(setq make-backup-files nil) ;; stop creating ~ files
+(setq auto-save-default nil) ;; Disable autosave # files
+(setq-default tab-width 4) 
 #+end_src 
