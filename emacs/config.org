@@ -178,7 +178,6 @@
 	  which-key-allow-imprecise-window-fit t
 	  which-key-separator " → " ))
 #+end_src
-
 * Look & Feel
 ** Theme
 #+begin_src emacs-lisp
@@ -241,6 +240,7 @@
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook 'org-indent-mode)
   (setq org-src-preserve-indentation t)
+  (electric-indent-mode -1)
 #+end_src
 ** Org Bullets
 #+begin_src emacs-lisp
@@ -258,4 +258,5 @@
   (setq inhibit-startup-messags t) ;; Disable splash screen
   (setq make-backup-files nil) ;; stop creating ~ files
   (setq auto-save-default nil) ;; Disable autosave # files
+  (global-visual-line-mode t)
 #+end_src 
