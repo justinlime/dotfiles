@@ -107,6 +107,7 @@
   :after evil
   :config
   (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+  (define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)
   (setq evil-collection-mode-list '(dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
@@ -118,9 +119,6 @@
 (use-package general
   :config
   (general-evil-setup)
-  (general-define-key
-    :states '(normal insert visual emacs)
-    :keymaps 'override 
     
   ;; set up 'SPC' as the global leader key
   (general-create-definer leader
