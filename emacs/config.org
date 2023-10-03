@@ -24,6 +24,8 @@
   - [[#org-table-of-contents][Org Table of Contents]]
   - [[#org-modern][Org Modern]]
 - [[#misc][Misc]]
+  - [[#other-settings][Other Settings]]
+  - [[#custom-functions][Custom Functions]]
 
 * General
 ** Package Manger
@@ -119,7 +121,7 @@
 (use-package general
   :config
   (general-evil-setup)
-    
+
   ;; set up 'SPC' as the global leader key
   (general-create-definer leader
     :states '(normal insert visual emacs)
@@ -156,6 +158,10 @@
     "c" '(:ignore t :wk "Help")
     "c r" '(comment-region :wk "Find file")
     "c l" '(comment-line :wk "Find file"))
+  (leader
+    "s" '(:ignore t :wk "Help")
+    "s u" '(ssh-user :wk "SSH as user")
+    "s r" '(ssh-root :wk "SSH as user with root privledges"))
   )
 #+end_src
 
@@ -165,6 +171,7 @@
   :init
   (key-chord-mode 1)
   :config
+  (setq key-chord-two-keys-delay 0.2)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 
@@ -272,9 +279,34 @@
   (with-eval-after-load 'org (global-org-modern-mode)))
 #+end_src
 * Misc
+** Other Settings
 #+begin_src emacs-lisp
 (setq inhibit-startup-messags t) ;; Disable splash screen
 (setq make-backup-files nil) ;; stop creating ~ files
 (setq auto-save-default nil) ;; Disable autosave # files
-(setq-default tab-width 4) 
+(setq-default tab-width 2) 
 #+end_src 
+** Custom Functions
+#+begin_src emacs-lisp
+(defun ssh-root (host)
+  "SSH with sudo privledges using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (let ((format-host (format "/ssh:%s|sudo:%s:/" host host)))
+    (find-file format-host)
+  )
+)
+
+(defun ssh-user (host)
+  "SSH using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (let ((format-host (format "/ssh:%s:~" host)))
+    (find-file format-host)
+  )
+)
+#+end_src
+
+
+
+
+
+
