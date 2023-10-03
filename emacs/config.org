@@ -19,6 +19,7 @@
   - [[#fonts][Fonts]]
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
+- [[#neotree][Neotree]]
 - [[#magit][Magit]]
 - [[#org-mode][Org Mode]]
   - [[#org-general][Org General]]
@@ -259,7 +260,21 @@
 * LSP/Completion
 #+begin_src emacs-lisp
 (use-package eglot)
-(use-package company)
+(use-package company
+  :config
+  (global-company-mode))
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode)
+  (setq treesit-auto-install 'prompt))
+(use-package yasnippet
+  :config
+  ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
+  (yas-global-mode 1))
+#+end_src
+* Neotree
+#+begin_src emacs-lisp
+(use-package neotree)
 #+end_src
 * Magit
 #+begin_src emacs-lisp
