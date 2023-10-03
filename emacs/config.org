@@ -19,6 +19,7 @@
   - [[#fonts][Fonts]]
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
+- [[#magit][Magit]]
 - [[#org-mode][Org Mode]]
   - [[#org-general][Org General]]
   - [[#org-bullets][Org Bullets]]
@@ -259,6 +260,10 @@
 #+begin_src emacs-lisp
 (use-package eglot)
 (use-package company)
+#+end_src
+* Magit
+#+begin_src emacs-lisp
+(use-package magit)
 #+end_src
 * Org Mode
 ** Org General
