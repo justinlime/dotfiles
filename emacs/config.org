@@ -18,6 +18,7 @@
   - [[#gui][GUI]]
   - [[#fonts][Fonts]]
   - [[#dashboard][Dashboard]]
+- [[#lspcompletion][LSP/Completion]]
 - [[#org-mode][Org Mode]]
   - [[#org-general][Org General]]
   - [[#org-bullets][Org Bullets]]
@@ -253,6 +254,11 @@
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
   (dashboard-setup-startup-hook))
+#+end_src
+* LSP/Completion
+#+begin_src emacs-lisp
+(use-package eglot)
+(use-package company)
 #+end_src
 * Org Mode
 ** Org General
