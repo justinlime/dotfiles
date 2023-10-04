@@ -20,6 +20,7 @@
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
 - [[#neotree][Neotree]]
+- [[#fzf][FZF]]
 - [[#magit][Magit]]
 - [[#org-mode][Org Mode]]
   - [[#org-general][Org General]]
@@ -38,35 +39,35 @@
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-							  :ref nil
-							  :files (:defaults (:exclude "extensions"))
-							  :build (:not elpaca--activate-package)))
+                              :ref nil
+                              :files (:defaults (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-	   (build (expand-file-name "elpaca/" elpaca-builds-directory))
-	   (order (cdr elpaca-order))
-	   (default-directory repo))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
   (add-to-list 'load-path (if (file-exists-p build) build repo))
   (unless (file-exists-p repo)
-	(make-directory repo t)
-	(when (< emacs-major-version 28) (require 'subr-x))
-	(condition-case-unless-debug err
-		(if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-				 ((zerop (call-process "git" nil buffer t "clone"
-									   (plist-get order :repo) repo)))
-				 ((zerop (call-process "git" nil buffer t "checkout"
-									   (or (plist-get order :ref) "--"))))
-				 (emacs (concat invocation-directory invocation-name))
-				 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-									   "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-				 ((require 'elpaca))
-				 ((elpaca-generate-autoloads "elpaca" repo)))
-			(progn (message "%s" (buffer-string)) (kill-buffer buffer))
-		  (error "%s" (with-current-buffer buffer (buffer-string))))
-	  ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (call-process "git" nil buffer t "clone"
+                                       (plist-get order :repo) repo)))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (or (plist-get order :ref) "--"))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
   (unless (require 'elpaca-autoloads nil t)
-	(require 'elpaca)
-	(elpaca-generate-autoloads "elpaca" repo)
-	(load "./elpaca-autoloads")))
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
@@ -149,8 +150,6 @@
     "h" '(:ignore t :wk "Help")
     "h f" '(describe-function :wk "Describe function")
     "h v" '(describe-variable :wk "Describe variable")
-    ;;"h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
-    "h r r" '(reload-init-file :wk "Reload emacs config"))
   (leader
     "d" '(:ignore t :wk "Help")
     "d t" '(dired :wk "Describe function"))
@@ -275,6 +274,23 @@
 * Neotree
 #+begin_src emacs-lisp
 (use-package neotree)
+#+end_src
+* FZF
+#+begin_src emacs-lisp
+(use-package fzf
+  :bind
+    ;; Don't forget to set keybinds!
+  :config
+  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+        fzf/executable "fzf"
+        fzf/git-grep-args "-i --line-number %s"
+        ;; command used for `fzf-grep-*` functions
+        ;; example usage for ripgrep:
+        ;; fzf/grep-command "rg --no-heading -nH"
+        fzf/grep-command "grep -nrH"
+        ;; If nil, the fzf buffer will appear at the top of the window
+        fzf/position-bottom t
+        fzf/window-height 15))
 #+end_src
 * Magit
 #+begin_src emacs-lisp

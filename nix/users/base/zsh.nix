@@ -25,7 +25,6 @@
 				unfunction preexec
 				PS1='$ '
 			fi
-
     '';
   };
 }

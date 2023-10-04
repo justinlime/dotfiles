@@ -7,7 +7,7 @@
     gcc
     vrrtest
     websocat
-	roboto
+		roboto
     (nerdfonts.override { fonts = [ "RobotoMono" ]; })
   ];
 }
