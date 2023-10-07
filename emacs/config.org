@@ -327,12 +327,7 @@
 (setq make-backup-files nil) ;; stop creating ~ files
 (setq auto-save-default nil) ;; Disable autosave # files
 (setq-default tab-width 2) 
-
-(customize-set-variable ;; Set a persistent connection in tramp
-'tramp-ssh-controlmaster-options
-(concat
-   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-   "-o ControlMaster=auto -o ControlPersist=yes"))
+(setq password-cache-expiry nil)
 #+end_src 
 ** Custom Functions
 #+begin_src emacs-lisp
