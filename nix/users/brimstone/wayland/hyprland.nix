@@ -183,9 +183,9 @@
                 "float,title:^(File Operation Progress)$"
                 "float,title:^(mpv)$"
                 # Ensure tearing for specific games
-                "immediate, class:^(cs2)$"
-                "immediate, class:^(love)$"
-                "immediate, title:^(Freesync test)$"
+                "immediate, class:^(cs2)$" #counterstrike
+                "immediate, class:^(love)$" #vrrtest
+                "immediate, class:^(steam_app_311210)$" #Black ops 3 
             ];
             layerrule = [
               "blur, waybar"
