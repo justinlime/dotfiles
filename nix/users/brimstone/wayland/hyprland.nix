@@ -164,10 +164,10 @@
                 ",switch:off:Lid Switch, exec, swaylock -f -i ~/photos/wallpapers/wallpaper.png"
             ];
             windowrulev2 = [
-                "opacity ${custom.opacity} ${custom.opacity},class:^(thunar)$"
+                # "opacity ${custom.opacity} ${custom.opacity},class:^(thunar)$"
                 # "opacity ${custom.opacity} ${custom.opacity},class:^(WebCord)$"
-                "opacity 0.90 0.90,class:^(Brave-browser)$"
-                "opacity 0.90 0.90,class:^(brave-browser)$"
+                # "opacity 0.90 0.90,class:^(Brave-browser)$"
+                # "opacity 0.90 0.90,class:^(brave-browser)$"
                 # "opacity 0.90 0.90,class:^(firefox)$"
                 "float,class:^(pavucontrol)$"
                 "float,class:^(file_progress)$"
