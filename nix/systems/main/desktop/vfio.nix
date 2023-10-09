@@ -6,7 +6,7 @@
 			"iommu=pt"
 			#"vfio-pci.ids=1002:73bf,1002:ab28"
 		];
-		initrd.kernelModules = [ "vfio-pci" "vfio_iommu_type1" "vfio_virqfd" "amdgpu" ];
+		initrd.kernelModules = [ "vfio_pci" "vfio_iommu_type1" "vfio_virqfd" "amdgpu" ];
 		kernelModules = [ "kvm-amd" ];
 	};
 	virtualisation.libvirtd = {
