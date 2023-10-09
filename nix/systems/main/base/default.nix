@@ -29,7 +29,7 @@
         users.justinlime = {
             isNormalUser = true;
             initialPassword = "gigachad";
-            extraGroups = [ "wheel" "docker" "video" "libvirtd" "plugdev" "${username}" ];
+            extraGroups = [ "wheel" "docker" "video" "kvm" "input" "libvirtd" "plugdev" "${username}" ];
             packages = with pkgs; [
             ];
         };

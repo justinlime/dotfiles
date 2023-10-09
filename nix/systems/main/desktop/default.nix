@@ -3,6 +3,7 @@
     imports =
         [ # Include the results of the hardware scan.
         ./hardware-configuration.nix
+				# cant get this shit to work lulz ./vfio.nix
         ../base
         ];
 
