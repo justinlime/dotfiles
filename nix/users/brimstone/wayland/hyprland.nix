@@ -58,7 +58,7 @@
                 "col.shadow" = "rgb(${custom.background})";
                 "col.shadow_inactive" = "rgba(${custom.background}00)";
                 blur = {
-                  enabled = true;
+                  enabled = false;
                   size = 6;
                   passes = 3;
                   new_optimizations = true;
@@ -100,7 +100,7 @@
                 "$mainMod SHIFT, X, exit "
                 # Launch
                 "$mainMod, RETURN, exec, foot"
-                "$mainMod, D, exec, wofi --show drun"
+                "$mainMod, D, exec, wofi"
                 ''$mainMod,P,exec,mkdir -p ~/photos/screenshots; grim -t png -g "$(slurp)" ~/photos/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png''
                 "$mainMod SHIFT,N,exec, swaync-client -t -sw"
                 "$mainMod SHIFT,M,exec, swaylock -f -i ~/photos/wallpapers/wallpaper.png"

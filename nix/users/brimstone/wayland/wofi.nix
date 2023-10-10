@@ -17,6 +17,7 @@
             width = "25%";
             hide_scroll = true;
             term = "foot";
+            show = "drun";
         };
         style =''
         * {

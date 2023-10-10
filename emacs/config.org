@@ -2,7 +2,7 @@
 #+AUTHOR: Justinlime
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
-#+STARTUP showeverything
+#+STARTUP: showeverything
 #+OPTIONS: toc:2
 
 * TABLE OF CONTENTS :toc:
@@ -128,6 +128,7 @@
   (general-evil-setup)
 
   ;; set up 'SPC' as the global leader key
+  ;; (general-imap "TAB" 'company-select-next) ;;Doesnt fuggin work
   (general-create-definer leader
     :states '(normal insert visual emacs)
     :keymaps 'override
@@ -262,7 +263,11 @@
 (use-package eglot)
 (use-package company
   :config
-  (global-company-mode))
+  (global-company-mode)
+  (define-key company-active-map (kbd "<tab>") nil)
+  (define-key company-active-map (kbd "TAB") 'company-select-next)
+  (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+)
 (use-package yasnippet
   :config
   ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
