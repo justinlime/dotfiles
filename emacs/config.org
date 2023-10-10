@@ -267,6 +267,7 @@
   (define-key company-active-map (kbd "<tab>") nil)
   (define-key company-active-map (kbd "TAB") 'company-select-next)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+  ;; (define-key company-active-map (kbd "<return>") 'company-yasnippet-or-completion)
 )
 (use-package yasnippet
   :config
