@@ -8,6 +8,7 @@
         ./networking.nix
         ./packages.nix
         ./services.nix
+				./virtulization.nix
     ];
     # Use the systemd-boot EFI boot loader.
     boot.loader = {
@@ -29,7 +30,7 @@
         users.justinlime = {
             isNormalUser = true;
             initialPassword = "gigachad";
-            extraGroups = [ "wheel" "docker" "video" "kvm" "input" "libvirtd" "plugdev" "${username}" ];
+            extraGroups = [ "wheel" "video" "plugdev" "${username}" ];
             packages = with pkgs; [
             ];
         };

@@ -1,51 +1,24 @@
-{ pkgs , flake_path, ... }:
+{ pkgs , inputs, flake_path, ... }:
 {
     # List packages installed in system profile
     environment = {
         systemPackages = with pkgs; [
-            cargo
-            cava
-            compsize
             curl
-            dconf
-            docker-compose
             gcc
             git
-            home-manager
-            htop
-            jdk17
-            lua
-            neovim
-            # nodejs
-            nodejs_20
-            powertop
             pulseaudio #Needed for volume keys even with pipewire
-            python3Full
-            tree-sitter
             unzip
             vim
-            virt-manager
-            virt-viewer
-            spice
-            spice-gtk
-            minecraft
-            spice-protocol
-            win-spice
-            win-virtio
             wireplumber
             wget
             wl-clipboard
             zip
+						inputs.home-manager.packages.${pkgs.system}.home-manager
         ];
         variables = { EDITOR = "vim"; };
         pathsToLink = [ "/share/zsh" ];
     };
 
-    #Fonts
-    # fonts.fonts = with pkgs; [
-    #     (nerdfonts.override { fonts = ["JetBrainsMono"]; })
-    # ];
-    
     hardware.opengl.enable = true;
     #Programs
     programs = {

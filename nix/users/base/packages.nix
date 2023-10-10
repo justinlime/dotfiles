@@ -8,6 +8,7 @@
     vrrtest
     websocat
 		roboto
+		pciutils
     (nerdfonts.override { fonts = [ "RobotoMono" ]; })
   ];
 }
