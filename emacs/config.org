@@ -19,6 +19,7 @@
   - [[#fonts][Fonts]]
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
+- [[#treesitter-auto][Treesitter-auto]]
 - [[#neotree][Neotree]]
 - [[#fzf][FZF]]
 - [[#magit][Magit]]
@@ -262,14 +263,34 @@
 (use-package company
   :config
   (global-company-mode))
-(use-package treesit-auto
-  :config
-  (global-treesit-auto-mode)
-  (setq treesit-auto-install 'prompt))
 (use-package yasnippet
   :config
   ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
   (yas-global-mode 1))
+#+end_src
+* Treesitter-auto
+#+begin_src emacs-lisp
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package treesit-auto
+  :after nix-mode
+  :config
+  (global-treesit-auto-mode)
+  (setq treesit-auto-install 'prompt)
+  (setq my-nix-ts-mode ;;this shit doesnt work :(
+    (make-treesit-auto-recipe
+      :lang 'nix
+      :ts-mode 'nix-ts-mode
+      :remap 'nix-mode
+      :url "https://github.com/nix-community/tree-sitter-nix"
+      :revision "master"
+      :source-dir "src"))
+
+  (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
+
+
+
 #+end_src
 * Neotree
 #+begin_src emacs-lisp

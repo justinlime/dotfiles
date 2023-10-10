@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     emacs29
+    tree-sitter
 		fzf
 		lua-language-server #Lua
     # nil #Nix
