@@ -6,38 +6,42 @@
 {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
+  ];
+
+  boot = { 
+    initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+    initrd.kernelModules = [ 
+      "amdgpu" 
     ];
-
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ 
-		"amdgpu" 
-	];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
-
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
+  };
+  fileSystems = {
+    "/" = { 
+      device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "subvol=root" ];
     };
-  
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
+    "/boot" = { 
+      device = "/dev/disk/by-uuid/FC74-CDE4";
+      fsType = "vfat";
+    };
+    "/home" = { 
+      device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "subvol=home" ];
     };
-
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
+    "/nix" = { 
+      device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "subvol=nix" ];
     };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/FC74-CDE4";
-      fsType = "vfat";
+    "/drives/nvme1" = {
+      device = "/dev/disk/by-label/nvme1";
+      fsType = "btrfs";
+      options = [ "compress=zstd:1" "noatime" "subvol=nvme1" ];
     };
-
+  };
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
