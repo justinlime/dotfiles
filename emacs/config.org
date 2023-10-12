@@ -267,7 +267,6 @@
   (define-key company-active-map (kbd "<tab>") nil)
   (define-key company-active-map (kbd "TAB") 'company-select-next)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
-  ;; (define-key company-active-map (kbd "<return>") 'company-yasnippet-or-completion)
 )
 (use-package yasnippet
   :config
@@ -350,7 +349,7 @@
 * Misc
 ** Other Settings
 #+begin_src emacs-lisp
-(setq inhibit-startup-messags t) ;; Disable splash screen
+(setq inhibit-startup-messages t) ;; Disable splash screen
 (setq make-backup-files nil) ;; stop creating ~ files
 (setq auto-save-default nil) ;; Disable autosave # files
 (setq-default tab-width 2) 

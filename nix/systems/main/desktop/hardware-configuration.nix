@@ -14,7 +14,6 @@
       "amdgpu" 
     ];
     kernelModules = [ "kvm-amd" ];
-    extraModulePackages = [ ];
   };
   fileSystems = {
     "/" = { 
@@ -39,7 +38,7 @@
     "/drives/nvme1" = {
       device = "/dev/disk/by-label/nvme1";
       fsType = "btrfs";
-      options = [ "compress=zstd:1" "noatime" "subvol=nvme1" ];
+      options = [ "compress-force=zstd:1" "noatime" "subvol=nvme1" ];
     };
   };
   swapDevices = [ ];
