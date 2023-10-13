@@ -9,7 +9,7 @@
 - [[#general][General]]
   - [[#package-manger][Package Manger]]
   - [[#evil-mode-binds][Evil Mode Binds]]
-  - [[#gerneral-binds][Gerneral Binds]]
+  - [[#general-binds][General Binds]]
   - [[#keychord-binds][Keychord Binds]]
 - [[#packages][Packages]]
   - [[#which-key][Which Key]]
@@ -113,20 +113,46 @@
 (use-package evil-collection
   :after evil
   :config
-  (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
-  (define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)
   (setq evil-collection-mode-list '(dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
 
 #+end_src
 
-** Gerneral Binds
+** General Binds
 #+begin_src emacs-lisp
 (use-package general
   :config
   (general-evil-setup)
-
+  
+  ;; Company mode
+  (general-define-key
+    :keymaps 'company-active-map
+    "<tab>" nil
+    "TAB" 'company-select-next
+    "<backtab>" 'company-select-previous
+  )
+  (general-define-key
+    :keymaps 'company-active-map
+    "<tab>" nil
+    "TAB" 'company-select-next
+    "<backtab>" 'company-select-previous
+  )
+ (general-define-key
+    :states 'normal 
+    :keymaps 'org-mode-map
+    "<tab>" #'org-cycle
+  )
+  (general-define-key
+    :keymaps 'evil-insert-state-map
+    "TAB" 'tab-to-tab-stop
+  )
+  (general-define-key
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    "C-u" 'evil-scroll-up
+    "C-d" 'evil-scroll-down
+  )
   ;; set up 'SPC' as the global leader key
   ;; (general-imap "TAB" 'company-select-next) ;;Doesnt fuggin work
   (general-create-definer leader
@@ -263,11 +289,7 @@
 (use-package eglot)
 (use-package company
   :config
-  (global-company-mode)
-  (define-key company-active-map (kbd "<tab>") nil)
-  (define-key company-active-map (kbd "TAB") 'company-select-next)
-  (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
-)
+  (global-company-mode))
 (use-package yasnippet
   :config
   ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
