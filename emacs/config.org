@@ -8,7 +8,7 @@
 * TABLE OF CONTENTS :toc:
 - [[#general][General]]
   - [[#package-manger][Package Manger]]
-  - [[#evil-mode-binds][Evil Mode Binds]]
+  - [[#evil-mode][Evil Mode]]
   - [[#general-binds][General Binds]]
   - [[#keychord-binds][Keychord Binds]]
 - [[#packages][Packages]]
@@ -16,6 +16,7 @@
 - [[#look--feel][Look & Feel]]
   - [[#theme][Theme]]
   - [[#gui][GUI]]
+  - [[#modeline][Modeline]]
   - [[#fonts][Fonts]]
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
@@ -29,6 +30,7 @@
   - [[#org-table-of-contents][Org Table of Contents]]
   - [[#org-modern][Org Modern]]
 - [[#misc][Misc]]
+  - [[#backup-files][Backup Files]]
   - [[#other-settings][Other Settings]]
   - [[#custom-functions][Custom Functions]]
 
@@ -99,7 +101,7 @@
 (elpaca nil (message "deferred"))
 #+end_src
 
-** Evil Mode Binds
+** Evil Mode
 #+begin_src emacs-lisp
 ;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
@@ -132,17 +134,13 @@
     "TAB" 'company-select-next
     "<backtab>" 'company-select-previous
   )
+  ;; Org
   (general-define-key
-    :keymaps 'company-active-map
-    "<tab>" nil
-    "TAB" 'company-select-next
-    "<backtab>" 'company-select-previous
-  )
- (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
     "<tab>" #'org-cycle
   )
+  ;; Evil
   (general-define-key
     :keymaps 'evil-insert-state-map
     "TAB" 'tab-to-tab-stop
@@ -180,7 +178,7 @@
     "h v" '(describe-variable :wk "Describe variable"))
   (leader
     "d" '(:ignore t :wk "Help")
-    "d t" '(dired :wk "Describe function"))
+    "d t" '(neotree-toggle :wk "Describe function"))
   (leader
     "f" '(:ignore t :wk "Help")
     "f f" '(find-file :wk "Find file"))
@@ -201,7 +199,7 @@
   :init
   (key-chord-mode 1)
   :config
-  (setq key-chord-two-keys-delay 0.2)
+  ;; (setq key-chord-two-keys-delay 0.2)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 
@@ -235,42 +233,43 @@
 #+end_src
 ** GUI
 #+begin_src emacs-lisp
+(setq use-dialog-box nil) ; No dialog box
 (menu-bar-mode -1) ;;Disable menu
 (tool-bar-mode -1) ;;Disable toolbar
 (scroll-bar-mode -1) ;;Disable scroll bar
-(pixel-scroll-precision-mode 1) ;;Smooth scrolling
 (global-display-line-numbers-mode 1) ;;Display line numbers
 (setq-default truncate-lines t) ;; Allow truncated lines
+(pixel-scroll-precision-mode 1) ;;Smooth scrolling
+(setq mouse-wheel-progressive-speed nil) 
+(setq scroll-conservatively 101)
+#+end_src
+** Modeline
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp
+(use-package nerd-icons
+  :custom
+  (nerd-icons-font-family "RobotoMono Nerd Font")
+)
 (set-face-attribute 'default nil
                     :font "RobotoMono Nerd Font"
-                    :height 120
+                    :height 140
                     :weight 'medium)
 (set-face-attribute 'variable-pitch nil
                     :font "Roboto"
-                    :height 120
+                    :height 140
                     :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
                     :font "RobotoMono Nerd Font"
-                    :height 120
+                    :height 140
                     :weight 'medium)
-;; Makes commented text and keywords italics.
-;; This is working in emacsclient but not emacs.
-;; Your font must have an italic face available.
-(set-face-attribute 'font-lock-comment-face nil
-                    :slant 'italic)
-(set-face-attribute 'font-lock-keyword-face nil
-                    :slant 'italic)
-
-;; This sets the default font on all graphical frames created after restarting Emacs.
-;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
-;; are not right unless I also add this method of setting the default font.
-
-
 ;; Uncomment the following line if line spacing needs adjusting.
 (setq-default line-spacing 0.12)
+(set-language-environment "UTF-8")
 #+end_src
 
 ** Dashboard
@@ -315,9 +314,6 @@
       :source-dir "src"))
 
   (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
-
-
-
 #+end_src
 * Neotree
 #+begin_src emacs-lisp
@@ -369,11 +365,17 @@
   (with-eval-after-load 'org (global-org-modern-mode)))
 #+end_src
 * Misc
-** Other Settings
+** Backup Files
 #+begin_src emacs-lisp
-(setq inhibit-startup-messages t) ;; Disable splash screen
 (setq make-backup-files nil) ;; stop creating ~ files
 (setq auto-save-default nil) ;; Disable autosave # files
+(setq create-lockfiles nil) ; Disable .# files
+#+end_src
+** Other Settings
+#+begin_src emacs-lisp
+(electric-pair-mode 1) ; Auto closing pairs like () and {}
+(setq use-short-answers t) ; Set y or n instead of yes or no for questions
+(setq inhibit-startup-messages t) ;; Disable splash screen
 (setq-default tab-width 2) 
 (setq password-cache-expiry nil)
 #+end_src 
