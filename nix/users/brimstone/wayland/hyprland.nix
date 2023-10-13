@@ -145,6 +145,8 @@
                 # Scroll workspace with mouse scrollwheel
                 "$mainMod, mouse_down, workspace, e+1"
                 "$mainMod, mouse_up, workspace, e-1"
+                # OBS
+                "CTRL SHIFT, S, pass,^(com\.obsproject\.Studio)$"
             ];
             bindm = [
                 # Move and resize windows with mouse too
@@ -184,6 +186,7 @@
                 "float,title:^(mpv)$"
                 # Ensure tearing for specific games
                 "immediate, class:^(cs2)$" #counterstrike
+                "immediate, title:^(DayZ)$" #DayZ
                 "immediate, class:^(love)$" #vrrtest
                 "immediate, class:^(steam_app_311210)$" #Black ops 3 
             ];
