@@ -5,6 +5,7 @@
 #+STARTUP: showeverything
 #+OPTIONS: toc:2
 
+
 * TABLE OF CONTENTS :toc:
 - [[#general][General]]
   - [[#package-manger][Package Manger]]
@@ -118,7 +119,6 @@
   (setq evil-collection-mode-list '(dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
-
 #+end_src
 
 ** General Binds
@@ -128,13 +128,13 @@
   (general-evil-setup)
   
   ;; Company mode
-  (general-define-key
-    :keymaps 'company-active-map
-    "<tab>" nil
-    "TAB" 'company-select-next
-    "<backtab>" 'company-select-previous
-  )
-  ;; Org
+  ;; (general-define-key
+  ;;   :keymaps 'company-active-map
+  ;;   "<tab>" nil
+  ;;   "TAB" 'corfu-next
+  ;;   "<backtab>" 'corfu-previous
+  ;; )
+  ;; ;; Org
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
@@ -152,7 +152,6 @@
     "C-d" 'evil-scroll-down
   )
   ;; set up 'SPC' as the global leader key
-  ;; (general-imap "TAB" 'company-select-next) ;;Doesnt fuggin work
   (general-create-definer leader
     :states '(normal insert visual emacs)
     :keymaps 'override
@@ -253,20 +252,19 @@
 #+begin_src emacs-lisp
 (use-package nerd-icons
   :custom
-  (nerd-icons-font-family "RobotoMono Nerd Font")
-)
+  (nerd-icons-font-family "RobotoMono Nerd Font"))
 (set-face-attribute 'default nil
-                    :font "RobotoMono Nerd Font"
-                    :height 140
-                    :weight 'medium)
+  :font "RobotoMono Nerd Font"
+  :height 140
+  :weight 'medium)
 (set-face-attribute 'variable-pitch nil
-                    :font "Roboto"
-                    :height 140
-                    :weight 'medium)
+  :font "Roboto"
+  :height 140
+  :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-                    :font "RobotoMono Nerd Font"
-                    :height 140
-                    :weight 'medium)
+  :font "RobotoMono Nerd Font"
+  :height 140
+  :weight 'medium)
 ;; Uncomment the following line if line spacing needs adjusting.
 (setq-default line-spacing 0.12)
 (set-language-environment "UTF-8")
@@ -286,9 +284,17 @@
 * LSP/Completion
 #+begin_src emacs-lisp
 (use-package eglot)
-(use-package company
-  :config
-  (global-company-mode))
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-auto t)
+  (corfu-cycle t)
+  (corfu-auto-delay 0.0)
+  (corfu-auto-prefix 2)
+  :init
+  (global-corfu-mode)
+  (corfu-history-mode))
+
 (use-package yasnippet
   :config
   ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))

@@ -42,5 +42,6 @@
         inputs.maxfetch.packages.${pkgs.system}.default
         # haskell
         haskell.compiler.native-bignum.ghcHEAD
+        lm_sensors
     ];
 }

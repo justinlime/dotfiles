@@ -28,7 +28,7 @@
           # Pin registry to flake
           { nix.registry.nixpkgs.flake = nixpkgs; }
           # Pin channel to flake 
-          { home.sessionVariables.NIX_PATH = "nixpkgs=nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}"; }
+          { home.sessionVariables.NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}"; }
         ];
       };
     };
@@ -48,7 +48,7 @@
         modules = [
           ./nix/systems/main/desktop
           { nix.registry.nixpkgs.flake = nixpkgs; }
-          { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
+          { nix.nixPath = [ "nixpkgs=flake:nixpkgs" ]; }
         ];
       };
     };
