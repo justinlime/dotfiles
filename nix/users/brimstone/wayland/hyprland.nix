@@ -188,7 +188,6 @@
                 "immediate, class:^(cs2)$" #counterstrike
                 "immediate, title:^(DayZ)$" #DayZ
                 "immediate, class:^(love)$" #vrrtest
-                "immediate, class:^(steam_app_311210)$" #Black ops 3 
             ];
             layerrule = [
               "blur, waybar"
