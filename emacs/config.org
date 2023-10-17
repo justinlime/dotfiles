@@ -133,9 +133,6 @@
   ;; Corfu mode
   (general-define-key
     :keymaps 'corfu-map
-    ;; "<tab>" nil
-    ;; "<backtab>" nil
-    ;; "backtab" nil
     "<tab>" 'corfu-next
     "<backtab>" 'corfu-previous
   )
@@ -230,10 +227,27 @@
 * Look & Feel
 ** Theme
 #+begin_src emacs-lisp
-(use-package catppuccin-theme
-  :init
-  (setq catppuccin-flavor 'mocha)
-  (load-theme 'catppuccin :no-confirm))
+;; (use-package catppuccin-theme
+;;   :init
+;;   (setq catppuccin-flavor 'frappe)
+;;   (load-theme 'catppuccin :no-confirm))
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 #+end_src
 ** GUI
 #+begin_src emacs-lisp
@@ -258,17 +272,19 @@
 (use-package nerd-icons
   :custom
   (nerd-icons-font-family "RobotoMono Nerd Font"))
+(use-package all-the-icons
+  :if (display-graphic-p))
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
-  :height 140
+  :height 130
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
   :font "Roboto"
-  :height 140
+  :height 130
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
   :font "RobotoMono Nerd Font"
-  :height 140
+  :height 130
   :weight 'medium)
 ;; Uncomment the following line if line spacing needs adjusting.
 (setq-default line-spacing 0.12)
@@ -290,6 +306,7 @@
 ** Eglot
 #+begin_src emacs-lisp
 (use-package eglot)
+;; (add-hook 'go-mode-hook #'eglot)
 #+end_src
 ** Corfu
 #+begin_src emacs-lisp
@@ -300,7 +317,7 @@
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (corfu-auto t)
   (corfu-cycle t)
-  (corfu-auto-delay 0.0)
+  (corfu-auto-delay 0.2)
   (corfu-auto-prefix 2)
   :init
   (global-corfu-mode)
@@ -337,11 +354,15 @@
 #+end_src
 * Treesitter-auto
 #+begin_src emacs-lisp
+(use-package lua-mode
+  :mode "\\.lua\\'")
 (use-package nix-mode
   :mode "\\.nix\\'")
+(use-package go-mode
+  :mode "\\.go\\'")
 
 (use-package treesit-auto
-  :after nix-mode
+  :ensure t
   :config
   (global-treesit-auto-mode)
   (setq treesit-auto-install 'prompt)
@@ -353,7 +374,6 @@
       :url "https://github.com/nix-community/tree-sitter-nix"
       :revision "master"
       :source-dir "src"))
-
   (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
 #+end_src
 * Neotree
