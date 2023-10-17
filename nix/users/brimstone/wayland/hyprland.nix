@@ -187,6 +187,8 @@
                 # Ensure tearing for specific games
                 "immediate, class:^(cs2)$" #counterstrike
                 "immediate, title:^(DayZ)$" #DayZ
+                "immediate, title:^(SonsOfTheForest)$" #DayZ
+                "immediate, title:^(Arma 3)$" #DayZ
                 "immediate, class:^(love)$" #vrrtest
             ];
             layerrule = [

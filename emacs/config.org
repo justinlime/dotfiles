@@ -21,13 +21,16 @@
   - [[#fonts][Fonts]]
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
+  - [[#eglot][Eglot]]
+  - [[#corfu][Corfu]]
+  - [[#cape][Cape]]
+  - [[#yasnippet][Yasnippet]]
 - [[#treesitter-auto][Treesitter-auto]]
 - [[#neotree][Neotree]]
 - [[#fzf][FZF]]
 - [[#magit][Magit]]
 - [[#org-mode][Org Mode]]
   - [[#org-general][Org General]]
-  - [[#org-bullets][Org Bullets]]
   - [[#org-table-of-contents][Org Table of Contents]]
   - [[#org-modern][Org Modern]]
 - [[#misc][Misc]]
@@ -126,15 +129,17 @@
 (use-package general
   :config
   (general-evil-setup)
-  
-  ;; Company mode
-  ;; (general-define-key
-  ;;   :keymaps 'company-active-map
-  ;;   "<tab>" nil
-  ;;   "TAB" 'corfu-next
-  ;;   "<backtab>" 'corfu-previous
-  ;; )
-  ;; ;; Org
+
+  ;; Corfu mode
+  (general-define-key
+    :keymaps 'corfu-map
+    ;; "<tab>" nil
+    ;; "<backtab>" nil
+    ;; "backtab" nil
+    "<tab>" 'corfu-next
+    "<backtab>" 'corfu-previous
+  )
+  ;; Org
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
@@ -282,11 +287,17 @@
   (dashboard-setup-startup-hook))
 #+end_src
 * LSP/Completion
+** Eglot
 #+begin_src emacs-lisp
 (use-package eglot)
+#+end_src
+** Corfu
+#+begin_src emacs-lisp
 (use-package corfu
   :ensure t
+  :bind nil
   :custom
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (corfu-auto t)
   (corfu-cycle t)
   (corfu-auto-delay 0.0)
@@ -294,7 +305,31 @@
   :init
   (global-corfu-mode)
   (corfu-history-mode))
-
+#+end_src
+** Cape
+#+begin_src emacs-lisp
+(use-package cape
+  :init
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.  The order of the functions matters, the
+  ;; first function returning a result wins.  Note that the list of buffer-local
+  ;; completion functions takes precedence over the global list.
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  ;;(add-to-list 'completion-at-point-functions #'cape-history)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  ;;(add-to-list 'completion-at-point-functions #'cape-line)
+)
+#+end_src
+** Yasnippet
+#+begin_src emacs-lisp
 (use-package yasnippet
   :config
   ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
@@ -353,11 +388,6 @@
 (setq org-src-preserve-indentation t)
 (electric-indent-mode -1)
 #+end_src
-** Org Bullets
-#+begin_src emacs-lisp
-(use-package org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-#+end_src
 ** Org Table of Contents
 #+begin_src emacs-lisp
 (use-package toc-org
@@ -382,6 +412,7 @@
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (setq use-short-answers t) ; Set y or n instead of yes or no for questions
 (setq inhibit-startup-messages t) ;; Disable splash screen
+(save-place-mode) ; Save cursor position in buffer on reopen
 (setq-default tab-width 2) 
 (setq password-cache-expiry nil)
 #+end_src 
