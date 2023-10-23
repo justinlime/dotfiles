@@ -33,6 +33,8 @@
   - [[#org-general][Org General]]
   - [[#org-table-of-contents][Org Table of Contents]]
   - [[#org-modern][Org Modern]]
+- [[#languages-and-modes][Languages and Modes]]
+  - [[#python-mode][Python Mode]]
 - [[#misc][Misc]]
   - [[#backup-files][Backup Files]]
   - [[#other-settings][Other Settings]]
@@ -300,7 +302,6 @@
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
   (setq dashboard-startup-banner "~/.config/emacs/eyecropped.png")
   (setq dashboard-banner-logo-title "Whopper Whopper Whopper Whopper Junior Double Triple Whopper")
-  (setq dashboard-center-content t)
   (setq dashboard-footer-messages '("sudo systemctl restart justinlime"))
   (dashboard-setup-startup-hook))
 #+end_src
@@ -421,6 +422,12 @@
 (use-package org-modern
   :init 
   (with-eval-after-load 'org (global-org-modern-mode)))
+#+end_src
+* Languages and Modes
+** Python Mode
+#+begin_src emacs-lisp
+(add-hook 'python-mode-hook '(lambda () (setq tab-width 4)))
+(add-hook 'python-ts-mode-hook '(lambda () (setq tab-width 4)))
 #+end_src
 * Misc
 ** Backup Files
