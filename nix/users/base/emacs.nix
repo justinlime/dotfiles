@@ -24,5 +24,6 @@
     "emacs/early-init.el".source = "${inputs.self}/emacs/early-init.el";
     "emacs/init.el".source = "${inputs.self}/emacs/init.el";
     "emacs/config.org".source = "${inputs.self}/emacs/config.org";
+    "emacs/eyecropped.png".source = "${inputs.self}/emacs/eyecropped.png";
   };
 }

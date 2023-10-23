@@ -290,16 +290,18 @@
 (setq-default line-spacing 0.12)
 (set-language-environment "UTF-8")
 #+end_src
-
 ** Dashboard
 #+begin_src emacs-lisp
-;; use-package with Elpaca:
 (use-package dashboard
   :elpaca t
   :config
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
+  (setq dashboard-startup-banner "~/.config/emacs/eyecropped.png")
+  (setq dashboard-banner-logo-title "Whopper Whopper Whopper Whopper Junior Double Triple Whopper")
+  (setq dashboard-center-content t)
+  (setq dashboard-footer-messages '("sudo systemctl restart justinlime"))
   (dashboard-setup-startup-hook))
 #+end_src
 * LSP/Completion
@@ -434,8 +436,10 @@
 (setq inhibit-startup-messages t) ;; Disable splash screen
 (save-place-mode) ; Save cursor position in buffer on reopen
 (setq-default tab-width 2) 
+(setq-default indent-tabs-mode nil)
+(setq-default indent-line-function 'insert-tab)
 (setq password-cache-expiry nil)
-#+end_src 
+#+end_src
 ** Custom Functions
 #+begin_src emacs-lisp
 (defun ssh-root (host)
