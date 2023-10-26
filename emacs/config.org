@@ -426,26 +426,29 @@
 * Languages and Modes
 ** Python Mode
 #+begin_src emacs-lisp
-(add-hook 'python-mode-hook '(lambda () (setq tab-width 4)))
-(add-hook 'python-ts-mode-hook '(lambda () (setq tab-width 4)))
-(add-hook 'python-mode-hook 'eglot-ensure)
-(add-hook 'python-ts-mode-hook 'eglot-ensure)
+(defun python-hook ()
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil)
+  (setq indent-line-function 'insert-tab)
+  (eglot-ensure)
+)
+(add-hook 'python-mode-hook 'python-hook)
+(add-hook 'python-ts-mode-hook 'python-hook)
 #+end_src
 ** Go Mode
 #+begin_src emacs-lisp
+(defun go-hook ()
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil)
+  (setq indent-line-function 'insert-tab)
+  (eglot-ensure)
+)
+
 (use-package go-mode
   :mode "\\.go\\'")
-(add-hook 'go-mode-hook '(lambda () (setq tab-width 4)))
-(add-hook 'go-ts-mode-hook '(lambda () (setq tab-width 4)))
 
-(add-hook 'go-mode-hook '(lambda () (setq indent-tabs-mode nil)))
-(add-hook 'go-ts-mode-hook '(lambda () (setq indent-tabs-mode nil)))
-
-(add-hook 'go-mode-hook '(lambda () (setq indent-line-function 'insert-tab)))
-(add-hook 'go-ts-mode-hook '(lambda () (setq indent-line-function 'insert-tab)))
-
-(add-hook 'go-mode-hook 'eglot-ensure)
-(add-hook 'go-ts-mode-hook 'eglot-ensure)
+(add-hook 'go-mode-hook 'go-hook)
+(add-hook 'go-ts-mode-hook 'go-hook)
 
 #+end_src
 * Misc
