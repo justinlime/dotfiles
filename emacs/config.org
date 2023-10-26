@@ -35,6 +35,7 @@
   - [[#org-modern][Org Modern]]
 - [[#languages-and-modes][Languages and Modes]]
   - [[#python-mode][Python Mode]]
+  - [[#go-mode][Go Mode]]
 - [[#misc][Misc]]
   - [[#backup-files][Backup Files]]
   - [[#other-settings][Other Settings]]
@@ -320,6 +321,7 @@
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (corfu-auto t)
   (corfu-cycle t)
+  (corfu-preselect 'prompt)
   (corfu-auto-delay 0.2)
   (corfu-auto-prefix 2)
   :init
@@ -361,8 +363,6 @@
   :mode "\\.lua\\'")
 (use-package nix-mode
   :mode "\\.nix\\'")
-(use-package go-mode
-  :mode "\\.go\\'")
 
 (use-package treesit-auto
   :ensure t
@@ -428,6 +428,25 @@
 #+begin_src emacs-lisp
 (add-hook 'python-mode-hook '(lambda () (setq tab-width 4)))
 (add-hook 'python-ts-mode-hook '(lambda () (setq tab-width 4)))
+(add-hook 'python-mode-hook 'eglot-ensure)
+(add-hook 'python-ts-mode-hook 'eglot-ensure)
+#+end_src
+** Go Mode
+#+begin_src emacs-lisp
+(use-package go-mode
+  :mode "\\.go\\'")
+(add-hook 'go-mode-hook '(lambda () (setq tab-width 4)))
+(add-hook 'go-ts-mode-hook '(lambda () (setq tab-width 4)))
+
+(add-hook 'go-mode-hook '(lambda () (setq indent-tabs-mode nil)))
+(add-hook 'go-ts-mode-hook '(lambda () (setq indent-tabs-mode nil)))
+
+(add-hook 'go-mode-hook '(lambda () (setq indent-line-function 'insert-tab)))
+(add-hook 'go-ts-mode-hook '(lambda () (setq indent-line-function 'insert-tab)))
+
+(add-hook 'go-mode-hook 'eglot-ensure)
+(add-hook 'go-ts-mode-hook 'eglot-ensure)
+
 #+end_src
 * Misc
 ** Backup Files
