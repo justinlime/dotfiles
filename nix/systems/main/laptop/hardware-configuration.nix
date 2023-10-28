@@ -8,34 +8,36 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
-  boot.initrd.luks.devices."cryptpart".device = "/dev/disk/by-uuid/ade7c385-a68c-40f3-9fae-8e997aa0dee3";
+  boot = {
+    initrd = {
+      availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+      luks.devices."cryptpart".device = "/dev/disk/by-uuid/ade7c385-a68c-40f3-9fae-8e997aa0dee3";
+    };
+    kernelModules = [ "kvm-amd" ];
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
 
-  fileSystems."/" =
-    { device = "/dev/mapper/cryptpart";
+  fileSystems = {
+    "/" = { 
+      device = "/dev/mapper/cryptpart";
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "subvol=root" ];
     };
-
-  fileSystems."/home" =
-    { device = "/dev/mapper/cryptpart";
+    "/home" = { 
+      device = "/dev/mapper/cryptpart";
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "subvol=home" ];
     };
-
-  fileSystems."/nix" =
-    { device = "/dev/mapper/cryptpart";
+    "/nix" = { 
+      device = "/dev/mapper/cryptpart";
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "subvol=nix" ];
     };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/D586-8FFE";
+    "/boot" = { 
+      device = "/dev/disk/by-uuid/D586-8FFE";
       fsType = "vfat";
     };
+  };
 
   swapDevices = [ ];
 

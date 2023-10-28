@@ -1,4 +1,4 @@
-{ inputs , pkgs, ... }:
+{ inputs , pkgs, pkgs_stable, ... }:
 {
   home.packages = with pkgs; [
     neovim
@@ -12,8 +12,9 @@
     rust-analyzer #Rust
     zls #Zig
     llvmPackages_15.clang-unwrapped #C, C++
-    python311Packages.jedi-language-server #Python
+    #pkgs_stable.python311Packages.jedi-language-server #Python
     # haskellPackages.hls # Haskell
+    nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
     nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
     nodePackages_latest.grammarly-languageserver #Markdown
     nodePackages_latest.typescript-language-server #Javascript and Typescript

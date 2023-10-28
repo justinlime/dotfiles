@@ -13,6 +13,7 @@
     initrd.kernelModules = [ 
       "amdgpu" 
     ];
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "kvm-amd" ];
   };
   fileSystems = {

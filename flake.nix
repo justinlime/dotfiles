@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs_stable.url = "github:nixos/nixpkgs/nixos-23.05";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -9,12 +10,13 @@
     hyprland.url = "github:hyprwm/Hyprland";
   };
 
-  outputs = {  self, nixpkgs, home-manager, ... }@inputs:
+  outputs = {  self, nixpkgs, nixpkgs_stable, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
     username = "justinlime";
     home_profile = "brimstone";
     pkgs = nixpkgs.legacyPackages.${system};
+    pkgs_stable = nixpkgs.legacyPackages.${system};
     # The path to this very repo 
     flake_path = "~/dotfiles";
   in
@@ -22,7 +24,7 @@
     homeConfigurations = {
       "${username}" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit username flake_path inputs; };
+        extraSpecialArgs = { inherit username flake_path pkgs_stable inputs; };
         modules = [
           ./nix/users/${home_profile}
           # Pin registry to flake
@@ -35,7 +37,7 @@
     nixosConfigurations = {
       japtop = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit username flake_path inputs; }; 
+        specialArgs = { inherit username flake_path pkgs_stable inputs; }; 
         modules = [
           ./nix/systems/main/laptop
           { nix.registry.nixpkgs.flake = nixpkgs; }
@@ -44,7 +46,7 @@
       };
       jesktop = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit username flake_path inputs; }; 
+        specialArgs = { inherit username flake_path pkgs_stable inputs; }; 
         modules = [
           ./nix/systems/main/desktop
           { nix.registry.nixpkgs.flake = nixpkgs; }
