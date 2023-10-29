@@ -30,7 +30,7 @@
         users.justinlime = {
             isNormalUser = true;
             initialPassword = "gigachad";
-            extraGroups = [ "wheel" "video" "plugdev" "${username}" ];
+            extraGroups = [ "wheel" "storage" "video" "plugdev" "${username}" ];
             packages = with pkgs; [
             ];
         };

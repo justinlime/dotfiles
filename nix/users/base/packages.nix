@@ -4,6 +4,7 @@
   #Packages
   home.packages = with pkgs; [
     speedtest-cli
+    ventoy
     gcc
     vrrtest
     websocat

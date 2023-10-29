@@ -1,4 +1,4 @@
-{ pkgs , inputs, flake_path, ... }:
+{ pkgs, inputs, flake_path, ... }:
 {
     # List packages installed in system profile
     environment = {

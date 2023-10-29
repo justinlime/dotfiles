@@ -409,7 +409,7 @@
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook 'org-indent-mode)
 (setq org-src-preserve-indentation t)
-(electric-indent-mode -1)
+(electric-indent-mode t)
 #+end_src
 ** Org Table of Contents
 #+begin_src emacs-lisp
