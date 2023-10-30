@@ -15,6 +15,7 @@
     system = "x86_64-linux";
     username = "justinlime";
     home_profile = "brimstone";
+    system_profile = "jesktop";
     pkgs = nixpkgs.legacyPackages.${system};
     pkgs_stable = nixpkgs.legacyPackages.${system};
     # The path to this very repo 
@@ -35,22 +36,13 @@
       };
     };
     nixosConfigurations = {
-      japtop = nixpkgs.lib.nixosSystem {
+      "${system_profile}" = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit username flake_path pkgs_stable inputs; }; 
         modules = [
-          ./nix/systems/main/laptop
+          ./nix/systems/${system_profile}
           { nix.registry.nixpkgs.flake = nixpkgs; }
           { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
-        ];
-      };
-      jesktop = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit username flake_path pkgs_stable inputs; }; 
-        modules = [
-          ./nix/systems/main/desktop
-          { nix.registry.nixpkgs.flake = nixpkgs; }
-          { nix.nixPath = [ "nixpkgs=flake:nixpkgs" ]; }
         ];
       };
     };
