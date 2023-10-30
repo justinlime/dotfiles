@@ -18,8 +18,11 @@
       };
     };
 
-    networking.hostName = "${system_profile}";
-
+    networking = {
+      hostName = "${system_profile}";
+      networkmanager.enable = true;
+    };
+    
     environment = {
       sessionVariables = rec {
         XDG_CACHE_HOME  = "$HOME/.cache";
