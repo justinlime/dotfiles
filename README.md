@@ -9,7 +9,7 @@
     </a>
 </p>
 
-## My general dotfiles and configurations for linux
+## My general dotfiles and configurations
 ![Imgur](https://imgur.com/BsWkXCz.png)
 ![Imgur](https://imgur.com/F4gGRqa.png)
 
