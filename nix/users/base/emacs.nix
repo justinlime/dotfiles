@@ -19,6 +19,8 @@
     nodePackages_latest.bash-language-server #Bash
     nodePackages_latest.dockerfile-language-server-nodejs #Dockerfiles
     nodePackages_latest.yaml-language-server #Yaml
+    roboto
+    (nerdfonts.override { fonts = [ "RobotoMono" ]; })
   ];
   xdg.configFile = {
     "emacs/early-init.el".source = "${inputs.self}/emacs/early-init.el";

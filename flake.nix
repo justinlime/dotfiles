@@ -12,12 +12,12 @@
 
   outputs = {  self, nixpkgs, nixpkgs_stable, home-manager, ... }@inputs:
   let
-    system = "x86_64-linux";
     username = "justinlime";
     home_profile = "brimstone";
     system_profile = "jesktop";
+    system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
-    pkgs_stable = nixpkgs.legacyPackages.${system};
+    pkgs_stable = nixpkgs_stable.legacyPackages.${system};
     # The path to this very repo 
     flake_path = "~/dotfiles";
   in
@@ -25,7 +25,7 @@
     homeConfigurations = {
       "${username}" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit username flake_path pkgs_stable inputs; };
+        extraSpecialArgs = { inherit username flake_path system_profile pkgs_stable inputs; };
         modules = [
           ./nix/users/${home_profile}
           # Pin registry to flake
@@ -38,7 +38,7 @@
     nixosConfigurations = {
       "${system_profile}" = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit username flake_path pkgs_stable inputs; }; 
+        specialArgs = { inherit username flake_path system_profile pkgs_stable inputs; }; 
         modules = [
           ./nix/systems/${system_profile}
           { nix.registry.nixpkgs.flake = nixpkgs; }

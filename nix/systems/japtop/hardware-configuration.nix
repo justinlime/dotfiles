@@ -9,6 +9,10 @@
     ];
 
   boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
     initrd = {
       availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
       luks.devices."cryptpart".device = "/dev/disk/by-uuid/ade7c385-a68c-40f3-9fae-8e997aa0dee3";

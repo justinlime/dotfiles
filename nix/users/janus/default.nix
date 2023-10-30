@@ -5,6 +5,8 @@
   _module.args = { inherit inputs username; };
   imports = [ 
     ./general
+    ../base/zsh.nix
+    ../base/neovim.nix
   ];
 
   # Let Home Manager install and manage itself.
@@ -16,6 +18,11 @@
       sudo = "sudo -E";
       sudopath = "sudo env PATH=$PATH";
   };
+  home.packages = with pkgs; [
+    pciutils
+    speedtest-cli
+    tree
+  ];
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.

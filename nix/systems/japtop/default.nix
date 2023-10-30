@@ -6,12 +6,8 @@
         ../base
         ];
 
-    # System
-    networking.hostName="japtop";
-
     #Programs
     programs = {
-        zsh.shellAliases.nix-switch = "sudo nixos-rebuild switch --flake ${flake_path}#japtop";
         light.enable = true;
     };
 

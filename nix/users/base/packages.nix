@@ -10,6 +10,7 @@
     websocat
 		roboto
 		pciutils
+    tree
     (nerdfonts.override { fonts = [ "RobotoMono" ]; })
   ];
 }

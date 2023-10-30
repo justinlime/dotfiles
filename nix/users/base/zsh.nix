@@ -6,9 +6,6 @@
     enableAutosuggestions = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
-    # this shit doesnt fuggin work
-    # dotDir = ".config/zsh";
-    # history.path = ".config/zsh/.zsh_history";
     initExtra = ''
       setopt appendhistory
       parse_git_branch() {
