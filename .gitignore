@@ -6,8 +6,6 @@ data/
 
 result/**
 
-flake.nix
-
 .undo/
 .swp/
 .backup/
