@@ -1,7 +1,7 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, username, inputs, ... }:
 {
 
-	users.users.justinlime.extraGroups = [ "kvm" "input" "libvirtd" ];
+	users.users.${username}.extraGroups = [ "kvm" "input" "libvirtd" ];
 	environment.systemPackages = with pkgs; [
 		virt-manager
 		virt-viewer

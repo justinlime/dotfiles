@@ -1,7 +1,6 @@
 { ... }:
 {
     imports = [
-      ../../base
       ./packages.nix
     ];
 }

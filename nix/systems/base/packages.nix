@@ -3,17 +3,9 @@
     # List packages installed in system profile
     environment = {
         systemPackages = with pkgs; [
-            curl
-            gcc
-            git
             pulseaudio #Needed for volume keys even with pipewire
-            unzip
-            vim
             wireplumber
-            wget
             wl-clipboard
-            zip
-						inputs.home-manager.packages.${pkgs.system}.home-manager
         ];
         variables = { EDITOR = "vim"; };
         pathsToLink = [ "/share/zsh" ];

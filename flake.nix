@@ -23,9 +23,9 @@
   in
   {
     homeConfigurations = {
-      "${username}" = home-manager.lib.homeManagerConfiguration {
+      "${home_profile}" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit username flake_path system_profile pkgs_stable inputs; };
+        extraSpecialArgs = { inherit username flake_path home_profile system_profile pkgs_stable inputs; };
         modules = [
           ./nix/users/${home_profile}
           # Pin registry to flake
@@ -38,7 +38,7 @@
     nixosConfigurations = {
       "${system_profile}" = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit username flake_path system_profile pkgs_stable inputs; }; 
+        specialArgs = { inherit username flake_path home_profile system_profile pkgs_stable inputs; }; 
         modules = [
           ./nix/systems/${system_profile}
           { nix.registry.nixpkgs.flake = nixpkgs; }
