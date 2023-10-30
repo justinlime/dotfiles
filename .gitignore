@@ -5,6 +5,7 @@ lazy-lock.json
 data/
 
 result/**
+/flake.nix
 
 .undo/
 .swp/

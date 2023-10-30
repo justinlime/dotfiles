@@ -1,6 +1,6 @@
 { config, lib, pkgs, username, inputs, ... }:
 {
-
+  # Enable virtualization with qemu and virt-manager and add the admin user to the necessary groups
 	users.users.${username}.extraGroups = [ "kvm" "input" "libvirtd" ];
 	environment.systemPackages = with pkgs; [
 		virt-manager

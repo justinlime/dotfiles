@@ -6,5 +6,6 @@
     ./services.nix
     ./virtulization.nix
     ./packages.nix
+    ./ssh.nix
   ];
 }

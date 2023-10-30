@@ -1,6 +1,7 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, username, pkgs, inputs, ... }:
 {
-	users.users.justinlime.extraGroups = [ "docker" ];
+  #Enable docker on the system and add the admin user to the docker group
+	users.users.${username}.extraGroups = [ "docker" ];
 	environment.systemPackages = with pkgs; [
 		docker-compose
 	];
