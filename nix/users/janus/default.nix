@@ -1,4 +1,4 @@
-{ username, home_profile, inputs, flake_path, ... }:
+{ pkgs, username, home_profile, inputs, flake_path, ... }:
 {
   # Janus is a home build for tools id be using typically on
   # a headless server of some kind
@@ -9,6 +9,12 @@
     ../base/configuration.nix
   ];
 
+  home.packages = with pkgs; [
+    tree
+    pciutils
+    neofetch
+    inputs.maxfetch.packages.${pkgs.system}.default
+  ];
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards

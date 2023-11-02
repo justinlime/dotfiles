@@ -8,25 +8,67 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 7;
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      timeout = 7;
+    };
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+      kernelModules = [ ];
+    };
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
+  };
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/98e9a525-6849-4392-90fb-8ef02d6520c0";
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/98e9a525-6849-4392-90fb-8ef02d6520c0";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" ];
     };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B196-C4D9";
+    "/boot" = {
+      device = "/dev/disk/by-uuid/B196-C4D9";
       fsType = "vfat";
     };
+    "/drives/NVME0" = {
+      device = "/dev/disk/by-uuid/466f73dd-c395-4b82-888e-d2ae99c286da";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" ];
+    };
+    "/drives/BTRFS0" = {
+      device = "/dev/disk/by-uuid/3b90beec-b28b-43ce-a2b1-0b6019f85722";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
+    "/drives/BTRFS1" = {
+      device = "/dev/disk/by-uuid/17013a54-745a-4068-8960-f55a0301c410";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
+    "/drives/BTRFS2" = {
+      device = "/dev/disk/by-uuid/8667aa5b-f698-4532-be58-5b961355d965";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
+    "/drives/BTRFS3" = {
+      device = "/dev/disk/by-uuid/b70381ba-3ddb-48ac-9f21-c0f7b342be78";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
+    "/drives/PARITY0" = {
+      device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
+    "/storage" = {
+      device = "/drives/BTRFS*";
+      fsType = "fuse.mergerfs";
+      options = [ "minfreespace=50G" "category.create=mfs" ];
+    };
+  };
 
   swapDevices = [ ];
 
@@ -38,5 +80,13 @@
   # networking.interfaces.enp3s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware = {
+    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+      ];
+    };
+  };
 }
