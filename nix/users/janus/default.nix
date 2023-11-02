@@ -4,7 +4,6 @@
   # a headless server of some kind
   _module.args = { inherit inputs username; };
   imports = [ 
-    ./general
     ../base/zsh.nix
     ../base/neovim.nix
     ../base/configuration.nix
