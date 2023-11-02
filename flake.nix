@@ -13,8 +13,8 @@
   outputs = {  self, nixpkgs, nixpkgs_stable, home-manager, ... }@inputs:
   let
     username = "justinlime";
-    home_profile = "janus";
-    system_profile = "stinkserver";
+    home_profile = "brimstone";
+    system_profile = "japtop";
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
     pkgs_stable = nixpkgs_stable.legacyPackages.${system};
