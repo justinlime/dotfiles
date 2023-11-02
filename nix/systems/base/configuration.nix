@@ -37,12 +37,17 @@
       };
       systemPackages = with pkgs; [
         curl
-        gcc
         git
         unzip
         vim
         wget
         zip
+        htop
+        btop
+        speedtest-cli
+        pciutils
+        neofetch
+        tree
 				inputs.home-manager.packages.${pkgs.system}.home-manager
       ];
       variables = { EDITOR = "vim"; };
