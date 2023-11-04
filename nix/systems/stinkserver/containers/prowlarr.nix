@@ -1,19 +1,17 @@
 { ... }:
 {
   virtualisation.oci-containers.containers = {
-    radarr = {
+    prowlarr = {
      autoStart = true; 
-     image = "lscr.io/linuxserver/radarr:latest";
+     image = "lscr.io/linuxserver/prowlarr:latest";
      environment = {
        TZ = "America/Chicago";
        PUID = "1000";
        PGID = "100";
      };
-     ports = [ "7878:7878" ];
+     ports = [ "9696:9696" ];
      volumes = [
-       "/configs/radarr:/config"
-       "/storage/pool/downloads:/downloads"
-       "/storage/pool/media/watch/movies:/movies"
+       "/configs/prowlarr:/config"
      ];
     };  
   };
