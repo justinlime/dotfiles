@@ -8,8 +8,8 @@
       PermitRootLogin = "no";
       PermitEmptyPasswords = false;
       Protocol = 2;
-      AllowUsers = "${username}";
-      AllowGroups = "${username}";
+      AllowUsers = ["${username}"];
+      AllowGroups = ["${username}"];
       MaxAuthTries = 3;
       ChallengeResponseAuthentication = false;
     };
