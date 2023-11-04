@@ -14,7 +14,7 @@
   let
     username = "justinlime";
     home_profile = "brimstone";
-    system_profile = "japtop";
+    system_profile = "jesktop";
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
     pkgs_stable = nixpkgs_stable.legacyPackages.${system};
