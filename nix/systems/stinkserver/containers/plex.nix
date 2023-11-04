@@ -12,9 +12,9 @@
      ports = [ "32400:32400" ];
      volumes = [
        "/configs/plex:/config"
-       "/storage/storage/media/watch/movies:/movies"
-       "/storage/storage/media/watch/tv:/tv"
-       "/storage/storage/media/watch/anime:/anime"
+       "/storage/pool/media/watch/movies:/movies"
+       "/storage/pool/media/watch/tv:/tv"
+       "/storage/pool/media/watch/anime:/anime"
      ];
      extraOptions = [ "--device=/dev/dri:/dev/dri" ];
     };  

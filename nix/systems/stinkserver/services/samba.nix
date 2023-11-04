@@ -17,33 +17,22 @@
       server string = stinkserver
       netbios name = stinkserver
       security = user 
-      hosts allow = 192.168. 127.0.0.1 localhost
-      hosts deny = 0.0.0.0/0
       guest account = nobody
       map to guest = bad user
+      unix extensions = no
     '';
     shares = {
-      fileshare = {
-        path = "/drives/NVME0/fileshare";
+      storage = {
+        path = "/storage";
         browseable = "yes";
         "read only" = "no";
         "writeable" = "yes";
-        "guest ok" = "yes";
+        "guest ok" = "no";
         "create mask" = "0755";
         "directory mask" = "0755";
-        #"force user" = "username";
-        #"force group" = "groupname";
-      };
-      users = {
-        path = "/drives/NVME0/users";
-        browseable = "yes";
-        "read only" = "no";
-        "writeable" = "yes";
-        "guest ok" = "yes";
-        "create mask" = "0755";
-        "directory mask" = "0755";
-        #"force user" = "username";
-        #"force group" = "groupname";
+        "valid users" = "justinlime";
+        "follow symlinks" = "yes";
+        "wide links" = "yes";
       };
     };
   };

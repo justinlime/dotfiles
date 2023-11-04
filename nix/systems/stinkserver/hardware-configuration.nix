@@ -63,10 +63,10 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
     };
-    "/storage" = {
+    "/storage/pool" = {
       device = "/drives/BTRFS*";
       fsType = "fuse.mergerfs";
-      options = [ "minfreespace=50G" "category.create=mfs" ];
+      options = [ "minfreespace=100G" "category.create=mfs" ];
     };
   };
 
