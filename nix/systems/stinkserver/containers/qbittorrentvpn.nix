@@ -20,7 +20,7 @@
      ports = [ "8080:8080" "8999:8999" "8999:8999/udp" ];
      volumes = [
        "/configs/qbittorrentvpn:/config"
-       "/storage/pool/downloads/torrent:/downloads"
+       "/storage/pool/downloads:/downloads"
      ];
      extraOptions = [
        "--privileged"

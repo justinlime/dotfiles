@@ -9,5 +9,7 @@
     ./prowlarr.nix
     ./requestrr.nix
     ./qbittorrentvpn.nix
+    ./nzbget.nix
+    ./filebot.nix
   ];
 }
