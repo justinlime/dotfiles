@@ -11,6 +11,6 @@
 
   environment.systemPackages = with pkgs; [
     mergerfs
-    compsize
+    snapraid
   ];
 }

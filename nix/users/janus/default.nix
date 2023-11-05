@@ -6,6 +6,7 @@
   imports = [ 
     ../base/zsh.nix
     ../base/neovim.nix
+    ../base/tmux.nix
     ../base/configuration.nix
   ];
 
@@ -13,6 +14,7 @@
     tree
     pciutils
     neofetch
+    rsync
     inputs.maxfetch.packages.${pkgs.system}.default
   ];
   # This value determines the Home Manager release that your
