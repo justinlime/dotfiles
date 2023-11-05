@@ -13,7 +13,7 @@
       timerConfig = {
         OnBootSec = "5m";
         OnUnitActiveSec = "5m";
-        Unit = "rsync_users.service";
+        Unit = "rsync_users_full.service";
       };
   };
   systemd.services."rsync_users" = {
