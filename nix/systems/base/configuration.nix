@@ -55,6 +55,12 @@
       variables = { EDITOR = "vim"; };
       pathsToLink = [ "/share/zsh" ];
     };
+    services = {
+      smartd = {
+        enable = true;
+        autodetect = true;
+      };
+    };
     programs.zsh = {
       enable = true;
       syntaxHighlighting.enable = true;
