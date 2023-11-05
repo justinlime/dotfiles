@@ -49,6 +49,7 @@
         neofetch
         tree
         compsize
+        smartmontools
 				inputs.home-manager.packages.${pkgs.system}.home-manager
       ];
       variables = { EDITOR = "vim"; };

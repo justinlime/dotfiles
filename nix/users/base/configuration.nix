@@ -1,4 +1,4 @@
-{ inputs, home_profile, username, flake_path, ... }:
+{ inputs, pkgs, home_profile, username, flake_path, ... }:
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -12,7 +12,28 @@
   # paths it should manage.
   home.username = "${username}";
   home.homeDirectory = "/home/${username}";
-
+  fonts.fontconfig.enable = true;
+  home.packages = with pkgs; [
+    speedtest-cli
+    ventoy
+    websocat
+		roboto
+    (nerdfonts.override { fonts = [ "RobotoMono" ]; })
+		pciutils
+    tree
+    compsize
+    smartmontools
+    pciutils
+    unzip
+    zip
+    git
+    htop
+    btop
+    wget
+    curl
+    vim
+    rsync
+  ];
   
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
