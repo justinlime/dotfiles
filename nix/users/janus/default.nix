@@ -15,6 +15,8 @@
     pciutils
     neofetch
     rsync
+    btop
+    htop
     inputs.maxfetch.packages.${pkgs.system}.default
   ];
   # This value determines the Home Manager release that your
