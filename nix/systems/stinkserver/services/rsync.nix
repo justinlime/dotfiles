@@ -28,7 +28,7 @@
   };
   systemd.services."rsync_users_full" = {
     script = ''
-    ${pkgs.rsync}/bin/rsync -rv --ignore-existing /drives/NVME0/users /storage/pool
+    ${pkgs.rsync}/bin/rsync -rv /drives/NVME0/users /storage/pool
     '';
     serviceConfig = {
       OnCalendar = "weekly";
