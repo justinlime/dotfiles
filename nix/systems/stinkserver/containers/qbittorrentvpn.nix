@@ -22,9 +22,7 @@
        "/configs/qbittorrentvpn:/config"
        "/storage/pool/downloads:/downloads"
      ];
-     extraOptions = [
-       "--privileged"
-     ];
+     extraOptions = [ "--privileged" ];
     };  
   };
 }

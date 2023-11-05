@@ -9,6 +9,6 @@
        "/configs/filebot:/config"
        "/storage/pool:/storage"
      ];
-    };  
+   };  
   };
 }

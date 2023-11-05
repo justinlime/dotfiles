@@ -15,6 +15,6 @@
        "/storage/pool/downloads:/downloads"
        "/storage/pool/media/watch/tv:/tv"
      ];
-    };  
+   };  
   };
 }

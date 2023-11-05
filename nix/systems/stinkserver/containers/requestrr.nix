@@ -8,6 +8,6 @@
      volumes = [
        "/configs/requestrr:/root/config"
      ];
-    };  
+   };  
   };
 }

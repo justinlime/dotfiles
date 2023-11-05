@@ -14,6 +14,6 @@
        "/configs/nzbget:/config"
        "/storage/pool/downloads:/downloads"
      ];
-    };  
+   };  
   };
 }

@@ -13,6 +13,6 @@
      volumes = [
        "/configs/prowlarr:/config"
      ];
-    };  
+   };  
   };
 }
