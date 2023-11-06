@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, flake_path, ... }:
 {
   imports = [ 
     ./hardware-configuration.nix
