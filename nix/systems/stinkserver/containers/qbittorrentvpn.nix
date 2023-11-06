@@ -2,6 +2,7 @@
 {
   # If the logs look correct, but the webgui is still not accessible, its probably a
   # LAN_NETWORK misconfiguration
+  # Ensure paths for downloads is set correctly in qbittorrent itself 
   virtualisation.oci-containers.containers = {
     qbittorrentvpn = {
      autoStart = true; 

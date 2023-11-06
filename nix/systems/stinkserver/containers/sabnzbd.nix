@@ -1,5 +1,6 @@
 { ... }:
 {
+  # Set paths in sabnzbd itself to ensure it functions as intended
   virtualisation.oci-containers.containers = {
     sabnzbd = {
      autoStart = true; 
