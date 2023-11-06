@@ -1,4 +1,4 @@
-{ inputs, home_profile, username, flake_path, ... }:
+{ inputs, username, flake_path, ... }:
 let 
   # Variables to share accross configs
   custom = {
@@ -16,6 +16,9 @@ in
 {
   # Brimstone is my main everyday home configuration, including a number
   # of tools and services i use on a daily basis
+  home.shellAliases = {
+    home-switch = "home-manager switch --flake path:${flake_path}#brimstone";
+  };
   _module.args = { inherit inputs username custom; };
   imports = [ 
     ./general

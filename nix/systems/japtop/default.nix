@@ -8,9 +8,13 @@
 
     #Programs
     programs = {
-        light.enable = true;
+      light.enable = true;
+      zsh.shellAliases = {
+        nix-switch = "sudo nixos-rebuild switch --flake path:${flake_path}#japtop";
+      };
     };
 
+    networking.hostName = "japtop";
     #Services
     services = {
         tlp.enable = true;

@@ -1,4 +1,4 @@
-{ username, pkgs, flake_path, home_profile, system_profile, inputs, ... }:
+{ username, pkgs, flake_path, inputs, ... }:
 {
     # Settings that will apply to all of my systems
     nix.settings.experimental-features= [ "nix-command" "flakes" ];
@@ -19,7 +19,6 @@
     };
 
     networking = {
-      hostName = "${system_profile}";
       networkmanager.enable = true;
     };
     
@@ -82,8 +81,6 @@
         gchb = "git checkout -b";
         gcoe = "git config user.email";
         gcon = "git config user.name";
-        home-switch = "home-manager switch --flake path:${flake_path}#${home_profile}";
-        nix-switch = "sudo nixos-rebuild switch --flake path:${flake_path}#${system_profile}";
         all-switch = "nix-switch && home-switch";
         all-update = "sudo nix flake update ${flake_path}# && all-switch";
       };

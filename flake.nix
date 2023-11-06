@@ -10,41 +10,50 @@
     hyprland.url = "github:hyprwm/Hyprland";
   };
 
-  outputs = {  self, nixpkgs, nixpkgs_stable, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs_stable, home-manager, ... }@inputs:
   let
     username = "justinlime";
-    home_profile = "brimstone";
-    system_profile = "jesktop";
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
     pkgs_stable = nixpkgs_stable.legacyPackages.${system};
+
     # The path to this very repo 
     flake_path = "/home/${username}/dotfiles";
+
+    allHomeConfigurations =  
+      nixpkgs.lib.genAttrs [
+        "brimstone"
+        "janus"
+      ] (config: 
+          home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            extraSpecialArgs = { inherit username flake_path pkgs_stable inputs; };
+            modules = [
+              ./nix/users/${config}
+              # Pin registry to flake
+              { nix.registry.nixpkgs.flake = nixpkgs; }
+              # Pin channel to flake 
+              { home.sessionVariables.NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}"; }
+            ];
+          });
+    allSystemConfigurations = 
+      nixpkgs.lib.genAttrs [
+        "stinkserver"
+        "jesktop"
+        "japtop"
+      ] (config: 
+           nixpkgs.lib.nixosSystem {
+             inherit system;
+             specialArgs = { inherit username flake_path pkgs_stable inputs; }; 
+             modules = [
+               ./nix/systems/${config}
+               { nix.registry.nixpkgs.flake = nixpkgs; }
+               { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
+             ];
+          });
   in
   {
-    homeConfigurations = {
-      "${home_profile}" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = { inherit username flake_path home_profile system_profile pkgs_stable inputs; };
-        modules = [
-          ./nix/users/${home_profile}
-          # Pin registry to flake
-          { nix.registry.nixpkgs.flake = nixpkgs; }
-          # Pin channel to flake 
-          { home.sessionVariables.NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}"; }
-        ];
-      };
-    };
-    nixosConfigurations = {
-      "${system_profile}" = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit username flake_path home_profile system_profile pkgs_stable inputs; }; 
-        modules = [
-          ./nix/systems/${system_profile}
-          { nix.registry.nixpkgs.flake = nixpkgs; }
-          { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
-        ];
-      };
-    };
+    homeConfigurations = allHomeConfigurations; 
+    nixosConfigurations = allSystemConfigurations; 
   };
 }
