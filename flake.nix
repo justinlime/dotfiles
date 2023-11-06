@@ -19,7 +19,7 @@
     pkgs = nixpkgs.legacyPackages.${system};
     pkgs_stable = nixpkgs_stable.legacyPackages.${system};
     # The path to this very repo 
-    flake_path = "~/dotfiles";
+    flake_path = "/home/${username}/dotfiles";
   in
   {
     homeConfigurations = {
