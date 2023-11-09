@@ -10,8 +10,10 @@
   ];
 
   programs = {
+    zsh.enable = true;
     zsh.shellAliases = {
       nix-switch = "sudo nixos-rebuild switch --flake path:${flake_path}#stinkserver";
+      testpoop = "echo testpoop1";
     };
   };
 
@@ -20,5 +22,7 @@
   environment.systemPackages = with pkgs; [
     mergerfs
     snapraid
+    intel-gpu-tools
+    ffmpeg-full
   ];
 }

@@ -38,31 +38,31 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" ];
     };
-    "/drives/BTRFS0" = {
-      device = "/dev/disk/by-uuid/3b90beec-b28b-43ce-a2b1-0b6019f85722";
-      fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
-    };
-    "/drives/BTRFS1" = {
-      device = "/dev/disk/by-uuid/17013a54-745a-4068-8960-f55a0301c410";
-      fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
-    };
-    "/drives/BTRFS2" = {
-      device = "/dev/disk/by-uuid/8667aa5b-f698-4532-be58-5b961355d965";
-      fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
-    };
-    "/drives/BTRFS3" = {
-      device = "/dev/disk/by-uuid/b70381ba-3ddb-48ac-9f21-c0f7b342be78";
-      fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
-    };
-    "/drives/PARITY0" = {
+    # "/drives/BTRFS0" = {
+    #   device = "/dev/disk/by-uuid/8667aa5b-f698-4532-be58-5b961355d965";
+    #   fsType = "btrfs";
+    #   options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    # };
+    "/drives/BTRFS1" = { #14tb
       device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
     };
+    "/drives/BTRFS2" = { #4tb
+      device = "/dev/disk/by-uuid/3b90beec-b28b-43ce-a2b1-0b6019f85722";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
+    "/drives/BTRFS3" = { #12tb
+      device = "/dev/disk/by-uuid/b70381ba-3ddb-48ac-9f21-c0f7b342be78";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
+    # "/drives/PARITY0" = {
+    #   device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
+    #   fsType = "btrfs";
+    #   options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    # };
     "/storage/pool" = {
       device = "/drives/BTRFS*";
       fsType = "fuse.mergerfs";

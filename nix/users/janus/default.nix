@@ -19,6 +19,9 @@
     htop
     inputs.maxfetch.packages.${pkgs.system}.default
   ];
+  home.shellAliases = {
+    home-switch = "home-manager switch --flake path:${flake_path}#janus";
+  };
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards

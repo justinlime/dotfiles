@@ -11,5 +11,6 @@
     ./qbittorrentvpn.nix
     ./sabnzbd.nix
     ./filebot.nix
+    ./jellyfin.nix
   ];
 }

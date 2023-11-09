@@ -4,9 +4,6 @@
   programs.home-manager.enable = true;
   nixpkgs.config.allowUnfree = true; # This is borked for some reason :D
   nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for the above borked option
-  home.shellAliases = {
-    home-switch = "home-manager switch --flake path:${flake_path}#brimstone";
-  };
   
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
