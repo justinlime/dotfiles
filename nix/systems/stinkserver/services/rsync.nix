@@ -2,32 +2,22 @@
 {
   systemd = {
     timers = {
-      "rsync_users" = {
+      "rsync" = {
         wantedBy = [ "timers.target" ];
         timerConfig = {
           Persistent = true; 
           OnCalendar = "hourly";
-          Unit = "rsync_users.service";
-        };
-      };
-      "rsync_users_full" = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          Persistent = true; 
-          OnCalendar = "weekly";
-          Unit = "rsync_users_full.service";
+          Unit = "rsync.service";
         };
       };
     };
     services = {
-      "rsync_users" = {
+      "rsync" = {
+        # If you dont want the dst dir to be named the same as the src,
+        # use a trailing / after the src dir, like:
+        # rsync -avh /drives/NVME0/users/ /storage/pool/new_users
         script = ''
-          ${pkgs.rsync}/bin/rsync -rv --ignore-existing /drives/NVME0/users /storage/pool 
-        '';
-      };
-      "rsync_users_full" = { 
-        script = ''
-          ${pkgs.rsync}/bin/rsync -rv /drives/NVME0/users /storage/pool
+          ${pkgs.rsync}/bin/rsync -avh /drives/NVME0/users /storage/pool --delete
         '';
       };
     };

@@ -2,7 +2,8 @@
 {
   imports = [
     ./samba.nix
-    # ./rsync.nix
+    ./rsync.nix
     ./snapraid.nix
+    ./smart.nix
   ];
 }

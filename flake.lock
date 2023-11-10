@@ -23,7 +23,9 @@
     "hyprland": {
       "inputs": {
         "hyprland-protocols": "hyprland-protocols",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "systems": "systems",
         "wlroots": "wlroots",
         "xdph": "xdph"
@@ -69,7 +71,9 @@
     },
     "maxfetch": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1690770330,
@@ -86,38 +90,6 @@
       }
     },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1698134075,
-        "narHash": "sha256-foCD+nuKzfh49bIoiCBur4+Fx1nozo+4C/6k8BYk4sg=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "8efd5d1e283604f75a808a20e6cde0ef313d07d4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1690640159,
-        "narHash": "sha256-5DZUYnkeMOsVb/eqPYb9zns5YsnQXRJRC8Xx/nPMcno=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e6ab46982debeab9831236869539a507f670a129",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
       "locked": {
         "lastModified": 1698924604,
         "narHash": "sha256-GCFbkl2tj8fEZBZCw3Tc0AkGo0v+YrQlohhEGJ/X4s0=",
@@ -149,13 +121,34 @@
         "type": "github"
       }
     },
+    "pipecord": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1699621485,
+        "narHash": "sha256-8vExrwb6jfD4ndqGuqzboRzpmaQE8d8NXxMh6Q8OsvE=",
+        "owner": "justinlime",
+        "repo": "pipecord",
+        "rev": "3a773c7716f39c61b28853c0002214efc26faa70",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justinlime",
+        "repo": "pipecord",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "maxfetch": "maxfetch",
-        "nixpkgs": "nixpkgs_3",
-        "nixpkgs_stable": "nixpkgs_stable"
+        "nixpkgs": "nixpkgs",
+        "nixpkgs_stable": "nixpkgs_stable",
+        "pipecord": "pipecord"
       }
     },
     "systems": {

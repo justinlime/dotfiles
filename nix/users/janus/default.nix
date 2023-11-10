@@ -1,8 +1,8 @@
-{ pkgs, username, home_profile, inputs, flake_path, ... }:
+{ profile, pkgs, username, inputs, flake_path, ... }:
 {
   # Janus is a home build for tools id be using typically on
   # a headless server of some kind
-  _module.args = { inherit inputs username; };
+  _module.args = { inherit profile inputs username; };
   imports = [ 
     ../base/zsh.nix
     ../base/neovim.nix
@@ -19,9 +19,6 @@
     htop
     inputs.maxfetch.packages.${pkgs.system}.default
   ];
-  home.shellAliases = {
-    home-switch = "home-manager switch --flake path:${flake_path}#janus";
-  };
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
