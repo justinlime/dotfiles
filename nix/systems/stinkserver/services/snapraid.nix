@@ -13,10 +13,10 @@
     exclude = [ "/downloads/" ];
     parityFiles = [ "/drives/PARITY0/snapraid.parity" ];
     dataDisks = {
-      d1 = "/drives/BTRFS0";
-      d2 = "/drives/BTRFS1";
-      d3 = "/drives/BTRFS2";
-      d4 = "/drives/BTRFS3";
+      d1 = "/drives/BTRFS0"; #20TB
+      d2 = "/drives/BTRFS1"; #14TB
+      d3 = "/drives/BTRFS2"; #4TB
+      d4 = "/drives/BTRFS3"; #12TB
     };
     contentFiles = [
       "/home/${username}/.snapraid.content"
