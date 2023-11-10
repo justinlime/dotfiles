@@ -38,11 +38,11 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" ];
     };
-    # "/drives/BTRFS0" = {
-    #   device = "/dev/disk/by-uuid/8667aa5b-f698-4532-be58-5b961355d965";
-    #   fsType = "btrfs";
-    #   options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
-    # };
+    "/drives/BTRFS0" = { #20tb
+      device = "/dev/disk/by-uuid/028f290f-d1f7-4b45-b346-47d7864a2e24";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
     "/drives/BTRFS1" = { #14tb
       device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
       fsType = "btrfs";
@@ -58,11 +58,11 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
     };
-    # "/drives/PARITY0" = {
-    #   device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
-    #   fsType = "btrfs";
-    #   options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
-    # };
+    "/drives/PARITY0" = { #20tb parity
+      device = "/dev/disk/by-uuid/27ab9146-6226-47fc-8d91-aedc210b9102";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
     "/storage/pool" = {
       device = "/drives/BTRFS*";
       fsType = "fuse.mergerfs";
