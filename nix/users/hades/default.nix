@@ -20,7 +20,7 @@
       vim
       zip
       unzip
-      tar
+      gnutar
       htop
       coreutils-full
       curl
