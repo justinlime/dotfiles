@@ -10,23 +10,23 @@
     shellAliases = {
       home-switch = "home-manager switch --flake path:/data/data/com.termux.nix/dotfiles#${profile}";
     };
+    packages = with pkgs; [
+      rsync
+      inputs.maxfetch.packages.${pkgs.system}.default
+      neofetch
+      git
+      netcat
+      vim
+      zip
+      unzip
+      tar
+      htop
+      coreutils-full
+      curl
+      wget
+      speedtest-cli
+      inetutils
+    ];
   };
   programs.zsh.enable = true;
-  packages = with pkgs; [
-    rsync
-    inputs.maxfetch.packages.${pkgs.system}.default
-    neofetch
-    git
-    netcat
-    vim
-    zip
-    unzip
-    tar
-    htop
-    coreutils-full
-    curl
-    wget
-    speedtest-cli
-    inetutils
-  ];
 }
