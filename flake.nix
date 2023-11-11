@@ -23,7 +23,7 @@
   outputs = { self, nixpkgs, nixpkgs_stable, home-manager, ... }@inputs:
   let
     username = "justinlime";
-
+    lib = nixpkgs.lib;
     # The path to this very repo 
     flake_path = "/home/${username}/dotfiles";
 
@@ -32,15 +32,14 @@
       (x + ".x86_64-darwin")
       (x + ".aarch64-linux")
     ];
-
     allHomeConfigurations =  
-      nixpkgs.lib.genAttrs (nixpkgs.lib.flatten (nixpkgs.lib.lists.forEach [
+      lib.genAttrs (lib.flatten (lib.lists.forEach [
         "brimstone"
         "janus"
-      ] allSystems)) # This will generate an entry for each profile and system, Example: brimstone.x86_64-linux
-      (profile: 
+      ] allSystems)) # This will generate an entry for each profile and system in a list
+      (profile:      # Example: [ "brimstone.x86_64-linux" "brimstone.x86_64-darwin" "janus.x86_64-linux" ], etc 
           let
-            split = nixpkgs.lib.strings.splitString "." profile;
+            split = lib.strings.splitString "." profile;
             name = builtins.elemAt split 0;
             system =  builtins.elemAt split 1;
             pkgs = nixpkgs.legacyPackages.${system};
@@ -58,20 +57,20 @@
             ];
           });
     allSystemConfigurations = 
-      nixpkgs.lib.genAttrs (nixpkgs.lib.flatten (nixpkgs.lib.lists.forEach [
+      lib.genAttrs (lib.flatten (lib.lists.forEach [
         "stinkserver"
         "jesktop"
         "japtop"
       ] allSystems))
       (profile: 
            let
-             split = nixpkgs.lib.strings.splitString "." profile;
+             split = lib.strings.splitString "." profile;
              name = builtins.elemAt split 0;
              system =  builtins.elemAt split 1;
              pkgs = nixpkgs.legacyPackages.${system};
              pkgs_stable = nixpkgs_stable.legacyPackages.${system};
            in
-           nixpkgs.lib.nixosSystem {
+           lib.nixosSystem {
              inherit system;
              specialArgs = { inherit profile username flake_path pkgs_stable inputs; }; 
              modules = [
