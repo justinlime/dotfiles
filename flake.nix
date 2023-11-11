@@ -24,23 +24,23 @@
   let
     username = "justinlime";
     lib = nixpkgs.lib;
-    # The path to this very repo 
+    # The path to this very repo, used for aliases
     flake_path = "/home/${username}/dotfiles";
 
     allSystems = x: [
-      (x + ".x86_64-linux")
-      (x + ".x86_64-darwin")
-      (x + ".aarch64-linux")
+      "${x}.x86_64-linux"
+      "${x}.x86_64-darwin"
+      "${x}.aarch64-linux"
     ];
     allHomeConfigurations =  
-      lib.genAttrs (lib.flatten (lib.lists.forEach [
-        "brimstone"
-        "janus"
-        "hades"
-      ] allSystems)) # This will generate an entry for each profile and system in a list
-      (profile:      # Example: [ "brimstone.x86_64-linux" "brimstone.x86_64-darwin" "janus.x86_64-linux" ], etc 
-          let
-            split = lib.strings.splitString "." profile;
+      lib.genAttrs (lib.flatten (map allSystems [
+        "brimstone" # This will generate an entry for each profile and system in a list
+        "janus"     # Example: [ "brimstone.x86_64-linux" "brimstone.x86_64-darwin" "janus.x86_64-linux" ], etc 
+        "hades"     # These are then split to generate the name of the config in the directory
+      ]))           # while also passing the system for each config
+      (profile:     
+          let        
+            split = lib.splitString "." profile;
             name = builtins.elemAt split 0;
             system =  builtins.elemAt split 1;
             pkgs = nixpkgs.legacyPackages.${system};
@@ -58,14 +58,14 @@
             ];
           });
     allSystemConfigurations = 
-      lib.genAttrs (lib.flatten (lib.lists.forEach [
+      lib.genAttrs (lib.flatten (map allSystems [
         "stinkserver"
         "jesktop"
         "japtop"
-      ] allSystems))
+      ]))
       (profile: 
            let
-             split = lib.strings.splitString "." profile;
+             split = lib.splitString "." profile;
              name = builtins.elemAt split 0;
              system =  builtins.elemAt split 1;
              pkgs = nixpkgs.legacyPackages.${system};
