@@ -36,6 +36,7 @@
       lib.genAttrs (lib.flatten (lib.lists.forEach [
         "brimstone"
         "janus"
+        "hades"
       ] allSystems)) # This will generate an entry for each profile and system in a list
       (profile:      # Example: [ "brimstone.x86_64-linux" "brimstone.x86_64-darwin" "janus.x86_64-linux" ], etc 
           let
