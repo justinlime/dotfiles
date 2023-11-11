@@ -5,6 +5,11 @@
   nixpkgs.config.allowUnfree = true; # This is borked for some reason :D
   nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for the above borked option
 
+  nix = {
+    package = pkgs.nix;
+    settings.experimental-features = [ "nix-command" "flakes" ];
+  };
+
   home = {
     username = "${username}";
     homeDirectory = "/home/${username}";
