@@ -1,7 +1,6 @@
 { profile, username, pkgs, flake_path, inputs, ... }:
 {
     # Settings that will apply to all of my systems
-    nix.settings.experimental-features= [ "nix-command" "flakes" ];
     nixpkgs.config.allowUnfree = true;
 
     time.timeZone = "America/Chicago";
