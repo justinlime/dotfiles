@@ -5,6 +5,7 @@
   nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for the above borked option
 
   home = {
+    stateVersion = "22.11";
     username = "nix-on-droid";
     homeDirectory = "/data/data/com.termux.nix/files/home";
     shellAliases = {
