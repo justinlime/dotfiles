@@ -27,22 +27,22 @@
     # The path to this very repo, used for aliases
     flake_path = "/home/${username}/dotfiles";
 
-    allSystems = x: [
+    addSystems = x: [
       "${x}.x86_64-linux"
       "${x}.x86_64-darwin"
       "${x}.aarch64-linux"
     ];
     allHomeConfigurations =  
-      lib.genAttrs (lib.flatten (map allSystems [
+      lib.genAttrs (lib.flatten (map addSystems [
         "brimstone" # This will generate an entry for each profile and system in a list
         "janus"     # Example: [ "brimstone.x86_64-linux" "brimstone.x86_64-darwin" "janus.x86_64-linux" ], etc 
         "hades"     # These are then split to generate the name of the config in the directory
       ]))           # while also passing the system for each config
       (profile:     
-          let        
-            split = lib.splitString "." profile;
-            name = builtins.elemAt split 0;
-            system =  builtins.elemAt split 1;
+          let                                    
+            split = lib.splitString "." profile; 
+            name = builtins.elemAt split 0;      
+            system =  builtins.elemAt split 1;   
             pkgs = nixpkgs.legacyPackages.${system};
             pkgs_stable = nixpkgs_stable.legacyPackages.${system};
           in
@@ -58,7 +58,7 @@
             ];
           });
     allSystemConfigurations = 
-      lib.genAttrs (lib.flatten (map allSystems [
+      lib.genAttrs (lib.flatten (map addSystems [
         "stinkserver"
         "jesktop"
         "japtop"
