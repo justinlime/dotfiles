@@ -41,10 +41,9 @@
             general = {
                 gaps_in = 6;
                 gaps_out = 10;
-                border_size = 2;
-                # "col.active_border" = "rgb(${custom.primary_accent})";
-                "col.active_border" = "rgba(${custom.palette.tertiary_background_hex}00)";
-                "col.inactive_border" = "rgba(${custom.background}00)";
+                border_size = 0;
+                # "col.active_border" = "rgb(${custom.palette.tertiary_background_hex})";
+                # "col.inactive_border" = "rgba(${custom.background}00)";
                 allow_tearing = true;
                 layout = "dwindle";
             };
@@ -52,7 +51,7 @@
                 rounding = 10;
                 shadow_ignore_window = true;
                 drop_shadow = true;
-								shadow_range = 40;
+								shadow_range = 50;
                 shadow_render_power = 2;
                 # "col.shadow" = "rgb(${custom.primary_accent})";
                 "col.shadow" = "rgb(${custom.background})";
@@ -71,12 +70,14 @@
             };
             animations = {
                 enabled = true;
-                bezier = "overshot,0.13,0.99,0.29,1.1";
+                bezier = [ "easeinoutsine, 0.37, 0, 0.63, 1" ];
                 animation = [ 
-                    "windows,1,6,overshot,slide" 
+                    "windows,1,2,easeinoutsine,slide" 
+                    "windowsOut,1,2,easeinoutsine,slide"
+                    "windowsMove,1,2,easeinoutsine,slide"
                     "border,1,10,default"
                     "fade,1,10,default"
-                    "workspaces,1,6,overshot,slide"
+                    "workspaces,1,2,easeinoutsine,slide"
                 ];
             };
             dwindle = {
