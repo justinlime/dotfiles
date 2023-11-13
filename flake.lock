@@ -128,11 +128,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1699621485,
-        "narHash": "sha256-8vExrwb6jfD4ndqGuqzboRzpmaQE8d8NXxMh6Q8OsvE=",
+        "lastModified": 1699831177,
+        "narHash": "sha256-J1/SOyeeAQALUL/T24Amr+bRfIqOUSzaqHDQf7iWNC0=",
         "owner": "justinlime",
         "repo": "pipecord",
-        "rev": "3a773c7716f39c61b28853c0002214efc26faa70",
+        "rev": "50a70de445f33e1e2101101baf476511d1d37754",
         "type": "github"
       },
       "original": {
