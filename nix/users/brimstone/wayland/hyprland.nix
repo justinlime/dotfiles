@@ -73,10 +73,8 @@
                 bezier = [ "easeinoutsine, 0.37, 0, 0.63, 1" ];
                 animation = [ 
                     "windows,1,2,easeinoutsine,slide" 
-                    "windowsOut,1,2,easeinoutsine,slide"
-                    "windowsMove,1,2,easeinoutsine,slide"
                     "border,1,10,default"
-                    "fade,1,10,default"
+                    "fade,1,1,default"
                     "workspaces,1,2,easeinoutsine,slide"
                 ];
             };
