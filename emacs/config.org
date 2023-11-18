@@ -429,27 +429,25 @@
 (defun python-hook ()
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
-  (setq indent-line-function 'insert-tab)
   (eglot-ensure)
 )
-(add-hook 'python-mode-hook 'python-hook)
-(add-hook 'python-ts-mode-hook 'python-hook)
+
+(add-hook 'python-mode-hook #'python-hook)
+(add-hook 'python-ts-mode-hook #'python-mode)
 #+end_src
 ** Go Mode
 #+begin_src emacs-lisp
 (defun go-hook ()
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
-  (setq indent-line-function 'insert-tab)
   (eglot-ensure)
 )
 
 (use-package go-mode
   :mode "\\.go\\'")
 
-(add-hook 'go-mode-hook 'go-hook)
-(add-hook 'go-ts-mode-hook 'go-hook)
-
+(add-hook 'go-mode-hook #'go-hook)
+(add-hook 'go-ts-mode-hook #'go-mode)
 #+end_src
 * Misc
 ** Backup Files
