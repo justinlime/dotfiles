@@ -35,6 +35,8 @@
   - [[#org-modern][Org Modern]]
 - [[#languages-and-modes][Languages and Modes]]
   - [[#python-mode][Python Mode]]
+  - [[#javascript-mode][Javascript Mode]]
+  - [[#typescript-mode][TypeScript Mode]]
   - [[#go-mode][Go Mode]]
 - [[#misc][Misc]]
   - [[#backup-files][Backup Files]]
@@ -435,6 +437,29 @@
 (add-hook 'python-mode-hook #'python-hook)
 (add-hook 'python-ts-mode-hook #'python-mode)
 #+end_src
+** Javascript Mode
+#+begin_src emacs-lisp
+(defun javascript-hook ()
+  (setq tab-width 2)
+  (setq indent-tabs-mode nil)
+  (eglot-ensure)
+)
+(add-hook 'javascript-mode-hook #'javascript-hook)
+(add-hook 'javascript-ts-mode-hook #'javascript-mode)
+#+end_src
+** TypeScript Mode
+#+begin_src emacs-lisp
+(use-package typescript-mode
+  :mode "\\.ts[x]?\\'")
+
+(defun typescript-hook ()
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil)
+  (eglot-ensure)
+)
+(add-hook 'typescript-mode-hook #'typescript-hook)
+(add-hook 'typescript-ts-mode-hook #'typescript-mode)
+#+end_src
 ** Go Mode
 #+begin_src emacs-lisp
 (defun go-hook ()
@@ -460,12 +485,11 @@
 #+begin_src emacs-lisp
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (setq use-short-answers t) ; Set y or n instead of yes or no for questions
-(setq inhibit-startup-messages t) ;; Disable splash screen
+(setq inhibit-startup-messages t) ; Disable splash screen
 (save-place-mode) ; Save cursor position in buffer on reopen
-(setq-default tab-width 2) 
-(setq-default indent-tabs-mode nil)
-(setq-default indent-line-function 'insert-tab)
-(setq password-cache-expiry nil)
+(setq-default tab-width 2) ; self explanitory
+(setq-default indent-tabs-mode nil) ; use spaces not tabs
+(setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
 #+end_src
 ** Custom Functions
 #+begin_src emacs-lisp
