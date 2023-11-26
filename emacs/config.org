@@ -439,13 +439,14 @@
 #+end_src
 ** Javascript Mode
 #+begin_src emacs-lisp
-(defun javascript-hook ()
+(defun js-hook ()
   (setq tab-width 2)
   (setq indent-tabs-mode nil)
+  (setq js-indent-level 2)
   (eglot-ensure)
 )
-(add-hook 'javascript-mode-hook #'javascript-hook)
-(add-hook 'javascript-ts-mode-hook #'javascript-mode)
+(add-hook 'js-mode-hook #'js-hook)
+(add-hook 'js-ts-mode-hook #'js-mode)
 #+end_src
 ** TypeScript Mode
 #+begin_src emacs-lisp
@@ -453,7 +454,7 @@
   :mode "\\.ts[x]?\\'")
 
 (defun typescript-hook ()
-  (setq tab-width 4)
+  (setq tab-width 2)
   (setq indent-tabs-mode nil)
   (eglot-ensure)
 )
