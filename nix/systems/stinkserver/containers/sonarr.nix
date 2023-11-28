@@ -12,7 +12,7 @@
      ports = [ "8989:8989" ];
      volumes = [
        "/configs/sonarr:/config"
-       "/storage/pool/downloads:/downloads"
+       "/storage/downloads:/downloads"
        "/storage/pool/media/watch/tv:/tv"
      ];
    };  

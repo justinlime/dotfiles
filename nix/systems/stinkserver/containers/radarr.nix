@@ -12,7 +12,7 @@
      ports = [ "7878:7878" ];
      volumes = [
        "/configs/radarr:/config"
-       "/storage/pool/downloads:/downloads"
+       "/storage/downloads:/downloads"
        "/storage/pool/media/watch/movies:/movies"
      ];
    };  

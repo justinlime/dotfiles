@@ -63,6 +63,11 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
     };
+    "/drives/EXTERNAL0" = { #4TB External 
+      device = "/dev/disk/by-uuid/78d1947e-0375-4ac3-ad0f-249803877899";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+    };
     "/storage/pool" = {
       device = "/drives/BTRFS*";
       fsType = "fuse.mergerfs";

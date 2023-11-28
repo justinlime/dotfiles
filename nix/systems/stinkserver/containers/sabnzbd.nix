@@ -13,7 +13,7 @@
      ports = [ "8081:8080" ];
      volumes = [
        "/configs/sabnzbd:/config"
-       "/storage/pool/downloads:/downloads"
+       "/storage/downloads:/downloads"
      ];
    };  
   };
