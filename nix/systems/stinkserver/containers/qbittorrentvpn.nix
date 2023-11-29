@@ -18,7 +18,7 @@
        NAME_SERVERS = "9.9.9.9,149.112.112.112";
        LAN_NETWORK = "192.168.0.0/16";
      };
-     ports = [ "8080:8080" "8999:8999" "8999:8999/udp" ];
+     ports = [ "8080:8080" "57529:57529" "57529:57529/udp" ];
      volumes = [
        "/configs/qbittorrentvpn:/config"
        "/storage/downloads:/downloads"
