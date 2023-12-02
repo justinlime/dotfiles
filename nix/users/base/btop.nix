@@ -14,6 +14,7 @@ in
       color_theme = "catppuccin-mocha";
       theme_background = false;
       vim_keys = true;
+      update_ms = 500;
     };
   };
   xdg.configFile = {
