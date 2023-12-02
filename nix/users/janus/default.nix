@@ -7,6 +7,7 @@
     ../base/zsh.nix
     ../base/neovim.nix
     ../base/tmux.nix
+    ../base/btop.nix
     ../base/configuration.nix
   ];
 
@@ -15,8 +16,6 @@
     pciutils
     neofetch
     rsync
-    btop
-    htop
     inputs.maxfetch.packages.${pkgs.system}.default
   ];
   # This value determines the Home Manager release that your
