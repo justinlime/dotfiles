@@ -190,6 +190,7 @@
                 "immediate, title:^(Arma 3)$" #DayZ
                 "immediate, class:^(love)$" #vrrtest
                 "immediate, class:^(steam_app_1659040)$" #Hitman 3
+                "immediate, class:^(steam_app_1144200)$" #Ready or Not
             ];
             layerrule = [
               "blur, waybar"
