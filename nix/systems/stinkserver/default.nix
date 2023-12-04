@@ -9,7 +9,9 @@
     ../base/docker.nix
   ];
 
-  networking.hostName = "stinkserver";
+  networking = {
+   hostName = "stinkserver"; 
+  };
 
   environment.systemPackages = with pkgs; [
     mergerfs

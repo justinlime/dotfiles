@@ -24,7 +24,6 @@
     enable = true;
     virtualHosts = {
       "watch.stinkboys.com" = {
-        serverName = "watch.stinkboys.com";
         listen = [{
           port = 90;
           addr = "0.0.0.0";
