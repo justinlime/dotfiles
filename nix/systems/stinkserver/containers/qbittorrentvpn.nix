@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, lib, ... }:
 {
   # If the logs look correct, but the webgui is still not accessible, its probably a
   # LAN_NETWORK misconfiguration

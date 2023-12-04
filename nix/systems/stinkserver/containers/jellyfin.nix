@@ -8,8 +8,9 @@
        TZ = "America/Chicago";
        PUID = "1000";
        PGID = "100";
+       JELLYFIN_PublishedServerUrl = "192.168.4.59";
      };
-     ports = [ "8096:8096" "8920:8920" ];
+     ports = [ "8096:8096" "8920:8920" "1900:1900/udp" "7359:7359/udp" ];
      volumes = [
        "/configs/jellyfin:/config"
        "/storage/pool/media/watch/movies:/movies"
@@ -18,5 +19,52 @@
      ];
      extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
     };  
+  };
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      "watch.stinkboys.com" = {
+        serverName = "watch.stinkboys.com";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }
+        {
+          port = 80;
+          addr = "0.0.0.0";
+        }];
+        locations."/" = {
+          proxyPass = "http://localhost:8096";
+          extraConfig = ''
+            proxy_set_header Accept-Encoding "";
+            sub_filter 
+            '</body>' 
+            '<script plugin="Jellyscrub" version="1.0.0.0" src="/Trickplay/ClientScript"></script>
+            </body>';  
+            sub_filter_once on; 
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Protocol $scheme;
+            proxy_set_header X-Forwarded-Host $http_host;
+          '';
+        };
+        locations."/socket" = {
+          proxyPass = "http://localhost:8096";
+          extraConfig = ''
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Protocol $scheme;
+            proxy_set_header X-Forwarded-Host $http_host;
+          '';
+        };
+      };
+    };
   };
 }

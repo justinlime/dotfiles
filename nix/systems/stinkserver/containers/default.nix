@@ -12,5 +12,6 @@
     ./sabnzbd.nix
     ./filebot.nix
     ./jellyfin.nix
+    ./pihole.nix
   ];
 }

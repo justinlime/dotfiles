@@ -16,6 +16,7 @@
     snapraid
     intel-gpu-tools
     ffmpeg-full
+    linux-firmware
     # inputs.pipecord.packages.${pkgs.system}.default
   ];
 }
