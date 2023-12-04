@@ -1,5 +1,8 @@
 { ... }:
 {
+
+  networking.firewall.allowedTCPPorts = [ 80 90 8096 ];
+  networking.firewall.allowedUDPPorts = [ 7359 ];
   virtualisation.oci-containers.containers = {
     jellyfin = {
      autoStart = true; 
@@ -8,7 +11,7 @@
        TZ = "America/Chicago";
        PUID = "1000";
        PGID = "100";
-       JELLYFIN_PublishedServerUrl = "192.168.4.59";
+       JELLYFIN_PublishedServerUrl = "http://192.168.4.59";
      };
      ports = [ "8096:8096" "8920:8920" "1900:1900/udp" "7359:7359/udp" ];
      volumes = [
@@ -17,7 +20,7 @@
        "/storage/pool/media/watch/tv:/tv"
        "/storage/pool/media/watch/anime:/anime"
      ];
-     extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
+     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
     };  
   };
   services.nginx = {
@@ -28,10 +31,7 @@
           port = 90;
           addr = "0.0.0.0";
         }
-        {
-          port = 80;
-          addr = "0.0.0.0";
-        }];
+        ];
         locations."/" = {
           proxyPass = "http://localhost:8096";
           extraConfig = ''
