@@ -19,6 +19,7 @@
   - [[#gui][GUI]]
   - [[#modeline][Modeline]]
   - [[#fonts][Fonts]]
+  - [[#rainbow-mode][Rainbow Mode]]
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
   - [[#eglot][Eglot]]
@@ -37,6 +38,7 @@
   - [[#python-mode][Python Mode]]
   - [[#javascript-mode][Javascript Mode]]
   - [[#typescript-mode][TypeScript Mode]]
+  - [[#vue-mode][Vue Mode]]
   - [[#go-mode][Go Mode]]
 - [[#misc][Misc]]
   - [[#backup-files][Backup Files]]
@@ -295,6 +297,11 @@
 (setq-default line-spacing 0.12)
 (set-language-environment "UTF-8")
 #+end_src
+** Rainbow Mode
+#+begin_src emacs-lisp
+(use-package rainbow-mode)
+(add-hook 'prog-mode-hook 'rainbow-mode)
+#+end_src
 ** Dashboard
 #+begin_src emacs-lisp
 (use-package dashboard
@@ -312,7 +319,6 @@
 ** Eglot
 #+begin_src emacs-lisp
 (use-package eglot)
-;; (add-hook 'go-mode-hook #'eglot)
 #+end_src
 ** Corfu
 #+begin_src emacs-lisp
@@ -358,6 +364,7 @@
   :config
   ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
   (yas-global-mode 1))
+
 #+end_src
 * Treesitter-auto
 #+begin_src emacs-lisp
@@ -461,6 +468,17 @@
 (add-hook 'typescript-mode-hook #'typescript-hook)
 (add-hook 'typescript-ts-mode-hook #'typescript-mode)
 #+end_src
+** Vue Mode
+#+begin_src emacs-lisp 
+(use-package vue-mode
+  :mode "\\.vue\\'")
+
+(defun vue-hook ()
+  (setq tab-width 2)
+  (setq indent-tabs-mode nil)
+)
+(add-hook 'vue-mode-hook #'vue-hook)
+#+end_src
 ** Go Mode
 #+begin_src emacs-lisp
 (defun go-hook ()
@@ -509,7 +527,6 @@
     (find-file format-host)
   )
 )
-
 #+end_src
 
 
