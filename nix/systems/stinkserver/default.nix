@@ -11,6 +11,7 @@
 
   networking = {
    hostName = "stinkserver"; 
+   nameservers = ["9.9.9.9"];
   };
 
   environment.systemPackages = with pkgs; [
