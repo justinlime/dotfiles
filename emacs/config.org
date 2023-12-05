@@ -20,6 +20,7 @@
   - [[#modeline][Modeline]]
   - [[#fonts][Fonts]]
   - [[#rainbow-mode][Rainbow Mode]]
+  - [[#erc][ERC]]
   - [[#dashboard][Dashboard]]
 - [[#lspcompletion][LSP/Completion]]
   - [[#eglot][Eglot]]
@@ -126,7 +127,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
+  (setq evil-collection-mode-list '(magit neotree dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
 #+end_src
@@ -160,6 +161,18 @@
     "C-u" 'evil-scroll-up
     "C-d" 'evil-scroll-down
   )
+  (general-define-key
+    :states '(normal emacs)
+    :keymaps 'override
+    "J" 'shrink-window
+    "K" 'enlarge-window
+    "H" 'shrink-window-horizontally
+    "L" 'enlarge-window-horizontally
+  )
+  (general-define-key
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+  )
   ;; set up 'SPC' as the global leader key
   (general-create-definer leader
     :states '(normal insert visual emacs)
@@ -168,37 +181,45 @@
     :global-prefix "M-SPC") ;; access leader in insert mode
 
   (leader
-    "b" '(:ignore t :wk "buffer")
-    "bb" '(switch-to-buffer :wk "TEST5")
-    "bi" '(ibuffer :wk "IBuffer")
+    "w" '(:ignore t :wk "Window Navigation")
+    "w h" '(evil-window-left :wk "Move left to window")
+    "w j" '(evil-window-down :wk "Move down to window")
+    "w k" '(evil-window-up :wk "Move up to window")
+    "w l" '(evil-window-right :wk "Move right to window")
+    "w s" '(evil-window-split :wk "Split window horizontally")
+    "w v" '(evil-window-vsplit :wk "Split window vertically"))
+  (leader
+    "b" '(:ignore t :wk "Buffer")
+    "bb" '(switch-to-buffer :wk "Switch to previous buffer/switch buffer by name")
+    "bi" '(ibuffer :wk "Buffer Menu (IBuffer)")
     "bk" '(kill-this-buffer :wk "Kill this buffer")
-    "br" '(revert-buffer :wk "Reload buffer"))
+    "br" '(revert-buffer :wk "Reload this buffer"))
   (leader
     "e" '(:ignore t :wk "Evaluate")    
     "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
     "e e" '(eval-expression :wk "Evaluate and elisp expression")
-    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-    "e r" '(eval-region :wk "Evaluate elisp in region")) 
+    "e r" '(eval-region :wk "Evaluate selected elisp")) 
   (leader
-    "h" '(:ignore t :wk "Help")
-    "h f" '(describe-function :wk "Describe function")
-    "h v" '(describe-variable :wk "Describe variable"))
+    "d" '(:ignore t :wk "Describe")
+    "d f" '(describe-function :wk "Describe function")
+    "d v" '(describe-variable :wk "Describe variable")
+    "d m" '(describe-mode :wk "Describe mode")
+    "d k" '(describe-key :wk "Describe key/keybind"))
   (leader
-    "d" '(:ignore t :wk "Help")
-    "d t" '(neotree-toggle :wk "Describe function"))
+    "t" '(:ignore t :wk "Side-Tree")
+    "t t" '(neotree-toggle :wk "Neotree toggle"))
   (leader
-    "f" '(:ignore t :wk "Help")
+    "f" '(:ignore t :wk "Find File")
     "f f" '(find-file :wk "Find file"))
   (leader
-    "c" '(:ignore t :wk "Help")
-    "c r" '(comment-region :wk "Find file")
-    "c l" '(comment-line :wk "Find file"))
+    "c" '(:ignore t :wk "Comment")
+    "c r" '(comment-region :wk "Comment selection")
+    "c l" '(comment-line :wk "Comment line"))
   (leader
-    "s" '(:ignore t :wk "Help")
-    "s u" '(ssh-user :wk "SSH as user")
-    "s r" '(ssh-root :wk "SSH as user with root privledges"))
-  )
+    "s" '(:ignore t :wk "SSH")
+    "s u" '(ssh-user :wk "SSH as user, using the ssh config file")
+    "s r" '(ssh-root :wk "SSH as user with root privledges, using the ssh config file"))
+)
 #+end_src
 
 ** Keychord Binds
@@ -302,6 +323,14 @@
 (use-package rainbow-mode)
 (add-hook 'prog-mode-hook 'rainbow-mode)
 #+end_src
+** ERC
+#+begin_src emacs-lisp
+(use-package erc-hl-nicks
+  :after erc)
+
+(use-package erc-image
+  :after erc)
+#+end_src
 ** Dashboard
 #+begin_src emacs-lisp
 (use-package dashboard
@@ -391,6 +420,7 @@
 * Neotree
 #+begin_src emacs-lisp
 (use-package neotree)
+(add-hook 'dashboard-mode-hook #'neotree-toggle)
 #+end_src
 * FZF
 #+begin_src emacs-lisp
@@ -502,6 +532,7 @@
 #+end_src
 ** Other Settings
 #+begin_src emacs-lisp
+(setq warning-minimum-level :emergency) ; Disable the annoying ass warning messages, remove this when debugging
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (setq use-short-answers t) ; Set y or n instead of yes or no for questions
 (setq inhibit-startup-messages t) ; Disable splash screen
@@ -517,6 +548,7 @@
   (interactive "sEnter host: ")
   (let ((format-host (format "/ssh:%s|sudo:%s:/" host host)))
     (find-file format-host)
+    (neotree-dir format-host)
   )
 )
 
@@ -525,6 +557,7 @@
   (interactive "sEnter host: ")
   (let ((format-host (format "/ssh:%s:~" host)))
     (find-file format-host)
+    (neotree-dir format-host)
   )
 )
 #+end_src
