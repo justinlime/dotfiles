@@ -30,6 +30,8 @@
       - [[#typescript-mode][TypeScript Mode]]
       - [[#vue-mode][Vue Mode]]
       - [[#go-mode][Go Mode]]
+      - [[#nix-mode][Nix Mode]]
+      - [[#lua-mode][Lua Mode]]
   - [[#modes-1][Modes]]
     - [[#org-mode][Org Mode]]
       - [[#org-general][Org General]]
@@ -47,7 +49,7 @@
   - [[#programming-1][Programming]]
     - [[#rainbow-mode][Rainbow Mode]]
     - [[#git-gutter][Git Gutter]]
-    - [[#treesitter-auto][Treesitter-auto]]
+    - [[#treesitter][Treesitter]]
 
 * General
 ** Package Manger
@@ -423,6 +425,16 @@
 (add-hook 'go-mode-hook #'go-hook)
 (add-hook 'go-ts-mode-hook #'go-mode)
 #+end_src
+**** Nix Mode
+#+begin_src emacs-lisp
+(use-package nix-mode
+ :mode "\\.nix\\'")
+#+end_src
+**** Lua Mode
+#+begin_src emacs-lisp
+(use-package lua-mode
+  :mode "\\.lua\\'")
+#+end_src
 
 ** Modes
 *** Org Mode
@@ -451,17 +463,17 @@
 ** General
 *** Themes
 #+begin_src emacs-lisp
-(use-package catppuccin-theme
-  :config
-  (setq catppuccin-flavor 'mocha)
-)
+;; (use-package catppuccin-theme
+;;   :config
+;;   (setq catppuccin-flavor 'mocha)
+;; )
 (use-package doom-themes
   :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'catppuccin t)
+  (load-theme 'doom-tokyo-night t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -553,27 +565,23 @@
   :config
   (global-git-gutter-mode t))
 #+end_src
-*** Treesitter-auto
+*** Treesitter
 #+begin_src emacs-lisp
-(use-package lua-mode
-  :mode "\\.lua\\'")
-(use-package nix-mode
-  :mode "\\.nix\\'")
-
 (use-package treesit-auto
   :ensure t
   :config
   (global-treesit-auto-mode)
-  (setq treesit-auto-install 'prompt)
-  (setq my-nix-ts-mode ;;this shit doesnt work :(
-    (make-treesit-auto-recipe
-      :lang 'nix
-      :ts-mode 'nix-ts-mode
-      :remap 'nix-mode
-      :url "https://github.com/nix-community/tree-sitter-nix"
-      :revision "master"
-      :source-dir "src"))
-  (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
+  (setq treesit-auto-install 'prompt))
+  ;; (setq my-nix-ts-mode ;;this shit doesnt work :(
+  ;;   (make-treesit-auto-recipe
+  ;;     :lang 'nix
+  ;;     :ts-mode 'nix-ts-mode
+  ;;     :remap 'nix-mode
+  ;;     :url "https://github.com/nix-community/tree-sitter-nix"
+  ;;     :revision "master"
+  ;;     :source-dir "src"))
+  ;; (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
+  
 #+end_src
 
 
