@@ -427,13 +427,22 @@
 #+end_src
 **** Nix Mode
 #+begin_src emacs-lisp
+(defun nix-hook ()
+  (eglot-ensure)
+)
 (use-package nix-mode
  :mode "\\.nix\\'")
+(add-hook 'nix-mode-hook #'nix-hook)
 #+end_src
 **** Lua Mode
 #+begin_src emacs-lisp
+(defun lua-hook()
+  (setq tab-width 4)
+  (eglot-ensure)
+)
 (use-package lua-mode
   :mode "\\.lua\\'")
+(add-hook 'lua-mode-hook #'lua-hook)
 #+end_src
 
 ** Modes
