@@ -33,6 +33,7 @@
       - [[#nix-mode][Nix Mode]]
       - [[#lua-mode][Lua Mode]]
   - [[#modes-1][Modes]]
+    - [[#markdown-mode][Markdown Mode]]
     - [[#org-mode][Org Mode]]
       - [[#org-general][Org General]]
       - [[#org-table-of-contents][Org Table of Contents]]
@@ -446,6 +447,11 @@
 #+end_src
 
 ** Modes
+*** Markdown Mode
+#+begin_src emacs-lisp
+(use-package markdown-mode
+  :mode "\\.md\\'")
+#+end_src
 *** Org Mode
 **** Org General
 #+begin_src emacs-lisp
@@ -565,8 +571,9 @@
 ** Programming
 *** Rainbow Mode
 #+begin_src emacs-lisp
-(use-package rainbow-mode)
-(add-hook 'prog-mode-hook 'rainbow-mode)
+(use-package rainbow-mode
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-mode))
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
