@@ -38,13 +38,15 @@
 - [[#look--feel][Look & Feel]]
   - [[#general-2][General]]
     - [[#themes][Themes]]
-    - [[#gui][GUI]]
     - [[#modeline][Modeline]]
+    - [[#gui-settings][GUI Settings]]
     - [[#fonts][Fonts]]
+    - [[#icons][Icons]]
     - [[#erc-highlights-and-images][ERC Highlights and Images]]
     - [[#dashboard][Dashboard]]
   - [[#programming-1][Programming]]
     - [[#rainbow-mode][Rainbow Mode]]
+    - [[#git-gutter][Git Gutter]]
     - [[#treesitter-auto][Treesitter-auto]]
 
 * General
@@ -127,6 +129,8 @@
 (setq-default tab-width 2) ; self explanitory
 (setq-default indent-tabs-mode nil) ; use spaces not tabs
 (setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
+
+(add-hook 'erc-mode-hook #'toggle-truncate-lines) ; truncate lines in erc mode
 #+end_src
 ** Custom Functions
 #+begin_src emacs-lisp
@@ -165,7 +169,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (setq evil-collection-mode-list '(magit neotree dashboard dired ibuffer))
+  (setq evil-collection-mode-list '(magit neotree help dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
 #+end_src
@@ -174,22 +178,30 @@
 (use-package general
   :config
   (general-evil-setup)
+  
+  ;; Neotree, this is the only way that works to override evil-collection
+  (add-hook 'neotree-mode-hook #'(lambda ()
+    (general-define-key
+      :states 'normal
+      :keymaps 'neotree-mode-map
+      "<tab>" #'neotree-change-root))
+  )
 
   ;; Corfu mode
   (general-define-key
-    :keymaps #'corfu-map
+    :keymaps 'corfu-map
     "<tab>" #'corfu-next
     "<backtab>" #'corfu-previous
   )
   ;; Org
   (general-define-key
-    :states #'normal 
-    :keymaps #'org-mode-map
+    :states 'normal 
+    :keymaps 'org-mode-map
     "<tab>" #'org-cycle
   )
   ;; Evil
   (general-define-key
-    :keymaps #'evil-insert-state-map
+    :keymaps 'evil-insert-state-map
     "TAB" #'tab-to-tab-stop
   )
   (general-define-key
@@ -256,7 +268,6 @@
     "s r" '(ssh-root :wk "SSH as user with root privledges, using the ssh config file"))
 )
 #+end_src
-
 ** Keychord Binds
 #+begin_src emacs-lisp
 (use-package key-chord
@@ -266,7 +277,6 @@
   ;; (setq key-chord-two-keys-delay 0.2)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
-
 
 * Functionality
 ** General
@@ -292,7 +302,8 @@
 *** Neotree
 #+begin_src emacs-lisp
 (use-package neotree)
-(add-hook 'dashboard-mode-hook #'neotree-toggle)
+(setq neo-theme (if (display-graphic-p) 'nerd))
+;; (add-hook 'dashboard-mode-hook #'neotree-toggle) ;Toggle on startup
 #+end_src
 
 ** Programming
@@ -345,9 +356,7 @@
   :config
   ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
   (yas-global-mode 1))
-
 #+end_src
-
 *** Magit
 #+begin_src emacs-lisp
 (use-package magit)
@@ -438,44 +447,28 @@
   (with-eval-after-load 'org (global-org-modern-mode)))
 #+end_src
 
-
 * Look & Feel
 ** General
 *** Themes
 #+begin_src emacs-lisp
-;; (use-package catppuccin-theme
-;;   :init
-;;   (setq catppuccin-flavor 'frappe)
-;;   (load-theme 'catppuccin :no-confirm))
+(use-package catppuccin-theme
+  :config
+  (setq catppuccin-flavor 'mocha)
+)
 (use-package doom-themes
   :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
+  (load-theme 'catppuccin t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
+  ;; (doom-themes-neotree-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
-#+end_src
-*** GUI
-#+begin_src emacs-lisp
-(setq use-dialog-box nil) ; No dialog box
-(menu-bar-mode -1) ;;Disable menu
-(tool-bar-mode -1) ;;Disable toolbar
-(scroll-bar-mode -1) ;;Disable scroll bar
-(global-display-line-numbers-mode 1) ;;Display line numbers
-(setq-default truncate-lines t) ;; Allow truncated lines
-(pixel-scroll-precision-mode 1) ;;Smooth scrolling
-(setq mouse-wheel-progressive-speed nil) 
-(setq scroll-conservatively 101)
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
@@ -483,13 +476,21 @@
   :ensure t
   :init (doom-modeline-mode 1))
 #+end_src
+*** GUI Settings
+#+begin_src emacs-lisp
+(setq use-dialog-box nil) ; No dialog box
+(menu-bar-mode -1) ;Disable menu
+(tool-bar-mode -1) ;Disable toolbar
+(scroll-bar-mode -1) ;Disable scroll bar
+(setq display-line-numbers-type 'relative) ;Realive numbers
+(global-display-line-numbers-mode 1) ;Display line numbers
+(setq-default truncate-lines t) ;Allow truncated lines
+(pixel-scroll-precision-mode 1) ;Smooth scrolling
+(setq mouse-wheel-progressive-speed nil) 
+(setq scroll-conservatively 101)
+#+end_src
 *** Fonts
 #+begin_src emacs-lisp
-(use-package nerd-icons
-  :custom
-  (nerd-icons-font-family "RobotoMono Nerd Font"))
-(use-package all-the-icons
-  :if (display-graphic-p))
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
   :height 130
@@ -506,11 +507,24 @@
 (setq-default line-spacing 0.12)
 (set-language-environment "UTF-8")
 #+end_src
+*** Icons
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :custom
+  (nerd-icons-font-family "RobotoMono Nerd Font"))
+
+(use-package nerd-icons-dired
+  :config  
+  (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
+
+(use-package nerd-icons-corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+#+end_src
 *** ERC Highlights and Images
 #+begin_src emacs-lisp
 (use-package erc-hl-nicks
   :after erc)
-
 (use-package erc-image
   :after erc)
 #+end_src
@@ -532,6 +546,12 @@
 #+begin_src emacs-lisp
 (use-package rainbow-mode)
 (add-hook 'prog-mode-hook 'rainbow-mode)
+#+end_src
+*** Git Gutter
+#+begin_src emacs-lisp
+(use-package git-gutter
+  :config
+  (global-git-gutter-mode t))
 #+end_src
 *** Treesitter-auto
 #+begin_src emacs-lisp
