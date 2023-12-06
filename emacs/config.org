@@ -3,48 +3,49 @@
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
 #+STARTUP: showeverything
-#+OPTIONS: toc:2
 
-
-* TABLE OF CONTENTS :toc:
+* TABLE OF CONTENTS :TOC_4:
 - [[#general][General]]
   - [[#package-manger][Package Manger]]
+  - [[#preferences][Preferences]]
+  - [[#custom-functions][Custom Functions]]
+- [[#keybinds][Keybinds]]
   - [[#evil-mode][Evil Mode]]
   - [[#general-binds][General Binds]]
   - [[#keychord-binds][Keychord Binds]]
-- [[#packages][Packages]]
-  - [[#which-key][Which Key]]
+- [[#functionality][Functionality]]
+  - [[#general-1][General]]
+    - [[#which-key][Which Key]]
+    - [[#neotree][Neotree]]
+  - [[#programming][Programming]]
+    - [[#lspcompletion][LSP/Completion]]
+      - [[#eglot][Eglot]]
+      - [[#corfu][Corfu]]
+      - [[#cape][Cape]]
+      - [[#yasnippet][Yasnippet]]
+    - [[#magit][Magit]]
+    - [[#modes][Modes]]
+      - [[#python-mode][Python Mode]]
+      - [[#javascript-mode][Javascript Mode]]
+      - [[#typescript-mode][TypeScript Mode]]
+      - [[#vue-mode][Vue Mode]]
+      - [[#go-mode][Go Mode]]
+  - [[#modes-1][Modes]]
+    - [[#org-mode][Org Mode]]
+      - [[#org-general][Org General]]
+      - [[#org-table-of-contents][Org Table of Contents]]
+      - [[#org-modern][Org Modern]]
 - [[#look--feel][Look & Feel]]
-  - [[#theme][Theme]]
-  - [[#gui][GUI]]
-  - [[#modeline][Modeline]]
-  - [[#fonts][Fonts]]
-  - [[#rainbow-mode][Rainbow Mode]]
-  - [[#erc][ERC]]
-  - [[#dashboard][Dashboard]]
-- [[#lspcompletion][LSP/Completion]]
-  - [[#eglot][Eglot]]
-  - [[#corfu][Corfu]]
-  - [[#cape][Cape]]
-  - [[#yasnippet][Yasnippet]]
-- [[#treesitter-auto][Treesitter-auto]]
-- [[#neotree][Neotree]]
-- [[#fzf][FZF]]
-- [[#magit][Magit]]
-- [[#org-mode][Org Mode]]
-  - [[#org-general][Org General]]
-  - [[#org-table-of-contents][Org Table of Contents]]
-  - [[#org-modern][Org Modern]]
-- [[#languages-and-modes][Languages and Modes]]
-  - [[#python-mode][Python Mode]]
-  - [[#javascript-mode][Javascript Mode]]
-  - [[#typescript-mode][TypeScript Mode]]
-  - [[#vue-mode][Vue Mode]]
-  - [[#go-mode][Go Mode]]
-- [[#misc][Misc]]
-  - [[#backup-files][Backup Files]]
-  - [[#other-settings][Other Settings]]
-  - [[#custom-functions][Custom Functions]]
+  - [[#general-2][General]]
+    - [[#themes][Themes]]
+    - [[#gui][GUI]]
+    - [[#modeline][Modeline]]
+    - [[#fonts][Fonts]]
+    - [[#erc-highlights-and-images][ERC Highlights and Images]]
+    - [[#dashboard][Dashboard]]
+  - [[#programming-1][Programming]]
+    - [[#rainbow-mode][Rainbow Mode]]
+    - [[#treesitter-auto][Treesitter-auto]]
 
 * General
 ** Package Manger
@@ -112,7 +113,44 @@
 ;; Don't install anything. Defer execution of BODY
 (elpaca nil (message "deferred"))
 #+end_src
+** Preferences 
+#+begin_src emacs-lisp
+(setq make-backup-files nil) ; stop creating ~ files
+(setq auto-save-default nil) ; Disable autosave # files
+(setq create-lockfiles nil) ; Disable .# files
 
+(setq warning-minimum-level :emergency) ; Disable the annoying ass warning messages, remove this when debugging
+(electric-pair-mode 1) ; Auto closing pairs like () and {}
+(setq use-short-answers t) ; Set y or n instead of yes or no for questions
+(setq inhibit-startup-messages t) ; Disable splash screen
+(save-place-mode) ; Save cursor position in buffer on reopen
+(setq-default tab-width 2) ; self explanitory
+(setq-default indent-tabs-mode nil) ; use spaces not tabs
+(setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
+#+end_src
+** Custom Functions
+#+begin_src emacs-lisp
+(defun ssh-root (host)
+  "SSH with sudo privledges using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (let ((format-host (format "/ssh:%s|sudo:%s:/" host host)))
+    (find-file format-host)
+    (neotree-dir format-host)
+  )
+)
+
+(defun ssh-user (host)
+  "SSH using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (let ((format-host (format "/ssh:%s:~" host)))
+    (find-file format-host)
+    (neotree-dir format-host)
+  )
+)
+#+end_src
+
+
+* Keybinds
 ** Evil Mode
 #+begin_src emacs-lisp
 ;; Expands to: (elpaca evil (use-package evil :demand t))
@@ -131,7 +169,6 @@
   (evil-collection-init))
 (use-package evil-tutor)
 #+end_src
-
 ** General Binds
 #+begin_src emacs-lisp
 (use-package general
@@ -140,38 +177,35 @@
 
   ;; Corfu mode
   (general-define-key
-    :keymaps 'corfu-map
-    "<tab>" 'corfu-next
-    "<backtab>" 'corfu-previous
+    :keymaps #'corfu-map
+    "<tab>" #'corfu-next
+    "<backtab>" #'corfu-previous
   )
   ;; Org
   (general-define-key
-    :states 'normal 
-    :keymaps 'org-mode-map
+    :states #'normal 
+    :keymaps #'org-mode-map
     "<tab>" #'org-cycle
   )
   ;; Evil
   (general-define-key
-    :keymaps 'evil-insert-state-map
-    "TAB" 'tab-to-tab-stop
+    :keymaps #'evil-insert-state-map
+    "TAB" #'tab-to-tab-stop
   )
   (general-define-key
     :states '(normal insert visual emacs)
     :keymaps 'override
-    "C-u" 'evil-scroll-up
-    "C-d" 'evil-scroll-down
+    "C-u" #'evil-scroll-up
+    "C-d" #'evil-scroll-down
   )
   (general-define-key
     :states '(normal emacs)
     :keymaps 'override
-    "J" 'shrink-window
-    "K" 'enlarge-window
-    "H" 'shrink-window-horizontally
-    "L" 'enlarge-window-horizontally
-  )
-  (general-define-key
-    :states '(normal insert visual emacs)
-    :keymaps 'override
+    "J" #'shrink-window
+    "K" #'enlarge-window
+    "H" #'shrink-window-horizontally
+    "L" #'enlarge-window-horizontally
+    "R" #'undo-redo
   )
   ;; set up 'SPC' as the global leader key
   (general-create-definer leader
@@ -233,8 +267,10 @@
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 
-* Packages
-** Which Key
+
+* Functionality
+** General
+*** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
   :init
@@ -253,8 +289,159 @@
 		which-key-allow-imprecise-window-fit t
 		which-key-separator " → " ))
 #+end_src
+*** Neotree
+#+begin_src emacs-lisp
+(use-package neotree)
+(add-hook 'dashboard-mode-hook #'neotree-toggle)
+#+end_src
+
+** Programming
+*** LSP/Completion
+**** Eglot
+#+begin_src emacs-lisp
+(use-package eglot)
+#+end_src
+**** Corfu
+#+begin_src emacs-lisp
+(use-package corfu
+  :ensure t
+  :bind nil
+  :custom
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  (corfu-auto t)
+  (corfu-cycle t)
+  (corfu-preselect 'prompt)
+  (corfu-auto-delay 0.2)
+  (corfu-auto-prefix 2)
+  :init
+  (global-corfu-mode)
+  (corfu-history-mode))
+#+end_src
+**** Cape
+#+begin_src emacs-lisp
+(use-package cape
+  :init
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.  The order of the functions matters, the
+  ;; first function returning a result wins.  Note that the list of buffer-local
+  ;; completion functions takes precedence over the global list.
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  ;;(add-to-list 'completion-at-point-functions #'cape-history)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  ;;(add-to-list 'completion-at-point-functions #'cape-line)
+)
+#+end_src
+**** Yasnippet
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :config
+  ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
+  (yas-global-mode 1))
+
+#+end_src
+
+*** Magit
+#+begin_src emacs-lisp
+(use-package magit)
+#+end_src
+
+*** Modes
+**** Python Mode
+#+begin_src emacs-lisp
+(defun python-hook ()
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil)
+  (eglot-ensure)
+)
+
+(add-hook 'python-mode-hook #'python-hook)
+(add-hook 'python-ts-mode-hook #'python-mode)
+#+end_src
+**** Javascript Mode
+#+begin_src emacs-lisp
+(defun js-hook ()
+  (setq tab-width 2)
+  (setq indent-tabs-mode nil)
+  (setq js-indent-level 2)
+  (eglot-ensure)
+)
+(add-hook 'js-mode-hook #'js-hook)
+(add-hook 'js-ts-mode-hook #'js-mode)
+#+end_src
+**** TypeScript Mode
+#+begin_src emacs-lisp
+(use-package typescript-mode
+  :mode "\\.ts[x]?\\'")
+
+(defun typescript-hook ()
+  (setq tab-width 2)
+  (setq indent-tabs-mode nil)
+  (eglot-ensure)
+)
+(add-hook 'typescript-mode-hook #'typescript-hook)
+(add-hook 'typescript-ts-mode-hook #'typescript-mode)
+#+end_src
+**** Vue Mode
+#+begin_src emacs-lisp 
+(use-package vue-mode
+  :mode "\\.vue\\'")
+
+(defun vue-hook ()
+  (setq tab-width 2)
+  (setq indent-tabs-mode nil)
+)
+(add-hook 'vue-mode-hook #'vue-hook)
+#+end_src
+**** Go Mode
+#+begin_src emacs-lisp
+(defun go-hook ()
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil)
+  (eglot-ensure)
+)
+
+(use-package go-mode
+  :mode "\\.go\\'")
+
+(add-hook 'go-mode-hook #'go-hook)
+(add-hook 'go-ts-mode-hook #'go-mode)
+#+end_src
+
+** Modes
+*** Org Mode
+**** Org General
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-indent-mode)
+(setq org-src-preserve-indentation t)
+(electric-indent-mode t)
+#+end_src
+**** Org Table of Contents
+#+begin_src emacs-lisp
+(use-package toc-org
+    :commands toc-org-enable
+    :init
+    (add-hook 'org-mode-hook 'toc-org-enable)
+    (add-hook 'markdown-mode-hook 'toc-org-enable))
+#+end_src
+**** Org Modern
+#+begin_src emacs-lisp
+(use-package org-modern
+  :init 
+  (with-eval-after-load 'org (global-org-modern-mode)))
+#+end_src
+
+
 * Look & Feel
-** Theme
+** General
+*** Themes
 #+begin_src emacs-lisp
 ;; (use-package catppuccin-theme
 ;;   :init
@@ -278,7 +465,7 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 #+end_src
-** GUI
+*** GUI
 #+begin_src emacs-lisp
 (setq use-dialog-box nil) ; No dialog box
 (menu-bar-mode -1) ;;Disable menu
@@ -290,13 +477,13 @@
 (setq mouse-wheel-progressive-speed nil) 
 (setq scroll-conservatively 101)
 #+end_src
-** Modeline
+*** Modeline
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1))
 #+end_src
-** Fonts
+*** Fonts
 #+begin_src emacs-lisp
 (use-package nerd-icons
   :custom
@@ -319,12 +506,7 @@
 (setq-default line-spacing 0.12)
 (set-language-environment "UTF-8")
 #+end_src
-** Rainbow Mode
-#+begin_src emacs-lisp
-(use-package rainbow-mode)
-(add-hook 'prog-mode-hook 'rainbow-mode)
-#+end_src
-** ERC
+*** ERC Highlights and Images
 #+begin_src emacs-lisp
 (use-package erc-hl-nicks
   :after erc)
@@ -332,7 +514,7 @@
 (use-package erc-image
   :after erc)
 #+end_src
-** Dashboard
+*** Dashboard
 #+begin_src emacs-lisp
 (use-package dashboard
   :elpaca t
@@ -345,58 +527,13 @@
   (setq dashboard-footer-messages '("sudo systemctl restart justinlime"))
   (dashboard-setup-startup-hook))
 #+end_src
-* LSP/Completion
-** Eglot
+** Programming
+*** Rainbow Mode
 #+begin_src emacs-lisp
-(use-package eglot)
+(use-package rainbow-mode)
+(add-hook 'prog-mode-hook 'rainbow-mode)
 #+end_src
-** Corfu
-#+begin_src emacs-lisp
-(use-package corfu
-  :ensure t
-  :bind nil
-  :custom
-  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
-  (corfu-auto t)
-  (corfu-cycle t)
-  (corfu-preselect 'prompt)
-  (corfu-auto-delay 0.2)
-  (corfu-auto-prefix 2)
-  :init
-  (global-corfu-mode)
-  (corfu-history-mode))
-#+end_src
-** Cape
-#+begin_src emacs-lisp
-(use-package cape
-  :init
-  ;; Add to the global default value of `completion-at-point-functions' which is
-  ;; used by `completion-at-point'.  The order of the functions matters, the
-  ;; first function returning a result wins.  Note that the list of buffer-local
-  ;; completion functions takes precedence over the global list.
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  ;;(add-to-list 'completion-at-point-functions #'cape-history)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  ;;(add-to-list 'completion-at-point-functions #'cape-line)
-)
-#+end_src
-** Yasnippet
-#+begin_src emacs-lisp
-(use-package yasnippet
-  :config
-  ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
-  (yas-global-mode 1))
-
-#+end_src
-* Treesitter-auto
+*** Treesitter-auto
 #+begin_src emacs-lisp
 (use-package lua-mode
   :mode "\\.lua\\'")
@@ -418,151 +555,6 @@
       :source-dir "src"))
   (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
 #+end_src
-* Neotree
-#+begin_src emacs-lisp
-(use-package neotree)
-(add-hook 'dashboard-mode-hook #'neotree-toggle)
-#+end_src
-* FZF
-#+begin_src emacs-lisp
-(use-package fzf
-  :bind
-    ;; Don't forget to set keybinds!
-  :config
-  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
-        fzf/executable "fzf"
-        fzf/git-grep-args "-i --line-number %s"
-        ;; command used for `fzf-grep-*` functions
-        ;; example usage for ripgrep:
-        ;; fzf/grep-command "rg --no-heading -nH"
-        fzf/grep-command "grep -nrH"
-        ;; If nil, the fzf buffer will appear at the top of the window
-        fzf/position-bottom t
-        fzf/window-height 15))
-#+end_src
-* Magit
-#+begin_src emacs-lisp
-(use-package magit)
-#+end_src
-* Org Mode
-** Org General
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-indent-mode)
-(setq org-src-preserve-indentation t)
-(electric-indent-mode t)
-#+end_src
-** Org Table of Contents
-#+begin_src emacs-lisp
-(use-package toc-org
-    :commands toc-org-enable
-    :init (add-hook 'org-mode-hook 'toc-org-enable))
-#+end_src
-** Org Modern
-#+begin_src emacs-lisp
-(use-package org-modern
-  :init 
-  (with-eval-after-load 'org (global-org-modern-mode)))
-#+end_src
-* Languages and Modes
-** Python Mode
-#+begin_src emacs-lisp
-(defun python-hook ()
-  (setq tab-width 4)
-  (setq indent-tabs-mode nil)
-  (eglot-ensure)
-)
-
-(add-hook 'python-mode-hook #'python-hook)
-(add-hook 'python-ts-mode-hook #'python-mode)
-#+end_src
-** Javascript Mode
-#+begin_src emacs-lisp
-(defun js-hook ()
-  (setq tab-width 2)
-  (setq indent-tabs-mode nil)
-  (setq js-indent-level 2)
-  (eglot-ensure)
-)
-(add-hook 'js-mode-hook #'js-hook)
-(add-hook 'js-ts-mode-hook #'js-mode)
-#+end_src
-** TypeScript Mode
-#+begin_src emacs-lisp
-(use-package typescript-mode
-  :mode "\\.ts[x]?\\'")
-
-(defun typescript-hook ()
-  (setq tab-width 2)
-  (setq indent-tabs-mode nil)
-  (eglot-ensure)
-)
-(add-hook 'typescript-mode-hook #'typescript-hook)
-(add-hook 'typescript-ts-mode-hook #'typescript-mode)
-#+end_src
-** Vue Mode
-#+begin_src emacs-lisp 
-(use-package vue-mode
-  :mode "\\.vue\\'")
-
-(defun vue-hook ()
-  (setq tab-width 2)
-  (setq indent-tabs-mode nil)
-)
-(add-hook 'vue-mode-hook #'vue-hook)
-#+end_src
-** Go Mode
-#+begin_src emacs-lisp
-(defun go-hook ()
-  (setq tab-width 4)
-  (setq indent-tabs-mode nil)
-  (eglot-ensure)
-)
-
-(use-package go-mode
-  :mode "\\.go\\'")
-
-(add-hook 'go-mode-hook #'go-hook)
-(add-hook 'go-ts-mode-hook #'go-mode)
-#+end_src
-* Misc
-** Backup Files
-#+begin_src emacs-lisp
-(setq make-backup-files nil) ;; stop creating ~ files
-(setq auto-save-default nil) ;; Disable autosave # files
-(setq create-lockfiles nil) ; Disable .# files
-#+end_src
-** Other Settings
-#+begin_src emacs-lisp
-(setq warning-minimum-level :emergency) ; Disable the annoying ass warning messages, remove this when debugging
-(electric-pair-mode 1) ; Auto closing pairs like () and {}
-(setq use-short-answers t) ; Set y or n instead of yes or no for questions
-(setq inhibit-startup-messages t) ; Disable splash screen
-(save-place-mode) ; Save cursor position in buffer on reopen
-(setq-default tab-width 2) ; self explanitory
-(setq-default indent-tabs-mode nil) ; use spaces not tabs
-(setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
-#+end_src
-** Custom Functions
-#+begin_src emacs-lisp
-(defun ssh-root (host)
-  "SSH with sudo privledges using a host from .ssh/config"
-  (interactive "sEnter host: ")
-  (let ((format-host (format "/ssh:%s|sudo:%s:/" host host)))
-    (find-file format-host)
-    (neotree-dir format-host)
-  )
-)
-
-(defun ssh-user (host)
-  "SSH using a host from .ssh/config"
-  (interactive "sEnter host: ")
-  (let ((format-host (format "/ssh:%s:~" host)))
-    (find-file format-host)
-    (neotree-dir format-host)
-  )
-)
-#+end_src
-
 
 
 
