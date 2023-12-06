@@ -580,6 +580,12 @@
 (use-package git-gutter
   :config
   (global-git-gutter-mode t))
+
+(add-hook 'find-file-hook (lambda ()
+  (when (file-remote-p (buffer-file-name)) 
+  (global-git-gutter-mode -1)
+)))
+
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
