@@ -4,6 +4,7 @@
   # a headless server of some kind
   _module.args = { inherit profile inputs username; };
   imports = [ 
+    ../base/emacs.nix
     ../base/zsh.nix
     ../base/neovim.nix
     ../base/tmux.nix
