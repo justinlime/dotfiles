@@ -143,7 +143,6 @@
   (interactive "sEnter host: ")
   (let ((format-host (format "/ssh:%s|sudo:%s:/" host host)))
     (find-file format-host)
-    (neotree-dir format-host)
   )
 )
 
@@ -152,10 +151,31 @@
   (interactive "sEnter host: ")
   (let ((format-host (format "/ssh:%s:~" host)))
     (find-file format-host)
-    (neotree-dir format-host)
   )
 )
-#+end_src
+
+(defun toggle-term ()
+  "Toggle a terminal window with $SHELL"
+  (interactive)
+  (let (
+    (w (get-buffer-window "*terminal*"))
+    (h (window-total-height)))
+      (cond (
+        (eq nil w)(select-window (split-window-below (round (* h 0.80))))(term (getenv "SHELL"))(evil-insert 1))
+        (t (delete-window w))))
+)
+
+(defun toggle-shell ()
+  "Toggle a shell window"
+  (interactive)
+  (let (
+    (w (get-buffer-window "*shell*"))
+    (h (window-total-height)))
+      (cond (
+        (eq nil w)(select-window (split-window-below (round (* h 0.80))))(shell)(evil-insert 1))
+        (t (delete-window w))))
+)
+#+End_src
 
 
 * Keybinds
@@ -267,6 +287,10 @@
     "c r" '(comment-region :wk "Comment selection")
     "c l" '(comment-line :wk "Comment line"))
   (leader
+    "g" '(:ignore t :wk "Get Terminal")
+    "g t" '(toggle-term :wk "Get Terminal")
+    "g s" '(toggle-shell :wk "Get Shell"))
+  (leader
     "s" '(:ignore t :wk "SSH")
     "s u" '(ssh-user :wk "SSH as user, using the ssh config file")
     "s r" '(ssh-root :wk "SSH as user with root privledges, using the ssh config file"))
@@ -318,8 +342,7 @@
   (setq vc-handled-backends '(git))
   (setq tramp-default-method "rcp")
   (setq tramp-use-ssh-controlmaster-options nil)
-  (setq projectile--mode-line "Projectile")
-  (setq tramp-verbose 1))
+  (setq projectile--mode-line "Projectile"))
 #+end_src
 
 ** Programming
@@ -327,12 +350,16 @@
 **** Eglot
 #+begin_src emacs-lisp
 (use-package eglot)
-;; (add-hook 'prog-mode-hook (lambda()
-;;   (unless (file-remote-p (buffer-file-name))
-;;     (when ()
-;;     )
-;;   )
-;; ))
+(add-hook 'prog-mode-hook (lambda()
+  (unless (file-remote-p (buffer-file-name))
+    (cond
+      ((eq major-mode 'go-mode)(eglot-ensure))
+      ((eq major-mode 'python-mode)(eglot-ensure))
+      ((eq major-mode 'js-mode)(eglot-ensure))
+      ((eq major-mode 'ts-mode)(eglot-ensure))
+    )
+  )
+))
 #+end_src
 **** Corfu
 #+begin_src emacs-lisp
@@ -385,9 +412,15 @@
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
-(use-package git-gutter
-  :config
-  (global-git-gutter-mode 1))
+(use-package git-gutter)
+
+;; Disable git-gutter over tramp
+(add-hook 'find-file-hook (lambda()
+  (unless (file-remote-p (buffer-file-name))
+    (git-gutter-mode t)
+  )
+))
+
 #+end_src
 
 *** Modes
@@ -396,7 +429,6 @@
 (defun python-hook ()
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
-  (eglot-ensure)
 )
 
 (add-hook 'python-mode-hook #'python-hook)
@@ -408,7 +440,6 @@
   (setq tab-width 2)
   (setq indent-tabs-mode nil)
   (setq js-indent-level 2)
-  (eglot-ensure)
 )
 (add-hook 'js-mode-hook #'js-hook)
 (add-hook 'js-ts-mode-hook #'js-mode)
@@ -421,7 +452,6 @@
 (defun typescript-hook ()
   (setq tab-width 2)
   (setq indent-tabs-mode nil)
-  (eglot-ensure)
 )
 (add-hook 'typescript-mode-hook #'typescript-hook)
 (add-hook 'typescript-ts-mode-hook #'typescript-mode)
@@ -442,7 +472,6 @@
 (defun go-hook ()
   (setq tab-width 4)
   (setq indent-tabs-mode nil)
-  (eglot-ensure)
 )
 
 (use-package go-mode
@@ -454,7 +483,6 @@
 **** Nix Mode
 #+begin_src emacs-lisp
 (defun nix-hook ()
-  (eglot-ensure)
 )
 (use-package nix-mode
  :mode "\\.nix\\'")
@@ -464,7 +492,6 @@
 #+begin_src emacs-lisp
 (defun lua-hook()
   (setq tab-width 4)
-  (eglot-ensure)
 )
 (use-package lua-mode
   :mode "\\.lua\\'")
