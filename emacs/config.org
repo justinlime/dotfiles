@@ -7,7 +7,7 @@
 * TABLE OF CONTENTS :TOC_4:
 - [[#general][General]]
   - [[#package-manger][Package Manger]]
-  - [[#preferences][Preferences]]
+  - [[#misc-preferences][Misc Preferences]]
   - [[#custom-functions][Custom Functions]]
 - [[#keybinds][Keybinds]]
   - [[#evil-mode][Evil Mode]]
@@ -17,6 +17,7 @@
   - [[#general-1][General]]
     - [[#which-key][Which Key]]
     - [[#neotree][Neotree]]
+    - [[#tramp][Tramp]]
   - [[#programming][Programming]]
     - [[#lspcompletion][LSP/Completion]]
       - [[#eglot][Eglot]]
@@ -24,6 +25,7 @@
       - [[#cape][Cape]]
       - [[#yasnippet][Yasnippet]]
     - [[#magit][Magit]]
+    - [[#git-gutter][Git Gutter]]
     - [[#modes][Modes]]
       - [[#python-mode][Python Mode]]
       - [[#javascript-mode][Javascript Mode]]
@@ -49,7 +51,6 @@
     - [[#dashboard][Dashboard]]
   - [[#programming-1][Programming]]
     - [[#rainbow-mode][Rainbow Mode]]
-    - [[#git-gutter][Git Gutter]]
     - [[#treesitter][Treesitter]]
 
 * General
@@ -118,7 +119,7 @@
 ;; Don't install anything. Defer execution of BODY
 (elpaca nil (message "deferred"))
 #+end_src
-** Preferences 
+** Misc Preferences 
 #+begin_src emacs-lisp
 (setq make-backup-files nil) ; stop creating ~ files
 (setq auto-save-default nil) ; Disable autosave # files
@@ -308,12 +309,30 @@
 (setq neo-theme (if (display-graphic-p) 'nerd))
 ;; (add-hook 'dashboard-mode-hook #'neotree-toggle) ;Toggle on startup
 #+end_src
+*** Tramp
+#+begin_src emacs-lisp
+;; Speeds up tramp allegedly
+(with-eval-after-load 'tramp
+  (setq tramp-inline-compress-start-size 1000)
+  (setq tramp-copy-size-limit 10000)
+  (setq vc-handled-backends '(git))
+  (setq tramp-default-method "rcp")
+  (setq tramp-use-ssh-controlmaster-options nil)
+  (setq projectile--mode-line "Projectile")
+  (setq tramp-verbose 1))
+#+end_src
 
 ** Programming
 *** LSP/Completion
 **** Eglot
 #+begin_src emacs-lisp
 (use-package eglot)
+;; (add-hook 'prog-mode-hook (lambda()
+;;   (unless (file-remote-p (buffer-file-name))
+;;     (when ()
+;;     )
+;;   )
+;; ))
 #+end_src
 **** Corfu
 #+begin_src emacs-lisp
@@ -363,6 +382,12 @@
 *** Magit
 #+begin_src emacs-lisp
 (use-package magit)
+#+end_src
+*** Git Gutter
+#+begin_src emacs-lisp
+(use-package git-gutter
+  :config
+  (global-git-gutter-mode 1))
 #+end_src
 
 *** Modes
@@ -574,18 +599,6 @@
 (use-package rainbow-mode
   :config
   (add-hook 'prog-mode-hook #'rainbow-mode))
-#+end_src
-*** Git Gutter
-#+begin_src emacs-lisp
-(use-package git-gutter
-  :config
-  (global-git-gutter-mode t))
-
-(add-hook 'find-file-hook (lambda ()
-  (when (file-remote-p (buffer-file-name)) 
-  (global-git-gutter-mode -1)
-)))
-
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
