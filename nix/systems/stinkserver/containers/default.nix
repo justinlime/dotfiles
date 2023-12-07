@@ -13,5 +13,6 @@
     ./filebot.nix
     ./jellyfin.nix
     ./pihole.nix
+    ./deemix.nix
   ];
 }

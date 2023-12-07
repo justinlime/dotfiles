@@ -1,7 +1,6 @@
 { pkgs, inputs, ... }:
 let
   pipecord = inputs.pipecord.packages.${pkgs.system}.default;
-  secrets = import ./secrets.nix;
 in
 {
   systemd = {
@@ -22,11 +21,7 @@ in
         # use a trailing / after the src dir, like:
         # rsync -avh /drives/NVME0/users/ /storage/pool/new_users
         script = ''
-          ${pkgs.rsync}/bin/rsync -avh /drives/NVME0/users /storage/pool --delete \
-          | tail -10 | ${pipecord}/bin/pipecord \
-          -l "Rsync" \
-          -c "1173409153394421821" \
-          -t "${secrets.discordBotToken}" 
+          ${pkgs.rsync}/bin/rsync -avh /drives/NVME0/users /storage/pool --delete 
         '';
       };
     };
