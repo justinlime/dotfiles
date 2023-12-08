@@ -125,6 +125,7 @@
 (setq auto-save-default nil) ; Disable autosave # files
 (setq create-lockfiles nil) ; Disable .# files
 
+(setq blink-cursor-mode nil)
 (setq warning-minimum-level :emergency)
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (setq use-short-answers t) ; Set y or n instead of yes or no for questions
@@ -208,20 +209,20 @@
     (general-define-key
       :states 'normal
       :keymaps 'neotree-mode-map
+      "TAB" #'neotree-change-root
       "<tab>" #'neotree-change-root))
   )
-
   ;; Corfu mode
   (general-define-key
     :keymaps 'corfu-map
-    "<tab>" #'corfu-next
+    "TAB" #'corfu-next
     "<backtab>" #'corfu-previous
   )
   ;; Org
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
-    "<tab>" #'org-cycle
+    "TAB" #'org-cycle
   )
   ;; Evil
   (general-define-key
@@ -260,10 +261,10 @@
     "w v" '(evil-window-vsplit :wk "Split window vertically"))
   (leader
     "b" '(:ignore t :wk "Buffer")
-    "bb" '(switch-to-buffer :wk "Switch to previous buffer/switch buffer by name")
-    "bi" '(ibuffer :wk "Buffer Menu (IBuffer)")
-    "bk" '(kill-this-buffer :wk "Kill this buffer")
-    "br" '(revert-buffer :wk "Reload this buffer"))
+    "b b" '(switch-to-buffer :wk "Switch to previous buffer/switch buffer by name")
+    "b i" '(ibuffer :wk "Buffer Menu (IBuffer)")
+    "b k" '(kill-this-buffer :wk "Kill this buffer")
+    "b r" '(revert-buffer :wk "Reload this buffer"))
   (leader
     "e" '(:ignore t :wk "Evaluate")    
     "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
@@ -302,7 +303,8 @@
   :init
   (key-chord-mode 1)
   :config
-  ;; (setq key-chord-two-keys-delay 0.2)
+  (setq key-chord-two-keys-delay 1)
+  (setq key-chord-safety-interval-forward 0.1)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 
