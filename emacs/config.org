@@ -125,7 +125,7 @@
 (setq auto-save-default nil) ; Disable autosave # files
 (setq create-lockfiles nil) ; Disable .# files
 
-(setq warning-minimum-level :emergency) ; Disable the annoying ass warning messages, remove this when debugging
+(setq warning-minimum-level :emergency)
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (setq use-short-answers t) ; Set y or n instead of yes or no for questions
 (setq inhibit-startup-messages t) ; Disable splash screen
@@ -208,20 +208,20 @@
     (general-define-key
       :states 'normal
       :keymaps 'neotree-mode-map
-      "<tab>" #'neotree-change-root))
+      "TAB" #'neotree-change-root))
   )
 
   ;; Corfu mode
   (general-define-key
     :keymaps 'corfu-map
-    "<tab>" #'corfu-next
-    "<backtab>" #'corfu-previous
+    "TAB" #'corfu-next
+    "BACKTAB" #'corfu-previous
   )
   ;; Org
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
-    "<tab>" #'org-cycle
+    "TAB" #'org-cycle
   )
   ;; Evil
   (general-define-key
@@ -376,6 +376,13 @@
   :init
   (global-corfu-mode)
   (corfu-history-mode))
+
+(use-package corfu-terminal
+  :ensure t
+  :config
+  (unless (display-graphic-p)
+    (corfu-terminal-mode 1)))
+
 #+end_src
 **** Cape
 #+begin_src emacs-lisp
