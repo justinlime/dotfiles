@@ -1,5 +1,5 @@
 #+TITLE: Justinlime's Emacs
-#+AUTHOR: Justinlime
+#+AUTHOR: justinlime
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
 #+STARTUP: showeverything
@@ -371,12 +371,6 @@
 (use-package corfu
   :ensure t
   :bind nil
-  :config
-  ;; Prevents evil from fucking with corfu-maps
-  (evil-make-overriding-map corfu-map)  ;; Org
-  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
-  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
-
   :custom
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (corfu-auto t)
@@ -438,7 +432,6 @@
     (git-gutter-mode t)
   )
 ))
-
 #+end_src
 
 *** Modes
