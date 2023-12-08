@@ -204,7 +204,7 @@
   :config
   (general-evil-setup)
   
-  ;; Neotree, this is the only way that works to override evil-collection
+  ;; Neotree
   (add-hook 'neotree-mode-hook #'(lambda ()
     (general-define-key
       :states 'normal
@@ -213,11 +213,14 @@
       "<tab>" #'neotree-change-root))
   )
   ;; Corfu mode
+  (add-hook 'corfu-mode-hook #'(lambda ()
   (general-define-key
     :keymaps 'corfu-map
+    "<tab>" #'corfu-next
     "TAB" #'corfu-next
     "<backtab>" #'corfu-previous
-  )
+  )))
+
   ;; Org
   (general-define-key
     :states 'normal 
