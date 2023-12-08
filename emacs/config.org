@@ -208,20 +208,20 @@
     (general-define-key
       :states 'normal
       :keymaps 'neotree-mode-map
-      "TAB" #'neotree-change-root))
+      "<tab>" #'neotree-change-root))
   )
 
   ;; Corfu mode
   (general-define-key
     :keymaps 'corfu-map
-    "TAB" #'corfu-next
-    "BACKTAB" #'corfu-previous
+    "<tab>" #'corfu-next
+    "<backtab>" #'corfu-previous
   )
   ;; Org
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
-    "TAB" #'org-cycle
+    "<tab>" #'org-cycle
   )
   ;; Evil
   (general-define-key
