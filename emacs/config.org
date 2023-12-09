@@ -209,6 +209,7 @@
     :keymaps 'neotree-mode-map
     "<tab>" #'neotree-change-root
     "TAB" #'neotree-change-root)))
+
   ;; Corfu
   (general-define-key
     :states 'insert
@@ -227,6 +228,7 @@
     :keymaps 'org-mode-map
     "<tab>" #'org-cycle
     "TAB" #'org-cycle)
+
   ;; Evil
   (general-define-key
     :states 'insert
@@ -353,6 +355,7 @@
 #+begin_src emacs-lisp
 (use-package eglot)
 (add-hook 'prog-mode-hook (lambda()
+(while (buffer-file-name) ; Prevents annoying message at stratup
   (unless (file-remote-p (buffer-file-name))
     (cond
       ((eq major-mode 'go-mode)(eglot-ensure))
@@ -361,7 +364,7 @@
       ((eq major-mode 'ts-mode)(eglot-ensure))
     )
   )
-))
+)))
 #+end_src
 **** Corfu
 #+begin_src emacs-lisp
