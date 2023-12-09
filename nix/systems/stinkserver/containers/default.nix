@@ -14,5 +14,6 @@
     ./jellyfin.nix
     ./pihole.nix
     ./deemix.nix
+    ./komga.nix
   ];
 }
