@@ -23,6 +23,7 @@
       - [[#eglot][Eglot]]
       - [[#corfu][Corfu]]
       - [[#cape][Cape]]
+      - [[#orderless][Orderless]]
       - [[#yasnippet][Yasnippet]]
     - [[#magit][Magit]]
     - [[#git-gutter][Git Gutter]]
@@ -355,21 +356,22 @@
 #+begin_src emacs-lisp
 (use-package eglot)
 (add-hook 'prog-mode-hook (lambda()
-(while (buffer-file-name) ; Prevents annoying message at stratup
   (unless (file-remote-p (buffer-file-name))
     (cond
       ((eq major-mode 'go-mode)(eglot-ensure))
       ((eq major-mode 'python-mode)(eglot-ensure))
       ((eq major-mode 'js-mode)(eglot-ensure))
-      ((eq major-mode 'ts-mode)(eglot-ensure))
+      ((eq major-mode 'typescript-mode)(eglot-ensure))
     )
   )
-)))
+))
 #+end_src
 **** Corfu
 #+begin_src emacs-lisp
 (use-package corfu
   :ensure t
+  :config
+  (setq corfu-popupinfo-delay 0)
   :custom
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (corfu-auto t)
@@ -378,6 +380,7 @@
   (corfu-auto-delay 0.2)
   (corfu-auto-prefix 2)
   :init
+  (corfu-popupinfo-mode)
   (global-corfu-mode)
   (corfu-history-mode))
 
@@ -386,7 +389,6 @@
   :config
   (unless (display-graphic-p)
     (corfu-terminal-mode 1)))
-
 #+end_src
 **** Cape
 #+begin_src emacs-lisp
@@ -409,6 +411,14 @@
   ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
   ;;(add-to-list 'completion-at-point-functions #'cape-line)
 )
+#+end_src
+**** Orderless
+#+begin_src emacs-lisp
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 #+end_src
 **** Yasnippet
 #+begin_src emacs-lisp
