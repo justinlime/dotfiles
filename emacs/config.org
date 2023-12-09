@@ -18,12 +18,14 @@
     - [[#which-key][Which Key]]
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
+    - [[#find-file][Find File]]
   - [[#programming][Programming]]
     - [[#lspcompletion][LSP/Completion]]
       - [[#eglot][Eglot]]
       - [[#corfu][Corfu]]
       - [[#cape][Cape]]
       - [[#orderless][Orderless]]
+      - [[#vertico][Vertico]]
       - [[#yasnippet][Yasnippet]]
     - [[#magit][Magit]]
     - [[#git-gutter][Git Gutter]]
@@ -210,7 +212,6 @@
     :keymaps 'neotree-mode-map
     "<tab>" #'neotree-change-root
     "TAB" #'neotree-change-root)))
-
   ;; Corfu
   (general-define-key
     :states 'insert
@@ -222,6 +223,13 @@
   (with-eval-after-load #'corfu
     (general-add-advice '(corfu--setup corfu--teardown) :after 'evil-normalize-keymaps)
     (evil-make-overriding-map corfu-map))
+  ;; Vertico
+  (general-define-key
+   :keymaps 'vertico-map
+   "RET" #'vertico-directory-enter
+   "<tab>" #'vertico-next
+   "TAB" #'vertico-next
+   "<backtab>" #'vertico-previous)
 
   ;; Org
   (general-define-key
@@ -285,7 +293,8 @@
     "t r" '(neotree-dir :wk "Choose neotree root dir"))
   (leader
     "f" '(:ignore t :wk "Find File")
-    "f f" '(find-file :wk "Find file"))
+    "f f" '(find-file :wk "Find File directly")
+    "f r" '(find-file-in-project :wk "Find File recursively in project (git). Find in CWD if not version controlled"))
   (leader
     "c" '(:ignore t :wk "Comment")
     "c r" '(comment-region :wk "Comment selection")
@@ -348,6 +357,10 @@
   (setq tramp-default-method "rcp")
   (setq tramp-use-ssh-controlmaster-options nil)
   (setq projectile--mode-line "Projectile"))
+#+end_src
+*** Find File
+#+begin_src emacs-lisp
+(use-package find-file-in-project)
 #+end_src
 
 ** Programming
@@ -419,6 +432,13 @@
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
+
+#+end_src
+**** Vertico
+#+begin_src emacs-lisp
+(use-package vertico
+  :init
+  (vertico-mode))
 #+end_src
 **** Yasnippet
 #+begin_src emacs-lisp
@@ -636,6 +656,7 @@
   :config
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
+  (setq default-directory "~/")
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
   (setq dashboard-startup-banner "~/.config/emacs/eyecropped.png")
   (setq dashboard-banner-logo-title "Whopper Whopper Whopper Whopper Junior Double Triple Whopper")
