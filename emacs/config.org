@@ -194,7 +194,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (setq evil-collection-mode-list '(magit neotree help dashboard dired ibuffer))
+  (setq evil-collection-mode-list '(magit term neotree help dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
 #+end_src
@@ -212,7 +212,7 @@
       "TAB" #'neotree-change-root
       "<tab>" #'neotree-change-root))
   )
-  ;; Corfu mode
+  ;; Corfu
   (add-hook 'corfu-mode-hook #'(lambda ()
   (general-define-key
     :keymaps 'corfu-map
@@ -220,8 +220,7 @@
     "TAB" #'corfu-next
     "<backtab>" #'corfu-previous
   )))
-  
-
+  ;; Org
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
