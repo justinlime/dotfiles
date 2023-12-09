@@ -47,7 +47,7 @@
     - [[#gui-settings][GUI Settings]]
     - [[#fonts][Fonts]]
     - [[#icons][Icons]]
-    - [[#erc-highlights-and-images][ERC Highlights and Images]]
+    - [[#erc][ERC]]
     - [[#dashboard][Dashboard]]
   - [[#programming-1][Programming]]
     - [[#rainbow-mode][Rainbow Mode]]
@@ -135,7 +135,6 @@
 (setq-default indent-tabs-mode nil) ; use spaces not tabs
 (setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
 
-(add-hook 'erc-mode-hook #'toggle-truncate-lines) ; truncate lines in erc mode
 #+end_src
 ** Custom Functions
 #+begin_src emacs-lisp
@@ -202,50 +201,49 @@
 #+begin_src emacs-lisp
 (use-package general
   :config
-  (general-evil-setup)
-  
+
   ;; Neotree
-  (add-hook 'neotree-mode-hook #'(lambda ()
-    (general-define-key
-      :states 'normal
-      :keymaps 'neotree-mode-map
-      "TAB" #'neotree-change-root
-      "<tab>" #'neotree-change-root))
-  )
-  ;; Corfu
-  (add-hook 'corfu-mode-hook #'(lambda ()
+  (add-hook 'neotree-mode-hook #'(lambda()
   (general-define-key
+    :states 'normal
+    :keymaps 'neotree-mode-map
+    "<tab>" #'neotree-change-root
+    "TAB" #'neotree-change-root)))
+  ;; Corfu
+  (general-define-key
+    :states 'insert
     :keymaps 'corfu-map
     "<tab>" #'corfu-next
     "TAB" #'corfu-next
-    "<backtab>" #'corfu-previous
-  )))
+    "<backtab>" #'corfu-previous)
+  ;; Prevent evil from overriding corfu bindings
+  (with-eval-after-load #'corfu
+    (general-add-advice '(corfu--setup corfu--teardown) :after 'evil-normalize-keymaps)
+    (evil-make-overriding-map corfu-map))
+
   ;; Org
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
-    "TAB" #'org-cycle
-  )
+    "<tab>" #'org-cycle
+    "TAB" #'org-cycle)
   ;; Evil
   (general-define-key
-    :keymaps 'evil-insert-state-map
-    "TAB" #'tab-to-tab-stop
-  )
+    :states 'insert
+    "<tab>" #'tab-to-tab-stop
+    "TAB" #'tab-to-tab-stop)
   (general-define-key
     :states '(normal insert visual emacs)
-    :keymaps 'override
     "C-u" #'evil-scroll-up
-    "C-d" #'evil-scroll-down
-  )
+    "C-d" #'evil-scroll-down)
   (general-define-key
     :states '(normal emacs)
-    :keymaps 'override
     "J" #'shrink-window
     "K" #'enlarge-window
     "H" #'shrink-window-horizontally
     "L" #'enlarge-window-horizontally
-    "R" #'undo-redo
-  )
+    "R" #'undo-redo)
+
   ;; set up 'SPC' as the global leader key
   (general-create-definer leader
     :states '(normal insert visual emacs)
@@ -369,7 +367,6 @@
 #+begin_src emacs-lisp
 (use-package corfu
   :ensure t
-  :bind nil
   :custom
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
   (corfu-auto t)
@@ -610,12 +607,14 @@
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
-*** ERC Highlights and Images
+*** ERC
 #+begin_src emacs-lisp
 (use-package erc-hl-nicks
   :after erc)
 (use-package erc-image
   :after erc)
+
+(add-hook 'erc-mode-hook #'toggle-truncate-lines) ; truncate lines in erc mode
 #+end_src
 *** Dashboard
 #+begin_src emacs-lisp
