@@ -157,7 +157,7 @@
   )
 )
 
-(defvar active-toggle-term "*term*" "The most recently used toggle term")
+(defvar active-toggle-term "*terminal*" "The most recently used toggle term")
 (defvar current-toggles '() "List of the current toggle terms")
 
 (defun toggle-term (name)
@@ -166,17 +166,26 @@
   ;; TODO make this function close any existing toggle term windows that arent the
   ;; specified name
   (let* (
+    ;; Wrapping and unwrapping to force a *name* naming scheme
     (unwrapped-name (replace-regexp-in-string "\\*" "" name))
-    (wrapped-name (format "*%s*" unwrapped-name))
-    (window (get-buffer-window wrapped-name))
-    (height (window-total-height)))
-      (if window (delete-window window)
-          (select-window (split-window-below (round (* height 0.80))))
-          (make-term unwrapped-name (getenv "SHELL")) ;This function wraps the "name" with *'s so it become *name* as the buffer name
-          (setq active-toggle-term wrapped-name)
-          (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
-          (switch-to-buffer wrapped-name)
-          (evil-insert 1)))
+    (wrapped-name (format "*%s*" unwrapped-name))) 
+      ;; Check if another toggle-term is active
+      (dolist (c current-toggles)
+        (if (string-equal c wrapped-name)
+          nil
+          (let ((w (get-buffer-window c)))
+            (if w (delete-window w)))))
+        ;; Toggle the term
+        (let (
+          (height (window-total-height))
+          (window (get-buffer-window wrapped-name)))
+            (if window (delete-window window)
+                (select-window (split-window-below (round (* height 0.80))))
+                (make-term unwrapped-name (getenv "SHELL")) ;This function wraps the "name" with *'s so it become *name* as the buffer name
+                (setq active-toggle-term wrapped-name)
+                (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
+                (switch-to-buffer wrapped-name)
+                (evil-insert 1))))
 )
 
 ;; (defun toggle-term (name)
