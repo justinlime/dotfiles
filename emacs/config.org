@@ -384,7 +384,10 @@
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
-(use-package consult)
+(use-package consult
+  :config
+  (setq consult-find-args "find . -not ( -path '*/.git*' -prune )")
+)
 #+end_src
 
 ** Programming
