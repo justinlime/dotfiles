@@ -158,24 +158,42 @@
 )
 
 (defvar active-toggle-term "*toggle-term*" "The most recently used toggle term")
-(defvar current-toggle-terms '() "List of the current toggle terms")
+(defvar current-toggles '() "List of the current toggle terms")
 
 (defun toggle-term (name)
   "Toggle a terminal window with $SHELL, and make it the active term"
   (interactive "sEnter term: ")
   ;; TODO make this function close any existing toggle term windows that arent the
   ;; specified name
-  (let (
-    (w (get-buffer-window name))
-    (h (window-total-height)))
-      (if w (delete-window w)
-          (select-window (split-window-below (round (* h 0.80))))
-          (term-ansi-make-term name (getenv "SHELL"))
-          (setq active-toggle-term name)
-          (if (member name current-toggle-terms) nil (add-to-list 'current-toggle-terms name))
-          (switch-to-buffer name)
+  (let* (
+    (unwrapped-name (replace-regexp-in-string "\\*" "" name))
+    (wrapped-name (format "*%s*" unwrapped-name))
+    (window (get-buffer-window wrapped-name))
+    (height (window-total-height)))
+      (if window (delete-window window)
+          (select-window (split-window-below (round (* height 0.80))))
+          (make-term unwrapped-name (getenv "SHELL")) ;This function wraps the "name" with *'s so it become *name* as the buffer name
+          (setq active-toggle-term wrapped-name)
+          (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
+          (switch-to-buffer wrapped-name)
           (evil-insert 1)))
 )
+;; (defun toggle-term (name)
+;;   "Toggle a terminal window with $SHELL, and make it the active term"
+;;   (interactive "sEnter term: ")
+;;   ;; TODO make this function close any existing toggle term windows that arent the
+;;   ;; specified name
+;;   (let (
+;;     (w (get-buffer-window name))
+;;     (h (window-total-height)))
+;;       (if w (delete-window w)
+;;           (select-window (split-window-below (round (* h 0.80))))
+;;           (term-ansi-make-term name (getenv "SHELL")) 
+;;           (setq active-toggle-term name)
+;;           (if (member name current-toggles) nil (add-to-list 'current-toggles name))
+;;           (switch-to-buffer name)
+;;           (evil-insert 1)))
+;; )
 (defun toggle-active-term ()
   "Toggle the most recently used toggle-term"
   (interactive)
@@ -325,7 +343,8 @@
     "c l" '(comment-line :wk "Comment line"))
   (leader
     "g" '(:ignore t :wk "Get Terminal")
-    "g t" '(toggle-term :wk "Get Terminal")
+    "g c" '(toggle-active-term :wk "Get Current Terminal")
+    "g a" '(toggle-term :wk "Get Terminal")
     "g s" '(toggle-shell :wk "Get Shell"))
   (leader
     "s" '(:ignore t :wk "SSH")
@@ -367,8 +386,10 @@
 #+end_src
 *** Neotree
 #+begin_src emacs-lisp
-(use-package neotree)
-(setq neo-theme (if (display-graphic-p) 'nerd))
+(use-package neotree
+  :defer t
+  :config
+  (setq neo-theme (if (display-graphic-p) 'nerd)))
 ;; (add-hook 'dashboard-mode-hook #'neotree-toggle) ;Toggle on startup
 #+end_src
 *** Tramp
