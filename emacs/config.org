@@ -157,7 +157,7 @@
   )
 )
 
-(defvar active-toggle-term "*toggle-term*" "The most recently used toggle term")
+(defvar active-toggle-term "*term*" "The most recently used toggle term")
 (defvar current-toggles '() "List of the current toggle terms")
 
 (defun toggle-term (name)
@@ -178,6 +178,7 @@
           (switch-to-buffer wrapped-name)
           (evil-insert 1)))
 )
+
 ;; (defun toggle-term (name)
 ;;   "Toggle a terminal window with $SHELL, and make it the active term"
 ;;   (interactive "sEnter term: ")
