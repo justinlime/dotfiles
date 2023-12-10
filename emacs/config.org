@@ -161,10 +161,13 @@
 (defvar current-toggles '("*terminal*") "List of the current toggle terms")
 
 (defun toggle-term (&optional name)
-  "Toggle a terminal window with $SHELL, and make it the active term"
+  "Toggle a terminal window with $SHELL, and make it the active term
+
+  If NAME is not provided, prompt to user for one. Closes any other toggle-terms
+  currently open that aren't NAME
+
+  NAME can be in the *name* format or just name, but the buffers' name will always output to *name*"
   (interactive)
-  ;; TODO make this function close any existing toggle term windows that arent the
-  ;; specified name
   (let* (
     ;; Wrapping and unwrapping to force a *name* naming scheme
     (name (if name name (completing-read "Toggle-Term: " current-toggles)))
@@ -189,22 +192,6 @@
                 (evil-insert 1))))
 )
 
-;; (defun toggle-term (name)
-;;   "Toggle a terminal window with $SHELL, and make it the active term"
-;;   (interactive "sEnter term: ")
-;;   ;; TODO make this function close any existing toggle term windows that arent the
-;;   ;; specified name
-;;   (let (
-;;     (w (get-buffer-window name))
-;;     (h (window-total-height)))
-;;       (if w (delete-window w)
-;;           (select-window (split-window-below (round (* h 0.80))))
-;;           (term-ansi-make-term name (getenv "SHELL")) 
-;;           (setq active-toggle-term name)
-;;           (if (member name current-toggles) nil (add-to-list 'current-toggles name))
-;;           (switch-to-buffer name)
-;;           (evil-insert 1)))
-;; )
 (defun toggle-active-term ()
   "Toggle the most recently used toggle-term"
   (interactive)
@@ -216,7 +203,7 @@
   "Toggle a shell window"
   (interactive)
   (let (
-    (w (get-buffer-window "*toggle-shell*"))
+    (w (get-buffer-window "*shell*"))
     (h (window-total-height)))
       (cond (
         (eq nil w)(select-window (split-window-below (round (* h 0.80))))(shell)(evil-insert 1))
@@ -353,9 +340,9 @@
     "c r" '(comment-region :wk "Comment selection")
     "c l" '(comment-line :wk "Comment line"))
   (leader
-    "g" '(:ignore t :wk "Get Terminal")
-    "g c" '(toggle-active-term :wk "Get Current Terminal")
-    "g a" '(toggle-term :wk "Get Terminal")
+    "g" '(:ignore t :wk "Get a toggle-term")
+    "g t" '(toggle-active-term :wk "Get the active toggle-term")
+    "g c" '(toggle-term :wk "Choose an active toggle-term")
     "g s" '(toggle-shell :wk "Get Shell"))
   (leader
     "s" '(:ignore t :wk "SSH")
