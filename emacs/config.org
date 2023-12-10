@@ -146,6 +146,7 @@
   (interactive "sEnter host: ")
   (let ((format-host (format "/ssh:%s|sudo:%s:/" host host)))
     (find-file format-host)
+    (toggle-ssh-term host host)
   )
 )
 
@@ -154,6 +155,7 @@
   (interactive "sEnter host: ")
   (let ((format-host (format "/ssh:%s:~" host)))
     (find-file format-host)
+    (toggle-ssh-term host host)
   )
 )
 
@@ -186,6 +188,38 @@
             (if window (delete-window window)
                 (select-window (split-window-below (round (* height 0.80))))
                 (make-term unwrapped-name (getenv "SHELL")) ;This function wraps the "name" with *'s so it become *name* as the buffer name
+                (setq active-toggle-term wrapped-name)
+                (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
+                (switch-to-buffer wrapped-name)
+                (evil-insert 1))))
+)
+;; Most of this code is redundant but I dont care right now
+(defun toggle-ssh-term (host &optional name)
+  "Toggle a terminal window with $SHELL, and make it the active term
+
+  If NAME is not provided, prompt to user for one. Closes any other toggle-terms
+  currently open that aren't NAME
+
+  NAME can be in the *name* format or just name, but the buffers' name will always output to *name*"
+  (interactive)
+  (let* (
+    ;; Wrapping and unwrapping to force a *name* naming scheme
+    (name (if name name (completing-read "Toggle-Term: " current-toggles)))
+    (unwrapped-name (replace-regexp-in-string "\\*" "" name))
+    (wrapped-name (format "*%s*" unwrapped-name))) 
+      ;; Check if another toggle-term is active
+      (dolist (c current-toggles)
+        (if (string-equal c wrapped-name)
+          nil
+          (let ((w (get-buffer-window c)))
+            (if w (delete-window w)))))
+        ;; Toggle the term
+        (let (
+          (height (window-total-height))
+          (window (get-buffer-window wrapped-name)))
+            (if window (delete-window window)
+                (select-window (split-window-below (round (* height 0.80))))
+                (make-term unwrapped-name (getenv "SHELL") nil "-c" (format "ssh %s" name)) ;This function wraps the "name" with *'s so it become *name* as the buffer name
                 (setq active-toggle-term wrapped-name)
                 (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
                 (switch-to-buffer wrapped-name)
