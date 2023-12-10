@@ -157,26 +157,49 @@
   )
 )
 
-(defun toggle-term ()
-  "Toggle a terminal window with $SHELL"
-  (interactive)
+(defvar active-toggle-term "*toggle-term*" "The most recently used toggle term")
+(defvar current-toggle-terms '() "List of the current toggle terms")
+
+(defun toggle-term (name)
+  "Toggle a terminal window with $SHELL, and make it the active term"
+  (interactive "sEnter term: ")
+  ;; TODO make this function close any existing toggle term windows that arent the
+  ;; specified name
   (let (
-    (w (get-buffer-window "*terminal*"))
+    (w (get-buffer-window name))
     (h (window-total-height)))
-      (cond (
-        (eq nil w)(select-window (split-window-below (round (* h 0.80))))(term (getenv "SHELL"))(evil-insert 1))
-        (t (delete-window w))))
+      (if w (delete-window w)
+          (select-window (split-window-below (round (* h 0.80))))
+          (term-ansi-make-term name (getenv "SHELL"))
+          (setq active-toggle-term name)
+          (if (member name current-toggle-terms) nil (add-to-list 'current-toggle-terms name))
+          (switch-to-buffer name)
+          (evil-insert 1)))
 )
+(defun toggle-active-term ()
+  "Toggle the most recently used toggle-term"
+  (interactive)
+  (toggle-term active-toggle-term)
+)
+
 
 (defun toggle-shell ()
   "Toggle a shell window"
   (interactive)
   (let (
-    (w (get-buffer-window "*shell*"))
+    (w (get-buffer-window "*toggle-shell*"))
     (h (window-total-height)))
       (cond (
         (eq nil w)(select-window (split-window-below (round (* h 0.80))))(shell)(evil-insert 1))
         (t (delete-window w))))
+)
+
+(defun consult-find-in-dir ()
+  "Find a file in a specific directory"
+  (interactive)
+  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
+    (consult-find dir)
+  )
 )
 #+End_src
 
@@ -292,9 +315,10 @@
     "t t" '(neotree-toggle :wk "Neotree toggle")
     "t r" '(neotree-dir :wk "Choose neotree root dir"))
   (leader
-    "f" '(:ignore t :wk "Find File")
-    "f f" '(find-file :wk "Find File directly")
-    "f r" '(find-file-in-project :wk "Find File recursively in project (git). Find in CWD if not version controlled"))
+    "f" '(:ignore t :wk "Find file")
+    "f f" '(find-file :wk "Find file directly")
+    "f r" '(consult-find :wk "Find file in current directory")
+    "f d" '(consult-find-in-dir :wk "Find file in directory"))
   (leader
     "c" '(:ignore t :wk "Comment")
     "c r" '(comment-region :wk "Comment selection")
@@ -361,6 +385,10 @@
 *** Find File
 #+begin_src emacs-lisp
 (use-package find-file-in-project)
+(use-package consult)
+(use-package affe)
+(use-package fzf)
+(use-package projectile)
 #+end_src
 
 ** Programming

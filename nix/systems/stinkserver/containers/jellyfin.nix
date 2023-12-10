@@ -19,7 +19,7 @@
        "/storage/pool/media/watch/movies:/movies"
        "/storage/pool/media/watch/tv:/tv"
        "/storage/pool/media/watch/anime:/anime"
-     ];
+    ];
      extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
     };  
   };
