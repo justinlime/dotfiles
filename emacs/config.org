@@ -18,7 +18,7 @@
     - [[#which-key][Which Key]]
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
-    - [[#find-file][Find File]]
+    - [[#consult][Consult]]
   - [[#programming][Programming]]
     - [[#lspcompletion][LSP/Completion]]
       - [[#eglot][Eglot]]
@@ -382,13 +382,9 @@
   (setq tramp-use-ssh-controlmaster-options nil)
   (setq projectile--mode-line "Projectile"))
 #+end_src
-*** Find File
+*** Consult
 #+begin_src emacs-lisp
-(use-package find-file-in-project)
 (use-package consult)
-(use-package affe)
-(use-package fzf)
-(use-package projectile)
 #+end_src
 
 ** Programming
