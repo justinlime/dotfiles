@@ -158,15 +158,16 @@
 )
 
 (defvar active-toggle-term "*terminal*" "The most recently used toggle term")
-(defvar current-toggles '() "List of the current toggle terms")
+(defvar current-toggles '("*terminal*") "List of the current toggle terms")
 
-(defun toggle-term (name)
+(defun toggle-term (&optional name)
   "Toggle a terminal window with $SHELL, and make it the active term"
-  (interactive "sEnter term: ")
+  (interactive)
   ;; TODO make this function close any existing toggle term windows that arent the
   ;; specified name
   (let* (
     ;; Wrapping and unwrapping to force a *name* naming scheme
+    (name (if name name (completing-read "Toggle-Term: " current-toggles)))
     (unwrapped-name (replace-regexp-in-string "\\*" "" name))
     (wrapped-name (format "*%s*" unwrapped-name))) 
       ;; Check if another toggle-term is active
