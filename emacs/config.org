@@ -141,22 +141,22 @@
 #+end_src
 ** Custom Functions
 #+begin_src emacs-lisp
-(defun ssh-root (host)
-  "SSH with sudo privledges using a host from .ssh/config"
-  (interactive "sEnter host: ")
-  (let ((format-host (format "/ssh:%s|sudo:%s:/" host host)))
+
+(defun ssh (host formatter)
+  (let ((format-host (format formatter host host)))
     (find-file format-host)
     (toggle-ssh-term host host)
   )
 )
-
+(defun ssh-root (host)
+  "SSH with sudo privledges using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (ssh host "/ssh:%s|sudo:%s:/")
+)
 (defun ssh-user (host)
   "SSH using a host from .ssh/config"
   (interactive "sEnter host: ")
-  (let ((format-host (format "/ssh:%s:~" host)))
-    (find-file format-host)
-    (toggle-ssh-term host host)
-  )
+  (ssh host "/ssh:%s:~")
 )
 
 (defvar active-toggle-term "*terminal*" "The most recently used toggle term")
