@@ -46,6 +46,7 @@
 - [[#look--feel][Look & Feel]]
   - [[#general-2][General]]
     - [[#themes][Themes]]
+    - [[#dired-rainbow][Dired Rainbow]]
     - [[#modeline][Modeline]]
     - [[#gui-settings][GUI Settings]]
     - [[#fonts][Fonts]]
@@ -355,15 +356,15 @@
     "e e" '(eval-expression :wk "Evaluate and elisp expression")
     "e r" '(eval-region :wk "Evaluate selected elisp")) 
   (leader
-    "d" '(:ignore t :wk "Describe")
-    "d f" '(describe-function :wk "Describe function")
-    "d v" '(describe-variable :wk "Describe variable")
-    "d m" '(describe-mode :wk "Describe mode")
-    "d k" '(describe-key :wk "Describe key/keybind"))
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Help function")
+    "h v" '(describe-variable :wk "Help variable")
+    "h m" '(describe-mode :wk "Help mode")
+    "h k" '(describe-key :wk "Help key/keybind"))
   (leader
-    "t" '(:ignore t :wk "Side-Tree")
-    "t t" '(neotree-toggle :wk "Neotree toggle")
-    "t r" '(neotree-dir :wk "Choose neotree root dir"))
+    "d" '(:ignore t :wk "Directory Tree")
+    "d t" '(neotree-toggle :wk "Toggle Directory Tree")
+    "d r" '(neotree-dir :wk "Change Directory Root"))
   (leader
     "f" '(:ignore t :wk "Find file")
     "f f" '(find-file :wk "Find file directly")
@@ -374,10 +375,10 @@
     "c r" '(comment-region :wk "Comment selection")
     "c l" '(comment-line :wk "Comment line"))
   (leader
-    "g" '(:ignore t :wk "Get a toggle-term")
-    "g t" '(toggle-active-term :wk "Get the active toggle-term")
-    "g c" '(toggle-term :wk "Choose an active toggle-term")
-    "g s" '(toggle-shell :wk "Get Shell"))
+    "t" '(:ignore t :wk "Toggle-Term")
+    "t t" '(toggle-active-term :wk "Toggle the active toggle-term")
+    "t c" '(toggle-term :wk "Change the active toggle-term")
+    "t s" '(toggle-shell :wk "Toggle Shell"))
   (leader
     "s" '(:ignore t :wk "SSH")
     "s u" '(ssh-user :wk "SSH as user, using the ssh config file")
@@ -668,6 +669,14 @@
   ;; (doom-themes-neotree-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
+#+end_src
+*** Dired Rainbow
+#+begin_src emacs-lisp
+(use-package dired-rainbow
+  :config
+  (dired-rainbow-define-chmod directory "#cba6f7" "d.*")
+  (dired-rainbow-define-chmod executable "#eba0ac" "-.*x.*")
+  (dired-rainbow-define-chmod readable "#74c7ec" "-.*r.*"))
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
