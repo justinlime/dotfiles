@@ -447,9 +447,9 @@
 #+end_src
 *** Undo Tree
 #+begin_src emacs-lisp
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode))
+;; (use-package undo-tree
+;;   :config
+;;   (global-undo-tree-mode))
 #+end_src
 
 ** Programming
