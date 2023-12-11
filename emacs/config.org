@@ -127,6 +127,8 @@
 #+end_src
 ** Misc Preferences 
 #+begin_src emacs-lisp
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
 (setq make-backup-files nil) ; stop creating ~ files
 (setq auto-save-default nil) ; Disable autosave # files
 (setq create-lockfiles nil) ; Disable .# files
