@@ -19,6 +19,7 @@
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
     - [[#consult][Consult]]
+    - [[#undo-tree][Undo Tree]]
   - [[#programming][Programming]]
     - [[#lspcompletion][LSP/Completion]]
       - [[#eglot][Eglot]]
@@ -442,6 +443,12 @@
   :config
   (setq consult-find-args "find . -not ( -path '*/.git*' -prune )")
 )
+#+end_src
+*** Undo Tree
+#+begin_src emacs-lisp
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
 #+end_src
 
 ** Programming
