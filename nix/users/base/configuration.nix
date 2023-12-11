@@ -10,6 +10,7 @@
     homeDirectory = "/home/${username}";
     shellAliases = {
       home-switch = "home-manager switch --flake path:${flake_path}#${profile}";
+      emacs = "COLORTERM=truecolor emacs -nwQ";
     };
     packages = with pkgs; [
       speedtest-cli

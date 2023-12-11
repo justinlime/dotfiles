@@ -280,6 +280,10 @@
 #+begin_src emacs-lisp
 (use-package general
   :config
+  ;; Escape
+  (general-define-key
+    :keymaps 'override
+    "<escape>" 'keyboard-escape-quit)
 
   ;; Neotree
   (add-hook 'neotree-mode-hook #'(lambda()
@@ -659,10 +663,6 @@
 ** General
 *** Themes
 #+begin_src emacs-lisp
-;; (use-package catppuccin-theme
-;;   :config
-;;   (setq catppuccin-flavor 'mocha)
-;; )
 (use-package doom-themes
   :ensure t
   :config
