@@ -56,6 +56,7 @@
     - [[#dashboard][Dashboard]]
   - [[#programming-1][Programming]]
     - [[#rainbow-mode][Rainbow Mode]]
+    - [[#rainbow-delimiters][Rainbow Delimiters]]
     - [[#treesitter][Treesitter]]
 
 * General
@@ -766,6 +767,13 @@
   :config
   (add-hook 'prog-mode-hook #'rainbow-mode))
 #+end_src
+*** Rainbow Delimiters
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+)
+#+end_src
 *** Treesitter
 #+begin_src emacs-lisp
 (use-package treesit-auto
@@ -784,6 +792,7 @@
   ;; (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
   
 #+end_src
+
 
 
 
