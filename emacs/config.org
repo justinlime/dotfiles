@@ -191,7 +191,7 @@
           (height (window-total-height))
           (window (get-buffer-window wrapped-name)))
             (if window (delete-window window)
-                (select-window (split-window-below (round (* height 0.80))))
+                (select-window (split-window-below (round (* height 0.75))))
                 (make-term unwrapped-name (getenv "SHELL")) ;This function wraps the "name" with *'s so it become *name* as the buffer name
                 (setq active-toggle-term wrapped-name)
                 (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
@@ -223,7 +223,7 @@
           (height (window-total-height))
           (window (get-buffer-window wrapped-name)))
             (if window (delete-window window)
-                (select-window (split-window-below (round (* height 0.80))))
+                (select-window (split-window-below (round (* height 0.75))))
                 (make-term unwrapped-name (getenv "SHELL") nil "-c" (format "ssh %s" name)) ;This function wraps the "name" with *'s so it become *name* as the buffer name
                 (setq active-toggle-term wrapped-name)
                 (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
