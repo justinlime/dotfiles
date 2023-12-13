@@ -660,6 +660,8 @@
 ** General
 *** Themes
 #+begin_src emacs-lisp
+(set-frame-parameter nil 'alpha-background 100) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
 (use-package doom-themes
   :ensure t
   :config
