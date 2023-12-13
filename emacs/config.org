@@ -558,6 +558,8 @@
 *** Term
 #+begin_src  emacs-lisp
 (add-hook 'term-mode-hook (lambda()
+  (setq buffer-face-mode-face `(:background "#11111B"))
+  (buffer-face-mode 1)
   (display-line-numbers-mode -1)
 ))
 #+end_src 
@@ -670,10 +672,10 @@
 #+begin_src emacs-lisp
 (set-frame-parameter nil 'alpha-background 100) ; For current frame
 (add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
-(use-package solaire-mode
-  :config
-  (solaire-global-mode +1)
-)
+;; (use-package solaire-mode
+;;   :config
+;;   (solaire-global-mode +1)
+;; )
 (use-package doom-themes
   :ensure t
   :config
