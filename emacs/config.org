@@ -30,6 +30,7 @@
       - [[#yasnippet][Yasnippet]]
     - [[#magit][Magit]]
     - [[#git-gutter][Git Gutter]]
+    - [[#term][Term]]
     - [[#modes][Modes]]
       - [[#python-mode][Python Mode]]
       - [[#javascript-mode][Javascript Mode]]
@@ -426,7 +427,9 @@
   :defer t
   :config
   (setq neo-theme (if (display-graphic-p) 'nerd)))
-;; (add-hook 'dashboard-mode-hook #'neotree-toggle) ;Toggle on startup
+  (add-hook 'neotree-mode-hook #'(lambda ()
+    (display-line-numbers-mode -1)
+  )) ;Toggle on startup
 #+end_src
 *** Tramp
 #+begin_src emacs-lisp
@@ -552,7 +555,12 @@
   )
 ))
 #+end_src
-
+*** Term
+#+begin_src  emacs-lisp
+(add-hook 'term-mode-hook (lambda()
+  (display-line-numbers-mode -1)
+))
+#+end_src 
 *** Modes
 **** Python Mode
 #+begin_src emacs-lisp
@@ -662,6 +670,10 @@
 #+begin_src emacs-lisp
 (set-frame-parameter nil 'alpha-background 100) ; For current frame
 (add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
+(use-package solaire-mode
+  :config
+  (solaire-global-mode +1)
+)
 (use-package doom-themes
   :ensure t
   :config
@@ -743,7 +755,10 @@
 (use-package erc-image
   :after erc)
 
-(add-hook 'erc-mode-hook #'toggle-truncate-lines) ; truncate lines in erc mode
+(add-hook 'erc-mode-hook #'(lambda ()
+  (toggle-truncate-lines) ; truncate lines in erc mode
+  (display-line-numbers-mode -1)
+))
 #+end_src
 *** Dashboard
 #+begin_src emacs-lisp
