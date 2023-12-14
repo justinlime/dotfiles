@@ -364,6 +364,7 @@
     "h f" '(describe-function :wk "Help function")
     "h v" '(describe-variable :wk "Help variable")
     "h m" '(describe-mode :wk "Help mode")
+    "h c" '(describe-char :wk "Help character")
     "h k" '(describe-key :wk "Help key/keybind"))
   (leader
     "d" '(:ignore t :wk "Directory Tree")
@@ -557,8 +558,11 @@
 #+end_src
 *** Term
 #+begin_src  emacs-lisp
-(add-hook 'term-mode-hook (lambda()
-  (setq buffer-face-mode-face `(:background "#11111B"))
+;; imgur.com/a/nphkZy4
+(add-hook 'term-mode-hook #'(lambda()
+  (face-remap-add-relative 'default :background "#11111B")
+  (face-remap-add-relative 'term-bold '((:background "#11111B") term-bold))
+  (face-remap-add-relative 'term '((:background "#11111B") term-bold))
   (buffer-face-mode 1)
   (display-line-numbers-mode -1)
 ))
