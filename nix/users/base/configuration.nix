@@ -11,7 +11,6 @@
     shellAliases = {
       home-switch = "home-manager switch --flake path:${flake_path}#${profile}";
       emacs = "COLORTERM=truecolor emacs -nw";
-      emac = "COLORTERM=truecolor emacsclient -nw";
     };
     packages = with pkgs; [
       emacs29

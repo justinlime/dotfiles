@@ -257,6 +257,13 @@
     (consult-find dir)
   )
 )
+(defun jl/erc-start-or-switch ()
+  "Connects to ERC, or switch to last active buffer."
+  (interactive)
+  (if (get-buffer "Libera.Chat")
+      (erc-track-switch-buffer 1)
+    (when (y-or-n-p "Start ERC? ")
+      (erc :server "irc.libera.chat" :port 6667 :nick "justinlime"))))
 #+End_src
 
 
