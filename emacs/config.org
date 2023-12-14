@@ -558,16 +558,16 @@
 #+end_src
 *** Term
 #+begin_src  emacs-lisp
-;; imgur.com/a/nphkZy4
 (add-hook 'term-mode-hook #'(lambda()
-  ;; Id bruh
-  ;; (face-remap-add-relative 'default :background "#11111B")
-  ;; (face-remap-add-relative 'term-bold '((:background "#11111B") term-bold))
-  ;; (face-remap-add-relative 'term '((:background "#11111B") term-bold))
-  (buffer-face-mode 1)
-  ;; (custom-set-faces   '(default ((t (:background "#11111B"))))) 
-  ;; (face-remap-add-relative 'default :background "#11111B")
-  ;; (add-text-properties (point-min) (point-max) '(font-lock-face (:background "#11111B")))
+  (face-remap-set-base 'default :background "#11111B")
+
+  (defface term-background
+  '((t (:inherit default :background "#11111B")))
+  "Some bullshit to fix term mode text-background"
+  :group 'basic-faces)
+
+  (setf (elt ansi-term-color-vector 0) 'term-background)
+
   (display-line-numbers-mode -1)
 ))
 #+end_src 
@@ -680,10 +680,10 @@
 #+begin_src emacs-lisp
 (set-frame-parameter nil 'alpha-background 100) ; For current frame
 (add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
-(use-package solaire-mode
-  :config
-  (solaire-global-mode +1)
-)
+;; (use-package solaire-mode
+;;   :config
+;;   (solaire-global-mode +1)
+;; )
 (use-package doom-themes
   :ensure t
   :config
