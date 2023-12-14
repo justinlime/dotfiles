@@ -430,7 +430,7 @@
   (setq neo-theme (if (display-graphic-p) 'nerd)))
   (add-hook 'neotree-mode-hook #'(lambda ()
     (display-line-numbers-mode -1)
-  )) ;Toggle on startup
+  )) 
 #+end_src
 *** Tramp
 #+begin_src emacs-lisp
