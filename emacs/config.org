@@ -285,7 +285,9 @@
   (setq evil-collection-mode-list '(magit term neotree help dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
+;; These hooks may not work if TERM isnt xterm/xterm256
 ;; Change cursor to beam in insert mode
+;; Doesnt work with eldoc for some reason
 (unless (display-graphic-p)
 (add-hook 'evil-insert-state-entry-hook (lambda ()
   (setq visible-cursor nil) ;disables blinking cursor
@@ -295,6 +297,20 @@
   (setq visible-cursor nil) ;disables blinking cursor
   (send-string-to-terminal "\e[2 q"))) 
 )
+
+;; This work but closes all windows
+
+;(define-key key-translation-map
+;  (kbd "<escape>")  
+;  (kbd "ESC"))  
+
+;; This return C-m-g for some reason
+
+;(define-key key-translation-map
+;  (kbd "<escape>")  
+;  (kbd "C-g"))  
+
+
 #+end_src
 ** General Binds
 #+begin_src emacs-lisp
