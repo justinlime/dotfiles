@@ -285,6 +285,16 @@
   (setq evil-collection-mode-list '(magit term neotree help dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
+;; Change cursor to beam in insert mode
+(unless (display-graphic-p)
+(add-hook 'evil-insert-state-entry-hook (lambda ()
+  (setq visible-cursor nil) ;disables blinking cursor
+  (send-string-to-terminal "\e[5 q")))
+;; Change cursor to box in normal mode
+(add-hook 'evil-normal-state-entry-hook (lambda ()
+  (setq visible-cursor nil) ;disables blinking cursor
+  (send-string-to-terminal "\e[2 q"))) 
+)
 #+end_src
 ** General Binds
 #+begin_src emacs-lisp
@@ -404,7 +414,9 @@
   (key-chord-mode 1)
   :config
   (setq key-chord-two-keys-delay 1)
+  (setq key-chord-one-key-delay 1.2)
   (setq key-chord-safety-interval-forward 0.1)
+  (setq key-chord-safety-interval-backward 1)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 
