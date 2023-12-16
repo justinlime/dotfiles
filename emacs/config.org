@@ -868,7 +868,7 @@
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq default-directory "~/")
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
-  (unless (display-graphic-p)
+  (when (display-graphic-p)
     (setq dashboard-startup-banner (format "~/.config/emacs/icons/%s" (random-icon))))
   (setq dashboard-banner-logo-title (random-quote))
   (setq dashboard-footer-messages `(,(random-quote)))
