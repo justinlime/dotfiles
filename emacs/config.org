@@ -266,6 +266,22 @@
       (erc-track-switch-buffer 1)
     (when (y-or-n-p "Start ERC? ")
       (erc :server "irc.libera.chat" :port 6667 :nick "justinlime"))))
+(defun random-quote ()
+  "Generate a random quote for dashboard"
+  (interactive)
+  (let ((ops '(
+    "Hello World!"
+    "Whopper Whopper Whopper Whopper Junior Double Triple Whopper"
+    "sudo systemctl stop justinlime"
+    "sudo systemctl start justinlime"
+    "sudo systemctl restart justinlime"
+    "White Monster"
+    "https://stinkboys.com"
+    ""
+  )))
+  (nth (random (length ops)) ops)
+  )
+)
 #+End_src
 
 
@@ -415,7 +431,7 @@
     "r" '(:ignore t :wk "Org Roam")
     "r f" '(org-roam-node-find :wk "Find org roam file")
     "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
-    "r s" '(org-capture-finalize :wk "Toggle the roam buffer")
+    "r c" '(org-capture-finalize :wk "Toggle the roam buffer")
     "r i" '(org-roam-node-insert :wk "Insert node link"))
   (leader
     "s" '(:ignore t :wk "SSH")
@@ -751,7 +767,7 @@
   :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode)
+  (org-roam-db-autosync-mode 1)
   (require 'org-roam-protocol))
 #+end_src
 
@@ -865,8 +881,8 @@
   (setq default-directory "~/")
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
   (setq dashboard-startup-banner "~/.config/emacs/eyecropped.png")
-  (setq dashboard-banner-logo-title "Whopper Whopper Whopper Whopper Junior Double Triple Whopper")
-  (setq dashboard-footer-messages '("sudo systemctl restart justinlime"))
+  (setq dashboard-banner-logo-title (random-quote))
+  (setq dashboard-footer-messages `(,(random-quote)))
   (dashboard-setup-startup-hook))
 #+end_src
 ** Programming
