@@ -864,10 +864,10 @@
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
-(use-package treesit-auto
-  :ensure t
-  :config
-  (global-treesit-auto-mode))
+;; (use-package treesit-auto
+;;   :ensure t
+;;   :config
+;;   (global-treesit-auto-mode))
   ;; (setq treesit-auto-install 'prompt))
   ;; (setq my-nix-ts-mode ;;this shit doesnt work :(
   ;;   (make-treesit-auto-recipe
@@ -880,7 +880,6 @@
   ;; (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
   
 #+end_src
-
 
 
 
