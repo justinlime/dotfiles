@@ -285,18 +285,24 @@
   (setq evil-collection-mode-list '(magit term neotree help dashboard dired ibuffer))
   (evil-collection-init))
 (use-package evil-tutor)
+
 ;; These hooks may not work if TERM isnt xterm/xterm256
 ;; Change cursor to beam in insert mode
 ;; Doesnt work with eldoc for some reason
 (unless (display-graphic-p)
-(add-hook 'evil-insert-state-entry-hook (lambda ()
-  (setq visible-cursor nil) ;disables blinking cursor
-  (send-string-to-terminal "\e[5 q")))
-;; Change cursor to box in normal mode
-(add-hook 'evil-normal-state-entry-hook (lambda ()
-  (setq visible-cursor nil) ;disables blinking cursor
-  (send-string-to-terminal "\e[2 q"))) 
-)
+  (add-hook 'evil-insert-state-entry-hook (lambda ()
+    (setq visible-cursor nil) ;disables blinking cursor
+    (send-string-to-terminal "\e[5 q")))
+  ;; Change cursor to box in normal mode
+  (add-hook 'evil-normal-state-entry-hook (lambda ()
+    (setq visible-cursor nil) ;disables blinking cursor
+    (send-string-to-terminal "\e[2 q"))) 
+  (defun mkbeam (&rest r)
+    (if (eq evil-state 'insert)
+      (send-string-to-terminal "\e[5 q")
+      (send-string-to-terminal "\e[2 q")))
+  (advice-add 'eldoc-documentation-default :after #'mkbeam) ;;This oneeeee
+  (advice-add 'eldoc-display-in-buffer :after #'mkbeam))
 
 ;; This work but closes all windows
 
@@ -841,8 +847,8 @@
 (use-package treesit-auto
   :ensure t
   :config
-  (global-treesit-auto-mode)
-  (setq treesit-auto-install 'prompt))
+  (global-treesit-auto-mode))
+  ;; (setq treesit-auto-install 'prompt))
   ;; (setq my-nix-ts-mode ;;this shit doesnt work :(
   ;;   (make-treesit-auto-recipe
   ;;     :lang 'nix
