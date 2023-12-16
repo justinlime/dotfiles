@@ -45,6 +45,7 @@
       - [[#org-general][Org General]]
       - [[#org-table-of-contents][Org Table of Contents]]
       - [[#org-modern][Org Modern]]
+      - [[#org-roam][Org Roam]]
 - [[#look--feel][Look & Feel]]
   - [[#general-2][General]]
     - [[#themes][Themes]]
@@ -338,6 +339,7 @@
   (general-define-key
     :states 'normal 
     :keymaps 'org-mode-map
+    "RET" #'org-open-at-point
     "<tab>" #'org-cycle
     "TAB" #'org-cycle)
 
@@ -409,6 +411,12 @@
     "t t" '(toggle-active-term :wk "Toggle the active toggle-term")
     "t c" '(toggle-term :wk "Change the active toggle-term")
     "t s" '(toggle-shell :wk "Toggle Shell"))
+  (leader
+    "r" '(:ignore t :wk "Org Roam")
+    "r f" '(org-roam-node-find :wk "Find org roam file")
+    "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
+    "r s" '(org-capture-finalize :wk "Toggle the roam buffer")
+    "r i" '(org-roam-node-insert :wk "Insert node link"))
   (leader
     "s" '(:ignore t :wk "SSH")
     "s u" '(ssh-user :wk "SSH as user, using the ssh config file")
@@ -732,6 +740,19 @@
 (use-package org-modern
   :init 
   (with-eval-after-load 'org (global-org-modern-mode)))
+#+end_src
+**** Org Roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/org/roam/"))
+
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  (require 'org-roam-protocol))
 #+end_src
 
 * Look & Feel
