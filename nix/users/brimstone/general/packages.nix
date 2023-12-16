@@ -43,5 +43,6 @@
         # haskell
         haskell.compiler.native-bignum.ghcHEAD
         lm_sensors
+        imagemagick
     ];
 }

@@ -12,7 +12,6 @@
 - [[#keybinds][Keybinds]]
   - [[#evil-mode][Evil Mode]]
   - [[#general-binds][General Binds]]
-  - [[#keychord-binds][Keychord Binds]]
 - [[#functionality][Functionality]]
   - [[#general-1][General]]
     - [[#which-key][Which Key]]
@@ -277,11 +276,17 @@
     "sudo systemctl restart justinlime"
     "White Monster"
     "https://stinkboys.com"
-    ""
-  )))
-  (nth (random (length ops)) ops)
-  )
-)
+    "No emacs???"
+  ))) (nth (random (length ops)) ops)))
+(defun random-icon ()
+  "Generate a random image for dashboard"
+  (interactive)
+  (let* ((ops (directory-files "/home/justinlime/.config/emacs/icons"))
+        (ops (delete "." ops))
+        (ops (delete ".." ops)))
+  (delete "." ops)
+  (delete ".." ops)
+  (nth (random (length ops)) ops)))
 #+End_src
 
 
@@ -427,28 +432,7 @@
     "t t" '(toggle-active-term :wk "Toggle the active toggle-term")
     "t c" '(toggle-term :wk "Change the active toggle-term")
     "t s" '(toggle-shell :wk "Toggle Shell"))
-  (leader
-    "r" '(:ignore t :wk "Org Roam")
-    "r f" '(org-roam-node-find :wk "Find org roam file")
-    "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
-    "r c" '(org-capture-finalize :wk "Toggle the roam buffer")
-    "r i" '(org-roam-node-insert :wk "Insert node link"))
-  (leader
-    "s" '(:ignore t :wk "SSH")
-    "s u" '(ssh-user :wk "SSH as user, using the ssh config file")
-    "s r" '(ssh-root :wk "SSH as user with root privledges, using the ssh config file"))
-)
-#+end_src
-** Keychord Binds
-#+begin_src emacs-lisp
-(use-package key-chord
-  :init
-  (key-chord-mode 1)
-  :config
-  (setq key-chord-two-keys-delay 1)
-  (setq key-chord-one-key-delay 1.2)
-  (setq key-chord-safety-interval-forward 0.1)
-  (setq key-chord-safety-interval-backward 1)
+  (letq key-chord-safety-interval-backward 1)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 
@@ -867,7 +851,7 @@
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq default-directory "~/")
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
-  (setq dashboard-startup-banner "~/.config/emacs/eyecropped.png")
+  (setq dashboard-startup-banner (format "~/.config/emacs/icons/%s" (random-icon)))
   (setq dashboard-banner-logo-title (random-quote))
   (setq dashboard-footer-messages `(,(random-quote)))
   (dashboard-setup-startup-hook))
