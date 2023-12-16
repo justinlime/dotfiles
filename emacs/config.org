@@ -307,6 +307,13 @@
     "<tab>" #'neotree-change-root
     "TAB" #'neotree-change-root)))
 
+  ;; Fix escape key on in emacs terminal mode
+  ;; Minibuffer 
+  (general-define-key
+    :keymaps 'minibuffer-local-map
+    "<escape>" #'keyboard-escape-quit
+  )
+
   ;; Corfu
   (general-define-key
     :states 'insert
@@ -318,6 +325,7 @@
   (with-eval-after-load #'corfu
     (general-add-advice '(corfu--setup corfu--teardown) :after 'evil-normalize-keymaps)
     (evil-make-overriding-map corfu-map))
+
   ;; Vertico
   (general-define-key
    :keymaps 'vertico-map
@@ -502,9 +510,10 @@
 
 ;; This return C-m-g for some reason
 
-;(define-key key-translation-map
-;  (kbd "<escape>")  
-;  (kbd "C-g"))  
+;; Winner chicken dinner
+;; (define-key key-translation-map
+;;  (kbd "<escape>")  
+;;  (kbd "ESC"))  
 
 #+end_src
 ** Programming
