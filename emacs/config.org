@@ -548,10 +548,11 @@
 (add-hook 'prog-mode-hook (lambda()
   (unless (file-remote-p (buffer-file-name))
     (cond
-      ((eq major-mode 'go-mode)(eglot-ensure))
-      ((eq major-mode 'python-mode)(eglot-ensure))
-      ((eq major-mode 'js-mode)(eglot-ensure))
-      ((eq major-mode 'typescript-mode)(eglot-ensure))
+      ((eq major-mode 'go-ts-mode)(eglot-ensure))
+      ((eq major-mode 'python-ts-mode)(eglot-ensure))
+      ((eq major-mode 'js-ts-mode)(eglot-ensure))
+      ((eq major-mode 'bash-ts-mode)(eglot-ensure))
+      ((eq major-mode 'typescript-ts-mode)(eglot-ensure))
     )
   )
 ))
@@ -645,73 +646,55 @@
 #+begin_src emacs-lisp
 (defun python-hook ()
   (setq tab-width 4)
-  (setq indent-tabs-mode nil)
-)
+  (setq indent-tabs-mode nil))
 
-(add-hook 'python-mode-hook #'python-hook)
-(add-hook 'python-ts-mode-hook #'python-mode)
+(add-hook 'python-ts-mode-hook #'python-hook)
 #+end_src
 **** Javascript Mode
 #+begin_src emacs-lisp
 (defun js-hook ()
   (setq tab-width 2)
   (setq indent-tabs-mode nil)
-  (setq js-indent-level 2)
-)
-(add-hook 'js-mode-hook #'js-hook)
-(add-hook 'js-ts-mode-hook #'js-mode)
+  (setq js-indent-level 2))
+
+(add-hook 'js-ts-mode-hook #'js-hook)
 #+end_src
 **** TypeScript Mode
 #+begin_src emacs-lisp
-(use-package typescript-mode
-  :mode "\\.ts[x]?\\'")
-
 (defun typescript-hook ()
   (setq tab-width 2)
-  (setq indent-tabs-mode nil)
-)
-(add-hook 'typescript-mode-hook #'typescript-hook)
-(add-hook 'typescript-ts-mode-hook #'typescript-mode)
+  (setq indent-tabs-mode nil))
+
+(add-hook 'typescript-ts-mode-hook #'typescript-hook)
 #+end_src
 **** Vue Mode
 #+begin_src emacs-lisp 
-(use-package vue-mode
-  :mode "\\.vue\\'")
+(use-package vue-mode :mode "\\.vue\\'")
 
 (defun vue-hook ()
   (setq tab-width 2)
-  (setq indent-tabs-mode nil)
-)
+  (setq indent-tabs-mode nil))
+
 (add-hook 'vue-mode-hook #'vue-hook)
 #+end_src
 **** Go Mode
 #+begin_src emacs-lisp
 (defun go-hook ()
   (setq tab-width 4)
-  (setq indent-tabs-mode nil)
-)
+  (setq indent-tabs-mode nil))
 
-(use-package go-mode
-  :mode "\\.go\\'")
-
-(add-hook 'go-mode-hook #'go-hook)
-(add-hook 'go-ts-mode-hook #'go-mode)
+(add-hook 'go-ts-mode-hook #'go-hook)
 #+end_src
 **** Nix Mode
 #+begin_src emacs-lisp
-(defun nix-hook ()
-)
-(use-package nix-mode
- :mode "\\.nix\\'")
-(add-hook 'nix-mode-hook #'nix-hook)
+(use-package nix-ts-mode :mode "\\.nix\\'")
 #+end_src
 **** Lua Mode
 #+begin_src emacs-lisp
 (defun lua-hook()
   (setq tab-width 4)
 )
-(use-package lua-mode
-  :mode "\\.lua\\'")
+(use-package lua-mode :mode "\\.lua\\'")
 (add-hook 'lua-mode-hook #'lua-hook)
 #+end_src
 
@@ -777,24 +760,28 @@
 #+begin_src emacs-lisp
 (set-frame-parameter nil 'alpha-background 100) ; For current frame
 (add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
+(use-package catppuccin-theme
+  :config
+  (load-theme 'catppuccin :no-confirm)
+)
 ;; (use-package solaire-mode
 ;;   :config
 ;;   (solaire-global-mode +1)
 ;; )
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-tokyo-night t)
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   ;; Global settings (defaults)
+;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;;   (load-theme 'doom-tokyo-night t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;; (doom-themes-neotree-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+;;   ;; Enable flashing mode-line on errors
+;;   (doom-themes-visual-bell-config)
+;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;   ;; (doom-themes-neotree-config)
+;;   ;; Corrects (and improves) org-mode's native fontification.
+;;   (doom-themes-org-config))
 #+end_src
 *** Dired Rainbow
 #+begin_src emacs-lisp
@@ -901,21 +888,43 @@
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
-;; (use-package treesit-auto
-;;   :ensure t
-;;   :config
-;;   (global-treesit-auto-mode))
-  ;; (setq treesit-auto-install 'prompt))
-  ;; (setq my-nix-ts-mode ;;this shit doesnt work :(
-  ;;   (make-treesit-auto-recipe
-  ;;     :lang 'nix
-  ;;     :ts-mode 'nix-ts-mode
-  ;;     :remap 'nix-mode
-  ;;     :url "https://github.com/nix-community/tree-sitter-nix"
-  ;;     :revision "master"
-  ;;     :source-dir "src"))
-  ;; (add-to-list 'treesit-auto-recipe-list my-nix-ts-mode))
-  
+
+;; best lock level for peak sexiness
+(setq-default treesit-font-lock-level 4)
+
+;; where to source the langs
+(setq treesit-language-source-alist
+  '((nix "https://github.com/nix-community/tree-sitter-nix")
+    (c "https://github.com/tree-sitter/tree-sitter-c")
+    (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+    (typescript "https://github.com/tree-sitter/tree-sitter-typescript/tree/master/typescript") ; not working, their directory structure is whack
+    (json "https://github.com/tree-sitter/tree-sitter-json")
+    (toml "https://github.com/tree-sitter/tree-sitter-toml")
+    (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+    (go "https://github.com/tree-sitter/tree-sitter-go")
+    (bash "https://github.com/tree-sitter/tree-sitter-bash")))
+
+;; auto install any missing defined langs
+(dolist (lang treesit-language-source-alist)
+  (unless (treesit-language-available-p (car lang))
+    (treesit-install-language-grammar (car lang))))
+
+;; maps the ts modes to normal modes
+(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+(add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
+(add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
+
+;; for modes that have an existing ts mode but no existing normal mode
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+
+;; If you need to override the names of the expected libraries, defualt emacs looks for libtree-sitter-${LANG_NAME}
+;; (setq treesit-load-name-override-list
+;;    '((cc "libtree-sitter-c")
+;;      (bash "libtree-sitter-bash")))
 #+end_src
 
 
