@@ -437,7 +437,7 @@
     "r" '(:ignore t :wk "Org Roam")
     "r f" '(org-roam-node-find :wk "Find org roam file")
     "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
-    "r c" '(org-capture-finalize :wk "Toggle the roam buffer")
+    "r c" '(org-capture-finalize :wk "Capture the roam buffer")
     "r i" '(org-roam-node-insert :wk "Insert node link"))
   (leader
     "s" '(:ignore t :wk "SSH")
@@ -768,12 +768,7 @@
 (add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
 (use-package catppuccin-theme
   :config
-  (load-theme 'catppuccin :no-confirm)
-)
-;; (use-package solaire-mode
-;;   :config
-;;   (solaire-global-mode +1)
-;; )
+  (load-theme 'catppuccin :no-confirm))
 ;; (use-package doom-themes
 ;;   :ensure t
 ;;   :config
