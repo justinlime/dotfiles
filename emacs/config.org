@@ -136,7 +136,6 @@
 (setq create-lockfiles nil) ; Disable .# files
 
 (setq blink-cursor-mode nil)
-(setq warning-minimum-level :emergency)
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (setq use-short-answers t) ; Set y or n instead of yes or no for questions
 (setq inhibit-startup-messages t) ; Disable splash screen
@@ -144,7 +143,11 @@
 (setq-default tab-width 2) ; self explanitory
 (setq-default indent-tabs-mode nil) ; use spaces not tabs
 (setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
-
+;; Disables all startup warnings, comment this out when debugging
+(setq warning-minimum-level :emergency)
+(add-hook 'dashboard-mode-hook #'(lambda()
+  (kill-buffer (get-buffer "*Warnings*"))
+  (keyboard-escape-quit)))
 #+end_src
 ** Custom Functions
 #+begin_src emacs-lisp
