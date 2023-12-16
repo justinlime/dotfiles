@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     tree-sitter
+    gcc #needed to compile treesitter langs in emacs
 		fzf
 		lua-language-server #Lua
     # nil #Nix
