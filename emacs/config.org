@@ -19,7 +19,7 @@
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
     - [[#consult][Consult]]
-    - [[#undo-tree][Undo Tree]]
+    - [[#terminal-emacs][Terminal Emacs]]
   - [[#programming][Programming]]
     - [[#lspcompletion][LSP/Completion]]
       - [[#eglot][Eglot]]
@@ -30,7 +30,6 @@
       - [[#yasnippet][Yasnippet]]
     - [[#magit][Magit]]
     - [[#git-gutter][Git Gutter]]
-    - [[#term][Term]]
     - [[#modes][Modes]]
       - [[#python-mode][Python Mode]]
       - [[#javascript-mode][Javascript Mode]]
@@ -41,6 +40,7 @@
       - [[#lua-mode][Lua Mode]]
   - [[#modes-1][Modes]]
     - [[#markdown-mode][Markdown Mode]]
+    - [[#term-mode][Term Mode]]
     - [[#org-mode][Org Mode]]
       - [[#org-general][Org General]]
       - [[#org-table-of-contents][Org Table of Contents]]
@@ -229,6 +229,7 @@
                 (setq active-toggle-term wrapped-name)
                 (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
                 (switch-to-buffer wrapped-name)
+
                 (evil-insert 1))))
 )
 
@@ -286,42 +287,18 @@
   (evil-collection-init))
 (use-package evil-tutor)
 
-;; These hooks may not work if TERM isnt xterm/xterm256
-;; Change cursor to beam in insert mode
-;; Doesnt work with eldoc for some reason
-(unless (display-graphic-p)
-  (add-hook 'evil-insert-state-entry-hook (lambda ()
-    (setq visible-cursor nil) ;disables blinking cursor
-    (send-string-to-terminal "\e[5 q")))
-  ;; Change cursor to box in normal mode
-  (add-hook 'evil-normal-state-entry-hook (lambda ()
-    (setq visible-cursor nil) ;disables blinking cursor
-    (send-string-to-terminal "\e[2 q"))) 
-  (defun mkbeam (&rest r)
-    (if (eq evil-state 'insert)
-      (send-string-to-terminal "\e[5 q")
-      (send-string-to-terminal "\e[2 q")))
-  (advice-add 'eldoc-documentation-default :after #'mkbeam) ;;This oneeeee
-  (advice-add 'eldoc-display-in-buffer :after #'mkbeam))
-
-;; This work but closes all windows
-
-;(define-key key-translation-map
-;  (kbd "<escape>")  
-;  (kbd "ESC"))  
-
-;; This return C-m-g for some reason
-
-;(define-key key-translation-map
-;  (kbd "<escape>")  
-;  (kbd "C-g"))  
-
-
 #+end_src
 ** General Binds
 #+begin_src emacs-lisp
 (use-package general
   :config
+  ;; Term Mode
+  (add-hook 'term-mode-hook #'(lambda()
+  (general-define-key
+    :states 'insert
+    :keymaps 'term-raw-map
+    "TAB" #'(lambda() (interactive) (term-send-raw-string "\t")))))
+
   ;; Neotree
   (add-hook 'neotree-mode-hook #'(lambda()
   (general-define-key
@@ -329,6 +306,7 @@
     :keymaps 'neotree-mode-map
     "<tab>" #'neotree-change-root
     "TAB" #'neotree-change-root)))
+
   ;; Corfu
   (general-define-key
     :states 'insert
@@ -491,13 +469,44 @@
   (setq consult-find-args "find . -not ( -path '*/.git*' -prune )")
 )
 #+end_src
-*** Undo Tree
+*** Terminal Emacs
 #+begin_src emacs-lisp
-;; (use-package undo-tree
-;;   :config
-;;   (global-undo-tree-mode))
-#+end_src
+;; These hooks may not work if TERM isnt xterm/xterm256
+;; Let cursor change based on mode when in Terminal Emacs
+;; (Not to be confused with term-mode) this is for when running emacs in the terminal
 
+;; This is a really hacky fix
+(unless (display-graphic-p)
+  ;; Change cursor to a beam in insert mode
+  (add-hook 'evil-insert-state-entry-hook (lambda ()
+    (setq visible-cursor nil) ;disables blinking cursor
+    (send-string-to-terminal "\e[5 q")))
+  ;; Change cursor to box in normal mode
+  (add-hook 'evil-normal-state-entry-hook (lambda ()
+    (setq visible-cursor nil) 
+    (send-string-to-terminal "\e[2 q"))) 
+  ;; Change cursor back to its intended state when using eldoc
+  ;; For some reason eldoc breaks the fix from above
+  (defun correct-cursor (&rest r)
+    (if (eq evil-state 'insert)
+      (send-string-to-terminal "\e[5 q")
+      (send-string-to-terminal "\e[2 q")))
+  (advice-add 'eldoc-documentation-default :after #'correct-cursor) ;;Echo Area
+  (advice-add 'eldoc-display-in-buffer :after #'correct-cursor)) ;;Buffer
+
+;; This work but closes all windows
+
+;(define-key key-translation-map
+;  (kbd "<escape>")  
+;  (kbd "ESC"))  
+
+;; This return C-m-g for some reason
+
+;(define-key key-translation-map
+;  (kbd "<escape>")  
+;  (kbd "C-g"))  
+
+#+end_src
 ** Programming
 *** LSP/Completion
 **** Eglot
@@ -597,21 +606,7 @@
   )
 ))
 #+end_src
-*** Term
-#+begin_src  emacs-lisp
-(add-hook 'term-mode-hook #'(lambda()
-  (face-remap-set-base 'default :background "#11111B")
-
-  (defface term-background
-  '((t (:inherit default :background "#11111B")))
-  "Some bullshit to fix term mode text-background"
-  :group 'basic-faces)
-
-  (setf (elt ansi-term-color-vector 0) 'term-background)
-
-  (display-line-numbers-mode -1)
-))
-#+end_src 
+ 
 *** Modes
 **** Python Mode
 #+begin_src emacs-lisp
@@ -693,6 +688,21 @@
 (use-package markdown-mode
   :mode "\\.md\\'")
 #+end_src
+*** Term Mode
+#+begin_src  emacs-lisp
+(add-hook 'term-mode-hook #'(lambda()
+  (face-remap-set-base 'default :background "#11111B")
+
+  (defface term-background
+  '((t (:inherit default :background "#11111B")))
+  "Some bullshit to fix term mode text-background"
+  :group 'basic-faces)
+
+  (setf (elt ansi-term-color-vector 0) 'term-background)
+
+  (display-line-numbers-mode -1)
+))
+#+end_src
 *** Org Mode
 **** Org General
 #+begin_src emacs-lisp
@@ -769,6 +779,7 @@
 (pixel-scroll-precision-mode 1) ;Smooth scrolling
 (setq mouse-wheel-progressive-speed nil) 
 (setq scroll-conservatively 101)
+(set-cursor-color "#cba6f7") 
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
