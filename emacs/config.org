@@ -39,6 +39,7 @@
       - [[#nix-mode][Nix Mode]]
       - [[#lua-mode][Lua Mode]]
       - [[#elixir-mode][Elixir Mode]]
+      - [[#rust-mode][Rust Mode]]
   - [[#modes-1][Modes]]
     - [[#markdown-mode][Markdown Mode]]
     - [[#term-mode][Term Mode]]
@@ -559,6 +560,7 @@
       ((eq major-mode 'js-ts-mode)(eglot-ensure))
       ((eq major-mode 'bash-ts-mode)(eglot-ensure))
       ((eq major-mode 'typescript-ts-mode)(eglot-ensure))
+      ((eq major-mode 'rust-ts-mode)(eglot-ensure))
     )
   )
 ))
@@ -707,6 +709,12 @@
 **** Elixir Mode
 #+begin_src emacs-lisp
 (use-package elixir-ts-mode :mode "\\.exs\\'")
+#+end_src
+**** Rust Mode
+#+begin_src emacs-lisp
+(defun rust-hook ()
+  (setq tab-width 4))
+(add-hook 'rust-ts-mode-hook #'rust-hook)
 #+end_src
 ** Modes
 *** Markdown Mode
@@ -903,6 +911,7 @@
     (yaml "https://github.com/ikatyang/tree-sitter-yaml")
     (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+    (rust "https://github.com/tree-sitter/tree-sitter-rust")
     (html "https://github.com/tree-sitter/tree-sitter-html") ;not used yet cant find a good html-ts-mode and I dont feel like making one
     (css "https://github.com/tree-sitter/tree-sitter-css")
     (go "https://github.com/tree-sitter/tree-sitter-go")
@@ -923,6 +932,7 @@
 
 ;; for modes that have an existing ts mode but no existing normal mode
 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
