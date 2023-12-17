@@ -816,7 +816,8 @@
 (pixel-scroll-precision-mode 1) ;Smooth scrolling
 (setq mouse-wheel-progressive-speed nil) 
 (setq scroll-conservatively 101)
-(set-cursor-color "#cba6f7") 
+(add-hook 'dashboard-mode-hook #'(lambda () (set-cursor-color "#cba6f7")))
+;; (set-cursor-color "#cba6f7") 
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
@@ -905,7 +906,10 @@
     (typescript "https://github.com/tree-sitter/tree-sitter-typescript/tree/master/typescript") ; not working, their directory structure is whack
     (json "https://github.com/tree-sitter/tree-sitter-json")
     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+    (yaml "https://github.com/ikatyang/tree-sitter-yaml")
     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+    (html "https://github.com/tree-sitter/tree-sitter-html") ;not used yet cant find a good html-ts-mode and I dont feel like making one
+    (css "https://github.com/tree-sitter/tree-sitter-css")
     (go "https://github.com/tree-sitter/tree-sitter-go")
     (bash "https://github.com/tree-sitter/tree-sitter-bash")))
 
@@ -918,11 +922,14 @@
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
 (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
 (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
+(add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
 (add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
 
 ;; for modes that have an existing ts mode but no existing normal mode
 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 
