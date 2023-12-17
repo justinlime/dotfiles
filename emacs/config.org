@@ -206,8 +206,8 @@
                 (setq active-toggle-term wrapped-name)
                 (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
                 (switch-to-buffer wrapped-name)
-                (evil-insert 1))))
-)
+                (evil-insert 1)))))
+
 ;; Most of this code is redundant but I dont care right now
 (defun toggle-ssh-term (host &optional name)
   "Toggle a terminal window with $SHELL, and make it the active term
@@ -238,16 +238,12 @@
                 (setq active-toggle-term wrapped-name)
                 (if (member wrapped-name current-toggles) nil (add-to-list 'current-toggles wrapped-name))
                 (switch-to-buffer wrapped-name)
-
-                (evil-insert 1))))
-)
+                (evil-insert 1)))))
 
 (defun toggle-active-term ()
   "Toggle the most recently used toggle-term"
   (interactive)
-  (toggle-term active-toggle-term)
-)
-
+  (toggle-term active-toggle-term))
 
 (defun toggle-shell ()
   "Toggle a shell window"
@@ -257,16 +253,14 @@
     (h (window-total-height)))
       (cond (
         (eq nil w)(select-window (split-window-below (round (* h 0.80))))(shell)(evil-insert 1))
-        (t (delete-window w))))
-)
+        (t (delete-window w)))))
 
 (defun consult-find-in-dir ()
   "Find a file in a specific directory"
   (interactive)
   (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
-    (consult-find dir)
-  )
-)
+    (consult-find dir)))
+
 (defun jl/erc-start-or-switch ()
   "Connects to ERC, or switch to last active buffer."
   (interactive)
@@ -293,11 +287,8 @@
   (let* ((ops (directory-files "/home/justinlime/.config/emacs/icons"))
         (ops (delete "." ops))
         (ops (delete ".." ops)))
-  (delete "." ops)
-  (delete ".." ops)
   (nth (random (length ops)) ops)))
 #+End_src
-
 
 * Keybinds
 ** Evil Mode
@@ -899,6 +890,7 @@
 (setq treesit-language-source-alist
   '((nix "https://github.com/nix-community/tree-sitter-nix")
     (c "https://github.com/tree-sitter/tree-sitter-c")
+    (python "https://github.com/tree-sitter/tree-sitter-python")
     (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
     (typescript "https://github.com/tree-sitter/tree-sitter-typescript/tree/master/typescript") ; not working, their directory structure is whack
     (json "https://github.com/tree-sitter/tree-sitter-json")
@@ -920,6 +912,7 @@
 (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
 (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
 (add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
 
 ;; for modes that have an existing ts mode but no existing normal mode
