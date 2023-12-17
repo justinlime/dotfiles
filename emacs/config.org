@@ -54,7 +54,6 @@
     - [[#gui-settings][GUI Settings]]
     - [[#fonts][Fonts]]
     - [[#icons][Icons]]
-    - [[#erc][ERC]]
     - [[#dashboard][Dashboard]]
   - [[#programming-1][Programming]]
     - [[#rainbow-mode][Rainbow Mode]]
@@ -129,6 +128,12 @@
 #+end_src
 ** Misc Preferences 
 #+begin_src emacs-lisp
+;; revert inflated GC defined in early init to avoid GC pauses while editing
+(run-with-idle-timer 5 nil
+  (lambda ()
+    (setq gc-cons-threshold 1000000)
+    (message "gc-cons-threshold restored to %S"
+      gc-cons-threshold)))
 (unless (display-graphic-p)
   (xterm-mouse-mode 1))
 (setq make-backup-files nil) ; stop creating ~ files
@@ -813,8 +818,6 @@
 (setq display-line-numbers-type 'relative) ;Realive numbers
 (global-display-line-numbers-mode 1) ;Display line numbers
 (setq-default truncate-lines t) ;Allow truncated lines
-(pixel-scroll-precision-mode 1) ;Smooth scrolling
-(setq mouse-wheel-progressive-speed nil) 
 (setq scroll-conservatively 101)
 (add-hook 'dashboard-mode-hook #'(lambda () (set-cursor-color "#cba6f7")))
 ;; (set-cursor-color "#cba6f7") 
@@ -850,13 +853,7 @@
 (use-package nerd-icons-corfu
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-#+end_src
-*** ERC
-#+begin_src emacs-lisp
-(use-package erc-hl-nicks
-  :after erc)
-(use-package erc-image
-  :after erc)
+
 
 (add-hook 'erc-mode-hook #'(lambda ()
   (toggle-truncate-lines) ; truncate lines in erc mode
