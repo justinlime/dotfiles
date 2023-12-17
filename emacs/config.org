@@ -38,6 +38,7 @@
       - [[#go-mode][Go Mode]]
       - [[#nix-mode][Nix Mode]]
       - [[#lua-mode][Lua Mode]]
+      - [[#elixir-mode][Elixir Mode]]
   - [[#modes-1][Modes]]
     - [[#markdown-mode][Markdown Mode]]
     - [[#term-mode][Term Mode]]
@@ -703,6 +704,10 @@
 (add-hook 'lua-mode-hook #'lua-hook)
 #+end_src
 
+**** Elixir Mode
+#+begin_src emacs-lisp
+(use-package elixir-ts-mode :mode "\\.exs\\'")
+#+end_src
 ** Modes
 *** Markdown Mode
 #+begin_src emacs-lisp
@@ -896,6 +901,7 @@
     (json "https://github.com/tree-sitter/tree-sitter-json")
     (toml "https://github.com/tree-sitter/tree-sitter-toml")
     (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+    (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
     (html "https://github.com/tree-sitter/tree-sitter-html") ;not used yet cant find a good html-ts-mode and I dont feel like making one
     (css "https://github.com/tree-sitter/tree-sitter-css")
