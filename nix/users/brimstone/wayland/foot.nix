@@ -25,7 +25,7 @@
             };
             colors = {
                 alpha="${custom.opacity}";
-                background="${custom.palette.tertiary_background_hex}";
+                background="${custom.palette.primary_background_hex}";
                 # background="${custom.background}";
                 regular0="11111B";  # black
                 regular1="ff5555";  # red

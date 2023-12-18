@@ -39,11 +39,11 @@
                 };
             };
             general = {
-                gaps_in = 6;
+                gaps_in = 4;
                 gaps_out = 10;
-                border_size = 0;
-                # "col.active_border" = "rgb(${custom.palette.tertiary_background_hex})";
-                # "col.inactive_border" = "rgba(${custom.background}00)";
+                border_size = 2;
+                "col.active_border" = "rgb(${custom.primary_accent})";
+                "col.inactive_border" = "rgba(${custom.background}00)";
                 allow_tearing = true;
                 layout = "dwindle";
             };
@@ -52,9 +52,9 @@
                 shadow_ignore_window = true;
                 drop_shadow = true;
 								shadow_range = 50;
-                shadow_render_power = 2;
+                shadow_render_power = 3;
                 # "col.shadow" = "rgb(${custom.primary_accent})";
-                "col.shadow" = "rgb(${custom.background})";
+                "col.shadow" = "rgba(${custom.primary_accent}00)";
                 "col.shadow_inactive" = "rgba(${custom.background}00)";
                 blur = {
                   enabled = true;

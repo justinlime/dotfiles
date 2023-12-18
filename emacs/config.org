@@ -726,10 +726,10 @@
 *** Term Mode
 #+begin_src  emacs-lisp
 (add-hook 'term-mode-hook #'(lambda()
-  (face-remap-set-base 'default :background "#11111B")
+  (face-remap-set-base 'default :background "#1b1b2b")
 
   (defface term-background
-  '((t (:inherit default :background "#11111B")))
+  '((t (:inherit default :background "#1b1b2b")))
   "Some bullshit to fix term mode text-background"
   :group 'basic-faces)
 
@@ -777,25 +777,15 @@
 ** General
 *** Themes
 #+begin_src emacs-lisp
-(set-frame-parameter nil 'alpha-background 95) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background . 95)) ; For all new frames henceforth
+(set-frame-parameter nil 'alpha-background 100) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
 (use-package catppuccin-theme
   :config
+  (setq catppuccin-highlight-matches t)
+  (catppuccin-set-color 'base "#11111B")
   (load-theme 'catppuccin :no-confirm))
-;; (use-package doom-themes
-;;   :ensure t
-;;   :config
-;;   ;; Global settings (defaults)
-;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-;;   (load-theme 'doom-tokyo-night t)
-
-;;   ;; Enable flashing mode-line on errors
-;;   (doom-themes-visual-bell-config)
-;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
-;;   ;; (doom-themes-neotree-config)
-;;   ;; Corrects (and improves) org-mode's native fontification.
-;;   (doom-themes-org-config))
+(add-hook 'dashboard-mode-hook #'(lambda() (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")))
+(add-hook 'dashboard-mode-hook #'(lambda () (set-cursor-color "#cba6f7")))
 #+end_src
 *** Dired Rainbow
 #+begin_src emacs-lisp
@@ -811,6 +801,9 @@
   :ensure t
   :config
   (setq doom-modeline-total-line-number t)
+  (set-face-attribute 'mode-line nil :background "#11111B")
+  (set-face-attribute 'eglot-mode-line)
+  ;; (set-face-attribute 'mode-line-inactive nil :background "#25253a")
   (display-time-mode)
   :init (doom-modeline-mode 1))
 #+end_src
@@ -824,8 +817,6 @@
 (global-display-line-numbers-mode 1) ;Display line numbers
 (setq-default truncate-lines t) ;Allow truncated lines
 (setq scroll-conservatively 101)
-(add-hook 'dashboard-mode-hook #'(lambda () (set-cursor-color "#cba6f7")))
-;; (set-cursor-color "#cba6f7") 
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
@@ -906,7 +897,7 @@
     (c "https://github.com/tree-sitter/tree-sitter-c")
     (python "https://github.com/tree-sitter/tree-sitter-python")
     (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
-    (typescript "https://github.com/tree-sitter/tree-sitter-typescript/tree/master/typescript") ; not working, their directory structure is whack
+    ;; (typescript "https://github.com/tree-sitter/tree-sitter-typescript/tree/master/typescript") ; not working, their directory structure is whack
     (json "https://github.com/tree-sitter/tree-sitter-json")
     (toml "https://github.com/tree-sitter/tree-sitter-toml")
     (yaml "https://github.com/ikatyang/tree-sitter-yaml")
@@ -938,7 +929,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+;; (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 
 ;; If you need to override the names of the expected libraries, defualt emacs looks for libtree-sitter-${LANG_NAME}
 ;; (setq treesit-load-name-override-list
