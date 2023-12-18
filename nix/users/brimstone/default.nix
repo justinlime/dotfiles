@@ -8,7 +8,7 @@ let
     secondary_accent= "89b4fa";
     tertiary_accent = "f5f5f5";
     background = "11111B";
-    opacity = ".90";
+    opacity = ".95";
     cursor = "Numix-Cursor";
     palette = import ./colors;
   };
