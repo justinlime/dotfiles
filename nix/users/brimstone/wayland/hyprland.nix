@@ -32,7 +32,7 @@
             ];
             input = {
                 kb_layout = "us";
-                follow_mouse = 1;
+                follow_mouse = false;
                 force_no_accel = 1;
                 touchpad = {
                     natural_scroll = 1;
