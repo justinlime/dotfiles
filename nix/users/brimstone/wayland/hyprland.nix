@@ -57,7 +57,7 @@
                 "col.shadow" = "rgb(${custom.background})";
                 "col.shadow_inactive" = "rgba(${custom.background}00)";
                 blur = {
-                  enabled = false;
+                  enabled = true;
                   size = 6;
                   passes = 3;
                   new_optimizations = true;
@@ -166,6 +166,7 @@
             ];
             windowrulev2 = [
                 # "opacity ${custom.opacity} ${custom.opacity},class:^(thunar)$"
+                # "opacity ${custom.opacity} ${custom.opacity},class:^(WebCord)$"
                 # "opacity ${custom.opacity} ${custom.opacity},class:^(WebCord)$"
                 # "opacity 0.90 0.90,class:^(Brave-browser)$"
                 # "opacity 0.90 0.90,class:^(brave-browser)$"

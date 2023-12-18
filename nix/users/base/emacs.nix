@@ -1,11 +1,11 @@
 { inputs , pkgs, ... }:
 {
   home.packages = with pkgs; [
+    emacs29-pgtk
     tree-sitter
     gcc #needed to compile treesitter langs in emacs
-		fzf
 		lua-language-server #Lua
-    # nil #Nix
+    elixir-ls
     nixd 
     gopls #Golang
     rust-analyzer #Rust

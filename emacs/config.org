@@ -561,6 +561,7 @@
       ((eq major-mode 'bash-ts-mode)(eglot-ensure))
       ((eq major-mode 'typescript-ts-mode)(eglot-ensure))
       ((eq major-mode 'rust-ts-mode)(eglot-ensure))
+      ((eq major-mode 'elixir-ts-mode)(eglot-ensure))
     )
   )
 ))
@@ -776,8 +777,8 @@
 ** General
 *** Themes
 #+begin_src emacs-lisp
-(set-frame-parameter nil 'alpha-background 100) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
+(set-frame-parameter nil 'alpha-background 90) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 90)) ; For all new frames henceforth
 (use-package catppuccin-theme
   :config
   (load-theme 'catppuccin :no-confirm))

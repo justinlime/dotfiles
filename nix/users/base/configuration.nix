@@ -13,7 +13,6 @@
       emacs = "COLORTERM=truecolor emacs -nw";
     };
     packages = with pkgs; [
-      emacs29
       speedtest-cli
       ventoy
       websocat
