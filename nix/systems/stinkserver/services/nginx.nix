@@ -8,8 +8,8 @@
   services.nginx = {
     enable = true;
     virtualHosts = {
-      "test.stinkboys.com" = {
-        serverName = "test.stinkboys.com";
+      "justinlime.dev" = {
+        serverName = "justinlime.dev";
         root = "/sites/justinlime.dev/src/public";
         listen = [{
           port = 90;
