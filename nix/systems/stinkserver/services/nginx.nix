@@ -8,6 +8,19 @@
   services.nginx = {
     enable = true;
     virtualHosts = {
+      "test.stinkboys.com" = {
+        serverName = "test.stinkboys.com";
+        root = "/sites/justinlime.dev/src/public";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }];
+         locations."/" = {
+           extraConfig = ''
+            index index.html;
+           '';
+         };
+      };
       "downloads.stinkboys.com" = {
         serverName = "downloads.stinkboys.com";
         listen = [{
