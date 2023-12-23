@@ -897,7 +897,8 @@
     (c "https://github.com/tree-sitter/tree-sitter-c")
     (python "https://github.com/tree-sitter/tree-sitter-python")
     (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
-    ;; (typescript "https://github.com/tree-sitter/tree-sitter-typescript/tree/master/typescript") ; not working, their directory structure is whack
+    (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src") ; not working, their directory structure is whack
+    (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
     (json "https://github.com/tree-sitter/tree-sitter-json")
     (toml "https://github.com/tree-sitter/tree-sitter-toml")
     (yaml "https://github.com/ikatyang/tree-sitter-yaml")
@@ -929,7 +930,8 @@
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
-;; (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 
 ;; If you need to override the names of the expected libraries, defualt emacs looks for libtree-sitter-${LANG_NAME}
 ;; (setq treesit-load-name-override-list
