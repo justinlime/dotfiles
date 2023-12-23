@@ -690,6 +690,7 @@
 #+begin_src emacs-lisp
 (defun go-hook ()
   (setq tab-width 4)
+  (setq go-ts-mode-indent-offset 4)
   (setq indent-tabs-mode nil))
 
 (add-hook 'go-ts-mode-hook #'go-hook)
