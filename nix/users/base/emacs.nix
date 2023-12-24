@@ -1,8 +1,5 @@
 { inputs , pkgs, username, ... }:
 {
-  services.syncthing = {
-    enable = true; 
-  };
   home.packages = with pkgs; [
     emacs29-pgtk
     tree-sitter
