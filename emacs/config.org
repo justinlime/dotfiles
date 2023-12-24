@@ -644,7 +644,7 @@
 #+end_src
 *** Magit
 #+begin_src emacs-lisp
-;; (use-package magit)
+(use-package magit)
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
