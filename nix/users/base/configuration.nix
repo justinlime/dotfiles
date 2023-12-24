@@ -12,6 +12,9 @@
       home-switch = "home-manager switch --flake path:${flake_path}#${profile}";
       emacs = "COLORTERM=truecolor emacs -nw";
     };
+    sessionVariables = {
+      MANGOHUD = "1";
+    };
     packages = with pkgs; [
       speedtest-cli
       ventoy

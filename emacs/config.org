@@ -21,6 +21,7 @@
     - [[#consult][Consult]]
     - [[#terminal-emacs][Terminal Emacs]]
   - [[#programming][Programming]]
+    - [[#direnv][Direnv]]
     - [[#lspcompletion][LSP/Completion]]
       - [[#eglot][Eglot]]
       - [[#corfu][Corfu]]
@@ -548,6 +549,12 @@
 
 #+end_src
 ** Programming
+*** Direnv
+#+begin_src emacs-lisp
+(use-package envrc
+  :config
+  (envrc-global-mode))
+#+end_src
 *** LSP/Completion
 **** Eglot
 #+begin_src emacs-lisp
@@ -562,6 +569,7 @@
       ((eq major-mode 'typescript-ts-mode)(eglot-ensure))
       ((eq major-mode 'rust-ts-mode)(eglot-ensure))
       ((eq major-mode 'elixir-ts-mode)(eglot-ensure))
+      ((eq major-mode 'c-ts-mode)(eglot-ensure))
     )
   )
 ))

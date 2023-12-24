@@ -10,7 +10,7 @@
     gopls #Golang
     rust-analyzer #Rust
     zls #Zig
-    llvmPackages_15.clang-unwrapped #C, C++
+    clang-tools #C
     python311Packages.jedi-language-server #Python
     # haskellPackages.hls # Haskell
     nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
