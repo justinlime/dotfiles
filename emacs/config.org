@@ -66,7 +66,7 @@
 * General
 ** Package Manger
 #+begin_src emacs-lisp 
-(defvar elpaca-installer-version 0.5)
+(defvar elpaca-installer-version 0.6)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -128,11 +128,12 @@
 
 ;; Don't install anything. Defer execution of BODY
 (elpaca nil (message "deferred"))
+(elpaca-load-lockfile "~/dotfiles/emacs/elpaca.lock")
 #+end_src
 ** Misc Preferences 
 #+begin_src emacs-lisp
 ;; revert inflated GC defined in early init to avoid GC pauses while editing
-(run-with-idle-timer 5 nil
+(run-with-idle-timer 1 nil
   (lambda ()
     (setq gc-cons-threshold 1000000)
     (message "gc-cons-threshold restored to %S"
@@ -336,8 +337,7 @@
   ;; Minibuffer 
   (general-define-key
     :keymaps 'minibuffer-local-map
-    "<escape>" #'keyboard-escape-quit
-  )
+    "<escape>" #'keyboard-escape-quit)
 
   ;; Corfu
   (general-define-key
@@ -348,8 +348,10 @@
     "<backtab>" #'corfu-previous)
   ;; Prevent evil from overriding corfu bindings
   (with-eval-after-load #'corfu
-    (general-add-advice '(corfu--setup corfu--teardown) :after 'evil-normalize-keymaps)
+    (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
+    (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (evil-make-overriding-map corfu-map))
+
 
   ;; Vertico
   (general-define-key
@@ -558,7 +560,7 @@
 *** LSP/Completion
 **** Eglot
 #+begin_src emacs-lisp
-(use-package eglot)
+;; (use-package eglot)
 (add-hook 'prog-mode-hook (lambda()
   (unless (file-remote-p (buffer-file-name))
     (cond
@@ -591,6 +593,7 @@
   (corfu-popupinfo-mode)
   (global-corfu-mode)
   (corfu-history-mode))
+
 
 (use-package corfu-terminal
   :ensure t
@@ -644,7 +647,7 @@
 #+end_src
 *** Magit
 #+begin_src emacs-lisp
-(use-package magit)
+;;(use-package magit)
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
