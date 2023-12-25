@@ -690,8 +690,7 @@
 
   (setf (elt ansi-term-color-vector 0) 'term-background)
 
-  (display-line-numbers-mode -1)
-))
+  (display-line-numbers-mode -1)))
 #+end_src
 *** Org Mode
 **** Org General
