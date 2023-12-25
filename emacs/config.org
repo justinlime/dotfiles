@@ -586,8 +586,15 @@
 #+begin_src emacs-lisp
 (use-package yasnippet
   :config
-  (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
+  ;; (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
   (yas-global-mode 1))
+;; (use-package yasnippet-snippets)
+;; (use-package yasnippet-capf
+;;   :after cape
+;;   :config
+;;   (setq yasnippet-capf-lookup-by 'name) ;; Prefer the name of the snippet instead
+;;   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+
 #+end_src
 *** Magit
 #+begin_src emacs-lisp
@@ -640,6 +647,9 @@
 **** Nix Mode
 #+begin_src emacs-lisp
 (use-package nix-ts-mode :mode "\\.nix\\'")
+(add-hook 'nix-ts-mode #'(lambda()
+  
+))
 #+end_src
 **** Lua Mode
 #+begin_src emacs-lisp
@@ -840,7 +850,7 @@
     (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
     (rust "https://github.com/tree-sitter/tree-sitter-rust")
-    (html "https://github.com/tree-sitter/tree-sitter-html") ;not used yet cant find a good html-ts-mode and I dont feel like making one
+    ;; (html "https://github.com/tree-sitter/tree-sitter-html") ;not used yet cant find a good html-ts-mode and I dont feel like making one
     (css "https://github.com/tree-sitter/tree-sitter-css")
     (go "https://github.com/tree-sitter/tree-sitter-go")
     (bash "https://github.com/tree-sitter/tree-sitter-bash")))
