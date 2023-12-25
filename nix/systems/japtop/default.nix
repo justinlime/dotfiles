@@ -1,19 +1,20 @@
 { flake_path, ... }:
 {
-    imports =
-        [ # Include the results of the hardware scan.
-        ./hardware-configuration.nix 
-        ../base
-        ];
-
-    #Programs
-    programs = {
-      light.enable = true;
-    };
-
-    networking.hostName = "japtop";
-    #Services
-    services = {
-        tlp.enable = true;
-    };
+  imports = [ 
+    ./hardware-configuration.nix 
+    ../base
+    ../base/configuration.nix
+    ../base/gaming.nix
+    ../base/wayland.nix
+    ../base/networking.nix
+    ../base/virtulization.nix
+  ];
+  programs = {
+    light.enable = true;
+  };
+  networking.hostName = "japtop";
+  hardware.ledger.enable = true;
+  services = {
+    tlp.enable = true;
+  };
 }

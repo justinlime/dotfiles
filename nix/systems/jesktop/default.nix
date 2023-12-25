@@ -8,7 +8,6 @@
     ../base/networking.nix
     ../base/virtulization.nix
   ];
-
   hardware.ledger.enable = true;
   networking.hostName = "jesktop";
 }

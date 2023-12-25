@@ -1,4 +1,4 @@
-{ profile, inputs, username, flake_path, ... }:
+{ profile, inputs, username, flake_path, pkgs, ... }:
 let 
   # Variables to share accross configs
   custom = {
@@ -18,10 +18,29 @@ in
   # of tools and services i use on a daily basis
   _module.args = { inherit profile inputs username custom; };
   imports = [ 
-    ./general
     ./programs
     ./themes
     ./wayland
-    ../base
+    ../base/configuration.nix
+    ../base/zsh.nix
+    ../base/btop.nix
+    ../base/tmux.nix
+    ../base/emacs.nix
+    ../base/neovim.nix
+  ];
+  programs.direnv.enable = true;
+  home.packages = with pkgs; [
+    brave 
+    firefox
+    gimp
+    mpv
+    neofetch
+    obs-studio
+    prismlauncher
+    speedtest-cli
+    via
+    inputs.maxfetch.packages.${pkgs.system}.default
+    lm_sensors
+    imagemagick
   ];
 }

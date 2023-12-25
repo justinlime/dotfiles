@@ -7,6 +7,7 @@
     ../base/configuration.nix
     ../base/ssh.nix
     ../base/docker.nix
+    ../base/networking.nix
   ];
 
   networking = {

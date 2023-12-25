@@ -7,7 +7,6 @@
     ./emacs.nix
     ./tmux.nix
     ./zsh.nix
-    ./packages.nix
     ./btop.nix
   ];
 }
