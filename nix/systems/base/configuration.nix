@@ -33,23 +33,11 @@
         "${XDG_BIN_HOME}"
       ];
     };
+
     systemPackages = with pkgs; [
-      curl
-      git
-      unzip
-      vim
-      wget
-      zip
-      htop
-      btop
-      speedtest-cli
-      pciutils
-      neofetch
-      tree
-      compsize
-      smartmontools
 			inputs.home-manager.packages.${pkgs.system}.home-manager
-    ];
+    ] ++ (import ../../universal.nix pkgs);
+
     variables = { EDITOR = "vim"; };
     pathsToLink = [ "/share/zsh" ];
   };

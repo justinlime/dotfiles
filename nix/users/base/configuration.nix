@@ -16,26 +16,11 @@
       MANGOHUD = "1";
     };
     packages = with pkgs; [
-      speedtest-cli
       ventoy
       websocat
       roboto
       (nerdfonts.override { fonts = [ "RobotoMono" ]; })
-      pciutils
-      tree
-      compsize
-      smartmontools
-      pciutils
-      unzip
-      zip
-      git
-      htop
-      btop
-      wget
-      curl
-      vim
-      rsync
-    ];
+    ] ++ (import ../../universal.nix pkgs);
   };
 
   # Home Manager needs a bit of information about you and the
