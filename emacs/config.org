@@ -31,7 +31,7 @@
       - [[#yasnippet][Yasnippet]]
     - [[#magit][Magit]]
     - [[#git-gutter][Git Gutter]]
-    - [[#modes][Modes]]
+    - [[#prog-modes][Prog Modes]]
       - [[#python-mode][Python Mode]]
       - [[#javascript-mode][Javascript Mode]]
       - [[#typescript-mode][TypeScript Mode]]
@@ -41,8 +41,9 @@
       - [[#lua-mode][Lua Mode]]
       - [[#elixir-mode][Elixir Mode]]
       - [[#rust-mode][Rust Mode]]
-  - [[#modes-1][Modes]]
+  - [[#modes][Modes]]
     - [[#markdown-mode][Markdown Mode]]
+    - [[#erc-mode][Erc Mode]]
     - [[#term-mode][Term Mode]]
     - [[#org-mode][Org Mode]]
       - [[#org-general][Org General]]
@@ -128,7 +129,6 @@
 
 ;; Don't install anything. Defer execution of BODY
 (elpaca nil (message "deferred"))
-(elpaca-load-lockfile "~/dotfiles/emacs/elpaca.lock")
 #+end_src
 ** Misc Preferences 
 #+begin_src emacs-lisp
@@ -136,47 +136,42 @@
 (run-with-idle-timer 1 nil
   (lambda ()
     (setq gc-cons-threshold 1000000)
-    (message "gc-cons-threshold restored to %S"
-      gc-cons-threshold)))
+    (message "gc-cons-threshold restored to %S" gc-cons-threshold)))
+;; Enable mouse in term-mode
 (unless (display-graphic-p)
   (xterm-mouse-mode 1))
-(setq make-backup-files nil) ; stop creating ~ files
-(setq auto-save-default nil) ; Disable autosave # files
-(setq create-lockfiles nil) ; Disable .# files
-
-(setq blink-cursor-mode nil)
+(setq make-backup-files nil ; stop creating ~ files
+      auto-save-default nil ; Disable autosave # files
+      create-lockfiles nil ; Disable .# files
+      blink-cursor-mode nil ; Exactly what is sounds like
+      use-short-answers t ; Set y or n instead of yes or no for questions
+      inhibit-startup-messages t ; Disable splash screen
+      password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
+(setq-default tab-width 2 ; self explanitory
+              indent-tabs-mode nil) ; use spaces not tabs
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
-(setq use-short-answers t) ; Set y or n instead of yes or no for questions
-(setq inhibit-startup-messages t) ; Disable splash screen
 (save-place-mode) ; Save cursor position in buffer on reopen
-(setq-default tab-width 2) ; self explanitory
-(setq-default indent-tabs-mode nil) ; use spaces not tabs
-(setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
+
 ;; Disables all startup warnings, comment this out when debugging
 (setq warning-minimum-level :emergency)
-(add-hook 'dashboard-mode-hook #'(lambda()
+(add-hook 'dashboard-mode-hook #'(lambda() ;Kills the warning buffer for even emergency messages
   (kill-buffer (get-buffer "*Warnings*"))
   (keyboard-escape-quit)))
 #+end_src
 ** Custom Functions
 #+begin_src emacs-lisp
-
 (defun ssh (host formatter)
   (let ((format-host (format formatter host host)))
     (find-file format-host)
-    (toggle-ssh-term host host)
-  )
-)
+    (toggle-ssh-term host host)))
 (defun ssh-root (host)
   "SSH with sudo privledges using a host from .ssh/config"
   (interactive "sEnter host: ")
-  (ssh host "/ssh:%s|sudo:%s:/")
-)
+  (ssh host "/ssh:%s|sudo:%s:/"))
 (defun ssh-user (host)
   "SSH using a host from .ssh/config"
   (interactive "sEnter host: ")
-  (ssh host "/ssh:%s:~")
-)
+  (ssh host "/ssh:%s:~"))
 
 (defvar active-toggle-term "*terminal*" "The most recently used toggle term")
 (defvar current-toggles '("*terminal*") "List of the current toggle terms")
@@ -265,13 +260,6 @@
   (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
     (consult-find dir)))
 
-(defun jl/erc-start-or-switch ()
-  "Connects to ERC, or switch to last active buffer."
-  (interactive)
-  (if (get-buffer "Libera.Chat")
-      (erc-track-switch-buffer 1)
-    (when (y-or-n-p "Start ERC? ")
-      (erc :server "irc.libera.chat" :port 6667 :nick "justinlime"))))
 (defun random-quote ()
   "Generate a random quote for dashboard"
   (interactive)
@@ -283,15 +271,13 @@
     "sudo systemctl restart justinlime"
     "White Monster"
     "https://stinkboys.com"
-    "No emacs???"
-  ))) (nth (random (length ops)) ops)))
+    "No emacs???"))) (nth (random (length ops)) ops)))
 (defun random-icon ()
   "Generate a random image for dashboard"
   (interactive)
-  (let* ((ops (directory-files "/home/justinlime/.config/emacs/icons"))
+  (let* ((ops (directory-files (expand-file-name "icons/" user-emacs-directory)))
         (ops (delete "." ops))
-        (ops (delete ".." ops)))
-  (nth (random (length ops)) ops)))
+        (ops (delete ".." ops))) (nth (random (length ops)) ops)))
 #+End_src
 
 * Keybinds
@@ -300,11 +286,11 @@
 ;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
   :init      ;; tweak evil's configuration before loading it
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
-  (setq evil-shift-width 4)
+  (setq evil-want-integration t ;; This is optional since it's already set to t by default.
+        evil-want-keybinding nil
+        evil-vsplit-window-right t
+        evil-split-window-below t
+        evil-shift-width 4)
   (evil-mode))
 (use-package evil-collection
   :after evil
@@ -351,7 +337,6 @@
     (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (evil-make-overriding-map corfu-map))
-
 
   ;; Vertico
   (general-define-key
@@ -446,8 +431,7 @@
   (leader
     "s" '(:ignore t :wk "SSH")
     "s u" '(ssh-user :wk "SSH as user, using the ssh config file")
-    "s r" '(ssh-root :wk "SSH as user with root privledges, using the ssh config file"))
-)
+    "s r" '(ssh-root :wk "SSH as user with root privledges, using the ssh config file")))
 #+end_src
 ** Keychord Binds
 #+begin_src emacs-lisp
@@ -455,10 +439,10 @@
   :init
   (key-chord-mode 1)
   :config
-  (setq key-chord-two-keys-delay 1)
-  (setq key-chord-one-key-delay 1.2)
-  (setq key-chord-safety-interval-forward 0.1)
-  (setq key-chord-safety-interval-backward 1)
+  (setq key-chord-two-keys-delay 1
+        key-chord-one-key-delay 1.2
+        key-chord-safety-interval-forward 0.1
+        key-chord-safety-interval-backward 1)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 
@@ -497,19 +481,18 @@
 #+begin_src emacs-lisp
 ;; Speeds up tramp allegedly
 (with-eval-after-load 'tramp
-  (setq tramp-inline-compress-start-size 1000)
-  (setq tramp-copy-size-limit 10000)
-  (setq vc-handled-backends '(git))
-  (setq tramp-default-method "rcp")
-  (setq tramp-use-ssh-controlmaster-options nil)
-  (setq projectile--mode-line "Projectile"))
+  (setq tramp-inline-compress-start-size 1000
+        tramp-copy-size-limit 10000
+        vc-handled-backends '(git)
+        tramp-default-method "rcp"
+        tramp-use-ssh-controlmaster-options nil
+        projectile--mode-line "Projectile"))
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
 (use-package consult
   :config
-  (setq consult-find-args "find . -not ( -path '*/.git*' -prune )")
-)
+  (setq consult-find-args "find . -not ( -path '*/.git*' -prune )"))
 #+end_src
 *** Terminal Emacs
 #+begin_src emacs-lisp
@@ -535,20 +518,6 @@
       (send-string-to-terminal "\e[2 q")))
   (advice-add 'eldoc-documentation-default :after #'correct-cursor) ;;Echo Area
   (advice-add 'eldoc-display-in-buffer :after #'correct-cursor)) ;;Buffer
-
-;; This work but closes all windows
-
-;(define-key key-translation-map
-;  (kbd "<escape>")  
-;  (kbd "ESC"))  
-
-;; This return C-m-g for some reason
-
-;; Winner chicken dinner
-;; (define-key key-translation-map
-;;  (kbd "<escape>")  
-;;  (kbd "ESC"))  
-
 #+end_src
 ** Programming
 *** Direnv
@@ -560,9 +529,8 @@
 *** LSP/Completion
 **** Eglot
 #+begin_src emacs-lisp
-;; (use-package eglot)
 (add-hook 'prog-mode-hook (lambda()
-  (unless (file-remote-p (buffer-file-name))
+  (unless (file-remote-p (buffer-file-name)) 
     (cond
       ((eq major-mode 'go-ts-mode)(eglot-ensure))
       ((eq major-mode 'python-ts-mode)(eglot-ensure))
@@ -571,10 +539,7 @@
       ((eq major-mode 'typescript-ts-mode)(eglot-ensure))
       ((eq major-mode 'rust-ts-mode)(eglot-ensure))
       ((eq major-mode 'elixir-ts-mode)(eglot-ensure))
-      ((eq major-mode 'c-ts-mode)(eglot-ensure))
-    )
-  )
-))
+      ((eq major-mode 'c-ts-mode)(eglot-ensure))))))
 #+end_src
 **** Corfu
 #+begin_src emacs-lisp
@@ -594,7 +559,6 @@
   (global-corfu-mode)
   (corfu-history-mode))
 
-
 (use-package corfu-terminal
   :ensure t
   :config
@@ -612,16 +576,7 @@
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  ;;(add-to-list 'completion-at-point-functions #'cape-history)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  ;;(add-to-list 'completion-at-point-functions #'cape-line)
-)
+  (add-to-list 'completion-at-point-functions #'cape-keyword))
 #+end_src
 **** Orderless
 #+begin_src emacs-lisp
@@ -630,7 +585,6 @@
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
-
 #+end_src
 **** Vertico
 #+begin_src emacs-lisp
@@ -642,7 +596,7 @@
 #+begin_src emacs-lisp
 (use-package yasnippet
   :config
-  ;; (setq yas-snippet-dirs '("~/.config/emacs/snips"))
+  (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
   (yas-global-mode 1))
 #+end_src
 *** Magit
@@ -656,55 +610,42 @@
 ;; Disable git-gutter over tramp
 (add-hook 'find-file-hook (lambda()
   (unless (file-remote-p (buffer-file-name))
-    (git-gutter-mode t)
-  )
-))
+    (git-gutter-mode t))))
 #+end_src
- 
-*** Modes
+*** Prog Modes
 **** Python Mode
 #+begin_src emacs-lisp
-(defun python-hook ()
+(add-hook 'python-ts-mode-hook #'(lambda()
   (setq tab-width 4)
-  (setq indent-tabs-mode nil))
-
-(add-hook 'python-ts-mode-hook #'python-hook)
+  (setq indent-tabs-mode nil)))
 #+end_src
 **** Javascript Mode
 #+begin_src emacs-lisp
-(defun js-hook ()
+(add-hook 'js-ts-mode-hook #'(lambda()
   (setq tab-width 2)
   (setq indent-tabs-mode nil)
-  (setq js-indent-level 2))
-
-(add-hook 'js-ts-mode-hook #'js-hook)
+  (setq js-indent-level 2)))
 #+end_src
 **** TypeScript Mode
 #+begin_src emacs-lisp
-(defun typescript-hook ()
+(add-hook 'typescript-ts-mode-hook #'(lambda()
   (setq tab-width 2)
-  (setq indent-tabs-mode nil))
-
-(add-hook 'typescript-ts-mode-hook #'typescript-hook)
+  (setq indent-tabs-mode nil)))
 #+end_src
 **** Vue Mode
 #+begin_src emacs-lisp 
 (use-package vue-mode :mode "\\.vue\\'")
 
-(defun vue-hook ()
+(add-hook 'vue-mode-hook #'(lambda()
   (setq tab-width 2)
-  (setq indent-tabs-mode nil))
-
-(add-hook 'vue-mode-hook #'vue-hook)
+  (setq indent-tabs-mode nil)))
 #+end_src
 **** Go Mode
 #+begin_src emacs-lisp
-(defun go-hook ()
+(add-hook 'go-ts-mode-hook #'(lambda()
   (setq tab-width 4)
   (setq go-ts-mode-indent-offset 4)
-  (setq indent-tabs-mode nil))
-
-(add-hook 'go-ts-mode-hook #'go-hook)
+  (setq indent-tabs-mode nil)))
 #+end_src
 **** Nix Mode
 #+begin_src emacs-lisp
@@ -712,28 +653,30 @@
 #+end_src
 **** Lua Mode
 #+begin_src emacs-lisp
-(defun lua-hook()
-  (setq tab-width 4)
-)
 (use-package lua-mode :mode "\\.lua\\'")
-(add-hook 'lua-mode-hook #'lua-hook)
-#+end_src
 
+(add-hook 'lua-mode-hook #'(lambda()
+  (setq tab-width 4)))
+#+end_src
 **** Elixir Mode
 #+begin_src emacs-lisp
 (use-package elixir-ts-mode :mode "\\.exs\\'")
 #+end_src
 **** Rust Mode
 #+begin_src emacs-lisp
-(defun rust-hook ()
-  (setq tab-width 4))
-(add-hook 'rust-ts-mode-hook #'rust-hook)
+(add-hook 'rust-ts-mode-hook #'(lambda()
+  (setq tab-width 4)))
 #+end_src
 ** Modes
 *** Markdown Mode
 #+begin_src emacs-lisp
-(use-package markdown-mode
-  :mode "\\.md\\'")
+(use-package markdown-mode :mode "\\.md\\'")
+#+end_src
+*** Erc Mode
+#+begin_src emacs-lisp
+(add-hook 'erc-mode-hook #'(lambda ()
+  (toggle-truncate-lines) ; truncate lines in erc mode
+  (display-line-numbers-mode -1)))
 #+end_src
 *** Term Mode
 #+begin_src  emacs-lisp
@@ -742,7 +685,7 @@
 
   (defface term-background
   '((t (:inherit default :background "#1b1b2b")))
-  "Some bullshit to fix term mode text-background"
+  "Some bullshit to fix term-mode text-background"
   :group 'basic-faces)
 
   (setf (elt ansi-term-color-vector 0) 'term-background)
@@ -760,10 +703,10 @@
 **** Org Table of Contents
 #+begin_src emacs-lisp
 (use-package toc-org
-    :commands toc-org-enable
-    :init
-    (add-hook 'org-mode-hook 'toc-org-enable)
-    (add-hook 'markdown-mode-hook 'toc-org-enable))
+  :commands toc-org-enable
+  :init
+  (add-hook 'org-mode-hook 'toc-org-enable)
+  (add-hook 'markdown-mode-hook 'toc-org-enable))
 #+end_src
 **** Org Modern
 #+begin_src emacs-lisp
@@ -777,7 +720,6 @@
   :ensure t
   :custom
   (org-roam-directory (file-truename "~/org/roam/"))
-
   :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
@@ -797,7 +739,7 @@
   (catppuccin-set-color 'base "#11111B")
   (load-theme 'catppuccin :no-confirm))
 (add-hook 'dashboard-mode-hook #'(lambda() (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")))
-(add-hook 'dashboard-mode-hook #'(lambda () (set-cursor-color "#cba6f7")))
+(add-hook 'dashboard-mode-hook #'(lambda() (set-cursor-color "#cba6f7")))
 #+end_src
 *** Dired Rainbow
 #+begin_src emacs-lisp
@@ -821,14 +763,14 @@
 #+end_src
 *** GUI Settings
 #+begin_src emacs-lisp
-(setq use-dialog-box nil) ; No dialog box
+(setq use-dialog-box nil ; No dialog box
+      display-line-numbers-type 'relative ;Realive numbers
+      scroll-conservatively 101)
+(setq-default truncate-lines t) ;Allow truncated lines
 (menu-bar-mode -1) ;Disable menu
 (tool-bar-mode -1) ;Disable toolbar
 (scroll-bar-mode -1) ;Disable scroll bar
-(setq display-line-numbers-type 'relative) ;Realive numbers
 (global-display-line-numbers-mode 1) ;Display line numbers
-(setq-default truncate-lines t) ;Allow truncated lines
-(setq scroll-conservatively 101)
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
@@ -844,7 +786,6 @@
   :font "RobotoMono Nerd Font"
   :height 130
   :weight 'medium)
-;; Uncomment the following line if line spacing needs adjusting.
 (setq-default line-spacing 0.12)
 (set-language-environment "UTF-8")
 #+end_src
@@ -861,12 +802,6 @@
 (use-package nerd-icons-corfu
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-
-
-(add-hook 'erc-mode-hook #'(lambda ()
-  (toggle-truncate-lines) ; truncate lines in erc mode
-  (display-line-numbers-mode -1)
-))
 #+end_src
 *** Dashboard
 #+begin_src emacs-lisp
@@ -876,7 +811,7 @@
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq default-directory "~/")
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
+  (setq initial-buffer-choice (lambda() (get-buffer-create "*dashboard*"))) ;; Start dashboard for emacs clients
   (when (display-graphic-p)
     (setq dashboard-startup-banner (format "~/.config/emacs/icons/%s" (random-icon))))
   (setq dashboard-banner-logo-title (random-quote))
@@ -894,13 +829,11 @@
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
-
-;; best lock level for peak sexiness
+;; sexiest lock level
 (setq-default treesit-font-lock-level 4)
 
 ;; where to source the langs
@@ -909,7 +842,7 @@
     (c "https://github.com/tree-sitter/tree-sitter-c")
     (python "https://github.com/tree-sitter/tree-sitter-python")
     (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
-    (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src") ; not working, their directory structure is whack
+    (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
     (json "https://github.com/tree-sitter/tree-sitter-json")
     (toml "https://github.com/tree-sitter/tree-sitter-toml")
