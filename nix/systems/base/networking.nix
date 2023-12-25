@@ -1,12 +1,11 @@
 { ... }:
 {
-    networking = {
-        firewall = {
-            enable = true;
-            checkReversePath = false; 
-            allowedTCPPorts = [ 80 443 5900 ];
-            allowedUDPPorts = [];
-        };
+  # Enable the firewall
+  networking = {
+    firewall = {
+      enable = true;
+      checkReversePath = false; 
     };
+  };
 }
  

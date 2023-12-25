@@ -1,21 +1,14 @@
 { pkgs, flake_path, ... }:
 {
-    imports =
-        [ # Include the results of the hardware scan.
-        ./hardware-configuration.nix
-        ../base
-        ];
+  imports = [
+    ./hardware-configuration.nix
+    ../base/configuration.nix
+    ../base/gaming.nix
+    ../base/wayland.nix
+    ../base/networking.nix
+    ../base/virtulization.nix
+  ];
 
-    # System
-    programs = {
-      steam.enable = true;
-    };
-
-    networking.hostName = "jesktop";
-
-    environment = {
-        systemPackages = with pkgs; [
-          mangohud
-        ];
-    };
+  hardware.ledger.enable = true;
+  networking.hostName = "jesktop";
 }

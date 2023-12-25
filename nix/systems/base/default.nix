@@ -1,11 +1,13 @@
 { ... }:
 {
+  # Import everything
   imports = [
     ./configuration.nix
     ./networking.nix
-    ./services.nix
+    ./docker.nix
+    ./wayland.nix
     ./virtulization.nix
-    ./packages.nix
     ./ssh.nix
+    ./gaming.nix
   ];
 }

@@ -1,5 +1,11 @@
 { username, ... }:
 {
+  # Enable SSH on the machine, and open the necessary ports
+  networking.firewall = {
+    allowedTCPPorts = [
+      22
+    ];
+  }
   services.openssh = {
     enable = true;
     settings = {
