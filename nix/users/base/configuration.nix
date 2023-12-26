@@ -11,6 +11,20 @@
     shellAliases = {
       home-switch = "home-manager switch --flake path:${flake_path}#${profile}";
       emacs = "COLORTERM=truecolor emacs -nw";
+      ga = "git add";
+      gs = "git status";
+      gb = "git branch";
+      gm = "git merge";
+      gpl = "git pull";
+      gplo = "git pull origin";
+      gps = "git push";
+      gpso = "git push origin";
+      gc = "git commit";
+      gcm = "git commit -m";
+      gch = "git checkout";
+      gchb = "git checkout -b";
+      gcoe = "git config user.email";
+      gcon = "git config user.name";
     };
     sessionVariables = {
       MANGOHUD = "1";
