@@ -13,10 +13,6 @@
   ];
 
   home.packages = with pkgs; [
-    tree
-    pciutils
-    neofetch
-    rsync
     inputs.maxfetch.packages.${pkgs.system}.default
   ];
   # This value determines the Home Manager release that your
