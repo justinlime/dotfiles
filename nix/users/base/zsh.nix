@@ -9,6 +9,7 @@
     initExtra = ''
       setopt appendhistory
       export PATH=$HOME/.nix-profile/bin:$PATH
+      export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
       parse_git_branch() {
         git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
       }
