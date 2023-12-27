@@ -163,6 +163,7 @@
 ** Custom Functions
 #+begin_src emacs-lisp
 (defun jl/ssh (host formatter)
+  (persp-switch host)
   (let ((format-host (format formatter host host)))
     (find-file format-host)
     (jl/toggle-ssh-term host host)))
@@ -256,6 +257,11 @@
   "Find a file in the project's directory"
   (interactive)
   (consult-find (projectile-project-root)))
+
+(defun jl/consult-ripgrep-in-project ()
+  "Find a file in the project's directory"
+  (interactive)
+  (consult-ripgrep (projectile-project-root)))
 
 (defun jl/random-quote ()
   "Generate a random quote for dashboard"
@@ -390,8 +396,8 @@
     "w v" '(evil-window-vsplit :wk "Split window vertically"))
   (leader
     "b" '(:ignore t :wk "Buffer")
-    "b b" '(switch-to-buffer :wk "Switch to previous buffer/switch buffer by name")
-    "b i" '(ibuffer :wk "Buffer Menu (IBuffer)")
+    "b b" '(persp-switch-to-buffer* :wk "Switch to previous buffer/switch buffer by name")
+    "b i" '(persp-ibuffer :wk "Buffer Menu (IBuffer)")
     "b k" '(kill-this-buffer :wk "Kill this buffer")
     "b r" '(revert-buffer :wk "Reload this buffer"))
   (leader
@@ -414,6 +420,7 @@
     "f" '(:ignore t :wk "Find file")
     "f f" '(find-file :wk "Find file directly")
     "f r" '(jl/consult-find-in-project :wk "Find file in current dir/project")
+    "f w" '(jl/consult-ripgrep-in-project :wk "Find word in current dir/project (ripgrep)")
     "f d" '(jl/consult-find-in-dir :wk "Find file in directory"))
   (leader
     "c" '(:ignore t :wk "Comment")
@@ -430,6 +437,11 @@
     "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
     "r c" '(org-capture-finalize :wk "Capture the roam buffer")
     "r i" '(org-roam-node-insert :wk "Insert node link"))
+  (leader
+    "p" '(:ignore t :wk "Perspective")
+    "p f" '(persp-switch :wk "Find perspective, or create new one")
+    "p h" '(persp-prev :wk "Previous perspective")
+    "p l" '(persp-next :wk "Next perspective"))
   (leader
     "s" '(:ignore t :wk "SSH")
     "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
@@ -493,6 +505,10 @@
 *** Projectile
 #+begin_src emacs-lisp
 (use-package projectile)
+(use-package perspective
+  :init
+  (persp-mode))
+(use-package avy)
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
@@ -541,7 +557,7 @@
 *** LSP/Completion
 **** Eglot
 #+begin_src emacs-lisp
-(add-hook 'prog-mode-hook (lambda()
+(add-hook 'find-file-hook (lambda()
   (unless (file-remote-p (buffer-file-name)) 
     (cond
       ((eq major-mode 'go-ts-mode)(eglot-ensure))

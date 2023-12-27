@@ -7,6 +7,7 @@
 		lua-language-server #Lua
     elixir-ls
     nixd 
+    go # Needed for gopls
     gopls #Golang
     rust-analyzer #Rust
     zls #Zig
