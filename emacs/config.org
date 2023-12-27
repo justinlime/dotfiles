@@ -261,13 +261,18 @@
     "sudo systemctl restart justinlime"
     "White Monster"
     "https://stinkboys.com"
+    "Stink Boys Inc. ©"
+    "/home/justinlime/.config"
     "No emacs???"))) (nth (random (length ops)) ops)))
 (defun jl/random-icon ()
   "Generate a random image for dashboard"
   (interactive)
-  (let* ((ops (directory-files (expand-file-name "icons/" user-emacs-directory)))
+  (let* ((icons-dir (expand-file-name "icons/" user-emacs-directory))
+        (ops (directory-files icons-dir))
         (ops (delete "." ops))
-        (ops (delete ".." ops))) (nth (random (length ops)) ops)))
+        (ops (delete ".." ops))
+        (file (nth (random (length ops)) ops)))
+          (expand-file-name file icons-dir)))
 #+End_src
 
 * Keybinds
@@ -808,12 +813,13 @@
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq default-directory "~/"
-        initial-buffer-choice (lambda() (get-buffer-create "*dashboard*")) ;; Start dashboard for emacs clients
+        initial-buffer-choice (lambda() (get-buffer-create "*dashboard*")) 
         dashboard-banner-logo-title (jl/random-quote)
         dashboard-footer-messages `(,(jl/random-quote)))
   (when (display-graphic-p)
-    (setq dashboard-startup-banner (format "~/.config/emacs/icons/%s" (jl/random-icon))))
+    (setq dashboard-startup-banner (jl/random-icon)))
   (dashboard-setup-startup-hook))
+
 (add-hook 'dashboard-mode-hook #'(lambda() (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")))
 (add-hook 'dashboard-mode-hook #'(lambda() (set-cursor-color "#cba6f7")))
 #+end_src
