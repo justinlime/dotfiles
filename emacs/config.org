@@ -19,6 +19,7 @@
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
     - [[#consult][Consult]]
+    - [[#marginalia][Marginalia]]
     - [[#terminal-emacs][Terminal Emacs]]
   - [[#programming][Programming]]
     - [[#direnv][Direnv]]
@@ -489,6 +490,12 @@
   :config
   (setq consult-find-args "find . -not ( -path '*/.git*' -prune )"))
 #+end_src
+*** Marginalia
+#+begin_src emacs-lisp
+(use-package marginalia
+  :init
+  (marginalia-mode))
+#+end_src
 *** Terminal Emacs
 #+begin_src emacs-lisp
 ;; These hooks may not work if TERM isnt xterm/xterm256
@@ -749,7 +756,17 @@
   :config
   (dired-rainbow-define-chmod directory "#cba6f7" "d.*")
   (dired-rainbow-define-chmod executable "#eba0ac" "-.*x.*")
+
   (dired-rainbow-define-chmod readable "#74c7ec" "-.*r.*"))
+
+(use-package dired+
+  :quelpa (dired+ :fetcher url :url "https://www.emacswiki.org/emacs/download/dired+.el")
+  :init
+  (setq diredp-hide-details-initially-flag nil)
+  (setq diredp-hide-details-propagate-flag nil)
+
+  :config
+  (diredp-toggle-find-file-reuse-dir 1))
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
