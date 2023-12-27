@@ -18,6 +18,7 @@
     - [[#which-key][Which Key]]
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
+    - [[#projectile][Projectile]]
     - [[#consult][Consult]]
     - [[#marginalia][Marginalia]]
     - [[#terminal-emacs][Terminal Emacs]]
@@ -251,6 +252,11 @@
   (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
     (consult-find dir)))
 
+(defun jl/consult-find-in-project ()
+  "Find a file in the project's directory"
+  (interactive)
+  (consult-find (projectile-project-root)))
+
 (defun jl/random-quote ()
   "Generate a random quote for dashboard"
   (interactive)
@@ -407,7 +413,7 @@
   (leader
     "f" '(:ignore t :wk "Find file")
     "f f" '(find-file :wk "Find file directly")
-    "f r" '(consult-find :wk "Find file in current directory")
+    "f r" '(jl/consult-find-in-project :wk "Find file in current dir/project")
     "f d" '(jl/consult-find-in-dir :wk "Find file in directory"))
   (leader
     "c" '(:ignore t :wk "Comment")
@@ -483,6 +489,10 @@
         tramp-default-method "rcp"
         tramp-use-ssh-controlmaster-options nil
         projectile--mode-line "Projectile"))
+#+end_src
+*** Projectile
+#+begin_src emacs-lisp
+(use-package projectile)
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
@@ -756,17 +766,7 @@
   :config
   (dired-rainbow-define-chmod directory "#cba6f7" "d.*")
   (dired-rainbow-define-chmod executable "#eba0ac" "-.*x.*")
-
   (dired-rainbow-define-chmod readable "#74c7ec" "-.*r.*"))
-
-(use-package dired+
-  :quelpa (dired+ :fetcher url :url "https://www.emacswiki.org/emacs/download/dired+.el")
-  :init
-  (setq diredp-hide-details-initially-flag nil)
-  (setq diredp-hide-details-propagate-flag nil)
-
-  :config
-  (diredp-toggle-find-file-reuse-dir 1))
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
