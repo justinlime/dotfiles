@@ -18,6 +18,7 @@
     - [[#which-key][Which Key]]
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
+    - [[#perspective][Perspective]]
     - [[#projectile][Projectile]]
     - [[#consult][Consult]]
     - [[#marginalia][Marginalia]]
@@ -502,13 +503,15 @@
         tramp-use-ssh-controlmaster-options nil
         projectile--mode-line "Projectile"))
 #+end_src
-*** Projectile
+*** Perspective
 #+begin_src emacs-lisp
-(use-package projectile)
 (use-package perspective
   :init
   (persp-mode))
-(use-package avy)
+#+end_src
+*** Projectile
+#+begin_src emacs-lisp
+(use-package projectile)
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
