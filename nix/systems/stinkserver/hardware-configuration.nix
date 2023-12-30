@@ -48,8 +48,8 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
     };
-    "/drives/BTRFS2" = { #4tb
-      device = "/dev/disk/by-uuid/3b90beec-b28b-43ce-a2b1-0b6019f85722";
+    "/drives/BTRFS2" = { #14tb 
+      device = "/dev/disk/by-uuid/1cdfed35-299b-4b62-93a3-b69e3eebc90e";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
     };

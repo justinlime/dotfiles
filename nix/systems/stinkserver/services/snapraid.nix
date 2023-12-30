@@ -15,7 +15,7 @@
     dataDisks = {
       d1 = "/drives/BTRFS0"; #20TB
       d2 = "/drives/BTRFS1"; #14TB
-      d3 = "/drives/BTRFS2"; #4TB
+      d3 = "/drives/BTRFS2"; #14TB
       d4 = "/drives/BTRFS3"; #12TB
     };
     contentFiles = [
