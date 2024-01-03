@@ -155,10 +155,15 @@
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (save-place-mode) ; Save cursor position in buffer on reopen
 
-;; Disables all startup warnings, comment this out when debugging
+;; Kill *Help* after :q'ing
+(advice-add #'evil-quit :after #'(lambda(&rest r) (kill-buffer (get-buffer "*Help*"))))
+
+;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
+(setq-default message-log-max nil)
 (add-hook 'dashboard-mode-hook #'(lambda() ;Kills the warning buffer for even emergency messages
   (kill-buffer (get-buffer "*Warnings*"))
+  (kill-buffer (get-buffer "*Messages*"))
   (keyboard-escape-quit)))
 #+end_src
 ** Custom Functions
@@ -177,8 +182,8 @@
   (interactive "sEnter host: ")
   (jl/ssh host "/ssh:%s:~"))
 
-(defvar jl/active-toggle-term "*terminal*" "The most recently used toggle term")
-(defvar jl/current-toggles '("*terminal*") "List of the current toggle terms")
+(defvar jl/active-toggle-term "*toggle-terminal*" "The most recently used toggle term")
+(defvar jl/current-toggles '("*toggle-terminal*") "List of the current toggle terms")
 
 (defun jl/toggle-term (&optional name)
   "Toggle a terminal window with $SHELL, and make it the active term
