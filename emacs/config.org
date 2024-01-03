@@ -304,7 +304,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (setq evil-collection-mode-list '(magit term neotree help dashboard dired ibuffer))
+  (setq evil-collection-mode-list '(magit term neotree help dashboard dired ibuffer tetris))
   (evil-collection-init))
 (use-package evil-tutor)
 
