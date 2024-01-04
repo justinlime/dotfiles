@@ -214,7 +214,7 @@
                 (select-window (split-window-below (round (* height 0.75))))
                 (if (eq command nil)
                   (make-term unwrapped-name (getenv "SHELL"))
-                  (make-term unwrapped-name (getenv "SHELL") nil "-c" (format "ssh %s" name))) 
+                  (make-term unwrapped-name (getenv "SHELL") nil "-c" command)) 
                 (setq jl/active-toggle-term wrapped-name)
                 (if (member wrapped-name jl/current-toggles) nil (add-to-list 'jl/current-toggles wrapped-name))
                 (switch-to-buffer wrapped-name)
