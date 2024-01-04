@@ -197,8 +197,8 @@
   If COMMAND is set, the created terminal will execute the command using your shell's -c flag"
   (interactive)
   (let* (
-    ;; Wrapping and unwrapping to force a *name* naming scheme
     (current-toggles-persp (car (cdr (assoc (persp-current-name) jl/current-toggles))))
+    ;; Wrapping and unwrapping to force a *name* naming scheme
     (name (if name name (completing-read "Toggle-Term: " current-toggles-persp)))
     (unwrapped-name (replace-regexp-in-string "\\*" "" name))
     (wrapped-name (format "*%s*" unwrapped-name))) 
@@ -213,16 +213,18 @@
           (height (window-total-height))
           (window (get-buffer-window wrapped-name)))
             (if window (delete-window window)
+                ;; Creates a window below the current window at 75% of the windows height
                 (select-window (split-window-below (round (* height 0.75))))
+                ;; If command is provided, start the term using the shells -c flag
                 (if (eq command nil)
-                  (make-term unwrapped-name (getenv "SHELL"))
+                  (make-term unwrapped-name (getenv "SHELL")) ; The make-term function automatically wraps *'s around the name given, hence the unwrapped name being used.
                   (make-term unwrapped-name (getenv "SHELL") nil "-c" command)) 
-                ;; (setq jl/active-toggle-term wrapped-name)
+                ;; Sets the active terminal for the current perspective in the alist
                 (let ((key (assoc (persp-current-name) jl/active-toggle-term)))
                   (if key
                     (setcdr key `(,wrapped-name))
                     (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term))))
-                ;; TODO find a way to append the list of a key for the current toggles
+                ;; Adds the terminal to the current-toggles alist if its not already included
                 (if (member wrapped-name current-toggles-persp) nil
                   (let* ((key (assoc (persp-current-name) jl/current-toggles))
                          (orig-list (car(cdr key))))
@@ -231,6 +233,7 @@
                         (add-to-list 'orig-list wrapped-name)
                         (setcdr key `(,orig-list)))
                       (add-to-list 'jl/current-toggles `(,(persp-current-name) (,wrapped-name))))))
+                ;; Switch to the buffer and enter insert mode
                 (switch-to-buffer wrapped-name)
                 (evil-insert 1)))))
 
