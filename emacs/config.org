@@ -217,10 +217,6 @@
                 (select-window (split-window-below (round (* height 0.75))))
                 ;; If command is provided, start the term using the shells -c flag
                 (if (eq command nil)
-                  (make-term unwrapped-name (getenv "SHELL"))
-                  (make-term unwrapped-name (getenv "SHELL") nil "-c" command)) 
-                (setq jl/active-toggle-term wrapped-name)
-                (if (member wrapped-name jl/current-toggles) nil (add-to-list 'jl/current-toggles wrapped-name))
                   (make-term unwrapped-name (getenv "SHELL")) ; The make-term function automatically wraps *'s around the name given, hence the unwrapped name being used.
                   (make-term unwrapped-name (getenv "SHELL") nil "-c" command)) 
                 ;; Sets the active terminal for the current perspective in the alist
@@ -285,7 +281,7 @@
         (ops (delete ".." ops))
         (file (nth (random (length ops)) ops)))
           (expand-file-name file icons-dir)))
-#+End_src
+#+end_src
 
 * Keybinds
 ** Evil Mode
