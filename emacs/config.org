@@ -224,7 +224,13 @@
                     (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term))))
                 ;; TODO find a way to append the list of a key for the current toggles
                 (if (member wrapped-name current-toggles-persp) nil
-                  (add-to-list 'current-toggles-persp wrapped-name))
+                  (let* ((key (assoc (persp-current-name) jl/current-toggles))
+                         (orig-list (car(cdr key))))
+                    (if key
+                      (progn
+                        (add-to-list 'orig-list wrapped-name)
+                        (setcdr key `(,orig-list)))
+                      (add-to-list 'jl/current-toggles `(,(persp-current-name) (,wrapped-name))))))
                 (switch-to-buffer wrapped-name)
                 (evil-insert 1)))))
 
