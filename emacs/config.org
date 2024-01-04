@@ -182,8 +182,9 @@
   (interactive "sEnter host: ")
   (jl/ssh host "/ssh:%s:~"))
 
-(defvar jl/active-toggle-term "*toggle-terminal*" "The most recently used toggle term")
-(defvar jl/current-toggles '("*toggle-terminal*") "List of the current toggle terms")
+(let ((init-term "*toggle-term-main*"))
+  (defvar jl/active-toggle-term `(("main" ,init-term)) "The most recently used toggle term")
+  (defvar jl/current-toggles `(("main" (,init-term))) "List of the current toggle terms"))
 
 (defun jl/toggle-term (&optional name command)
   "Toggle a terminal window with $SHELL, and make it the active term
@@ -197,11 +198,12 @@
   (interactive)
   (let* (
     ;; Wrapping and unwrapping to force a *name* naming scheme
-    (name (if name name (completing-read "Toggle-Term: " jl/current-toggles)))
+    (current-toggles-persp (car (cdr (assoc (persp-current-name) jl/current-toggles))))
+    (name (if name name (completing-read "Toggle-Term: " current-toggles-persp)))
     (unwrapped-name (replace-regexp-in-string "\\*" "" name))
     (wrapped-name (format "*%s*" unwrapped-name))) 
       ;; Check if another toggle-term is active
-      (dolist (c jl/current-toggles)
+      (dolist (c current-toggles-persp)
         (if (string-equal c wrapped-name)
           nil
           (let ((w (get-buffer-window c)))
@@ -214,16 +216,22 @@
                 (select-window (split-window-below (round (* height 0.75))))
                 (if (eq command nil)
                   (make-term unwrapped-name (getenv "SHELL"))
-                  (make-term unwrapped-name (getenv "SHELL") nil "-c" (format "ssh %s" name))) 
-                (setq jl/active-toggle-term wrapped-name)
-                (if (member wrapped-name jl/current-toggles) nil (add-to-list 'jl/current-toggles wrapped-name))
+                  (make-term unwrapped-name (getenv "SHELL") nil "-c" command)) 
+                ;; (setq jl/active-toggle-term wrapped-name)
+                (let ((key (assoc (persp-current-name) jl/active-toggle-term)))
+                  (if key
+                    (setcdr key `(,wrapped-name))
+                    (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term))))
+                ;; TODO find a way to append the list of a key for the current toggles
+                (if (member wrapped-name current-toggles-persp) nil
+                  (add-to-list 'current-toggles-persp wrapped-name))
                 (switch-to-buffer wrapped-name)
                 (evil-insert 1)))))
 
 (defun jl/toggle-active-term ()
   "Toggle the most recently used toggle-term"
   (interactive)
-  (jl/toggle-term jl/active-toggle-term))
+  (jl/toggle-term (car (cdr (assoc (persp-current-name) jl/active-toggle-term)))))
 
 (defun jl/consult-find-in-dir ()
   "Find a file in a specific directory"
