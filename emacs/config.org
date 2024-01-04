@@ -186,6 +186,7 @@
   (defvar jl/active-toggle-term `(("main" ,init-term)) "The most recently used toggle term")
   (defvar jl/current-toggles `(("main" (,init-term))) "List of the current toggle terms"))
 
+;; This is sphagetti code but I dont care
 (defun jl/toggle-term (&optional name command)
   "Toggle a terminal window with $SHELL, and make it the active term
 
@@ -196,6 +197,13 @@
 
   If COMMAND is set, the created terminal will execute the command using your shell's -c flag"
   (interactive)
+  ;; Create a key and default value for the alist if it doesnt exist for the perspective 
+  (if (eq (assoc (persp-current-name) jl/current-toggles) nil)
+    (progn
+      (let ((wrapped-name (format "*toggle-term-%s*" (persp-current-name))))
+        (add-to-list 'jl/current-toggles `(,(persp-current-name) (,wrapped-name)))
+        (setq name wrapped-name)
+        (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term)))))
   (let* (
     (current-toggles-persp (car (cdr (assoc (persp-current-name) jl/current-toggles))))
     ;; Wrapping and unwrapping to force a *name* naming scheme
