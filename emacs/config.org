@@ -521,7 +521,9 @@
 #+begin_src emacs-lisp
 (use-package perspective
   :init
-  (persp-mode))
+  (persp-mode)
+  :config
+  (setq persp-sort 'created))
 #+end_src
 *** Projectile
 #+begin_src emacs-lisp
