@@ -447,6 +447,7 @@
     "p f" '(persp-switch :wk "Find perspective, or create new one")
     "p h" '(persp-prev :wk "Previous perspective")
     "p l" '(persp-next :wk "Next perspective")
+    "p k" '((lambda () (interactive) (if (yes-or-no-p "Kill the current perspective?")(persp-kill (persp-current-name)))) :wk "Kill the current perspective")
     "p 1" '((lambda () (interactive) (persp-switch-by-number 1)) :wk "Switch to perspective 1")
     "p 2" '((lambda () (interactive) (persp-switch-by-number 2)) :wk "Switch to perspective 2")
     "p 3" '((lambda () (interactive) (persp-switch-by-number 3)) :wk "Switch to perspective 3")
