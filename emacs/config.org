@@ -156,7 +156,10 @@
 (save-place-mode) ; Save cursor position in buffer on reopen
 
 ;; Kill *Help* after :q'ing
-(advice-add #'evil-quit :after #'(lambda(&rest r) (kill-buffer (get-buffer "*Help*"))))
+(advice-add #'evil-quit :after #'(lambda(&rest r)
+  (let ((buf (get-buffer "*Help*")))
+    (if (eq buf nil) nil
+      (kill-buffer buf)))))
 
 ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
