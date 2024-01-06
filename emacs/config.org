@@ -672,7 +672,8 @@
 #+end_src
 *** Magit
 #+begin_src emacs-lisp
-;;(use-package magit)
+(use-package seq) ; Magit needs a newer version of seq
+(use-package magit)
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
