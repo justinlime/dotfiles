@@ -524,7 +524,23 @@
   :init
   (persp-mode)
   :config
-  (setq persp-sort 'created))
+  (setq persp-sort 'created)
+  ;; Overriding the function to reverse the sorting order
+  (defun persp-names ()
+    "Return a list of the names of all perspectives on the `selected-frame'.
+
+  If `persp-sort' is 'name (the default), then return them sorted
+  alphabetically. If `persp-sort' is 'access, then return them
+  sorted by the last time the perspective was switched to, the
+  current perspective being the first. If `persp-sort' is 'created,
+  then return them in the order they were created, with the newest
+  first."
+    (let ((persps (hash-table-values (perspectives-hash))))
+      (cond ((eq persp-sort 'created)
+               (mapcar 'persp-name
+                 (sort persps (lambda (a b)
+                   (time-less-p (persp-created-time a)
+                     (persp-created-time b))))))))))
 #+end_src
 *** Projectile
 #+begin_src emacs-lisp
