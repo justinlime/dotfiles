@@ -27,6 +27,7 @@ in
     ../base/tmux.nix
     ../base/emacs.nix
     ../base/neovim.nix
+    ../base/cava.nix
   ];
   programs.direnv.enable = true;
   home.packages = with pkgs; [
@@ -41,7 +42,6 @@ in
     via
     inputs.maxfetch.packages.${pkgs.system}.default
     lm_sensors
-    cava
     imagemagick
   ];
 }

@@ -8,5 +8,6 @@
     ./tmux.nix
     ./zsh.nix
     ./btop.nix
+    ./cava.nix
   ];
 }
