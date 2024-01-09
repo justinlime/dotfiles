@@ -154,6 +154,7 @@
               indent-tabs-mode nil) ; use spaces not tabs
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (save-place-mode) ; Save cursor position in buffer on reopen
+(put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 
 ;; Kill *Help* after :q'ing
 (advice-add #'evil-quit :after #'(lambda(&rest r)
