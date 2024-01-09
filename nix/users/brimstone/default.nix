@@ -41,6 +41,7 @@ in
     via
     inputs.maxfetch.packages.${pkgs.system}.default
     lm_sensors
+    cava
     imagemagick
   ];
 }
