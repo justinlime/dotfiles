@@ -39,6 +39,7 @@ in
     obs-studio
     prismlauncher
     speedtest-cli
+    telegram-desktop
     via
     inputs.maxfetch.packages.${pkgs.system}.default
     lm_sensors
