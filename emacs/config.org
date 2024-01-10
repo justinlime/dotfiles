@@ -752,6 +752,7 @@
 #+begin_src emacs-lisp
 (add-hook 'erc-mode-hook #'(lambda ()
   (toggle-truncate-lines) ; truncate lines in erc mode
+  (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
   (display-line-numbers-mode -1)))
 #+end_src
 *** Term Mode
