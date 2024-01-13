@@ -1,6 +1,8 @@
 { ... }:
 {
-
+  systemd.tmpfiles.rules = [
+    "d /configs/jellyfin 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  ];
   networking.firewall.allowedTCPPorts = [ 80 90 8096 ];
   networking.firewall.allowedUDPPorts = [ 7359 ];
   virtualisation.oci-containers.containers = {

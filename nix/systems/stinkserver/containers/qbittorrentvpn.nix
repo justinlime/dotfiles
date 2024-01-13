@@ -1,9 +1,13 @@
 { pkgs, lib, ... }:
 {
+  systemd.tmpfiles.rules = [
+    "d /configs/qbittorrentvpn 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  ];
   # If the logs look correct, but the webgui is still not accessible, its probably a
   # LAN_NETWORK misconfiguration
   # Ensure paths for downloads is set correctly in qbittorrent itself 
   virtualisation.oci-containers.containers = {
+
     qbittorrentvpn = {
      autoStart = true; 
      image = "dyonr/qbittorrentvpn";

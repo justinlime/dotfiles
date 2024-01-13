@@ -1,5 +1,8 @@
 { ... }:
 {
+  systemd.tmpfiles.rules = [
+    "d /configs/sabnzbd 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  ];
   # Set paths in sabnzbd itself to ensure it functions as intended
   virtualisation.oci-containers.containers = {
     sabnzbd = {

@@ -1,5 +1,8 @@
 { ... }:
 {
+  systemd.tmpfiles.rules = [
+    "d /configs/komga 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  ];
   virtualisation.oci-containers.containers = {
     komga = {
      autoStart = true; 
