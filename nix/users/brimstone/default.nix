@@ -28,6 +28,7 @@ in
     ../base/emacs.nix
     ../base/neovim.nix
     ../base/cava.nix
+    ../base/mpv.nix
   ];
   programs.direnv.enable = true;
   home.packages = with pkgs; [

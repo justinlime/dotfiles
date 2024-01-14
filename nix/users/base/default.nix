@@ -9,5 +9,6 @@
     ./zsh.nix
     ./btop.nix
     ./cava.nix
+    ./mpv.nix
   ];
 }
