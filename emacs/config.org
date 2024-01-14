@@ -340,13 +340,6 @@
     :keymaps 'minibuffer-local-map
     "<escape>" #'keyboard-escape-quit)
 
-  ;; Dired
-  ;; Stops dired from making a new buffer every time you hit RET
-  (general-define-key
-    :states '(normal insert)
-    :keymaps 'dired-mode-map
-    "RET" #'dired-find-alternate-file)
-
   ;; Corfu
   (general-define-key
     :states 'insert
