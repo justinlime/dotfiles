@@ -5,7 +5,8 @@ $uncompressed_dir = "Z:\Recordings\PC\Escape From Tarkov\Uncompressed Recordings
 $compressed_dir = "Z:\Recordings\PC\Escape From Tarkov\Compressed Recordings"
 
 Write-Host "Using $($init_file)`n"
-$file_name = Read-Host "Enter the name for the video (exclude the file extension)"
+$file_name = Read-Host "Enter the name for the video "
+$file_name = $file_name -replace '\.[^.]*$'
 
 Write-Host "`nWriting Uncompressed File to: $($uncompressed_dir)\$($file_name).mkv"
 Write-Host "Writing Compressed File to: $($compressed_dir)\$($file_name).mkv`n"
