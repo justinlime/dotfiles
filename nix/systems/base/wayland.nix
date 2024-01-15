@@ -13,9 +13,11 @@
     };
     pipewire = {
       enable = true;
+      audio.enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      wireplumber.enable = true;
     };
   };
   xdg.portal = {
@@ -24,7 +26,6 @@
   environment = {
     systemPackages = with pkgs; [
       pulseaudio 
-      wireplumber
       wl-clipboard
     ];
   };

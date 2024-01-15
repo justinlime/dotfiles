@@ -1,33 +1,33 @@
 # If powershell scripts aren't enabled yet, enter a terminal as admin and run:
 # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned 
-#Hello world!!!!!!
 
-<<<<<<< HEAD
->>>>>>> a24d76d (windows :vomit:)
-=======
+
 # The init file to compress and move
->>>>>>> 1b2af46 (emacs edits)
 $init_file = "Z:\output.mkv"
 # Path to FFMPEG
 $ffmpeg = "C:\Users\justi\Documents\My Documents\Software\ffmpeg\ffmpeg.exe"
-# Local directories to copy the files to
-$uncompressed_dir = "Z:\Recordings\PC\Escape From Tarkov\Uncompressed Recordings"
-$compressed_dir = "Z:\Recordings\PC\Escape From Tarkov\Compressed Recordings"
-# Remote directories to copy the files to
-$uncompressed_dir_remote = "\\192.168.4.59\storage\users\justin\Recordings\PC\Escape From Tarkov\Uncompressed Recordings"
-$compressed_dir_remote = "\\192.168.4.59\storage\users\justin\Recordings\PC\Escape From Tarkov\Compressed Recordings"
-# Confirmation
+
 Write-Host "Using $($init_file)`n"
+# Game Name
+$game = Read-Host "Enter the name of the game (Required Exact Match)"
+# Local directories to copy the files to
+$uncompressed_dir = "Z:\Recordings\PC\$($game)\Uncompressed Recordings"
+$compressed_dir = "Z:\Recordings\PC\$($game)\Compressed Recordings"
+# Remote directories to copy the files to
+$uncompressed_dir_remote = "\\192.168.4.59\storage\users\justin\Recordings\PC\$($game)\Uncompressed Recordings"
+$compressed_dir_remote = "\\192.168.4.59\storage\users\justin\Recordings\PC\$($game)\Compressed Recordings"
+# Confirmation
 $file_name = Read-Host "Enter the name for the video (exclude the file extension)"
 $file_name = $file_name -replace '\.[^.]*$'
-Write-Host "`nLocal Directories:"
-Write-Host "Writing Uncompressed File to: $($uncompressed_dir)\$($file_name).mkv"
-Write-Host "Writing Compressed File to: $($compressed_dir)\$($file_name).mkv`n"
-Write-Host "`nRemote Directories:"
-Write-Host "Writing Uncompressed File to: $($uncompressed_dir_remote)\$($file_name).mkv"
-Write-Host "Writing Compressed File to: $($compressed_dir_remote)\$($file_name).mkv`n"
+Clear-Host
+Write-Host "--Local Directories--"
+Write-Host "Writing Uncompressed File to: `n$($uncompressed_dir)\$($file_name).mkv"
+Write-Host "Writing Compressed File to: `n$($compressed_dir)\$($file_name).mkv"
+Write-Host "`n--Remote Directories--"
+Write-Host "Writing Uncompressed File to: `n$($uncompressed_dir_remote)\$($file_name).mkv"
+Write-Host "Writing Compressed File to: `n$($compressed_dir_remote)\$($file_name).mkv"
 do {
-  $choice = Read-Host "Do you wish to proceed? [y/n]"
+  $choice = Read-Host "`nDo you wish to proceed? [y/n]"
 } while ($choice -ne 'y' -and $choice -ne 'n')
 
 if ($choice -eq "y") {

@@ -9,6 +9,8 @@
   - [[#package-manger][Package Manger]]
   - [[#misc-preferences][Misc Preferences]]
   - [[#custom-functions][Custom Functions]]
+    - [[#toggle-term][Toggle-Term]]
+    - [[#misc][Misc]]
 - [[#keybinds][Keybinds]]
   - [[#evil-mode][Evil Mode]]
   - [[#general-binds][General Binds]]
@@ -19,7 +21,7 @@
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
     - [[#perspective][Perspective]]
-    - [[#projectile][Projectile]]
+    - [[#affe][Affe]]
     - [[#consult][Consult]]
     - [[#marginalia][Marginalia]]
     - [[#terminal-emacs][Terminal Emacs]]
@@ -44,6 +46,7 @@
       - [[#lua-mode][Lua Mode]]
       - [[#elixir-mode][Elixir Mode]]
       - [[#rust-mode][Rust Mode]]
+      - [[#powershell-mode][PowerShell Mode]]
   - [[#modes][Modes]]
     - [[#markdown-mode][Markdown Mode]]
     - [[#erc-mode][Erc Mode]]
@@ -56,9 +59,10 @@
 - [[#look--feel][Look & Feel]]
   - [[#general-2][General]]
     - [[#themes][Themes]]
-    - [[#dired-rainbow][Dired Rainbow]]
+    - [[#dired][Dired]]
     - [[#modeline][Modeline]]
     - [[#gui-settings][GUI Settings]]
+    - [[#scrolling][Scrolling]]
     - [[#fonts][Fonts]]
     - [[#icons][Icons]]
     - [[#dashboard][Dashboard]]
@@ -150,11 +154,14 @@
       use-short-answers t ; Set y or n instead of yes or no for questions
       inhibit-startup-messages t ; Disable splash screen
       password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
+
 (setq-default tab-width 2 ; self explanitory
               indent-tabs-mode nil) ; use spaces not tabs
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (save-place-mode) ; Save cursor position in buffer on reopen
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
+(global-hl-line-mode)
+(electric-indent-mode t)
 
 ;; Kill *Help* after :q'ing
 (advice-add #'evil-quit :after #'(lambda(&rest r)
@@ -171,26 +178,13 @@
   (keyboard-escape-quit)))
 #+end_src
 ** Custom Functions
+*** Toggle-Term
 #+begin_src emacs-lisp
-(defun jl/ssh (host formatter)
-  (persp-switch host)
-  (let ((format-host (format formatter host host)))
-    (find-file format-host)
-    (jl/toggle-term host (format "ssh %s" host))))
-(defun jl/ssh-root (host)
-  "SSH with sudo privledges using a host from .ssh/config"
-  (interactive "sEnter host: ")
-  (jl/ssh host "/ssh:%s|sudo:%s:/"))
-(defun jl/ssh-user (host)
-  "SSH using a host from .ssh/config"
-  (interactive "sEnter host: ")
-  (jl/ssh host "/ssh:%s:~"))
-
+;; This is sphagetti code but I dont care
 (let ((init-term "*toggle-term-main*"))
   (defvar jl/active-toggle-term `(("main" ,init-term)) "The most recently used toggle term")
   (defvar jl/current-toggles `(("main" (,init-term))) "List of the current toggle terms"))
 
-;; This is sphagetti code but I dont care
 (defun jl/toggle-term (&optional name command)
   "Toggle a terminal window with $SHELL, and make it the active term
 
@@ -198,6 +192,8 @@
   currently open that aren't NAME
 
   NAME can be in the *name* format or just name, but the buffers' name will always output to *name*
+
+  Integrated with perspective.el
 
   If COMMAND is set, the created terminal will execute the command using your shell's -c flag"
   (interactive)
@@ -225,8 +221,8 @@
           (height (window-total-height))
           (window (get-buffer-window wrapped-name)))
             (if window (delete-window window)
-                ;; Creates a window below the current window at 75% of the windows height
-                (select-window (split-window-below (round (* height 0.75))))
+                ;; Creates a window below the current window at 22% of the windows height
+                (select-window (split-window-below (round (* height 0.78))))
                 ;; If command is provided, start the term using the shells -c flag
                 (if (eq command nil)
                   (make-term unwrapped-name (getenv "SHELL")) ; The make-term function automatically wraps *'s around the name given, hence the unwrapped name being used.
@@ -253,22 +249,73 @@
   "Toggle the most recently used toggle-term"
   (interactive)
   (jl/toggle-term (car (cdr (assoc (persp-current-name) jl/active-toggle-term)))))
+#+end_src
+*** Misc
+#+begin_src emacs-lisp
+(defun jl/ssh (host formatter)
+  (persp-switch host)
+  (let ((format-host (format formatter host host)))
+    (find-file format-host)
+    (jl/toggle-term host (format "ssh %s" host))))
+(defun jl/ssh-root (host)
+  "SSH with sudo privledges using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (jl/ssh host "/ssh:%s|sudo:%s:/"))
+(defun jl/ssh-user (host)
+  "SSH using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (jl/ssh host "/ssh:%s:~"))
 
 (defun jl/consult-find-in-dir ()
-  "Find a file in a specific directory"
+  "Find a file in a specific directory
+   
+  Uses Affe if working with local files, and Consult for remote files"
   (interactive)
   (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
-    (consult-find dir)))
+    (if (string-prefix-p "/ssh:" default-directory)
+      (consult-find dir)
+      (affe-find dir))))
+(defun jl/consult-find-in-current ()
+  "Find a file in the project's directory
 
-(defun jl/consult-find-in-project ()
-  "Find a file in the project's directory"
-  (interactive)
-  (consult-find (projectile-project-root)))
+  Sets the root of the search to the folders' .git parent path if present
 
-(defun jl/consult-ripgrep-in-project ()
-  "Find a file in the project's directory"
+  Uses Affe if working with local files, and Consult for remote files"
   (interactive)
-  (consult-ripgrep (projectile-project-root)))
+  (let ((dir (magit-toplevel default-directory)))
+    (if (string-prefix-p "/ssh:" default-directory)
+      (if dir
+        (consult-find dir)
+        (consult-find))
+      (if dir
+        (affe-find dir)
+        (affe-find)))))
+
+(defun jl/consult-grep-in-dir ()
+  "Find a word in a specified project/folder
+
+  Uses Ripgrep if working with local files, and Grep for remote files"
+  (interactive)
+  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
+    (if (string-prefix-p "/ssh:" default-directory)
+      (consult-grep dir)
+      (consult-ripgrep dir))))
+
+(defun jl/consult-grep-in-current ()
+  "Find a word in the current project/folder
+
+  Sets the root of the search to the folders' .git parent path if present
+
+  Uses Ripgrep if working with local files, and Grep for remote files"
+  (interactive)
+  (let ((dir (magit-toplevel default-directory)))
+    (if dir
+      (if (string-prefix-p "/ssh:" default-directory)
+        (consult-grep dir)
+        (consult-ripgrep dir))
+      (if (string-prefix-p "/ssh:" default-directory)
+        (consult-grep)
+        (consult-ripgrep)))))
 
 (defun jl/random-quote ()
   "Generate a random quote for dashboard"
@@ -366,6 +413,8 @@
    "RET" #'vertico-directory-enter
    "<tab>" #'vertico-next
    "TAB" #'vertico-next
+   "<backspace>" #'vertico-directory-delete-char
+   "DEL" #'vertico-directory-delete-char
    "<backtab>" #'vertico-previous)
 
   ;; Org
@@ -433,9 +482,10 @@
   (leader
     "f" '(:ignore t :wk "Find file")
     "f f" '(find-file :wk "Find file directly")
-    "f r" '(jl/consult-find-in-project :wk "Find file in current dir/project")
-    "f w" '(jl/consult-ripgrep-in-project :wk "Find word in current dir/project (ripgrep)")
-    "f d" '(jl/consult-find-in-dir :wk "Find file in directory"))
+    "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
+    "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
+    "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
+    "f W" '(jl/consult-grep-in-dir :wk "Find word in specified dir/project"))
   (leader
     "c" '(:ignore t :wk "Comment")
     "c r" '(comment-region :wk "Comment selection")
@@ -512,6 +562,8 @@
   :config
   (setq neo-theme (if (display-graphic-p) 'nerd)))
   (add-hook 'neotree-mode-hook #'(lambda ()
+    (face-remap-set-base 'default :background "#181825")
+    (face-remap-set-base 'fringe :background "#181825")
     (display-line-numbers-mode -1)
   )) 
 #+end_src
@@ -550,15 +602,15 @@
                    (time-less-p (persp-created-time a)
                      (persp-created-time b))))))))))
 #+end_src
-*** Projectile
+*** Affe
 #+begin_src emacs-lisp
-(use-package projectile)
+(use-package affe)
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
 (use-package consult
   :config
-  (setq consult-find-args "find . -not ( -path '*/.git*' -prune )"))
+  (setq consult-find-args "find . -not ( -path '*/.git*' -prune ) -not ( -path '*.git*' -prune )"))
 #+end_src
 *** Marginalia
 #+begin_src emacs-lisp
@@ -601,6 +653,13 @@
 *** LSP/Completion
 **** Eglot
 #+begin_src emacs-lisp
+;; Override the binary being used on startup
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '((java-ts-mode java-mode) . ("java-language-server")))
+  (add-to-list 'eglot-server-programs
+               '((nix-ts-mode nix-mode) . ("nixd"))))
+
 (add-hook 'find-file-hook (lambda()
   (unless (file-remote-p (buffer-file-name)) 
     (cond
@@ -611,6 +670,8 @@
       ((eq major-mode 'typescript-ts-mode)(eglot-ensure))
       ((eq major-mode 'rust-ts-mode)(eglot-ensure))
       ((eq major-mode 'elixir-ts-mode)(eglot-ensure))
+      ((eq major-mode 'nix-ts-mode)(eglot-ensure))
+      ((eq major-mode 'java-ts-mode)(eglot-ensure))
       ((eq major-mode 'c-ts-mode)(eglot-ensure))))))
 #+end_src
 **** Corfu
@@ -668,14 +729,14 @@
 #+begin_src emacs-lisp
 (use-package yasnippet
   :config
-  ;; (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
+  (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
   (yas-global-mode 1))
-;; (use-package yasnippet-snippets)
-;; (use-package yasnippet-capf
-;;   :after cape
-;;   :config
-;;   (setq yasnippet-capf-lookup-by 'name) ;; Prefer the name of the snippet instead
-;;   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+(use-package yasnippet-snippets)
+(use-package yasnippet-capf
+  :after cape
+  :config
+  (setq yasnippet-capf-lookup-by 'name) ;; Prefer the name of the snippet instead
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 #+end_src
 *** Magit
@@ -750,6 +811,10 @@
 (add-hook 'rust-ts-mode-hook #'(lambda()
   (setq tab-width 4)))
 #+end_src
+**** PowerShell Mode
+#+begin_src emacs-lisp
+(use-package powershell)
+#+end_src
 ** Modes
 *** Markdown Mode
 #+begin_src emacs-lisp
@@ -765,10 +830,12 @@
 *** Term Mode
 #+begin_src  emacs-lisp
 (add-hook 'term-mode-hook #'(lambda()
-  (face-remap-set-base 'default :background "#1b1b2b")
-
+  ;; (face-remap-set-base 'default :background "#1b1b2b")
+  (face-remap-set-base 'default :background "#11111B")
+  (face-remap-set-base 'fringe :background "#11111B")
+  (hl-line-mode 'toggle)
   (defface term-background
-  '((t (:inherit default :background "#1b1b2b")))
+  '((t (:inherit default :background "#11111B")))
   "Some bullshit to fix term-mode text-background"
   :group 'basic-faces)
 
@@ -779,9 +846,12 @@
 *** Org Mode
 **** Org General
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook #'(lambda ()
+  (org-indent-mode)
+  (setq-local electric-indent-mode nil)))
+
 (setq org-src-preserve-indentation t)
-(electric-indent-mode t)
+
 #+end_src
 **** Org Table of Contents
 #+begin_src emacs-lisp
@@ -819,16 +889,15 @@
 (use-package catppuccin-theme
   :config
   (setq catppuccin-highlight-matches t)
-  (catppuccin-set-color 'base "#11111B")
+  ;; (catppuccin-set-color 'base "#11111B")
   (load-theme 'catppuccin :no-confirm))
 #+end_src
-*** Dired Rainbow
+*** Dired
 #+begin_src emacs-lisp
-(use-package dired-rainbow
+(use-package diredfl
   :config
-  (dired-rainbow-define-chmod directory "#cba6f7" "d.*")
-  (dired-rainbow-define-chmod executable "#eba0ac" "-.*x.*")
-  (dired-rainbow-define-chmod readable "#74c7ec" "-.*r.*"))
+  (diredfl-global-mode))
+(setq dired-listing-switches "-alFh")
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
@@ -845,27 +914,41 @@
 *** GUI Settings
 #+begin_src emacs-lisp
 (setq use-dialog-box nil ; No dialog box
-      display-line-numbers-type 'relative ;Realive numbers
-      scroll-conservatively 101)
+      display-line-numbers-type 'relative) ;Realive numbers
 (setq-default truncate-lines t) ;Allow truncated lines
 (menu-bar-mode -1) ;Disable menu
 (tool-bar-mode -1) ;Disable toolbar
 (scroll-bar-mode -1) ;Disable scroll bar
 (global-display-line-numbers-mode 1) ;Display line numbers
 #+end_src
+*** Scrolling
+#+begin_src emacs-lisp 
+(setq pixel-scroll-precision-mode t
+      mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
+      mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
+      mouse-wheel-follow-mouse 't ;; scroll window under mouse
+      scroll-margin 1
+      scroll-conservatively 0
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
+(setq-default scroll-up-aggressively 0.01
+              scroll-down-aggressively 0.01)
+(unless (display-graphic-p) 
+  (setq scroll-conservatively 101))
+#+end_src
 *** Fonts
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
-  :height 130
+  :height 120
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
   :font "Roboto"
-  :height 130
+  :height 120
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
   :font "RobotoMono Nerd Font"
-  :height 130
+  :height 120
   :weight 'medium)
 (setq-default line-spacing 0.12)
 (set-language-environment "UTF-8")
@@ -899,7 +982,8 @@
     (setq dashboard-startup-banner (jl/random-icon)))
   (dashboard-setup-startup-hook))
 
-(add-hook 'dashboard-mode-hook #'(lambda() (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")))
+(add-hook 'dashboard-mode-hook #'(lambda() (set-face-attribute
+ 'line-number-current-line nil :foreground "#cba6f7")))
 (add-hook 'dashboard-mode-hook #'(lambda() (set-cursor-color "#cba6f7")))
 #+end_src
 ** Programming
@@ -937,6 +1021,7 @@
     ;; (html "https://github.com/tree-sitter/tree-sitter-html") ;not used yet cant find a good html-ts-mode and I dont feel like making one
     (css "https://github.com/tree-sitter/tree-sitter-css")
     (go "https://github.com/tree-sitter/tree-sitter-go")
+    (java "https://github.com/tree-sitter/tree-sitter-java")
     (bash "https://github.com/tree-sitter/tree-sitter-bash")))
 
 ;; auto install any missing defined langs
@@ -951,6 +1036,7 @@
 (add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
+(add-to-list 'major-mode-remap-alist '(java-mode . java-ts-mode))
 
 ;; for modes that have an existing ts mode but no existing normal mode
 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))

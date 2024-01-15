@@ -13,6 +13,7 @@
     zls #Zig
     clang-tools #C
     python311Packages.jedi-language-server #Python
+    java-language-server #Java
     # haskellPackages.hls # Haskell
     nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
     nodePackages_latest.grammarly-languageserver #Markdown
