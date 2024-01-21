@@ -2,11 +2,7 @@
 # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned 
 #Hello world!!!!!!
 
-<<<<<<< HEAD
->>>>>>> a24d76d (windows :vomit:)
-=======
 # The init file to compress and move
->>>>>>> 1b2af46 (emacs edits)
 $init_file = "Z:\output.mkv"
 # Path to FFMPEG
 $ffmpeg = "C:\Users\justi\Documents\My Documents\Software\ffmpeg\ffmpeg.exe"

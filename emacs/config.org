@@ -626,20 +626,13 @@
 
 ;; This is a really hacky fix
 (unless (display-graphic-p)
-  ;; Change cursor to a beam in insert mode
-  (add-hook 'evil-insert-state-entry-hook (lambda ()
-    (setq visible-cursor nil) ;disables blinking cursor
-    (send-string-to-terminal "\e[5 q")))
-  ;; Change cursor to box in normal mode
-  (add-hook 'evil-normal-state-entry-hook (lambda ()
-    (setq visible-cursor nil) 
-    (send-string-to-terminal "\e[2 q"))) 
-  ;; Change cursor back to its intended state when using eldoc
-  ;; For some reason eldoc breaks the fix from above
   (defun correct-cursor (&rest r)
+    (setq visible-cursor nil) 
     (if (eq evil-state 'insert)
       (send-string-to-terminal "\e[5 q")
       (send-string-to-terminal "\e[2 q")))
+  (add-hook 'evil-insert-state-entry-hook #'correct-cursor)
+  (add-hook 'evil-normal-state-entry-hook #'correct-cursor)
   (advice-add 'eldoc-documentation-default :after #'correct-cursor) ;;Echo Area
   (advice-add 'eldoc-display-in-buffer :after #'correct-cursor)) ;;Buffer
 #+end_src
@@ -923,7 +916,7 @@
 #+end_src
 *** Scrolling
 #+begin_src emacs-lisp 
-(setq pixel-scroll-precision-mode t
+(setq-default pixel-scroll-precision-mode t
       mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
       mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
       mouse-wheel-follow-mouse 't ;; scroll window under mouse
@@ -931,8 +924,6 @@
       scroll-conservatively 0
       scroll-up-aggressively 0.01
       scroll-down-aggressively 0.01)
-(setq-default scroll-up-aggressively 0.01
-              scroll-down-aggressively 0.01)
 (unless (display-graphic-p) 
   (setq scroll-conservatively 101))
 #+end_src
