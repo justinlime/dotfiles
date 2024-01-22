@@ -27,6 +27,7 @@
     systemPackages = with pkgs; [
       pulseaudio 
       wl-clipboard
+      libnotify
     ];
   };
   programs = {

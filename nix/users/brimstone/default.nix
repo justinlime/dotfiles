@@ -18,7 +18,6 @@ in
   # of tools and services i use on a daily basis
   _module.args = { inherit profile inputs username custom; };
   imports = [ 
-    ./programs
     ./themes
     ./wayland
     ../base/configuration.nix
@@ -29,6 +28,7 @@ in
     ../base/neovim.nix
     ../base/cava.nix
     ../base/mpv.nix
+    ../base/mpd.nix
   ];
   programs.direnv.enable = true;
   home.packages = with pkgs; [
