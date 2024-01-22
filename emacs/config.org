@@ -18,6 +18,7 @@
 - [[#functionality][Functionality]]
   - [[#general-1][General]]
     - [[#which-key][Which Key]]
+    - [[#treemacs][Treemacs]]
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
     - [[#perspective][Perspective]]
@@ -561,17 +562,32 @@
 		which-key-allow-imprecise-window-fit t
 		which-key-separator " → " ))
 #+end_src
+*** Treemacs
+#+begin_src emacs-lisp
+(use-package treemacs
+  :config
+  (face-remap-set-base 'treemacs-window-background-face :background "#181825")
+)
+(use-package treemacs-nerd-icons
+  :config
+  (treemacs-load-theme "nerd-icons"))
+
+(add-hook 'treemacs-mode-hook #'(lambda ()
+  (face-remap-set-base 'treemacs-window-background-face :background "#181825")
+  (display-line-numbers-mode -1))) 
+
+#+end_src
 *** Neotree
 #+begin_src emacs-lisp
 (use-package neotree
   :defer t
   :config
   (setq neo-theme (if (display-graphic-p) 'nerd)))
+  (setq neo-smart-open t)
   (add-hook 'neotree-mode-hook #'(lambda ()
     (face-remap-set-base 'default :background "#181825")
     (face-remap-set-base 'fringe :background "#181825")
-    (display-line-numbers-mode -1)
-  )) 
+    (display-line-numbers-mode -1))) 
 #+end_src
 *** Tramp
 #+begin_src emacs-lisp
