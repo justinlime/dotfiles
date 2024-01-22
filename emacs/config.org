@@ -340,6 +340,12 @@
         (ops (delete ".." ops))
         (file (nth (random (length ops)) ops)))
           (expand-file-name file icons-dir)))
+(defun jl/dired-open ()
+  "Open path in the same buffer if a file, and a new one if a directory in dired"
+  (interactive)
+  (if (file-directory-p (dired-get-file-for-visit))
+    (dired-find-alternate-file)
+    (dired-find-file)))
 #+end_src
 
 * Keybinds
@@ -392,7 +398,7 @@
   (general-define-key
     :states '(normal insert)
     :keymaps 'dired-mode-map
-    "RET" #'dired-find-alternate-file)
+    "RET" #'jl/dired-open)
 
   ;; Corfu
   (general-define-key
