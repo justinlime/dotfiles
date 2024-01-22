@@ -18,7 +18,6 @@
 - [[#functionality][Functionality]]
   - [[#general-1][General]]
     - [[#which-key][Which Key]]
-    - [[#treemacs][Treemacs]]
     - [[#neotree][Neotree]]
     - [[#tramp][Tramp]]
     - [[#perspective][Perspective]]
@@ -468,7 +467,7 @@
     "w v" '(evil-window-vsplit :wk "Split window vertically"))
   (leader
     "b" '(:ignore t :wk "Buffer")
-    "b b" '(persp-switch-to-buffer* :wk "Switch to previous buffer/switch buffer by name")
+    "b f" '(persp-switch-to-buffer* :wk "Find a buffer, or create a new one")
     "b i" '(persp-ibuffer :wk "Buffer Menu (IBuffer)")
     "b k" '(kill-this-buffer :wk "Kill this buffer")
     "b r" '(revert-buffer :wk "Reload this buffer"))
@@ -502,7 +501,7 @@
   (leader
     "t" '(:ignore t :wk "Toggle-Term")
     "t t" '(jl/toggle-active-term :wk "Toggle the active toggle-term")
-    "t c" '(jl/toggle-term :wk "Change the active toggle-term"))
+    "t f" '(jl/toggle-term :wk "Find a toggle-term, or create a new one"))
   (leader
     "r" '(:ignore t :wk "Org Roam")
     "r f" '(org-roam-node-find :wk "Find org roam file")
@@ -564,28 +563,16 @@
 		which-key-allow-imprecise-window-fit t
 		which-key-separator " → " ))
 #+end_src
-*** Treemacs
-#+begin_src emacs-lisp
-(use-package treemacs
-  :config
-  (face-remap-set-base 'treemacs-window-background-face :background "#181825")
-)
-(use-package treemacs-nerd-icons
-  :config
-  (treemacs-load-theme "nerd-icons"))
-
-(add-hook 'treemacs-mode-hook #'(lambda ()
-  (face-remap-set-base 'treemacs-window-background-face :background "#181825")
-  (display-line-numbers-mode -1))) 
-
-#+end_src
 *** Neotree
 #+begin_src emacs-lisp
 (use-package neotree
-  :defer t
   :config
-  (setq neo-theme (if (display-graphic-p) 'nerd)))
-  (setq neo-smart-open t)
+  (progn
+    (setq neo-smart-open t)
+    (setq neo-theme (if (display-graphic-p) 'nerd))))
+
+  ;; (add-hook 'persp-activated-hook #'(lambda ()
+  ;;   (if (neo-global--window-exists-p) (neotree-toggle)))) 
   (add-hook 'neotree-mode-hook #'(lambda ()
     (face-remap-set-base 'default :background "#181825")
     (face-remap-set-base 'fringe :background "#181825")
