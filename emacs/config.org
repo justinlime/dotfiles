@@ -25,6 +25,7 @@
     - [[#affe][Affe]]
     - [[#consult][Consult]]
     - [[#marginalia][Marginalia]]
+    - [[#undo-tree][Undo Tree]]
     - [[#terminal-emacs][Terminal Emacs]]
   - [[#programming][Programming]]
     - [[#direnv][Direnv]]
@@ -447,7 +448,8 @@
     "K" #'enlarge-window
     "H" #'shrink-window-horizontally
     "L" #'enlarge-window-horizontally
-    "R" #'undo-redo)
+    "u" #'undo-tree-undo
+    "R" #'undo-tree-redo)
 
   ;; set up 'SPC' as the global leader key
   (general-create-definer leader
@@ -639,6 +641,14 @@
 (use-package marginalia
   :init
   (marginalia-mode))
+#+end_src
+*** Undo Tree
+#+begin_src emacs-lisp
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode)
+  (setq undo-tree-auto-save-history t)
+  (setq undo-tree-history-directory-alist '(("." . "~/.config/emacs/undo"))))
 #+end_src
 *** Terminal Emacs
 #+begin_src emacs-lisp
