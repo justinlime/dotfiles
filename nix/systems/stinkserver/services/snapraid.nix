@@ -1,6 +1,6 @@
 { username , ... }:
 {
-  snapraid = {
+  services.snapraid = {
     enable = true;
     sync = {
       interval = "daily"; 
