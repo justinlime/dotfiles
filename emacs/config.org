@@ -164,11 +164,13 @@
 (global-hl-line-mode)
 (electric-indent-mode t)
 
-;; Kill *Help* after :q'ing
+;; Kill *Help* after :q'ing, and kill magit buffers when quitting them
 (advice-add #'evil-quit :after #'(lambda(&rest r)
   (let ((buf (get-buffer "*Help*")))
     (if (eq buf nil) nil
-      (kill-buffer buf)))))
+      (kill-buffer buf))
+    (dolist (b (magit-mode-get-buffers))
+        (kill-buffer b)))))
 
 ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
@@ -509,6 +511,24 @@
     "r c" '(org-capture-finalize :wk "Capture the roam buffer")
     "r i" '(org-roam-node-insert :wk "Insert node link"))
   (leader
+    "g" '(:ignore t :wk "Magit")
+    "g s" '(magit-stage-file :wk "Stage Files")
+    "g S" '(magit-stage-modified :wk "Stage All Files")
+    "g u" '(magit-unstage-file :wk "Unstage Files")
+    "g U" '(magit-unstage-all :wk "Unstage All Files")
+    "g f" '(magit-fetch :wk "Fetch")
+    "g F" '(magit-fetch-all :wk "Fetch")
+    "g i" '(magit-init :wk "Init")
+    "g l" '(magit-log :wk "Log")
+    "g b" '(magit-branch :wk "Branch")
+    "g d" '(magit-diff :wk "Diff")
+    "g c" '(magit-commit :wk "Commit")
+    "g r" '(magit-rebase :wk "Rebase")
+    "g R" '(magit-reset :wk "Reset")
+    "g p" '(magit-push :wk "Push")
+    "g P" '(magit-pull :wk "Pull")
+    "g m" '(magit :wk "Magit Menu"))
+  (leader
     "p" '(:ignore t :wk "Perspective")
     "p f" '(persp-switch :wk "Find perspective, or create new one")
     "p h" '(persp-prev :wk "Previous perspective")
@@ -593,6 +613,7 @@
 #+begin_src emacs-lisp
 (use-package perspective
   :init
+  (setq persp-suppress-no-prefix-key-warning t)
   (persp-mode)
   :config
   (setq persp-sort 'created)
@@ -755,6 +776,8 @@
 #+begin_src emacs-lisp
 (use-package seq) ; Magit needs a newer version of seq
 (use-package magit)
+(add-hook 'magit-post-stage-hook #'(lambda ()
+  (message "Staged")))
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
@@ -918,7 +941,6 @@
   :config
   (setq doom-modeline-total-line-number t)
   (set-face-attribute 'mode-line nil :background "#11111B")
-  (set-face-attribute 'eglot-mode-line)
   ;; (set-face-attribute 'mode-line-inactive nil :background "#25253a")
   (display-time-mode)
   :init (doom-modeline-mode 1))
