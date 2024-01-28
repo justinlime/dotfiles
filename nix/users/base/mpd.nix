@@ -1,4 +1,4 @@
-{ pkgs, username, ... }:
+{ pkgs, username, lib, ... }:
 {
   services = {
     mpdris2.enable = true;
@@ -14,6 +14,18 @@
       '';
     };
   };
+  # nixpkgs.overlays = [
+  #   (final: prev: {
+  #     ncmpcpp = prev.ncmpcpp.overrideAttrs (o: {
+  #       patches = (o.patches or [ ]) ++ [
+  #         (pkgs.fetchpatch {
+  #           url = "https://github.com/ncmpcpp/ncmpcpp/pull/544/commits/39fa659609255b92f555dd0ef359557c8d1ef45e.patch";
+  #           sha256 = "sha256-k7R1zULXY567IWmX7zUpFjib5/a+kv6KA4sF8alqBqs=";
+  #         })
+  #       ];
+  #     });
+  #   })
+  # ];
   home.packages = with pkgs; [
     libnotify
     ffmpeg
@@ -40,6 +52,7 @@
       ];
       settings = {
        "execute_on_song_change" = "songinfo"; 
+       "lyrics_fetchers" = "musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet";
       };
     };
   };
