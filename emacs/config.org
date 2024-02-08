@@ -68,6 +68,7 @@
     - [[#icons][Icons]]
     - [[#dashboard][Dashboard]]
   - [[#programming-1][Programming]]
+    - [[#highlight-todo][Highlight TODO]]
     - [[#rainbow-mode][Rainbow Mode]]
     - [[#rainbow-delimiters][Rainbow Delimiters]]
     - [[#treesitter][Treesitter]]
@@ -1019,6 +1020,18 @@
 (add-hook 'dashboard-mode-hook #'(lambda() (set-cursor-color "#cba6f7")))
 #+end_src
 ** Programming
+*** Highlight TODO
+#+begin_src emacs-lisp
+(use-package hl-todo
+  :config
+  (global-hl-todo-mode)
+  (setq hl-todo-keyword-faces
+      '(("TODO"   . "#FF0000")
+        ("FIXME"  . "#FF0000")
+        ("DEBUG"  . "#A020F0")
+        ("GOTCHA" . "#FF4500")
+        ("STUB"   . "#1E90FF"))))
+#+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
 (use-package rainbow-mode
