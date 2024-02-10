@@ -49,8 +49,22 @@
       bindings = [
         { key = "j"; command = "scroll_down"; }
         { key = "k"; command = "scroll_up"; }
+        { key = "h"; command = "previous_column"; }
+        { key = "l"; command = "next_column"; }
       ];
       settings = {
+       "colors_enabled" = "yes";
+       "playlist_editor_display_mode" = "columns";
+       "playlist_display_mode" = "columns";
+       "search_engine_display_mode" = "columns";
+       "user_interface" = "alternative";
+       "main_window_color" = "magenta";
+       "progressbar_color" = "white";
+       "current_item_prefix" = "$(cyan)$r";
+       "current_item_suffix" = "$/r$(end)";
+       "current_item_inactive_column_prefix" = "$(magenta)$r";
+       "volume_color" = "green";
+       "progressbar_elapsed_color" = "cyan";
        "execute_on_song_change" = "songinfo"; 
        "lyrics_fetchers" = "musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet";
       };
