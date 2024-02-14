@@ -24,27 +24,24 @@
   let
     username = "justinlime";
     inherit (nixpkgs.lib) flatten genAttrs splitString;
-    inherit (builtins) elemAt; 
+    inherit (builtins) elemAt attrNames readDir; 
     # The path to this very repo, used for shell aliases
     # Instead of using: sudo nixos-rebuild switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux 
     # After the first build this command is aliased to just: nix-switch
     flake_path = "/home/${username}/dotfiles";
 
-    addSystems = x: [
-      "${x}.x86_64-linux"
-      "${x}.x86_64-darwin"
-      "${x}.aarch64-linux"
-    ];
+    addSystems = x: (map (y: "${x}.${y}") [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+    ]);
     allHomeConfigurations =  
-      genAttrs (flatten (map addSystems [
-        "brimstone" # This will generate an entry for each profile and system in a list
-        "janus"     # Example: [ "brimstone.x86_64-linux" "brimstone.x86_64-darwin" "janus.x86_64-linux" etc... ]
-      ]))           # These are then split to generate the name of the config in the directory
-      (profile:     # while also passing the system for each config 
-          let                                    # Example evaluations: 
-            split = splitString "." profile;     # brimstone.x86_64-linux to [ "brimstone" "x86_64-linux" ]
-            name = elemAt split 0;               # [ "brimstone" "x86_64-linux" ] to brimstone
-            system =  elemAt split 1;            # [ "brimstone" "x86_64-linux" ] to x86_64-linux
+      genAttrs (flatten (map addSystems (attrNames (readDir ./nix/users))))
+      (profile:                               # This will generate an entry for each profile and system in a list
+          let                                 # These are then split to generate the name of the config in the directory
+            split = splitString "." profile;  # while also passing the system for each config 
+            name = elemAt split 0;            # Example evaluations: 
+            system =  elemAt split 1;         # brimstone.x86_64-linux to [ "brimstone" "x86_64-linux" ]
             pkgs = nixpkgs.legacyPackages.${system};
             pkgs_stable = nixpkgs_stable.legacyPackages.${system};
           in
@@ -64,11 +61,7 @@
             ];
           });
     allSystemConfigurations = 
-      genAttrs (flatten (map addSystems [
-        "stinkserver"
-        "jesktop"
-        "japtop"
-      ]))
+      genAttrs (flatten (map addSystems (attrNames (readDir ./nix/systems))))
       (profile: 
            let
              split = splitString "." profile;
