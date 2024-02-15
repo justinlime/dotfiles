@@ -30,10 +30,6 @@
       MANGOHUD = "1";
     };
     packages = with pkgs; [
-      ventoy
-      websocat
-      roboto
-      (nerdfonts.override { fonts = [ "RobotoMono" ]; })
     ] ++ (import ../../universal.nix pkgs);
   };
 

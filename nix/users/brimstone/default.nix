@@ -42,8 +42,6 @@ in
     speedtest-cli
     telegram-desktop
     via
-    inputs.maxfetch.packages.${pkgs.system}.default
-    lm_sensors
     imagemagick
   ];
 }

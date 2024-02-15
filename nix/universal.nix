@@ -16,4 +16,9 @@ with pkgs; [
   smartmontools
   vim
   pciutils
+  websocat
+  lm_sensors
+  inputs.maxfetch.packages.${pkgs.system}.default
+  roboto
+  (nerdfonts.override { fonts = [ "RobotoMono" ]; })
 ]
