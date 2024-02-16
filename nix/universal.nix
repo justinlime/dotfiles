@@ -1,5 +1,5 @@
 # Universal packages I will want regardless of system, or home-manager profile 
-pkgs:
+pkgs: inputs:
 with pkgs; [
   git
   curl

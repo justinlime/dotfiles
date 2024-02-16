@@ -30,7 +30,7 @@
       MANGOHUD = "1";
     };
     packages = with pkgs; [
-    ] ++ (import ../../universal.nix pkgs);
+    ] ++ (import ../../universal.nix pkgs inputs);
   };
 
   # Home Manager needs a bit of information about you and the

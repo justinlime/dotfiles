@@ -36,7 +36,7 @@
 
     systemPackages = with pkgs; [
 			inputs.home-manager.packages.${pkgs.system}.home-manager
-    ] ++ (import ../../universal.nix pkgs);
+    ] ++ (import ../../universal.nix pkgs inputs);
 
     variables = { EDITOR = "vim"; };
     pathsToLink = [ "/share/zsh" ];
