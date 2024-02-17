@@ -23,21 +23,29 @@
   let
     inherit (nixpkgs.lib) flatten genAttrs splitString;
     inherit (builtins) getEnv elemAt attrNames readDir; 
-    # Impure, I dont care
+    # Impure, I dont care, use the current users' username
     username = (getEnv "USER");
+
     # The path to this very repo, used for shell aliases
-    # Instead of using: sudo nixos-rebuild switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux 
+    # Instead of using: sudo nixos-rebuild switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux --impure
     # After the first build this command is aliased to just: nix-switch
+    # You will have to reload your shell for the aliases to take affect
     flake_path = (getEnv "HOME") + "/dotfiles";
 
-    applyProfiles = dir: (genAttrs (flatten (map addSystems (attrNames (readDir ./nix/${dir})))));
-    addSystems = x: (map (y: "${x}.${y}") (import ./nix/platforms.nix));
+    # When given a directory in the ./nix directory, such as "users" 
+    # it will generate a list of possible profiles, which is in the format of ${profilename}.${system}
+    # and supply each profile generated from the given directory (./nix/users) as an arguement to a function
+    # Generated Profile List Example: brimstone.x86_64-linux, brimstone.aarch64-linux, janus.x86_64-linux, etc
+    applyProfiles = dir: (genAttrs (flatten (map
+      (x: (map (y: "${x}.${y}") (import ./nix/platforms.nix)))
+        (attrNames (readDir ./nix/${dir})))));
+
     allHomeConfigurations = applyProfiles "users"
-      (profile:                               # This will generate an entry for each profile and system in a list
-          let                                 # These are then split to generate the name of the config in the directory
-            split = splitString "." profile;  # while also passing the system for each config 
-            name = elemAt split 0;            # Example evaluations: 
-            system =  elemAt split 1;         # brimstone.x86_64-linux to [ "brimstone" "x86_64-linux" ]
+      (profile:                               # Example evaluations: 
+          let                                 # profile = "brimstone.x86_64-linux"
+            split = splitString "." profile;  # split   = [ "brimstone" "x86_64-linux" ]
+            name = elemAt split 0;            # name    = "brimstone"
+            system =  elemAt split 1;         # system  = "x86_64-linux"
             pkgs = nixpkgs.legacyPackages.${system};
           in
           home-manager.lib.homeManagerConfiguration {

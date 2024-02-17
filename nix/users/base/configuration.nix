@@ -6,8 +6,8 @@
   nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for the above borked option
 
   home = {
-    username = builtins.getEnv "USER";
-    homeDirectory = builtins.getEnv "HOME";
+    username = username;
+    homeDirectory = /. + builtins.getEnv "HOME";
     shellAliases = {
       home-switch = "home-manager switch --flake path:${flake_path}#${profile} --impure";
       emacs = "COLORTERM=truecolor emacs -nw";
