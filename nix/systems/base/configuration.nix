@@ -70,7 +70,7 @@
       gcoe = "git config user.email";
       gcon = "git config user.name";
       all-switch = "nix-switch && home-switch";
-      nix-switch = "sudo nixos-rebuild switch --flake path:${flake_path}#${profile}";
+      nix-switch = "sudo nixos-rebuild switch --flake path:${flake_path}#${profile} --impure";
       all-update = "sudo nix flake update ${flake_path}# && all-switch";
     };
   };

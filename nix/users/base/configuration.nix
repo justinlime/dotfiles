@@ -6,10 +6,10 @@
   nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for the above borked option
 
   home = {
-    username = "${username}";
-    homeDirectory = "/home/${username}";
+    username = builtins.getEnv "USER";
+    homeDirectory = builtins.getEnv "HOME";
     shellAliases = {
-      home-switch = "home-manager switch --flake path:${flake_path}#${profile}";
+      home-switch = "home-manager switch --flake path:${flake_path}#${profile} --impure";
       emacs = "COLORTERM=truecolor emacs -nw";
       ga = "git add";
       gs = "git status";

@@ -127,22 +127,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_stable": {
-      "locked": {
-        "lastModified": 1704290814,
-        "narHash": "sha256-LWvKHp7kGxk/GEtlrGYV68qIvPHkU9iToomNFGagixU=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "70bdadeb94ffc8806c0570eb5c2695ad29f0e421",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-23.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "pipecord": {
       "inputs": {
         "nixpkgs": [
@@ -169,7 +153,6 @@
         "hyprland": "hyprland",
         "maxfetch": "maxfetch",
         "nixpkgs": "nixpkgs",
-        "nixpkgs_stable": "nixpkgs_stable",
         "pipecord": "pipecord"
       }
     },
