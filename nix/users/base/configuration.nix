@@ -7,9 +7,9 @@
 
   home = {
     username = username;
-    homeDirectory = /. + builtins.getEnv "HOME";
+    homeDirectory = "/home/${username}";
     shellAliases = {
-      home-switch = "home-manager switch --flake path:${flake_path}#${profile} --impure";
+      home-switch = "home-manager switch --flake path:${flake_path}#${profile}";
       emacs = "COLORTERM=truecolor emacs -nw";
       ga = "git add";
       gs = "git status";
