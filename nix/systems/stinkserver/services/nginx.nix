@@ -9,7 +9,7 @@
     enable = true;
     virtualHosts = {
       "justinlime.dev" = {
-        serverName = "justinlime.dev";
+        serverName = "justinlime.dev test.justinlime.dev";
         root = "/sites/justinlime.dev/src/public";
         listen = [{
           port = 90;
@@ -21,8 +21,24 @@
            '';
          };
       };
+      "download.justinlime.dev" = {
+        serverName = "download.justinlime.dev";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }];
+        locations."/" = {
+          root = "/drives/NVME0/fileshare";
+          extraConfig = ''
+            add_before_body /.theme/header.html;
+            add_after_body /.theme/footer.html;
+            autoindex on;
+            autoindex_exact_size off;
+          '';
+        };
+      };
       "downloads.stinkboys.com" = {
-        serverName = "downloads.stinkboys.com";
+        serverName = "downloads.stinkboys.com download.stinkboys.com";
         listen = [{
           port = 90;
           addr = "0.0.0.0";
