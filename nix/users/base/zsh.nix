@@ -4,6 +4,7 @@
     fzf
     eza
     fd
+    zoxide
   ];
   programs.zsh = {
     enable = true;
@@ -34,6 +35,12 @@
               else
                   builtin cd "$@" && eza --group-directories-first
               fi
+          else
+              if [ $# -eq 0 ]; then
+                builtin cd && ls --group-directories-first
+              else
+                  builtin cd "$@" && ls --group-directories-first
+              fi
           fi
       }
       function f(){
@@ -50,6 +57,14 @@
     ''
       export PATH=$HOME/.nix-profile/bin:$PATH
       export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+      eval "$(zoxide init --cmd z zsh)"
+      function cd() {
+         if [ $# -eq 0 ]; then
+            z && eza --group-directories-first
+         else
+            z "$@" && eza --group-directories-first
+         fi
+      }
     '';
   };
 }

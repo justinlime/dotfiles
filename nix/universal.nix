@@ -7,7 +7,6 @@ with pkgs; [
   coreutils-full
   zip
   unzip
-  eza
   bat
   gnutar
   btop
