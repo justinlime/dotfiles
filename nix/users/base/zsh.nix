@@ -1,5 +1,10 @@
-{ ... }:
+{ pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    fzf
+    eza
+    fd
+  ];
   programs.zsh = {
     enable = true;
     autocd = true;
@@ -8,8 +13,6 @@
     syntaxHighlighting.enable = true;
     initExtra = ''
       setopt appendhistory
-      export PATH=$HOME/.nix-profile/bin:$PATH
-      export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
       parse_git_branch() {
         git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
       }
@@ -24,6 +27,29 @@
 				unfunction preexec
 				PS1='$ '
 			fi
+      function cd() {
+          if which eza >/dev/null; then 
+              if [ $# -eq 0 ]; then
+                  builtin cd && eza --group-directories-first
+              else
+                  builtin cd "$@" && eza --group-directories-first
+              fi
+          fi
+      }
+      function f(){
+         builtin cd "$(fd -t d --full-path / . | fzf)" && eza --group-directories-first
+      }
+      function fa(){
+         builtin cd "$(fd -t d --full-path / / | fzf)" && eza --group-directories-first
+      }
+      function fh(){
+         builtin cd "$(fd -t d --full-path / ~ | fzf)" && eza --group-directories-first
+      }
+    '' +
+    # Nix Specific
+    ''
+      export PATH=$HOME/.nix-profile/bin:$PATH
+      export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
     '';
   };
 }

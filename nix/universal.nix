@@ -7,6 +7,7 @@ with pkgs; [
   coreutils-full
   zip
   unzip
+  eza
   gnutar
   btop
   speedtest-cli

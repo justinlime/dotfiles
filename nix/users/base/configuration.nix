@@ -25,6 +25,7 @@
       gchb = "git checkout -b";
       gcoe = "git config user.email";
       gcon = "git config user.name";
+      ls = "exa --group-directories-first";
     };
     sessionVariables = {
       MANGOHUD = "1";
