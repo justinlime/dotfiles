@@ -8,6 +8,7 @@ with pkgs; [
   zip
   unzip
   eza
+  bat
   gnutar
   btop
   speedtest-cli

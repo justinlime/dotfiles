@@ -26,6 +26,7 @@
       gcoe = "git config user.email";
       gcon = "git config user.name";
       ls = "exa --group-directories-first";
+      cat = "bat -p";
     };
     sessionVariables = {
       MANGOHUD = "1";

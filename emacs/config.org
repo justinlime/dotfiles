@@ -226,7 +226,7 @@
           (window (get-buffer-window wrapped-name)))
             (if window (delete-window window)
                 ;; Creates a window below the current window at 22% of the windows height
-                (select-window (split-window-below (round (* height 0.78))))
+                (select-window (split-root-window-below (round (* height 0.78))))
                 ;; If command is provided, start the term using the shells -c flag
                 (if (eq command nil)
                   (make-term unwrapped-name (getenv "SHELL")) ; The make-term function automatically wraps *'s around the name given, hence the unwrapped name being used.
