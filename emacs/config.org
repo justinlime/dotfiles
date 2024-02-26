@@ -260,7 +260,11 @@
   (persp-switch host)
   (let ((format-host (format formatter host host)))
     (find-file format-host)
-    (jl/toggle-term host (format "ssh %s" host))))
+    (jl/toggle-term host (format "ssh %s" host))
+    (run-at-time 1 nil #'(lambda()
+      (jl/str-to-input jl/pass)
+      (execute-kbd-macro (kbd "RET"))
+      (setq jl/pass nil)))))
 (defun jl/ssh-root (host)
   "SSH with sudo privledges using a host from .ssh/config"
   (interactive "sEnter host: ")
@@ -269,6 +273,29 @@
   "SSH using a host from .ssh/config"
   (interactive "sEnter host: ")
   (jl/ssh host "/ssh:%s:~"))
+
+(defvar jl/pass nil)
+(defun jl/capture-password (orig-func &rest args)
+  "Capture the password temporarily to send to send somewhere
+   Probably pretty insecure but I dont really care"
+
+  (let ((pass (apply orig-func args)))
+    ;; only capture if jl/pass is not active
+    (if (eq jl/pass nil)
+      (setq jl/pass pass)
+      (run-at-time 30 nil #'(lambda()
+          ;; clear the pass from memory
+          (setq jl/pass nil))))
+    ;; always return the original value so the orig-function works like normal
+    pass))
+
+(advice-add #'read-passwd :around #'jl/capture-password)
+
+(defun jl/str-to-input (str)
+  (mapc (lambda (char)
+    (execute-kbd-macro (char-to-string char)))
+    str))
+
 
 (defun jl/consult-find-in-dir ()
   "Find a file in a specific directory
