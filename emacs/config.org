@@ -29,6 +29,7 @@
   - [[#programming][Programming]]
     - [[#direnv][Direnv]]
     - [[#lspcompletion][LSP/Completion]]
+      - [[#outline][Outline]]
       - [[#eglot][Eglot]]
       - [[#corfu][Corfu]]
       - [[#cape][Cape]]
@@ -380,6 +381,14 @@
   (if (file-directory-p (dired-get-file-for-visit))
     (dired-find-alternate-file)
     (dired-find-file)))
+
+(defun jl/symbols-outline-toggle ()
+  "Toggle the symbols outline"
+  (interactive)
+  (let ((w (get-buffer-window "*Outline*")))
+    (if w 
+      (delete-window w)
+      (symbols-outline-show))))
 #+end_src
 
 * Keybinds
@@ -457,6 +466,13 @@
    "DEL" #'vertico-directory-delete-char
    "<backtab>" #'vertico-previous)
 
+  ;; Symbol Outlines
+  (general-define-key
+   :states 'normal
+   :keymaps 'symbols-outline-mode-map
+   "RET" #'symbols-outline-visit
+   "<tab>" #'symbols-outline-toggle-node)
+
   ;; Org
   (general-define-key
     :states 'normal 
@@ -520,6 +536,9 @@
     "d" '(:ignore t :wk "Directory Tree")
     "d t" '(neotree-toggle :wk "Toggle Directory Tree")
     "d r" '(neotree-dir :wk "Change Directory Root"))
+  (leader
+    "o" '(:ignore t :wk "Symbols Outline")
+    "o t" '(jl/symbols-outline-toggle :wk "Toggle the symbol outline"))
   (leader
     "f" '(:ignore t :wk "Find file")
     "f f" '(find-file :wk "Find file directly")
@@ -715,6 +734,20 @@
   (envrc-global-mode))
 #+end_src
 *** LSP/Completion
+**** Outline
+#+begin_src emacs-lisp
+(use-package symbols-outline
+  :config
+  (setq symbols-outline-fetch-fn #'symbols-outline-lsp-fetch
+        symbols-outline-window-position 'right
+        symbols-outline-no-other-window nil
+        symbols-outline-window-width '30)
+  (add-hook 'symbols-outline-mode-hook #'(lambda ()
+    (face-remap-set-base 'default :background "#181825")
+    (face-remap-set-base 'fringe :background "#181825")
+    (display-line-numbers-mode -1)))
+  (symbols-outline-follow-mode))
+#+end_src
 **** Eglot
 #+begin_src emacs-lisp
 ;; Override the binary being used on startup
@@ -724,19 +757,28 @@
   (add-to-list 'eglot-server-programs
                '((nix-ts-mode nix-mode) . ("nixd"))))
 
-(add-hook 'find-file-hook (lambda()
-  (unless (file-remote-p (buffer-file-name)) 
-    (cond
-      ((eq major-mode 'go-ts-mode)(eglot-ensure))
-      ((eq major-mode 'python-ts-mode)(eglot-ensure))
-      ((eq major-mode 'js-ts-mode)(eglot-ensure))
-      ((eq major-mode 'bash-ts-mode)(eglot-ensure))
-      ((eq major-mode 'typescript-ts-mode)(eglot-ensure))
-      ((eq major-mode 'rust-ts-mode)(eglot-ensure))
-      ((eq major-mode 'elixir-ts-mode)(eglot-ensure))
-      ((eq major-mode 'nix-ts-mode)(eglot-ensure))
-      ((eq major-mode 'java-ts-mode)(eglot-ensure))
-      ((eq major-mode 'c-ts-mode)(eglot-ensure))))))
+;; (defun jl/eglot-find-file-hook ()
+;;   (eglot-ensure)
+;;   (symbols-outline-show))
+(defvar jl/eglot-enabled-langs 
+    '(go-ts-mode  
+      python-ts-mode
+      js-ts-mode
+      typescript-ts-mode
+      rust-ts-mode
+      elixir-ts-mode
+      nix-ts-mode
+      java-ts-mode
+      c-ts-mode
+      bash-ts-mode))
+
+(add-hook 'find-file-hook #'(lambda()
+    (unless (file-remote-p (buffer-file-name)) 
+      (dolist (lang jl/eglot-enabled-langs)
+        (if (eq major-mode lang)
+          (progn
+            
+            (eglot-ensure)))))))
 #+end_src
 **** Corfu
 #+begin_src emacs-lisp
@@ -815,7 +857,7 @@
 (use-package git-gutter)
 
 ;; Disable git-gutter over tramp
-(add-hook 'find-file-hook (lambda()
+(add-hook 'find-file-hook #'(lambda()
   (unless (file-remote-p (buffer-file-name))
     (git-gutter-mode t))))
 #+end_src
