@@ -8,6 +8,7 @@
     ../base/wayland.nix
     ../base/networking.nix
     ../base/virtulization.nix
+    ../base/usb.nix
   ];
   programs = {
     light.enable = true;

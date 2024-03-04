@@ -8,6 +8,7 @@
     ../base/ssh.nix
     ../base/docker.nix
     ../base/networking.nix
+    ../base/usb.nix
   ];
 
   networking = {
