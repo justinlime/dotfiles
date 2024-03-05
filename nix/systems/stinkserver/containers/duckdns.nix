@@ -8,7 +8,7 @@
        TZ = "America/Chicago";
        PUID = "1000";
        PGID = "100";
-       SUBDOMAINS = "${hush.duckdns.stinkserver-subdomain}";
+       SUBDOMAINS = "${hush.duckdns.stinkserver.subdomain}";
        TOKEN = "${hush.duckdns.token}";
        UPDATE_IP = "ipv4";
      };

@@ -12,7 +12,7 @@
        PEERDNS = "9.9.9.9";
        ALLOWEDIPS = "0.0.0.0/0";
        SERVERPORT = "51820";
-       SERVERURL = "${hush.wireguard.stinkserver-url}";
+       SERVERURL = "${hush.wireguard.stinkserver.url}";
      };
      ports = [ "51820:51820/udp" ];
      volumes = [
