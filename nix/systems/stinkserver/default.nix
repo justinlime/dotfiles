@@ -1,4 +1,4 @@
-{ pkgs, inputs, flake_path, ... }:
+{ pkgs, inputs, username, hush, flake_path, ... }:
 {
   imports = [ 
     ./hardware-configuration.nix
@@ -15,6 +15,9 @@
    hostName = "stinkserver"; 
    nameservers = ["9.9.9.9"];
   };
+  users.users.${username}.openssh.authorizedKeys.keys = [
+    "${hush.ssh.public-keys.stinkserver}" 
+  ];
 
   environment.systemPackages = with pkgs; [
     mergerfs

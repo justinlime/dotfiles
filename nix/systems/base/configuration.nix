@@ -65,6 +65,8 @@
       gpso = "git push origin";
       gc = "git commit";
       gcm = "git commit -m";
+      gca = "git commit --amend";
+      gcan = "git commit --amend --no-edit";
       gch = "git checkout";
       gchb = "git checkout -b";
       gcoe = "git config user.email";

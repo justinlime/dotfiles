@@ -22,7 +22,12 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     inherit (nixpkgs.lib) flatten genAttrs splitString;
-    inherit (builtins) elemAt attrNames readDir; 
+    inherit (builtins) head fromTOML readFile elemAt attrNames readDir; 
+
+    # Shhhhh
+    # Read all the files an mush them into a top level hush variable
+    hush = let dir = ./hush; temp = {}; in
+      head (map (x: temp // (fromTOML (readFile "${dir}/${x}"))) (attrNames (readDir dir)));
 
     # This is a stinky way to add something like command line arguments to the switch
     # commands. The flags are seperated by .'s
@@ -47,7 +52,7 @@
           in
           home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit profile username flake_path inputs; };
+            extraSpecialArgs = { inherit profile username flake_path hush inputs; };
             modules = [
               ./nix/users/${name}
               # Enable flakes after bootstrapping, if you dont have home-manager, flakes, or nix-command setup yet,
@@ -72,7 +77,7 @@
            in
            nixpkgs.lib.nixosSystem {
              inherit system;
-             specialArgs = { inherit profile username flake_path inputs; }; 
+             specialArgs = { inherit profile username flake_path hush inputs; }; 
              modules = [
                ./nix/systems/${name}
                { nix.settings.experimental-features = [ "nix-command" "flakes" ]; }

@@ -21,5 +21,6 @@ with pkgs; [
   lm_sensors
   inputs.maxfetch.packages.${pkgs.system}.default
   roboto
+  git-crypt
   (nerdfonts.override { fonts = [ "RobotoMono" ]; })
 ]
