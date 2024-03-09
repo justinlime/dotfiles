@@ -11,15 +11,13 @@
     hush = let dir = ./hush; temp = {}; in
       head (map (x: temp // (importTOML "${dir}/${x}")) (attrNames (readDir dir)));
 
-    # This is a stinky way to add something like command line arguments to the switch
-    # commands. The flags are seperated by .'s
-    # I use this for the variety of usernames and systems I might use so I
-    # can pass them imperitevly in the rebuild commands
-    # EX: brimstone.x86_64-linux.justinlime, jesktop.x86_64-linux.justinlime
+    # Prefix every string in a ${list} with a given ${flag}, seperated by dots
+    #
+    # EX: addFlags [ "brimstone" ] "x86_64-linux" -> [ "brimstone.x86_64-linux" ]
     addFlags = list: flag: (map (y: "${flag}.${y}") list);
 
-    # Add flags for every home and system profile (directory containing a default.nix file)
-    # in a given dir, and apply a function to each attribute in the resulting set
+    # Add flags for every username, home profile, and system profile (directory containing a default.nix file)
+    # in a given dir, then apply a given function to each attribute in the resulting set
     applyProfiles = dir: func: (genAttrs
       (flatten (map (addFlags hush.usernames)
         (flatten (map (addFlags systems)
@@ -27,6 +25,7 @@
 
     setParams = profile: rec {
       # Split the attribute's name into independant variables
+      #
       # EX: brimstone.x86_64-linux.justinlime -> [ "brimstone" "x86_64-linux" "justinlime" ]
       split = splitString "." profile;  
       name = elemAt split 0;            
@@ -36,8 +35,15 @@
       flake_path = "/home/${username}/dotfiles";
     };
 
-    # Generate an attribute in the set for every possible combination
-    # of system, profile, and username
+    # Generate a attributes in a set for every possible combination
+    # of system, profile, and username. The attribute names will be in the format of
+    #
+    # ${profile}.${system}.${username}
+    #
+    # EX: brimstone.x86_64-linux.justinlime, jesktop.x86_64-linux.justinlime
+    #
+    # I use this for the variety of usernames and systems I might use so I
+    # can pass them imperitevly in the rebuild commands.
     allHomeConfigurations = applyProfiles "users"
       (profile:                               
         with (setParams profile);
@@ -76,6 +82,7 @@
     homeConfigurations = allHomeConfigurations; 
     nixosConfigurations = allSystemConfigurations; 
   };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
