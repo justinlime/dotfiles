@@ -17,6 +17,7 @@
     initrd.kernelModules = [ 
       "amdgpu" 
     ];
+    # New kernels crash my desktop for some reason, still have to debug that
     kernelPackages = pkgs.linuxPackages_6_1;
     kernelModules = [ "kvm-amd" ];
   };

@@ -202,6 +202,7 @@ pkgs,
         "immediate, class:^(love)$" #vrrtest
         "immediate, class:^(steam_app_1659040)$" #Hitman 3
         "immediate, class:^(steam_app_1144200)$" #Ready or Not
+        "immediate, class:^(steam_app_1144200)$" #Blops 3
       ];
       layerrule = [
         "blur, waybar"
