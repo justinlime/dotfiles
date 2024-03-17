@@ -1,26 +1,29 @@
 { inputs , pkgs, username, ... }:
 {
   home.packages = with pkgs; [
+    # Runtime
     emacs29-pgtk
     tree-sitter
-    gcc #needed to compile treesitter langs in emacs
-		lua-language-server #Lua
+    gcc 
+    imagemagick
+    # Language Servers
+		lua-language-server 
     elixir-ls
     nixd 
-    go # Needed for gopls
-    gopls #Golang
-    rust-analyzer #Rust
+    go 
+    gopls 
+    rust-analyzer
     zls #Zig
     clang-tools #C
     python311Packages.jedi-language-server #Python
-    java-language-server #Java
-    # haskellPackages.hls # Haskell
+    java-language-server
     nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
     nodePackages_latest.grammarly-languageserver #Markdown
     nodePackages_latest.typescript-language-server #Javascript and Typescript
-    nodePackages_latest.bash-language-server #Bash
+    nodePackages_latest.bash-language-server
     nodePackages_latest.dockerfile-language-server-nodejs #Dockerfiles
-    nodePackages_latest.yaml-language-server #Yaml
+    nodePackages_latest.yaml-language-server
+    # Fonts
     roboto
     (nerdfonts.override { fonts = [ "RobotoMono" ]; })
   ];

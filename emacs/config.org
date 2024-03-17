@@ -6,6 +6,7 @@
 
 * TABLE OF CONTENTS :TOC_4:
 - [[#general][General]]
+  - [[#late-init][Late Init]]
   - [[#package-manger][Package Manger]]
   - [[#misc-preferences][Misc Preferences]]
   - [[#custom-functions][Custom Functions]]
@@ -75,6 +76,22 @@
     - [[#treesitter][Treesitter]]
 
 * General
+** Late Init
+#+begin_src emacs-lisp
+;; revert inflated GC defined in early init to avoid GC pauses while editing
+(add-hook 'after-init-hook #'(lambda ()
+    (setq file-name-handler-alist file-name-handler-alist-original)
+    (makunbound 'file-name-handler-alist-original)))
+;; Revert again just in case if out of focus (doesnt work for terminal emacs)
+;; and use the chance to collect garbage
+(add-hook 'focus-out-hook #'(lambda ()
+  (setq gc-cons-threshold (* 1024 1024 16))
+  (garbage-collect)))
+;; Revert after 5 seconds of being idle as an additonal precaution
+(run-with-idle-timer 5 nil
+  (lambda ()
+    (setq gc-cons-threshold (* 1024 1024 16))))
+#+end_src 
 ** Package Manger
 #+begin_src emacs-lisp 
 (defvar elpaca-installer-version 0.6)
@@ -142,11 +159,6 @@
 #+end_src
 ** Misc Preferences 
 #+begin_src emacs-lisp
-;; revert inflated GC defined in early init to avoid GC pauses while editing
-(run-with-idle-timer 1 nil
-  (lambda ()
-    (setq gc-cons-threshold 1000000)
-    (message "gc-cons-threshold restored to %S" gc-cons-threshold)))
 ;; Enable mouse in term-mode
 (unless (display-graphic-p)
   (xterm-mouse-mode 1))
@@ -165,6 +177,7 @@
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (global-hl-line-mode)
 (electric-indent-mode t)
+(setq frame-resize-pixelwise t)
 
 ;; Kill *Help* after :q'ing, and kill magit buffers when quitting them
 (advice-add #'evil-quit :after #'(lambda(&rest r)
@@ -959,7 +972,17 @@
   (setq-local electric-indent-mode nil)))
 
 (setq org-src-preserve-indentation t)
+(setq org-startup-with-inline-images t)
+;; This settings causes ridiculous lag.
+;; (setq org-image-actual-width (round (* (window-pixel-width) 0.50)))
 
+;; Scale inline images to the windows size adaptively
+(defun org-image-resize (frame)
+  (when (derived-mode-p 'org-mode)
+      (setq org-image-actual-width (round (* (window-pixel-width) 0.5)))
+      (org-redisplay-inline-images)))
+
+(add-hook 'window-size-change-functions 'org-image-resize)
 #+end_src
 **** Org Table of Contents
 #+begin_src emacs-lisp

@@ -18,7 +18,7 @@
       luks.devices."cryptpart".device = "/dev/disk/by-uuid/ade7c385-a68c-40f3-9fae-8e997aa0dee3";
     };
     kernelModules = [ "kvm-amd" ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
   };
 
   fileSystems = {
