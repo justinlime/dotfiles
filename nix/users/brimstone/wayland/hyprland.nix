@@ -30,8 +30,11 @@ pkgs,
     settings = {
       "$mainMod" = "ALT";
       monitor = [
-        ",preferred,auto,auto"
-        "eDP-1,1920x1080@60,0x0,1"
+        # name,resolution,position,scale
+        # position can be negative to swtich monitor to the left or right side
+        "DP-1,3840x2160@144,0x0,1.5,bitdepth,10"
+        # Position is affected by scaling, i.e. 3840 at 1.5 scaling results in 2560
+        "DP-2,2560x1440@165,2560x0,1"
       ];
       exec-once = [
         "waybar"
