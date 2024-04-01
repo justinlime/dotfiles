@@ -33,8 +33,8 @@ pkgs,
         # name,resolution,position,scale
         # position can be negative to swtich monitor to the left or right side
         "DP-1,3840x2160@144,0x0,1.5,bitdepth,10"
-        # Position is affected by scaling, i.e. 3840 at 1.5 scaling results in 2560
         "DP-2,2560x1440@165,2560x0,1"
+        "eDP-1,1920x1080@60,0x0,1"
       ];
       exec-once = [
         "waybar"
@@ -43,6 +43,9 @@ pkgs,
         "hyprctl setcursor ${custom.cursor} ${custom.fontsize}"
         "swaync"
       ];
+      xwayland = {
+        force_zero_scaling = true; 
+      };
       input = {
         kb_layout = "us";
         follow_mouse = true;
@@ -198,14 +201,8 @@ pkgs,
         "float,title:^(File Operation Progress)$"
         "float,title:^(mpv)$"
         # Ensure tearing for specific games
-        "immediate, class:^(cs2)$" #counterstrike
-        "immediate, title:^(DayZ)$" #DayZ
-        "immediate, title:^(SonsOfTheForest)$" #DayZ
-        "immediate, title:^(Arma 3)$" #DayZ
-        "immediate, class:^(love)$" #vrrtest
-        "immediate, class:^(steam_app_1659040)$" #Hitman 3
-        "immediate, class:^(steam_app_1144200)$" #Ready or Not
-        "immediate, class:^(steam_app_1144200)$" #Blops 3
+        # All games run with gamescope
+        "immediate, class:^(.gamescope-wrapped)$" 
       ];
       layerrule = [
         "blur, waybar"

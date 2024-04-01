@@ -18,7 +18,6 @@
     python311Packages.jedi-language-server #Python
     java-language-server
     nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
-    nodePackages_latest.grammarly-languageserver #Markdown
     nodePackages_latest.typescript-language-server #Javascript and Typescript
     nodePackages_latest.bash-language-server
     nodePackages_latest.dockerfile-language-server-nodejs #Dockerfiles

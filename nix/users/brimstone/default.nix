@@ -1,4 +1,4 @@
-{ profile, inputs, username, flake_path, pkgs, ... }:
+{ profile, inputs, username, flake_path, pkgs, pkgsStable, ... }:
 let 
   # Variables to share accross configs
   custom = {
@@ -16,7 +16,7 @@ in
 {
   # Brimstone is my main everyday home configuration, including a number
   # of tools and services i use on a daily basis
-  _module.args = { inherit profile inputs username custom; };
+  _module.args = { inherit pkgsStable profile inputs username custom; };
   imports = [ 
     ./themes
     ./wayland

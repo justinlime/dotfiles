@@ -16,7 +16,6 @@
     # haskellPackages.hls # Haskell
     nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
     nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
-    nodePackages_latest.grammarly-languageserver #Markdown
     nodePackages_latest.typescript-language-server #Javascript and Typescript
     nodePackages_latest.bash-language-server #Bash
     nodePackages_latest.dockerfile-language-server-nodejs #Dockerfiles

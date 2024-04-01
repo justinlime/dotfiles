@@ -28,9 +28,7 @@
       ls = "exa --group-directories-first";
       cat = "bat -p";
     };
-    sessionVariables = {
-      MANGOHUD = "1";
-    };
+
     packages = with pkgs; [
     ] ++ (import ../../universal.nix pkgs inputs);
   };

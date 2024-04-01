@@ -1,4 +1,4 @@
-#+TITLE: Justinlime's Emacs
+#+TITLE: Justinlime's Emac 
 #+AUTHOR: justinlime
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
