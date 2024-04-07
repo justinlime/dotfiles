@@ -41,10 +41,10 @@
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "subvol=nix" ];
     };
-    "/drives/nvme1" = {
-      device = "/dev/disk/by-label/nvme1";
+    "/drives/HDD0" = {
+      device = "/dev/disk/by-label/HDD0";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "subvol=nvme1" ];
+      options = [ "compress-force=zstd:1" "noatime" "nofail" ];
     };
   };
   swapDevices = [ ];
