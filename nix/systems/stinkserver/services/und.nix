@@ -1,5 +1,9 @@
 { username, ... }:
 {
+  networking.firewall = {
+    allowedTCPPorts = [ 26656 ];
+    allowedUDPPorts = [ 26656 ];
+  };
   systemd.services.und = {
     description="Unification Mainchain Node";
     serviceConfig = {
@@ -10,7 +14,7 @@
       Restart="always";
       RestartSec="10s";
       LimitNOFILE=4096;
-      ExecStart = "/usr/local/bin/cosmovisor run start --home /drives/EXTERNAL1/und_archive";
+      ExecStart = "/usr/local/bin/cosmovisor run start --x-crisis-skip-assert-invariants --home /drives/EXTERNAL1/und_archive";
     };
     wantedBy = [ "default.target" ];
   };
@@ -80,6 +84,36 @@
         }];
         locations."/" = {
           proxyPass = "http://localhost:26657";
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;    
+          '';
+        };
+      };
+      "p2p.unification.refundvalidator.com" = {
+        serverName = "p2p.unification.refundvalidator.com";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }];
+        locations."/" = {
+          proxyPass = "http://localhost:26656";
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;    
+          '';
+        };
+      };
+      "158.101.111.126" = {
+        serverName = "158.101.111.126";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }];
+        locations."/" = {
+          proxyPass = "http://localhost:26656";
           extraConfig = ''
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;

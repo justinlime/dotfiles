@@ -14,6 +14,10 @@
   networking = {
    hostName = "stinkserver"; 
    nameservers = ["9.9.9.9"];
+   firewall = {
+      allowedTCPPorts = [ 1313 ];
+      allowedUDPPorts = [ 1313 ];
+   };
   };
   users.users.${username}.openssh.authorizedKeys.keys = [
     "${hush.ssh.public-keys.stinkserver}" 

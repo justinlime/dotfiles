@@ -23,7 +23,7 @@
        "/storage/pool/media/watch/anime:/anime"
        "/storage/pool/media/watch/mom:/mom"
     ];
-     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
+     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card1" ];
     };  
   };
   services.nginx = {

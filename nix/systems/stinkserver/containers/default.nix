@@ -17,5 +17,6 @@
     ./pihole.nix
     ./deemix.nix
     ./komga.nix
+    ./syncthing.nix
   ];
 }

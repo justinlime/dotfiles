@@ -1,5 +1,8 @@
 { hush, ... }:
 {
+  systemd.tmpfiles.rules = [
+    "d /configs/wireguard 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  ];
   virtualisation.oci-containers.containers = {
     wireguard = {
      autoStart = true; 
