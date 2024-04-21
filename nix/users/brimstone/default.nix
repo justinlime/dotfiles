@@ -31,6 +31,7 @@ in
     ../base/mpd.nix
   ];
   programs.direnv.enable = true;
+  services.syncthing.enable = true;
   home.packages = with pkgs; [
     brave 
     firefox
