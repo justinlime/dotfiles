@@ -1,7 +1,8 @@
-{ ... }:
+{ username, ... }:
 {
   systemd.tmpfiles.rules = [
     "d /configs/syncthing 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+    "d /home/${username}/sync/notes 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
   ];
   virtualisation.oci-containers.containers = {
     syncthing = {
@@ -20,7 +21,8 @@
      ];
      volumes = [
        "/configs/syncthing:/config"
-       "/storage/users/justin:/data1"
+       "/home/${username}/sync/notes:/notes"
+       "/storage/pool:/pool"
      ];
      extraOptions = [ 
        "--hostname=stinkserver-syncthing"
