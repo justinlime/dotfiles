@@ -1,4 +1,4 @@
-#+TITLE: Justinlime's Emac 
+#+TITLE: Justinlime's Emacs
 #+AUTHOR: justinlime
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
@@ -30,6 +30,7 @@
   - [[#programming][Programming]]
     - [[#direnv][Direnv]]
     - [[#lspcompletion][LSP/Completion]]
+      - [[#sideline][Sideline]]
       - [[#outline][Outline]]
       - [[#eglot][Eglot]]
       - [[#corfu][Corfu]]
@@ -747,6 +748,25 @@
   (envrc-global-mode))
 #+end_src
 *** LSP/Completion
+**** Sideline
+#+begin_src emacs-lisp
+(use-package sideline
+  :init
+  (setq sideline-backends-left-skip-current-line t   ; don't display on current line (left)
+        sideline-backends-right-skip-current-line t  ; don't display on current line (right)
+        sideline-order-left 'down                    ; or 'up
+        sideline-order-right 'up                     ; or 'down
+        sideline-format-left "%s   "                 ; format for left aligment
+        sideline-format-right "   %s"                ; format for right aligment
+        sideline-priority 100                        ; overlays' priority
+        sideline-display-backend-name t))            ; display the backend name
+(use-package sideline-flymake
+  :hook (flymake-mode . sideline-mode)
+  :init
+  (setq sideline-flymake-display-mode 'line) ; 'point to show errors only on point
+                                             ; 'line to show errors on the current line
+  (setq sideline-backends-right '(sideline-flymake)))
+#+end_src
 **** Outline
 #+begin_src emacs-lisp
 (use-package symbols-outline
@@ -791,7 +811,8 @@
         (if (eq major-mode lang)
           (progn
             
-            (eglot-ensure)))))))
+            (eglot-ensure)
+            (sideline-mode)))))))
 #+end_src
 **** Corfu
 #+begin_src emacs-lisp
