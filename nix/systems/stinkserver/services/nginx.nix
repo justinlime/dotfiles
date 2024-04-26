@@ -21,8 +21,21 @@
            '';
          };
       };
+      "cheatsheet.justinlime.dev" = {
+        serverName = "cheatsheet.justinlime.dev";
+        root = "/sites/cheatsheet/src/public";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }];
+         locations."/" = {
+           extraConfig = ''
+            index index.html;
+           '';
+         };
+      };
       "download.justinlime.dev" = {
-        serverName = "download.justinlime.dev";
+        serverName = "downloads.justinlime.dev download.justinlime.dev";
         listen = [{
           port = 90;
           addr = "0.0.0.0";
