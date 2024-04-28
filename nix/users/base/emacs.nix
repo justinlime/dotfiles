@@ -10,6 +10,7 @@
 		lua-language-server 
     elixir-ls
     nixd 
+    samba
     go 
     gopls 
     rust-analyzer

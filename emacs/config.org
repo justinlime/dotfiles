@@ -95,68 +95,21 @@
 #+end_src 
 ** Package Manger
 #+begin_src emacs-lisp 
-(defvar elpaca-installer-version 0.6)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil
-                              :files (:defaults (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (< emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                 ((zerop (call-process "git" nil buffer t "clone"
-                                       (plist-get order :repo) repo)))
-                 ((zerop (call-process "git" nil buffer t "checkout"
-                                       (or (plist-get order :ref) "--"))))
-                 (emacs (concat invocation-directory invocation-name))
-                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                 ((require 'elpaca))
-                 ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (load "./elpaca-autoloads")))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
-
-;; Install use-package support
-(elpaca elpaca-use-package
-  ;; Enable :elpaca use-package keyword.
-  (elpaca-use-package-mode)
-  ;; Assume :elpaca t unless otherwise specified.
-  (setq elpaca-use-package-by-default t))
-
-;; Block until current queue processed.
-(elpaca-wait)
-
-;;When installing a package which modifies a form used at the top-level
-;;(e.g. a package which adds a use-package key word),
-;;use `elpaca-wait' to block until that package has been installed/configured.
-;;For example:
-;;(use-package general :demand t)
-;;(elpaca-wait)
-
-
-;;Turns off elpaca-use-package-mode current declartion
-;;Note this will cause the declaration to be interpreted immediately (not deferred).
-;;Useful for configuring built-in emacs features.
-(use-package emacs :elpaca nil :config (setq ring-bell-function #'ignore))
-
-;; Don't install anything. Defer execution of BODY
-(elpaca nil (message "deferred"))
+(require 'package) ; load the package manager
+(setq package-check-signature nil) ; override signature errors
+;; add package archives to package manager
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize) ; exactly what it sounds like 
+;; pull archvies only on very first startup
+(unless package-archive-contents
+    (package-refresh-contents))
+;; install use-package if it doesn't exist yet
+(unless (package-installed-p 'use-package) 
+  (package-install 'use-package))          
+(require 'use-package) ; load use-package
+;; Make use-package uses package.el, prevents having to use :ensure t on everything
+(setq use-package-always-ensure t) 
 #+end_src
 ** Misc Preferences 
 #+begin_src emacs-lisp
@@ -188,13 +141,13 @@
     (dolist (b (magit-mode-get-buffers))
         (kill-buffer b)))))
 
-;; Disables all startup warnings, and kills message buffer, comment this out when debugging
-(setq warning-minimum-level :emergency)
+;; ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
+;; (setq warning-minimum-level :emergency)
 (setq-default message-log-max nil)
-(add-hook 'dashboard-mode-hook #'(lambda() ;Kills the warning buffer for even emergency messages
-  (kill-buffer (get-buffer "*Warnings*"))
-  (kill-buffer (get-buffer "*Messages*"))
-  (keyboard-escape-quit)))
+;; (add-hook 'dashboard-mode-hook #'(lambda() ;Kills the warning buffer for even emergency messages
+;;   (kill-buffer (get-buffer "*Warnings*"))
+;;   (kill-buffer (get-buffer "*Messages*"))
+;;   (keyboard-escape-quit)))
 #+end_src
 ** Custom Functions
 *** Toggle-Term
@@ -294,6 +247,9 @@
   "SSH using a host from .ssh/config"
   (interactive "sEnter host: ")
   (jl/ssh host "/ssh:%s:~"))
+(defun jl/samba (host)
+  (interactive "sEnter user@ip: ")
+  (find-file (format "/smb:%s:" host)))
 
 (defvar jl/pass nil)
 (defun jl/capture-password (orig-func &rest args)
@@ -408,7 +364,6 @@
 * Keybinds
 ** Evil Mode
 #+begin_src emacs-lisp
-;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
   :init      ;; tweak evil's configuration before loading it
   (setq evil-want-integration t ;; This is optional since it's already set to t by default.
@@ -611,7 +566,8 @@
   (leader
     "s" '(:ignore t :wk "SSH")
     "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
-    "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")))
+    "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
+    "s m" '(jl/samba :wk "Access an SMB share")))
 #+end_src
 ** Keychord Binds
 #+begin_src emacs-lisp
@@ -817,7 +773,6 @@
 **** Corfu
 #+begin_src emacs-lisp
 (use-package corfu
-  :ensure t
   :config
   (setq corfu-popupinfo-delay 0)
   :custom
@@ -833,7 +788,6 @@
   (corfu-history-mode))
 
 (use-package corfu-terminal
-  :ensure t
   :config
   (unless (display-graphic-p)
     (corfu-terminal-mode 1)))
@@ -854,7 +808,6 @@
 **** Orderless
 #+begin_src emacs-lisp
 (use-package orderless
-  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
@@ -881,7 +834,6 @@
 #+end_src
 *** Magit
 #+begin_src emacs-lisp
-(use-package seq) ; Magit needs a newer version of seq
 (use-package magit)
 (add-hook 'magit-post-stage-hook #'(lambda ()
   (message "Staged")))
@@ -994,16 +946,15 @@
 
 (setq org-src-preserve-indentation t)
 (setq org-startup-with-inline-images t)
-;; This settings causes ridiculous lag.
-;; (setq org-image-actual-width (round (* (window-pixel-width) 0.50)))
 
 ;; Scale inline images to the windows size adaptively
-(defun org-image-resize (frame)
-  (when (derived-mode-p 'org-mode)
-      (setq org-image-actual-width (round (* (window-pixel-width) 0.5)))
-      (org-redisplay-inline-images)))
+;; This lags the shit out of emacs
+;; (defun org-image-resize (frame)
+;;   (when (derived-mode-p 'org-mode)
+;;       (setq org-image-actual-width (round (* (window-pixel-width) 0.5)))
+;;       (org-redisplay-inline-images)))
 
-(add-hook 'window-size-change-functions 'org-image-resize)
+;; (add-hook 'window-size-change-functions 'org-image-resize)
 #+end_src
 **** Org Table of Contents
 #+begin_src emacs-lisp
@@ -1022,7 +973,6 @@
 **** Org Roam
 #+begin_src emacs-lisp
 (use-package org-roam
-  :ensure t
   :custom
   (org-roam-directory (file-truename "~/sync/notes/roam"))
   :config
@@ -1046,15 +996,15 @@
 #+end_src
 *** Dired
 #+begin_src emacs-lisp
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+(setq dired-listing-switches "-alFh")
 (use-package diredfl
   :config
   (diredfl-global-mode))
-(setq dired-listing-switches "-alFh")
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
 (use-package doom-modeline
-  :ensure t
   :config
   (setq doom-modeline-total-line-number t)
   (set-face-attribute 'mode-line nil :background "#11111B")
@@ -1119,10 +1069,7 @@
 *** Dashboard
 #+begin_src emacs-lisp
 (use-package dashboard
-  :elpaca t
   :config
-  (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
-  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   (setq default-directory "~/"
         initial-buffer-choice (lambda() (get-buffer-create "*dashboard*")) 
         dashboard-banner-logo-title (jl/random-quote)
@@ -1182,6 +1129,7 @@
     ;; (html "https://github.com/tree-sitter/tree-sitter-html") ;not used yet cant find a good html-ts-mode and I dont feel like making one
     (css "https://github.com/tree-sitter/tree-sitter-css")
     (go "https://github.com/tree-sitter/tree-sitter-go")
+    (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
     (java "https://github.com/tree-sitter/tree-sitter-java")
     (bash "https://github.com/tree-sitter/tree-sitter-bash")))
 
@@ -1212,7 +1160,7 @@
 ;; If you need to override the names of the expected libraries, defualt emacs looks for libtree-sitter-${LANG_NAME}
 ;; (setq treesit-load-name-override-list
 ;;    '((cc "libtree-sitter-c")
-;;      (bash "libtree-sitter-bash")))
+;;      (gomod "libtree-sitter-go")))
 #+end_src
 
 
