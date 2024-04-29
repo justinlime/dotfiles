@@ -3,74 +3,83 @@
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
 #+STARTUP: showeverything, inlineimages
-
+      
 * TABLE OF CONTENTS :TOC_4:
 - [[#general][General]]
   - [[#late-init][Late Init]]
-  - [[#package-manger][Package Manger]]
-  - [[#misc-preferences][Misc Preferences]]
-  - [[#custom-functions][Custom Functions]]
-    - [[#toggle-term][Toggle-Term]]
-    - [[#misc][Misc]]
-- [[#keybinds][Keybinds]]
-  - [[#evil-mode][Evil Mode]]
-  - [[#general-binds][General Binds]]
-  - [[#keychord-binds][Keychord Binds]]
-- [[#functionality][Functionality]]
-  - [[#general-1][General]]
-    - [[#which-key][Which Key]]
-    - [[#neotree][Neotree]]
-    - [[#tramp][Tramp]]
-    - [[#perspective][Perspective]]
-    - [[#affe][Affe]]
-    - [[#consult][Consult]]
-    - [[#marginalia][Marginalia]]
-    - [[#undo-tree][Undo Tree]]
-    - [[#terminal-emacs][Terminal Emacs]]
-  - [[#programming][Programming]]
-    - [[#direnv][Direnv]]
-    - [[#lspcompletion][LSP/Completion]]
-      - [[#sideline][Sideline]]
-      - [[#outline][Outline]]
-      - [[#eglot][Eglot]]
-      - [[#corfu][Corfu]]
-      - [[#cape][Cape]]
-      - [[#orderless][Orderless]]
-      - [[#vertico][Vertico]]
-      - [[#yasnippet][Yasnippet]]
-    - [[#magit][Magit]]
-    - [[#git-gutter][Git Gutter]]
-    - [[#prog-modes][Prog Modes]]
-      - [[#python-mode][Python Mode]]
-      - [[#javascript-mode][Javascript Mode]]
-      - [[#typescript-mode][TypeScript Mode]]
-      - [[#vue-mode][Vue Mode]]
-      - [[#go-mode][Go Mode]]
-      - [[#nix-mode][Nix Mode]]
-      - [[#lua-mode][Lua Mode]]
-      - [[#elixir-mode][Elixir Mode]]
-      - [[#rust-mode][Rust Mode]]
-      - [[#powershell-mode][PowerShell Mode]]
-  - [[#modes][Modes]]
-    - [[#markdown-mode][Markdown Mode]]
-    - [[#erc-mode][Erc Mode]]
-    - [[#term-mode][Term Mode]]
-    - [[#org-mode][Org Mode]]
-      - [[#org-general][Org General]]
-      - [[#org-table-of-contents][Org Table of Contents]]
-      - [[#org-modern][Org Modern]]
-      - [[#org-roam][Org Roam]]
-- [[#look--feel][Look & Feel]]
-  - [[#general-2][General]]
-    - [[#themes][Themes]]
-    - [[#dired][Dired]]
-    - [[#modeline][Modeline]]
-    - [[#gui-settings][GUI Settings]]
+    - [[#package-manger][Package Manger]]
+    - [[#use-package][Use Package]]
+  - [[#preferences][Preferences]]
+    - [[#littering][Littering]]
+      - [[#buffer-litter][Buffer Litter]]
+      - [[#file-litter][File litter]]
+    - [[#gui][GUI]]
     - [[#scrolling][Scrolling]]
     - [[#fonts][Fonts]]
-    - [[#icons][Icons]]
+    - [[#misc][Misc]]
+  - [[#custom-functions][Custom Functions]]
+    - [[#toggle-term][Toggle-Term]]
+    - [[#misc-1][Misc]]
+- [[#configurations][Configurations]]
+  - [[#keybinds][Keybinds]]
+    - [[#generalel][General.el]]
+    - [[#evil][Evil]]
+      - [[#evil-mode][Evil Mode]]
+      - [[#evil-collection][Evil Collection]]
+    - [[#keychord][Keychord]]
+    - [[#which-key][Which Key]]
+  - [[#tramp][Tramp]]
+  - [[#dired][Dired]]
+    - [[#diredfl][Diredfl]]
+  - [[#eglot][Eglot]]
+  - [[#erc][ERC]]
+  - [[#term][Term]]
+  - [[#org][Org]]
+    - [[#org-toc][Org Toc]]
+    - [[#org-modern][Org Modern]]
+    - [[#org-roam][Org Roam]]
+  - [[#minibuffer][Minibuffer]]
+    - [[#marginalia][Marginalia]]
+    - [[#vertico][Vertico]]
+  - [[#finding][Finding]]
+    - [[#affe][Affe]]
+    - [[#consult][Consult]]
+  - [[#completion][Completion]]
+    - [[#corfu][Corfu]]
+      - [[#corfu-terminal][Corfu Terminal]]
+    - [[#cape][Cape]]
+    - [[#orderless][Orderless]]
+    - [[#yasnippet][Yasnippet]]
+      - [[#yasnippet-snippets][Yasnippet Snippets]]
+      - [[#yasnipped-capf][Yasnipped Capf]]
+  - [[#git][Git]]
+    - [[#magit][Magit]]
+    - [[#git-gutter][Git Gutter]]
+  - [[#misc-2][Misc]]
     - [[#dashboard][Dashboard]]
-  - [[#programming-1][Programming]]
+    - [[#perspective][Perspective]]
+    - [[#undo-tree][Undo Tree]]
+    - [[#direnv][Direnv]]
+    - [[#sideline][Sideline]]
+      - [[#sideline-flymake][Sideline Flymake]]
+  - [[#programming-modes][Programming Modes]]
+    - [[#python-mode][Python Mode]]
+    - [[#javascript-mode][Javascript Mode]]
+    - [[#typescript-mode][TypeScript Mode]]
+    - [[#vue-mode][Vue Mode]]
+    - [[#go-mode][Go Mode]]
+    - [[#nix-mode][Nix Mode]]
+    - [[#lua-mode][Lua Mode]]
+    - [[#elixir-mode][Elixir Mode]]
+    - [[#rust-mode][Rust Mode]]
+    - [[#powershell-mode][PowerShell Mode]]
+    - [[#markdown-mode][Markdown Mode]]
+  - [[#style][Style]]
+    - [[#themes][Themes]]
+    - [[#modeline][Modeline]]
+    - [[#nerd-icons][Nerd Icons]]
+      - [[#nerd-icons-dired][Nerd Icons Dired]]
+      - [[#nerd-icons-dired-1][Nerd Icons Dired]]
     - [[#highlight-todo][Highlight TODO]]
     - [[#rainbow-mode][Rainbow Mode]]
     - [[#rainbow-delimiters][Rainbow Delimiters]]
@@ -93,7 +102,7 @@
   (lambda ()
     (setq gc-cons-threshold (* 1024 1024 16))))
 #+end_src 
-** Package Manger
+*** Package Manger
 #+begin_src emacs-lisp 
 (require 'package) ; load the package manager
 (setq package-check-signature nil) ; override signature errors
@@ -101,9 +110,14 @@
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize) ; exactly what it sounds like 
-;; pull archvies only on very first startup
+;; pull archvies and prevent warning messages only on very first startup
 (unless package-archive-contents
-    (package-refresh-contents))
+  (progn
+    (setq warning-minimum-level :emergency) 
+    (package-refresh-contents)))
+#+end_src
+*** Use Package
+#+begin_src emacs-lisp 
 ;; install use-package if it doesn't exist yet
 (unless (package-installed-p 'use-package) 
   (package-install 'use-package))          
@@ -111,28 +125,10 @@
 ;; Make use-package uses package.el, prevents having to use :ensure t on everything
 (setq use-package-always-ensure t) 
 #+end_src
-** Misc Preferences 
+** Preferences 
+*** Littering
+**** Buffer Litter
 #+begin_src emacs-lisp
-;; Enable mouse in term-mode
-(unless (display-graphic-p)
-  (xterm-mouse-mode 1))
-(setq make-backup-files nil ; stop creating ~ files
-      auto-save-default nil ; Disable autosave # files
-      create-lockfiles nil ; Disable .# files
-      blink-cursor-mode nil ; Exactly what is sounds like
-      use-short-answers t ; Set y or n instead of yes or no for questions
-      inhibit-startup-messages t ; Disable splash screen
-      password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
-
-(setq-default tab-width 2 ; self explanitory
-              indent-tabs-mode nil) ; use spaces not tabs
-(electric-pair-mode 1) ; Auto closing pairs like () and {}
-(save-place-mode) ; Save cursor position in buffer on reopen
-(put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
-(global-hl-line-mode)
-(electric-indent-mode t)
-(setq frame-resize-pixelwise t)
-
 ;; Kill *Help* after :q'ing, and kill magit buffers when quitting them
 (advice-add #'evil-quit :after #'(lambda(&rest r)
   (let ((buf (get-buffer "*Help*")))
@@ -148,6 +144,70 @@
 ;;   (kill-buffer (get-buffer "*Warnings*"))
 ;;   (kill-buffer (get-buffer "*Messages*"))
 ;;   (keyboard-escape-quit)))
+#+end_src
+**** File litter
+#+begin_src emacs-lisp
+(setq make-backup-files nil ; stop creating ~ files
+      auto-save-default nil ; Disable autosave # files
+      create-lockfiles nil) ; Disable .# files
+#+end_src
+*** GUI
+#+begin_src emacs-lisp
+(setq use-dialog-box nil) ; No dialog box
+(menu-bar-mode -1) ;Disable menu
+(tool-bar-mode -1) ;Disable toolbar
+(scroll-bar-mode -1) ;Disable scroll bar
+;; Transparency
+(set-frame-parameter nil 'alpha-background 100) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
+#+end_src
+*** Scrolling
+#+begin_src emacs-lisp 
+(setq-default pixel-scroll-precision-mode t
+      mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
+      mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
+      mouse-wheel-follow-mouse 't ;; scroll window under mouse
+      scroll-margin 1
+      scroll-conservatively 0
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
+(unless (display-graphic-p) 
+  (setq scroll-conservatively 101))
+#+end_src
+*** Fonts
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil
+  :font "RobotoMono Nerd Font"
+  :height 120
+  :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+  :font "Roboto"
+  :height 120
+  :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+  :font "RobotoMono Nerd Font"
+  :height 120
+  :weight 'medium)
+(setq-default line-spacing 0.12)
+(set-language-environment "UTF-8")
+#+end_src
+*** Misc
+#+begin_src emacs-lisp
+;; Enable mouse in term-mode
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
+(setq blink-cursor-mode nil ; Exactly what is sounds like
+      use-short-answers t ; Set y or n instead of yes or no for questions
+      display-line-numbers-type 'relative ; Realive line numbers
+      frame-resize-pixelwise t) ; Better frame resizing
+(setq-default tab-width 2 ; self explanitory
+              indent-tabs-mode nil ; use spaces not tabs
+              truncate-lines t) ;Allow truncated lines
+(electric-pair-mode 1) ; Auto closing pairs like () and {}
+(save-place-mode) ; Save cursor position in buffer on reopen
+(global-hl-line-mode) ; Highlight the current line
+(electric-indent-mode t) ; Auto Indent
+(global-display-line-numbers-mode 1) ;Display line numbers
 #+end_src
 ** Custom Functions
 *** Toggle-Term
@@ -351,275 +411,136 @@
   (if (file-directory-p (dired-get-file-for-visit))
     (dired-find-alternate-file)
     (dired-find-file)))
-
-(defun jl/symbols-outline-toggle ()
-  "Toggle the symbols outline"
-  (interactive)
-  (let ((w (get-buffer-window "*Outline*")))
-    (if w 
-      (delete-window w)
-      (symbols-outline-show))))
 #+end_src
-
-* Keybinds
-** Evil Mode
-#+begin_src emacs-lisp
-(use-package evil
-  :init      ;; tweak evil's configuration before loading it
-  (setq evil-want-integration t ;; This is optional since it's already set to t by default.
-        evil-want-keybinding nil
-        evil-vsplit-window-right t
-        evil-split-window-below t
-        evil-shift-width 4)
-  (evil-mode))
-(use-package evil-collection
-  :after evil
-  :config
-  (setq evil-collection-mode-list '(magit term neotree help dashboard dired ibuffer tetris))
-  (evil-collection-init))
-(use-package evil-tutor)
-
-#+end_src
-** General Binds
+* Configurations
+** Keybinds
+*** General.el
 #+begin_src emacs-lisp
 (use-package general
   :config
-  ;; Term Mode
-  (add-hook 'term-mode-hook #'(lambda()
-  (general-define-key
-    :states 'insert
-    :keymaps 'term-raw-map
-    "TAB" #'(lambda() (interactive) (term-send-raw-string "\t")))))
-
-  ;; Neotree
-  (add-hook 'neotree-mode-hook #'(lambda()
-  (general-define-key
-    :states 'normal
-    :keymaps 'neotree-mode-map
-    "<tab>" #'neotree-change-root
-    "TAB" #'neotree-change-root)))
-
-  ;; Fix escape key on in emacs terminal mode
-  ;; Minibuffer 
-  (general-define-key
-    :keymaps 'minibuffer-local-map
-    "<escape>" #'keyboard-escape-quit)
-
-  ;; Dired
-  ;; Stops dired from making a new buffer every time you hit RET
-  (general-define-key
-    :states '(normal insert)
-    :keymaps 'dired-mode-map
-    "RET" #'jl/dired-open)
-
-  ;; Corfu
-  (general-define-key
-    :states 'insert
-    :keymaps 'corfu-map
-    "<tab>" #'corfu-next
-    "TAB" #'corfu-next
-    "<backtab>" #'corfu-previous)
-  ;; Prevent evil from overriding corfu bindings
-  (with-eval-after-load #'corfu
-    (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
-    (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
-    (evil-make-overriding-map corfu-map))
-
-  ;; Vertico
-  (general-define-key
-   :keymaps 'vertico-map
-   "RET" #'vertico-directory-enter
-   "<tab>" #'vertico-next
-   "TAB" #'vertico-next
-   "<backspace>" #'vertico-directory-delete-char
-   "DEL" #'vertico-directory-delete-char
-   "<backtab>" #'vertico-previous)
-
-  ;; Symbol Outlines
-  (general-define-key
-   :states 'normal
-   :keymaps 'symbols-outline-mode-map
-   "RET" #'symbols-outline-visit
-   "<tab>" #'symbols-outline-toggle-node)
-
-  ;; Org
-  (general-define-key
-    :states 'normal 
-    :keymaps 'org-mode-map
-    "RET" #'org-open-at-point
-    "<tab>" #'org-cycle
-    "TAB" #'org-cycle)
-
-  ;; Evil
-  (general-define-key
-    :states 'insert
-    "<tab>" #'tab-to-tab-stop
-    "TAB" #'tab-to-tab-stop)
-  (general-define-key
-    :states '(normal insert visual emacs)
-    "C-u" #'evil-scroll-up
-    "C-d" #'evil-scroll-down)
-  (general-define-key
-    :states '(normal emacs)
-    "J" #'shrink-window
-    "K" #'enlarge-window
-    "H" #'shrink-window-horizontally
-    "L" #'enlarge-window-horizontally
-    "u" #'undo-tree-undo
-    "R" #'undo-tree-redo)
-
-  ;; set up 'SPC' as the global leader key
-  (general-create-definer leader
-    :states '(normal insert visual emacs)
-    :keymaps 'override
-    :prefix "SPC" ;; set leader
-    :global-prefix "M-SPC") ;; access leader in insert mode
-
-  (leader
-    "w" '(:ignore t :wk "Window Navigation")
-    "w h" '(evil-window-left :wk "Move left to window")
-    "w j" '(evil-window-down :wk "Move down to window")
-    "w k" '(evil-window-up :wk "Move up to window")
-    "w l" '(evil-window-right :wk "Move right to window")
-    "w s" '(evil-window-split :wk "Split window horizontally")
-    "w v" '(evil-window-vsplit :wk "Split window vertically"))
-  (leader
-    "b" '(:ignore t :wk "Buffer")
-    "b f" '(persp-switch-to-buffer* :wk "Find a buffer, or create a new one")
-    "b i" '(persp-ibuffer :wk "Buffer Menu (IBuffer)")
-    "b k" '(kill-this-buffer :wk "Kill this buffer")
-    "b r" '(revert-buffer :wk "Reload this buffer"))
-  (leader
-    "e" '(:ignore t :wk "Evaluate")    
-    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-    "e e" '(eval-expression :wk "Evaluate and elisp expression")
-    "e r" '(eval-region :wk "Evaluate selected elisp")) 
-  (leader
-    "h" '(:ignore t :wk "Help")
-    "h f" '(describe-function :wk "Help function")
-    "h v" '(describe-variable :wk "Help variable")
-    "h m" '(describe-mode :wk "Help mode")
-    "h c" '(describe-char :wk "Help character")
-    "h k" '(describe-key :wk "Help key/keybind"))
-  (leader
-    "d" '(:ignore t :wk "Directory Tree")
-    "d t" '(neotree-toggle :wk "Toggle Directory Tree")
-    "d r" '(neotree-dir :wk "Change Directory Root"))
-  (leader
-    "o" '(:ignore t :wk "Symbols Outline")
-    "o t" '(jl/symbols-outline-toggle :wk "Toggle the symbol outline"))
-  (leader
-    "f" '(:ignore t :wk "Find file")
-    "f f" '(find-file :wk "Find file directly")
-    "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
-    "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
-    "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
-    "f W" '(jl/consult-grep-in-dir :wk "Find word in specified dir/project"))
-  (leader
-    "c" '(:ignore t :wk "Comment")
-    "c r" '(comment-region :wk "Comment selection")
-    "c l" '(comment-line :wk "Comment line"))
-  (leader
-    "t" '(:ignore t :wk "Toggle-Term")
-    "t t" '(jl/toggle-active-term :wk "Toggle the active toggle-term")
-    "t f" '(jl/toggle-term :wk "Find a toggle-term, or create a new one"))
-  (leader
-    "r" '(:ignore t :wk "Org Roam")
-    "r f" '(org-roam-node-find :wk "Find org roam file")
-    "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
-    "r c" '(org-capture-finalize :wk "Capture the roam buffer")
-    "r i" '(org-roam-node-insert :wk "Insert node link"))
-  (leader
-    "g" '(:ignore t :wk "Magit")
-    "g s" '(magit-stage-file :wk "Stage Files")
-    "g S" '(magit-stage-modified :wk "Stage All Files")
-    "g u" '(magit-unstage-file :wk "Unstage Files")
-    "g U" '(magit-unstage-all :wk "Unstage All Files")
-    "g f" '(magit-fetch :wk "Fetch")
-    "g F" '(magit-fetch-all :wk "Fetch")
-    "g i" '(magit-init :wk "Init")
-    "g l" '(magit-log :wk "Log")
-    "g b" '(magit-branch :wk "Branch")
-    "g d" '(magit-diff :wk "Diff")
-    "g c" '(magit-commit :wk "Commit")
-    "g r" '(magit-rebase :wk "Rebase")
-    "g R" '(magit-reset :wk "Reset")
-    "g p" '(magit-push :wk "Push")
-    "g P" '(magit-pull :wk "Pull")
-    "g m" '(magit :wk "Magit Menu"))
-  (leader
-    "p" '(:ignore t :wk "Perspective")
-    "p f" '(persp-switch :wk "Find perspective, or create new one")
-    "p h" '(persp-prev :wk "Previous perspective")
-    "p l" '(persp-next :wk "Next perspective")
-    "p k" '((lambda () (interactive) (if (yes-or-no-p "Kill the current perspective?")(persp-kill (persp-current-name)))) :wk "Kill the current perspective")
-    "p 1" '((lambda () (interactive) (persp-switch-by-number 1)) :wk "Switch to perspective 1")
-    "p 2" '((lambda () (interactive) (persp-switch-by-number 2)) :wk "Switch to perspective 2")
-    "p 3" '((lambda () (interactive) (persp-switch-by-number 3)) :wk "Switch to perspective 3")
-    "p 4" '((lambda () (interactive) (persp-switch-by-number 4)) :wk "Switch to perspective 4")
-    "p 5" '((lambda () (interactive) (persp-switch-by-number 5)) :wk "Switch to perspective 5")
-    "p 6" '((lambda () (interactive) (persp-switch-by-number 6)) :wk "Switch to perspective 6")
-    "p 7" '((lambda () (interactive) (persp-switch-by-number 7)) :wk "Switch to perspective 7")
-    "p 8" '((lambda () (interactive) (persp-switch-by-number 8)) :wk "Switch to perspective 8")
-    "p 9" '((lambda () (interactive) (persp-switch-by-number 9)) :wk "Switch to perspective 9")
-    "p 0" '((lambda () (interactive) (persp-switch-by-number 0)) :wk "Switch to perspective 0"))
-  (leader
-    "s" '(:ignore t :wk "SSH")
-    "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
-    "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
-    "s m" '(jl/samba :wk "Access an SMB share")))
+    ;; set up 'SPC' as the global leader key
+    (general-create-definer leader
+      :states '(normal insert visual emacs)
+      :keymaps 'override
+      :prefix "SPC" ;; set leader
+      :global-prefix "M-SPC") ;; access leader in insert mode
+    (leader
+      "w" '(:ignore t :wk "Window Navigation")
+      "w h" '(evil-window-left :wk "Move left to window")
+      "w j" '(evil-window-down :wk "Move down to window")
+      "w k" '(evil-window-up :wk "Move up to window")
+      "w l" '(evil-window-right :wk "Move right to window")
+      "w s" '(evil-window-split :wk "Split window horizontally")
+      "w v" '(evil-window-vsplit :wk "Split window vertically"))
+    (leader
+      "b k" '(kill-this-buffer :wk "Kill this buffer")
+      "b r" '(revert-buffer :wk "Reload this buffer"))
+    (leader
+      "e" '(:ignore t :wk "Evaluate")    
+      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+      "e e" '(eval-expression :wk "Evaluate and elisp expression")
+      "e r" '(eval-region :wk "Evaluate selected elisp")) 
+    (leader
+      "h" '(:ignore t :wk "Help")
+      "h f" '(describe-function :wk "Help function")
+      "h v" '(describe-variable :wk "Help variable")
+      "h m" '(describe-mode :wk "Help mode")
+      "h c" '(describe-char :wk "Help character")
+      "h k" '(describe-key :wk "Help key/keybind"))
+    (leader
+      "c r" '(comment-region :wk "Comment selection")
+      "c l" '(comment-line :wk "Comment line"))
+    (leader
+      "t t" '(jl/toggle-active-term :wk "Toggle the active toggle-term")
+      "t f" '(jl/toggle-term :wk "Find a toggle-term, or create a new one"))
+    (leader
+      "f f" '(find-file :wk "Find File"))
+    (leader
+      "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
+      "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
+      "s m" '(jl/samba :wk "Access an SMB share")))
 #+end_src
-** Keychord Binds
+*** Evil
+**** Evil Mode
+#+begin_src emacs-lisp
+(use-package evil
+  :general
+    (:states 'insert
+      "<tab>" #'tab-to-tab-stop
+      "TAB" #'tab-to-tab-stop)
+    (:states '(normal insert visual emacs)
+      "C-u" #'evil-scroll-up
+      "C-d" #'evil-scroll-down)
+    (:states '(normal emacs)
+      "J" #'shrink-window
+      "K" #'enlarge-window
+      "H" #'shrink-window-horizontally
+      "L" #'enlarge-window-horizontally
+      "u" #'undo-tree-undo
+      "R" #'undo-tree-redo)
+  :init      ;; tweak evil's configuration before loading it
+    (setq evil-want-integration t ;; This is optional since it's already set to t by default.
+          evil-want-keybinding nil
+          evil-vsplit-window-right t
+          evil-split-window-below t
+          evil-shift-width 4)
+    (evil-mode)
+  :config
+    ;; These hooks may not work if TERM isnt xterm/xterm256
+    ;; Let cursor change based on mode when using emacs in the terminal
+    (unless (display-graphic-p)
+      (defun correct-cursor (&rest r)
+        (setq visible-cursor nil) 
+        (if (eq evil-state 'insert)
+          (send-string-to-terminal "\e[5 q")
+          (send-string-to-terminal "\e[2 q")))
+      (add-hook 'evil-insert-state-entry-hook #'correct-cursor)
+      (add-hook 'evil-normal-state-entry-hook #'correct-cursor)
+      (advice-add 'eldoc-documentation-default :after #'correct-cursor) ;;Echo Area
+      (advice-add 'eldoc-display-in-buffer :after #'correct-cursor))) ;;Buffer
+#+end_src
+**** Evil Collection
+#+begin_src emacs-lisp
+(use-package evil-collection
+  :after evil
+  :config
+    (setq evil-collection-mode-list '(magit term help dashboard dired ibuffer tetris))
+    (evil-collection-init))
+#+end_src
+*** Keychord
 #+begin_src emacs-lisp
 (use-package key-chord
   :init
-  (key-chord-mode 1)
+    (key-chord-mode 1)
   :config
-  (setq key-chord-two-keys-delay 1
-        key-chord-one-key-delay 1.2
-        key-chord-safety-interval-forward 0.1
-        key-chord-safety-interval-backward 1)
-  (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
+    (setq key-chord-two-keys-delay 1
+          key-chord-one-key-delay 1.2
+          key-chord-safety-interval-forward 0.1
+          key-chord-safety-interval-backward 1)
+    (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
-
-* Functionality
-** General
 *** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
   :init
-  (which-key-mode 1)
+    (which-key-mode 1)
   :config
-  (setq which-key-side-window-location 'bottom
-		which-key-sort-order #'which-key-key-order-alpha
-		which-key-sort-uppercase-first nil
-		which-key-add-column-padding 1
-		which-key-max-display-columns nil
-		which-key-min-display-lines 6
-		which-key-side-window-slot -10
-		which-key-side-window-max-height 0.25
-		which-key-idle-delay 0.8
-		which-key-max-description-length 25
-		which-key-allow-imprecise-window-fit t
-		which-key-separator " → " ))
+    (setq which-key-side-window-location 'bottom
+      which-key-sort-order #'which-key-key-order-alpha
+      which-key-sort-uppercase-first nil
+      which-key-add-column-padding 1
+      which-key-max-display-columns nil
+      which-key-min-display-lines 6
+      which-key-side-window-slot -10
+      which-key-side-window-max-height 0.25
+      which-key-idle-delay 0.8
+      which-key-max-description-length 25
+      which-key-allow-imprecise-window-fit t
+      which-key-separator " → " ))
 #+end_src
-*** Neotree
+** Tramp
 #+begin_src emacs-lisp
-(use-package neotree
-  :config
-  (progn
-    (setq neo-smart-open t)
-    (setq neo-theme (if (display-graphic-p) 'nerd))))
-
-  ;; (add-hook 'persp-activated-hook #'(lambda ()
-  ;;   (if (neo-global--window-exists-p) (neotree-toggle)))) 
-  (add-hook 'neotree-mode-hook #'(lambda ()
-    (face-remap-set-base 'default :background "#181825")
-    (face-remap-set-base 'fringe :background "#181825")
-    (display-line-numbers-mode -1))) 
-#+end_src
-*** Tramp
-#+begin_src emacs-lisp
+(setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
 ;; Speeds up tramp allegedly
 (with-eval-after-load 'tramp
   (setq tramp-inline-compress-start-size 1000
@@ -629,115 +550,25 @@
         tramp-use-ssh-controlmaster-options nil
         projectile--mode-line "Projectile"))
 #+end_src
-*** Perspective
+** Dired
 #+begin_src emacs-lisp
-(use-package perspective
-  :init
-  (setq persp-suppress-no-prefix-key-warning t)
-  (persp-mode)
-  :config
-  (setq persp-sort 'created)
-  ;; Overriding the function to reverse the sorting order
-  (defun persp-names ()
-    "Return a list of the names of all perspectives on the `selected-frame'.
+(general-define-key
+  :states '(normal insert)
+  :keymaps 'dired-mode-map
+  "RET" #'jl/dired-open)
 
-  If `persp-sort' is 'name (the default), then return them sorted
-  alphabetically. If `persp-sort' is 'access, then return them
-  sorted by the last time the perspective was switched to, the
-  current perspective being the first. If `persp-sort' is 'created,
-  then return them in the order they were created, with the newest
-  first."
-    (let ((persps (hash-table-values (perspectives-hash))))
-      (cond ((eq persp-sort 'created)
-               (mapcar 'persp-name
-                 (sort persps (lambda (a b)
-                   (time-less-p (persp-created-time a)
-                     (persp-created-time b))))))))))
+(setq dired-dwim-target t) ; Dired will prompt to copy/move to another dired buffer if its visible
+(put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+(setq dired-listing-switches "-alFh")
 #+end_src
-*** Affe
+*** Diredfl
 #+begin_src emacs-lisp
-(use-package affe)
-#+end_src
-*** Consult
-#+begin_src emacs-lisp
-(use-package consult
+(use-package diredfl
   :config
-  (setq consult-find-args "find . -not ( -path '*/.git*' -prune ) -not ( -path '*.git*' -prune )"))
+    (diredfl-global-mode))
 #+end_src
-*** Marginalia
-#+begin_src emacs-lisp
-(use-package marginalia
-  :init
-  (marginalia-mode))
-#+end_src
-*** Undo Tree
-#+begin_src emacs-lisp
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode)
-  (setq undo-tree-auto-save-history t)
-  (setq undo-tree-history-directory-alist '(("." . "~/.config/emacs/undo"))))
-#+end_src
-*** Terminal Emacs
-#+begin_src emacs-lisp
-;; These hooks may not work if TERM isnt xterm/xterm256
-;; Let cursor change based on mode when in Terminal Emacs
-;; (Not to be confused with term-mode) this is for when running emacs in the terminal
-
-;; This is a really hacky fix
-(unless (display-graphic-p)
-  (defun correct-cursor (&rest r)
-    (setq visible-cursor nil) 
-    (if (eq evil-state 'insert)
-      (send-string-to-terminal "\e[5 q")
-      (send-string-to-terminal "\e[2 q")))
-  (add-hook 'evil-insert-state-entry-hook #'correct-cursor)
-  (add-hook 'evil-normal-state-entry-hook #'correct-cursor)
-  (advice-add 'eldoc-documentation-default :after #'correct-cursor) ;;Echo Area
-  (advice-add 'eldoc-display-in-buffer :after #'correct-cursor)) ;;Buffer
-#+end_src
-** Programming
-*** Direnv
-#+begin_src emacs-lisp
-(use-package envrc
-  :config
-  (envrc-global-mode))
-#+end_src
-*** LSP/Completion
-**** Sideline
-#+begin_src emacs-lisp
-(use-package sideline
-  :init
-  (setq sideline-backends-left-skip-current-line t   ; don't display on current line (left)
-        sideline-backends-right-skip-current-line t  ; don't display on current line (right)
-        sideline-order-left 'down                    ; or 'up
-        sideline-order-right 'up                     ; or 'down
-        sideline-format-left "%s   "                 ; format for left aligment
-        sideline-format-right "   %s"                ; format for right aligment
-        sideline-priority 100                        ; overlays' priority
-        sideline-display-backend-name t))            ; display the backend name
-(use-package sideline-flymake
-  :hook (flymake-mode . sideline-mode)
-  :init
-  (setq sideline-flymake-display-mode 'line) ; 'point to show errors only on point
-                                             ; 'line to show errors on the current line
-  (setq sideline-backends-right '(sideline-flymake)))
-#+end_src
-**** Outline
-#+begin_src emacs-lisp
-(use-package symbols-outline
-  :config
-  (setq symbols-outline-fetch-fn #'symbols-outline-lsp-fetch
-        symbols-outline-window-position 'right
-        symbols-outline-no-other-window nil
-        symbols-outline-window-width '30)
-  (add-hook 'symbols-outline-mode-hook #'(lambda ()
-    (face-remap-set-base 'default :background "#181825")
-    (face-remap-set-base 'fringe :background "#181825")
-    (display-line-numbers-mode -1)))
-  (symbols-outline-follow-mode))
-#+end_src
-**** Eglot
+** Eglot
 #+begin_src emacs-lisp
 ;; Override the binary being used on startup
 (with-eval-after-load 'eglot
@@ -746,9 +577,6 @@
   (add-to-list 'eglot-server-programs
                '((nix-ts-mode nix-mode) . ("nixd"))))
 
-;; (defun jl/eglot-find-file-hook ()
-;;   (eglot-ensure)
-;;   (symbols-outline-show))
 (defvar jl/eglot-enabled-langs 
     '(go-ts-mode  
       python-ts-mode
@@ -770,161 +598,20 @@
             (eglot-ensure)
             (sideline-mode)))))))
 #+end_src
-**** Corfu
-#+begin_src emacs-lisp
-(use-package corfu
-  :config
-  (setq corfu-popupinfo-delay 0)
-  :custom
-  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
-  (corfu-auto t)
-  (corfu-cycle t)
-  (corfu-preselect 'prompt)
-  (corfu-auto-delay 0.2)
-  (corfu-auto-prefix 2)
-  :init
-  (corfu-popupinfo-mode)
-  (global-corfu-mode)
-  (corfu-history-mode))
-
-(use-package corfu-terminal
-  :config
-  (unless (display-graphic-p)
-    (corfu-terminal-mode 1)))
-#+end_src
-**** Cape
-#+begin_src emacs-lisp
-(use-package cape
-  :init
-  ;; Add to the global default value of `completion-at-point-functions' which is
-  ;; used by `completion-at-point'.  The order of the functions matters, the
-  ;; first function returning a result wins.  Note that the list of buffer-local
-  ;; completion functions takes precedence over the global list.
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  (add-to-list 'completion-at-point-functions #'cape-keyword))
-#+end_src
-**** Orderless
-#+begin_src emacs-lisp
-(use-package orderless
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
-#+end_src
-**** Vertico
-#+begin_src emacs-lisp
-(use-package vertico
-  :init
-  (vertico-mode))
-#+end_src
-**** Yasnippet
-#+begin_src emacs-lisp
-(use-package yasnippet
-  :config
-  (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
-  (yas-global-mode 1))
-(use-package yasnippet-snippets)
-(use-package yasnippet-capf
-  :after cape
-  :config
-  (setq yasnippet-capf-lookup-by 'name) ;; Prefer the name of the snippet instead
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
-
-#+end_src
-*** Magit
-#+begin_src emacs-lisp
-(use-package magit)
-(add-hook 'magit-post-stage-hook #'(lambda ()
-  (message "Staged")))
-#+end_src
-*** Git Gutter
-#+begin_src emacs-lisp
-(use-package git-gutter)
-
-;; Disable git-gutter over tramp
-(add-hook 'find-file-hook #'(lambda()
-  (unless (file-remote-p (buffer-file-name))
-    (git-gutter-mode t))))
-#+end_src
-*** Prog Modes
-**** Python Mode
-#+begin_src emacs-lisp
-(add-hook 'python-ts-mode-hook #'(lambda()
-  (setq tab-width 4
-        indent-tabs-mode nil)))
-#+end_src
-**** Javascript Mode
-#+begin_src emacs-lisp
-(add-hook 'js-ts-mode-hook #'(lambda()
-  (setq tab-width 2
-        indent-tabs-mode nil
-        js-indent-level 2)))
-#+end_src
-**** TypeScript Mode
-#+begin_src emacs-lisp
-(add-hook 'typescript-ts-mode-hook #'(lambda()
-  (setq tab-width 2
-        indent-tabs-mode nil)))
-#+end_src
-**** Vue Mode
-#+begin_src emacs-lisp 
-(use-package vue-mode :mode "\\.vue\\'")
-
-(add-hook 'vue-mode-hook #'(lambda()
-  (setq tab-width 2
-        indent-tabs-mode nil)))
-#+end_src
-**** Go Mode
-#+begin_src emacs-lisp
-(add-hook 'go-ts-mode-hook #'(lambda()
-  (setq tab-width 4
-        go-ts-mode-indent-offset 4
-        indent-tabs-mode nil)))
-#+end_src
-**** Nix Mode
-#+begin_src emacs-lisp
-(use-package nix-ts-mode :mode "\\.nix\\'")
-(add-hook 'nix-ts-mode #'(lambda()
-  
-))
-#+end_src
-**** Lua Mode
-#+begin_src emacs-lisp
-(use-package lua-mode :mode "\\.lua\\'")
-
-(add-hook 'lua-mode-hook #'(lambda()
-  (setq tab-width 4)))
-#+end_src
-**** Elixir Mode
-#+begin_src emacs-lisp
-(use-package elixir-ts-mode :mode "\\.exs\\'")
-#+end_src
-**** Rust Mode
-#+begin_src emacs-lisp
-(add-hook 'rust-ts-mode-hook #'(lambda()
-  (setq tab-width 4)))
-#+end_src
-**** PowerShell Mode
-#+begin_src emacs-lisp
-(use-package powershell)
-#+end_src
-** Modes
-*** Markdown Mode
-#+begin_src emacs-lisp
-(use-package markdown-mode :mode "\\.md\\'")
-#+end_src
-*** Erc Mode
+** ERC
 #+begin_src emacs-lisp
 (add-hook 'erc-mode-hook #'(lambda ()
   (toggle-truncate-lines) ; truncate lines in erc mode
   (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
   (display-line-numbers-mode -1)))
 #+end_src
-*** Term Mode
+** Term
 #+begin_src  emacs-lisp
 (add-hook 'term-mode-hook #'(lambda()
-  ;; (face-remap-set-base 'default :background "#1b1b2b")
+  (general-define-key
+    :states 'insert
+    :keymaps 'term-raw-map
+    "TAB" #'(lambda() (interactive) (term-send-raw-string "\t")))
   (face-remap-set-base 'default :background "#11111B")
   (face-remap-set-base 'fringe :background "#11111B")
   (hl-line-mode 'toggle)
@@ -937,15 +624,21 @@
 
   (display-line-numbers-mode -1)))
 #+end_src
-*** Org Mode
-**** Org General
+** Org
 #+begin_src emacs-lisp
+(setq org-src-preserve-indentation t)
+(setq org-startup-with-inline-images t)
+(general-define-key
+  :states 'normal 
+  :keymaps 'org-mode-map
+  "RET" #'org-open-at-point
+  "<tab>" #'org-cycle
+  "TAB" #'org-cycle)
+
+
 (add-hook 'org-mode-hook #'(lambda ()
   (org-indent-mode)
   (setq-local electric-indent-mode nil)))
-
-(setq org-src-preserve-indentation t)
-(setq org-startup-with-inline-images t)
 
 ;; Scale inline images to the windows size adaptively
 ;; This lags the shit out of emacs
@@ -956,156 +649,412 @@
 
 ;; (add-hook 'window-size-change-functions 'org-image-resize)
 #+end_src
-**** Org Table of Contents
+*** Org Toc
 #+begin_src emacs-lisp
 (use-package toc-org
   :commands toc-org-enable
   :init
-  (add-hook 'org-mode-hook 'toc-org-enable)
-  (add-hook 'markdown-mode-hook 'toc-org-enable))
+    (add-hook 'org-mode-hook 'toc-org-enable)
+    (add-hook 'markdown-mode-hook 'toc-org-enable))
 #+end_src
-**** Org Modern
+*** Org Modern
 #+begin_src emacs-lisp
 (use-package org-modern
   :init 
-  (with-eval-after-load 'org (global-org-modern-mode)))
+    (with-eval-after-load 'org (global-org-modern-mode)))
 #+end_src
-**** Org Roam
+*** Org Roam
 #+begin_src emacs-lisp
 (use-package org-roam
+  :general
+    (leader
+      "r" '(:ignore t :wk "Org Roam")
+      "r f" '(org-roam-node-find :wk "Find org roam file")
+      "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
+      "r c" '(org-capture-finalize :wk "Capture the roam buffer")
+      "r i" '(org-roam-node-insert :wk "Insert node link"))
   :custom
-  (org-roam-directory (file-truename "~/sync/notes/roam"))
+    (org-roam-directory (file-truename "~/sync/notes/roam"))
   :config
-  ;; If you're using a vertical completion framework, you might want a more informative completion interface
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode 1)
-  (require 'org-roam-protocol))
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode 1)
+    (require 'org-roam-protocol))
+#+end_src
+** Minibuffer
+#+begin_src emacs-lisp
+(general-define-key
+  :keymaps 'minibuffer-local-map
+  "<escape>" #'keyboard-escape-quit)
+#+end_src
+*** Marginalia
+#+begin_src emacs-lisp
+(use-package marginalia
+  :init
+  (marginalia-mode))
+#+end_src
+*** Vertico
+#+begin_src emacs-lisp
+(use-package vertico
+  :general
+    (:keymaps 'vertico-map
+      "RET" #'vertico-directory-enter
+      "<tab>" #'vertico-next
+      "TAB" #'vertico-next
+      "<backspace>" #'vertico-directory-delete-char
+      "DEL" #'vertico-directory-delete-char
+      "<backtab>" #'vertico-previous)
+  :init
+    (vertico-mode))
 #+end_src
 
-* Look & Feel
-** General
-*** Themes
+** Finding
+*** Affe
 #+begin_src emacs-lisp
-(set-frame-parameter nil 'alpha-background 100) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
-(use-package catppuccin-theme
+(use-package affe)
+#+end_src
+*** Consult
+#+begin_src emacs-lisp
+(use-package consult
+  :general
+    (leader
+      "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
+      "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
+      "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
+      "f W" '(jl/consult-grep-in-dir :wk "Find word in specified dir/project"))
   :config
-  (setq catppuccin-highlight-matches t)
-  ;; (catppuccin-set-color 'base "#11111B")
-  (load-theme 'catppuccin :no-confirm))
+    (setq consult-find-args "find . -not ( -path '*/.git*' -prune ) -not ( -path '*.git*' -prune )"))
 #+end_src
-*** Dired
+** Completion
+*** Corfu
 #+begin_src emacs-lisp
-(add-hook 'dired-mode-hook 'auto-revert-mode)
-(setq dired-listing-switches "-alFh")
-(use-package diredfl
+(use-package corfu
+  :general
+    (:keymaps 'corfu-map :states 'insert
+      "<tab>" #'corfu-next
+      "TAB" #'corfu-next
+      "<backtab>" #'corfu-previous) 
   :config
-  (diredfl-global-mode))
-#+end_src
-*** Modeline
-#+begin_src emacs-lisp
-(use-package doom-modeline
-  :config
-  (setq doom-modeline-total-line-number t)
-  (set-face-attribute 'mode-line nil :background "#11111B")
-  ;; (set-face-attribute 'mode-line-inactive nil :background "#25253a")
-  (display-time-mode)
-  :init (doom-modeline-mode 1))
-#+end_src
-*** GUI Settings
-#+begin_src emacs-lisp
-(setq use-dialog-box nil ; No dialog box
-      display-line-numbers-type 'relative) ;Realive numbers
-(setq-default truncate-lines t) ;Allow truncated lines
-(menu-bar-mode -1) ;Disable menu
-(tool-bar-mode -1) ;Disable toolbar
-(scroll-bar-mode -1) ;Disable scroll bar
-(global-display-line-numbers-mode 1) ;Display line numbers
-#+end_src
-*** Scrolling
-#+begin_src emacs-lisp 
-(setq-default pixel-scroll-precision-mode t
-      mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
-      mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
-      mouse-wheel-follow-mouse 't ;; scroll window under mouse
-      scroll-margin 1
-      scroll-conservatively 0
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
-(unless (display-graphic-p) 
-  (setq scroll-conservatively 101))
-#+end_src
-*** Fonts
-#+begin_src emacs-lisp
-(set-face-attribute 'default nil
-  :font "RobotoMono Nerd Font"
-  :height 120
-  :weight 'medium)
-(set-face-attribute 'variable-pitch nil
-  :font "Roboto"
-  :height 120
-  :weight 'medium)
-(set-face-attribute 'fixed-pitch nil
-  :font "RobotoMono Nerd Font"
-  :height 120
-  :weight 'medium)
-(setq-default line-spacing 0.12)
-(set-language-environment "UTF-8")
-#+end_src
-*** Icons
-#+begin_src emacs-lisp
-(use-package nerd-icons
+    (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+    ;; Prevent evil from overriding corfu bindings
+    (with-eval-after-load #'corfu
+      (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
+      (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
+      (evil-make-overriding-map corfu-map))
+    (setq corfu-popupinfo-delay 0)
   :custom
-  (nerd-icons-font-family "RobotoMono Nerd Font"))
-
-(use-package nerd-icons-dired
-  :config  
-  (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
-
-(use-package nerd-icons-corfu
-  :config
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+    (corfu-auto t)
+    (corfu-cycle t)
+    (corfu-preselect 'prompt)
+    (corfu-auto-delay 0.05)
+    (corfu-auto-prefix 2)
+  :init
+    (corfu-popupinfo-mode)
+    (global-corfu-mode)
+    (corfu-history-mode))
 #+end_src
+**** Corfu Terminal
+#+begin_src emacs-lisp
+(use-package corfu-terminal
+  :config
+    (unless (display-graphic-p)
+      (corfu-terminal-mode 1)))
+#+end_src
+*** Cape
+#+begin_src emacs-lisp
+(use-package cape
+  :init
+    ;; Add to the global default value of `completion-at-point-functions' which is
+    ;; used by `completion-at-point'.  The order of the functions matters, the
+    ;; first function returning a result wins.  Note that the list of buffer-local
+    ;; completion functions takes precedence over the global list.
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+    (add-to-list 'completion-at-point-functions #'cape-keyword))
+#+end_src
+*** Orderless
+#+begin_src emacs-lisp
+(use-package orderless
+  :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+#+end_src
+*** Yasnippet
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :config
+    (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
+    (yas-global-mode 1))
+#+end_src
+**** Yasnippet Snippets
+#+begin_src emacs-lisp
+(use-package yasnippet-snippets)
+#+end_src
+**** Yasnipped Capf
+#+begin_src emacs-lisp
+(use-package yasnippet-capf
+  :after cape
+  :config
+    (setq yasnippet-capf-lookup-by 'name) ;; Prefer the name of the snippet instead
+    (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+#+end_src
+** Git
+*** Magit
+#+begin_src emacs-lisp
+(use-package magit 
+  :config
+   (leader
+    "g s" '(magit-stage-file :wk "Stage Files")
+    "g S" '(magit-stage-modified :wk "Stage All Files")
+    "g u" '(magit-unstage-file :wk "Unstage Files")
+    "g U" '(magit-unstage-all :wk "Unstage All Files")
+    "g f" '(magit-fetch :wk "Fetch")
+    "g F" '(magit-fetch-all :wk "Fetch")
+    "g i" '(magit-init :wk "Init")
+    "g l" '(magit-log :wk "Log")
+    "g b" '(magit-branch :wk "Branch")
+    "g d" '(magit-diff :wk "Diff")
+    "g c" '(magit-commit :wk "Commit")
+    "g r" '(magit-rebase :wk "Rebase")
+    "g R" '(magit-reset :wk "Reset")
+    "g p" '(magit-push :wk "Push")
+    "g P" '(magit-pull :wk "Pull")
+    "g m" '(magit :wk "Magit Menu"))
+
+    (add-hook 'magit-post-stage-hook #'(lambda ()
+      (message "Staged"))))
+#+end_src
+*** Git Gutter
+#+begin_src emacs-lisp
+(use-package git-gutter)
+
+;; Disable git-gutter over tramp
+(add-hook 'find-file-hook #'(lambda()
+  (unless (file-remote-p (buffer-file-name))
+    (git-gutter-mode t))))
+#+end_src
+** Misc
 *** Dashboard
 #+begin_src emacs-lisp
 (use-package dashboard
   :config
-  (setq default-directory "~/"
-        initial-buffer-choice (lambda() (get-buffer-create "*dashboard*")) 
-        dashboard-banner-logo-title (jl/random-quote)
-        dashboard-footer-messages `(,(jl/random-quote)))
-  (when (display-graphic-p)
-    (setq dashboard-startup-banner (jl/random-icon)))
-  (dashboard-setup-startup-hook))
+    (setq default-directory "~/"
+          initial-buffer-choice (lambda() (get-buffer-create "*dashboard*")) 
+          dashboard-banner-logo-title (jl/random-quote)
+          dashboard-footer-messages `(,(jl/random-quote)))
+    (when (display-graphic-p)
+      (setq dashboard-startup-banner (jl/random-icon)))
+    (dashboard-setup-startup-hook))
 
+(add-hook 'dashboard-mode-hook #'(lambda() (set-cursor-color "#cba6f7")))
 (add-hook 'dashboard-mode-hook #'(lambda() (set-face-attribute
  'line-number-current-line nil :foreground "#cba6f7")))
-(add-hook 'dashboard-mode-hook #'(lambda() (set-cursor-color "#cba6f7")))
 #+end_src
-** Programming
+*** Perspective
+#+begin_src emacs-lisp
+(use-package perspective
+  :init
+    (setq persp-suppress-no-prefix-key-warning t)
+    (persp-mode)
+  :general
+    (leader
+      "b f" '(persp-switch-to-buffer* :wk "Find a buffer, or create a new one")
+      "b i" '(persp-ibuffer :wk "Buffer Menu (IBuffer)")
+      "p f" '(persp-switch :wk "Find perspective, or create new one")
+      "p h" '(persp-prev :wk "Previous perspective")
+      "p l" '(persp-next :wk "Next perspective")
+      "p k" '((lambda () (interactive) (if (yes-or-no-p "Kill the current perspective?")(persp-kill (persp-current-name)))) :wk "Kill the current perspective")
+      "p 1" '((lambda () (interactive) (persp-switch-by-number 1)) :wk "Switch to perspective 1")
+      "p 2" '((lambda () (interactive) (persp-switch-by-number 2)) :wk "Switch to perspective 2")
+      "p 3" '((lambda () (interactive) (persp-switch-by-number 3)) :wk "Switch to perspective 3")
+      "p 4" '((lambda () (interactive) (persp-switch-by-number 4)) :wk "Switch to perspective 4")
+      "p 5" '((lambda () (interactive) (persp-switch-by-number 5)) :wk "Switch to perspective 5")
+      "p 6" '((lambda () (interactive) (persp-switch-by-number 6)) :wk "Switch to perspective 6")
+      "p 7" '((lambda () (interactive) (persp-switch-by-number 7)) :wk "Switch to perspective 7")
+      "p 8" '((lambda () (interactive) (persp-switch-by-number 8)) :wk "Switch to perspective 8")
+      "p 9" '((lambda () (interactive) (persp-switch-by-number 9)) :wk "Switch to perspective 9")
+      "p 0" '((lambda () (interactive) (persp-switch-by-number 0)) :wk "Switch to perspective 0"))
+  :config
+    (setq persp-sort 'created)
+    ;; Overriding the function to reverse the sorting order
+    (defun persp-names ()
+      "Return a list of the names of all perspectives on the `selected-frame'.
+
+    If `persp-sort' is 'name (the default), then return them sorted
+    alphabetically. If `persp-sort' is 'access, then return them
+    sorted by the last time the perspective was switched to, the
+    current perspective being the first. If `persp-sort' is 'created,
+    then return them in the order they were created, with the newest
+    first."
+      (let ((persps (hash-table-values (perspectives-hash))))
+        (cond ((eq persp-sort 'created)
+                 (mapcar 'persp-name
+                   (sort persps (lambda (a b)
+                     (time-less-p (persp-created-time a)
+                       (persp-created-time b))))))))))
+#+end_src
+*** Undo Tree
+#+begin_src emacs-lisp
+(use-package undo-tree
+  :config
+    (global-undo-tree-mode)
+    (setq undo-tree-auto-save-history t)
+    (setq undo-tree-history-directory-alist '(("." . "~/.config/emacs/undo"))))
+#+end_src
+*** Direnv
+#+begin_src emacs-lisp
+(use-package envrc
+  :config
+    (envrc-global-mode))
+#+end_src
+*** Sideline
+#+begin_src emacs-lisp
+(use-package sideline
+  :init
+    (setq sideline-backends-left-skip-current-line t   ; don't display on current line (left)
+          sideline-backends-right-skip-current-line t  ; don't display on current line (right)
+          sideline-order-left 'down                    ; or 'up
+          sideline-order-right 'up                     ; or 'down
+          sideline-format-left "%s   "                 ; format for left aligment
+          sideline-format-right "   %s"                ; format for right aligment
+          sideline-priority 100                        ; overlays' priority
+          sideline-display-backend-name t))            ; display the backend name
+#+end_src
+**** Sideline Flymake
+#+begin_src emacs-lisp
+(use-package sideline-flymake
+  :hook (flymake-mode . sideline-mode)
+  :init
+    (setq sideline-flymake-display-mode 'line) ; 'line or 'point
+    (setq sideline-backends-right '(sideline-flymake)))
+#+end_src
+** Programming Modes
+*** Python Mode
+#+begin_src emacs-lisp
+(add-hook 'python-ts-mode-hook #'(lambda()
+  (setq tab-width 4
+        indent-tabs-mode nil)))
+#+end_src
+*** Javascript Mode
+#+begin_src emacs-lisp
+(add-hook 'js-ts-mode-hook #'(lambda()
+  (setq tab-width 2
+        indent-tabs-mode nil
+        js-indent-level 2)))
+#+end_src
+*** TypeScript Mode
+#+begin_src emacs-lisp
+(add-hook 'typescript-ts-mode-hook #'(lambda()
+  (setq tab-width 2
+        indent-tabs-mode nil)))
+#+end_src
+*** Vue Mode
+#+begin_src emacs-lisp 
+(use-package vue-mode :mode "\\.vue\\'")
+
+(add-hook 'vue-mode-hook #'(lambda()
+  (setq tab-width 2
+        indent-tabs-mode nil)))
+#+end_src
+*** Go Mode
+#+begin_src emacs-lisp
+(add-hook 'go-ts-mode-hook #'(lambda()
+  (setq tab-width 4
+        go-ts-mode-indent-offset 4
+        indent-tabs-mode nil)))
+#+end_src
+*** Nix Mode
+#+begin_src emacs-lisp
+(use-package nix-ts-mode :mode "\\.nix\\'")
+(add-hook 'nix-ts-mode #'(lambda()
+  
+))
+#+end_src
+*** Lua Mode
+#+begin_src emacs-lisp
+(use-package lua-mode :mode "\\.lua\\'")
+
+(add-hook 'lua-mode-hook #'(lambda()
+  (setq tab-width 4)))
+#+end_src
+*** Elixir Mode
+#+begin_src emacs-lisp
+(use-package elixir-ts-mode :mode "\\.exs\\'")
+#+end_src
+*** Rust Mode
+#+begin_src emacs-lisp
+(add-hook 'rust-ts-mode-hook #'(lambda()
+  (setq tab-width 4)))
+#+end_src
+*** PowerShell Mode
+#+begin_src emacs-lisp
+(use-package powershell)
+#+end_src
+*** Markdown Mode
+#+begin_src emacs-lisp
+(use-package markdown-mode :mode "\\.md\\'")
+#+end_src
+** Style
+*** Themes
+#+begin_src emacs-lisp
+(use-package catppuccin-theme
+  :config
+    (setq catppuccin-highlight-matches t)
+    ;; (catppuccin-set-color 'base "#11111B")
+    (load-theme 'catppuccin :no-confirm))
+#+end_src
+*** Modeline
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :config
+    (setq doom-modeline-total-line-number t)
+    (set-face-attribute 'mode-line nil :background "#11111B")
+    ;; (set-face-attribute 'mode-line-inactive nil :background "#25253a")
+    (display-time-mode))
+#+end_src
+*** Nerd Icons
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :custom
+    (nerd-icons-font-family "RobotoMono Nerd Font"))
+#+end_src
+**** Nerd Icons Dired
+#+begin_src emacs-lisp
+(use-package nerd-icons-dired
+  :config  
+    (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
+#+end_src
+**** Nerd Icons Dired
+#+begin_src emacs-lisp
+(use-package nerd-icons-corfu
+  :config
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+#+end_src
 *** Highlight TODO
 #+begin_src emacs-lisp
 (use-package hl-todo
   :config
-  (global-hl-todo-mode)
-  (setq hl-todo-keyword-faces
-      '(("TODO"   . "#FF0000")
-        ("FIXME"  . "#FF0000")
-        ("DEBUG"  . "#A020F0")
-        ("GOTCHA" . "#FF4500")
-        ("STUB"   . "#1E90FF"))))
+    (global-hl-todo-mode)
+    (setq hl-todo-keyword-faces
+        '(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF"))))
 #+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
 (use-package rainbow-mode
   :config
-  (add-hook 'prog-mode-hook #'rainbow-mode))
+    (add-hook 'prog-mode-hook #'rainbow-mode))
 #+end_src
 *** Rainbow Delimiters
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
