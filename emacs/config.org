@@ -31,6 +31,7 @@
   - [[#tramp][Tramp]]
   - [[#dired][Dired]]
     - [[#diredfl][Diredfl]]
+    - [[#dired-ranger][Dired Ranger]]
   - [[#eglot][Eglot]]
   - [[#erc][ERC]]
   - [[#term][Term]]
@@ -553,13 +554,16 @@
 ** Dired
 #+begin_src emacs-lisp
 (general-define-key
-  :states '(normal insert)
+  :states 'normal
   :keymaps 'dired-mode-map
+  "s" #'dired-hide-details-mode
   "RET" #'jl/dired-open)
 
-(setq dired-dwim-target t) ; Dired will prompt to copy/move to another dired buffer if its visible
+;; (setq dired-dwim-target t) ; Dired will prompt to copy/move to another dired buffer if its visible
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
-(add-hook 'dired-mode-hook 'auto-revert-mode)
+(add-hook 'dired-mode-hook #'(lambda ()
+  (auto-revert-mode)
+  (dired-hide-details-mode)))
 (setq dired-listing-switches "-alFh")
 #+end_src
 *** Diredfl
@@ -567,6 +571,18 @@
 (use-package diredfl
   :config
     (diredfl-global-mode))
+#+end_src
+*** Dired Ranger
+#+begin_src emacs-lisp
+(use-package dired-ranger
+  :general
+    (:keymaps 'dired-mode-map
+     :states '(normal emacs motion)
+       "y" #'dired-ranger-copy
+       "p" #'dired-ranger-paste
+       "M" #'dired-ranger-move)
+  :config
+    (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 #+end_src
 ** Eglot
 #+begin_src emacs-lisp
