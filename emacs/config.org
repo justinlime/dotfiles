@@ -552,18 +552,28 @@
 #+end_src
 ** Dired
 #+begin_src emacs-lisp
+(advice-add #'dired-do-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
+(advice-add #'dired-do-flagged-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
 (general-define-key
   :states 'normal
   :keymaps 'dired-mode-map
   "s" #'dired-hide-details-mode
+  "A" #'dired-create-directory
+  "W" #'wdired-change-to-wdired-mode
   "RET" #'jl/dired-open)
-
 ;; (setq dired-dwim-target t) ; Dired will prompt to copy/move to another dired buffer if its visible
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (add-hook 'dired-mode-hook #'(lambda ()
   (auto-revert-mode)
   (dired-hide-details-mode)))
 (setq dired-listing-switches "-alFh")
+
+(general-define-key
+  :states 'normal
+  :keymaps 'wdired-mode-map
+  "W" #'wdired-finish-edit
+  "<escape>" #'wdired-exit)
+(setq wdired-allow-to-change-permissions t)
 #+end_src
 *** Diredfl
 #+begin_src emacs-lisp
