@@ -1,7 +1,9 @@
 ;; Speeds up startup times, changes reverted after startup is complete
 (setq gc-cons-threshold (* 1024 1024 256)) ;256 MB GC
+;; IDK what this does tbh, but seems to help startup times a bit
 (setq file-name-handler-alist-original file-name-handler-alist)
 (setq file-name-handler-alist nil)
-
-(setq vc-follow-symlinks nil) ;; Allow tangleing if the file is a symlink
-(setq package-enable-at-startup nil) ;disable package.el
+;; disable package.el at early init
+;; even though it will be loaded later
+;; shaves off some startup time
+(setq package-enable-at-startup nil)

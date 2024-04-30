@@ -63,6 +63,7 @@
     - [[#direnv][Direnv]]
     - [[#sideline][Sideline]]
       - [[#sideline-flymake][Sideline Flymake]]
+    - [[#sudo-edit][Sudo Edit]]
   - [[#programming-modes][Programming Modes]]
     - [[#python-mode][Python Mode]]
     - [[#javascript-mode][Javascript Mode]]
@@ -139,12 +140,10 @@
         (kill-buffer b)))))
 
 ;; ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
-;; (setq warning-minimum-level :emergency)
+(setq warning-minimum-level :emergency)
 (setq-default message-log-max nil)
-;; (add-hook 'dashboard-mode-hook #'(lambda() ;Kills the warning buffer for even emergency messages
-;;   (kill-buffer (get-buffer "*Warnings*"))
-;;   (kill-buffer (get-buffer "*Messages*"))
-;;   (keyboard-escape-quit)))
+(add-hook 'emacs-startup-hook #'(lambda() ;Kills the warning buffer for even emergency messages
+  (kill-buffer (get-buffer "*Messages*"))))
 #+end_src
 **** File litter
 #+begin_src emacs-lisp
@@ -579,9 +578,14 @@
     (:keymaps 'dired-mode-map
      :states '(normal emacs motion)
        "y" #'dired-ranger-copy
-       "p" #'dired-ranger-paste
+       "P" #'dired-ranger-paste
        "M" #'dired-ranger-move)
   :config
+    ;; remove marks after an action, and also revert buffer to fix broken icons/formatting after
+    ;; moving or pasting
+    (advice-add #'dired-ranger-copy :after #'(lambda(&rest r) (dired-unmark-all-marks)))
+    (advice-add #'dired-ranger-move :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
+    (advice-add #'dired-ranger-paste :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 #+end_src
 ** Eglot
@@ -944,6 +948,10 @@
   :init
     (setq sideline-flymake-display-mode 'line) ; 'line or 'point
     (setq sideline-backends-right '(sideline-flymake)))
+#+end_src
+*** Sudo Edit
+#+begin_src emacs-lisp
+(use-package sudo-edit)
 #+end_src
 ** Programming Modes
 *** Python Mode
