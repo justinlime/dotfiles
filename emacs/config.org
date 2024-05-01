@@ -421,6 +421,14 @@
 #+begin_src emacs-lisp
 (use-package general
   :config
+    (general-define-key 
+      :keymaps 'indent-rigidly-map
+      "TAB" #'indent-rigidly-right-to-tab-stop
+      "<tab>" #'indent-rigidly-right-to-tab-stop
+      "DEL" #'indent-rigidly-left-to-tab-stop
+      "<backtab>" #'indent-rigidly-left-to-tab-stop
+      "h" #'indent-rigidly-left
+      "l" #'indent-rigidly-right)
     ;; set up 'SPC' as the global leader key
     (general-create-definer leader
       :states '(normal insert visual emacs)
@@ -458,6 +466,8 @@
       "t f" '(jl/toggle-term :wk "Find a toggle-term, or create a new one"))
     (leader
       "f f" '(find-file :wk "Find File"))
+    (leader
+      "i r" '(indent-rigidly :wk "Indent Rigidly"))
     (leader
       "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
       "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
@@ -748,7 +758,7 @@
 #+begin_src emacs-lisp
 (use-package avy
   :general
-    (leader
+    (leade
       "a c" '(avy-goto-char :wk "Jump to character")
       "a l" '(avy-goto-line :wk "Jump to line")))
 #+end_src
