@@ -152,7 +152,9 @@
 #+begin_src emacs-lisp
 (setq make-backup-files nil ; stop creating ~ files
       auto-save-default nil ; Disable autosave # files
-      create-lockfiles nil) ; Disable .# files
+      create-lockfiles nil  ; Disable .# files
+      ;; Prevent emacs from trying to write to init.el
+      custom-file (concat user-emacs-directory "trash.el"))
 #+end_src
 *** GUI
 #+begin_src emacs-lisp
@@ -423,12 +425,12 @@
   :config
     (general-define-key 
       :keymaps 'indent-rigidly-map
-      "TAB" #'indent-rigidly-right-to-tab-stop
-      "<tab>" #'indent-rigidly-right-to-tab-stop
-      "DEL" #'indent-rigidly-left-to-tab-stop
-      "<backtab>" #'indent-rigidly-left-to-tab-stop
-      "h" #'indent-rigidly-left
-      "l" #'indent-rigidly-right)
+        "TAB" #'indent-rigidly-right-to-tab-stop
+        "<tab>" #'indent-rigidly-right-to-tab-stop
+        "DEL" #'indent-rigidly-left-to-tab-stop
+        "<backtab>" #'indent-rigidly-left-to-tab-stop
+        "h" #'indent-rigidly-left
+        "l" #'indent-rigidly-right)
     ;; set up 'SPC' as the global leader key
     (general-create-definer leader
       :states '(normal insert visual emacs)
@@ -554,6 +556,12 @@
 ** Tramp
 #+begin_src emacs-lisp
 (setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
+;; Prevent tramp from trying to save to auth-info
+;; It stores passwords in plain text (WTF...)
+(connection-local-set-profile-variables
+ 'remote-without-auth-sources '((auth-sources . nil)))
+(connection-local-set-profiles
+ '(:application tramp) 'remote-without-auth-sources)
 ;; Speeds up tramp allegedly
 (with-eval-after-load 'tramp
   (setq tramp-inline-compress-start-size 1000
@@ -640,7 +648,6 @@
       (dolist (lang jl/eglot-enabled-langs)
         (if (eq major-mode lang)
           (progn
-            
             (eglot-ensure)
             (sideline-mode)))))))
 #+end_src
@@ -658,7 +665,7 @@
   (general-define-key
     :states 'insert
     :keymaps 'term-raw-map
-    "TAB" #'(lambda() (interactive) (term-send-raw-string "\t")))
+      "TAB" #'(lambda() (interactive) (term-send-raw-string "\t")))
   (face-remap-set-base 'default :background "#11111B")
   (face-remap-set-base 'fringe :background "#11111B")
   (hl-line-mode 'toggle)
@@ -666,10 +673,8 @@
   '((t (:inherit default :background "#11111B")))
   "Some bullshit to fix term-mode text-background"
   :group 'basic-faces)
-
-  (setf (elt ansi-term-color-vector 0) 'term-background)
-
-  (display-line-numbers-mode -1)))
+    (setf (elt ansi-term-color-vector 0) 'term-background)
+    (display-line-numbers-mode -1)))
 #+end_src
 ** Org
 #+begin_src emacs-lisp
@@ -760,7 +765,7 @@
 #+begin_src emacs-lisp
 (use-package avy
   :general
-    (leade
+    (leader
       "a c" '(avy-goto-char :wk "Jump to character")
       "a l" '(avy-goto-line :wk "Jump to line")))
 #+end_src
