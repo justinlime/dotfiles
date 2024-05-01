@@ -43,6 +43,7 @@
     - [[#marginalia][Marginalia]]
     - [[#vertico][Vertico]]
   - [[#finding][Finding]]
+    - [[#zoxide][Zoxide]]
     - [[#affe][Affe]]
     - [[#consult][Consult]]
   - [[#completion][Completion]]
@@ -739,6 +740,15 @@
 #+end_src
 
 ** Finding
+*** Zoxide
+#+begin_src emacs-lisp
+(use-package zoxide
+  :general
+    (leader
+      "f d" '(zoxide-travel :wk "Find directory with Zoxide"))
+  :config
+    (add-hook 'dired-mode-hook #'zoxide-add))
+#+end_src
 *** Affe
 #+begin_src emacs-lisp
 (use-package affe)
@@ -886,6 +896,7 @@
 (use-package perspective
   :init
     (setq persp-suppress-no-prefix-key-warning t)
+    (setq persp-initial-frame-name "emacs")
     (persp-mode)
   :general
     (leader

@@ -6,6 +6,7 @@
     tree-sitter
     gcc 
     imagemagick
+    zoxide
     # Language Servers
 		lua-language-server 
     elixir-ls
