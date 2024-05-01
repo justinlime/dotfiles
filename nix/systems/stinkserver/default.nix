@@ -9,6 +9,7 @@
     ../base/docker.nix
     ../base/networking.nix
     ../base/usb.nix
+    ../base/avahi.nix
   ];
 
   networking = {
@@ -19,6 +20,7 @@
       allowedUDPPorts = [ 1313 ];
    };
   };
+  services.avahi.hostName = "stink";
   users.users.${username}.openssh.authorizedKeys.keys = [
     "${hush.ssh.public-keys.stinkserver}" 
   ];

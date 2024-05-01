@@ -9,6 +9,7 @@
     ../base/virtulization.nix
     ../base/usb.nix
     ../base/ssh.nix
+    ../base/avahi.nix
   ];
   hardware.ledger.enable = true;
   hardware.keyboard.qmk.enable = true;

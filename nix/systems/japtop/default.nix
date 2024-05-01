@@ -9,6 +9,7 @@
     ../base/networking.nix
     ../base/virtulization.nix
     ../base/usb.nix
+    ../base/avahi.nix
   ];
   programs = {
     light.enable = true;
