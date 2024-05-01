@@ -771,6 +771,7 @@
 (use-package corfu
   :general
     (:keymaps 'corfu-map :states 'insert
+      "SPC" #'corfu-insert-separator
       "<tab>" #'corfu-next
       "TAB" #'corfu-next
       "<backtab>" #'corfu-previous) 
