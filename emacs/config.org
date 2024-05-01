@@ -30,6 +30,7 @@
     - [[#which-key][Which Key]]
   - [[#tramp][Tramp]]
   - [[#dired][Dired]]
+  - [[#wdired][wDired]]
     - [[#diredfl][Diredfl]]
     - [[#dired-ranger][Dired Ranger]]
   - [[#eglot][Eglot]]
@@ -56,7 +57,7 @@
       - [[#yasnipped-capf][Yasnipped Capf]]
   - [[#git][Git]]
     - [[#magit][Magit]]
-    - [[#diff-hl][Diff-hl]]
+    - [[#git-gutter][Git Gutter]]
   - [[#misc-2][Misc]]
     - [[#dashboard][Dashboard]]
     - [[#perspective][Perspective]]
@@ -553,6 +554,8 @@
 #+end_src
 ** Dired
 #+begin_src emacs-lisp
+(setq dired-listing-switches "-alFh")
+(put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (advice-add #'dired-do-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
 (advice-add #'dired-do-flagged-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
 (general-define-key
@@ -563,18 +566,18 @@
   "W" #'wdired-change-to-wdired-mode
   "RET" #'jl/dired-open)
 ;; (setq dired-dwim-target t) ; Dired will prompt to copy/move to another dired buffer if its visible
-(put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (add-hook 'dired-mode-hook #'(lambda ()
   (auto-revert-mode)
   (dired-hide-details-mode)))
-(setq dired-listing-switches "-alFh")
-
+#+end_src
+** wDired
+#+begin_src emacs-lisp
+(setq wdired-allow-to-change-permissions t)
 (general-define-key
   :states 'normal
   :keymaps 'wdired-mode-map
   "W" #'wdired-finish-edit
   "<escape>" #'wdired-exit)
-(setq wdired-allow-to-change-permissions t)
 #+end_src
 *** Diredfl
 #+begin_src emacs-lisp
@@ -866,14 +869,13 @@
     (add-hook 'magit-post-stage-hook #'(lambda ()
       (message "Staged"))))
 #+end_src
-*** Diff-hl
+*** Git Gutter
 #+begin_src emacs-lisp
-(use-package diff-hl 
-  :config 
-    (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
-    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
-    (add-hook 'diff-hl-mode-hook #'diff-hl-margin-mode)
-    (global-diff-hl-mode))
+(use-package git-gutter)
+;; Disable git-gutter over tramp
+(add-hook 'find-file-hook #'(lambda()
+  (unless (file-remote-p (buffer-file-name))
+    (git-gutter-mode t))))
 #+end_src
 ** Misc
 *** Dashboard
