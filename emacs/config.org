@@ -56,7 +56,7 @@
       - [[#yasnipped-capf][Yasnipped Capf]]
   - [[#git][Git]]
     - [[#magit][Magit]]
-    - [[#git-gutter][Git Gutter]]
+    - [[#diff-hl][Diff-hl]]
   - [[#misc-2][Misc]]
     - [[#dashboard][Dashboard]]
     - [[#perspective][Perspective]]
@@ -865,14 +865,14 @@
     (add-hook 'magit-post-stage-hook #'(lambda ()
       (message "Staged"))))
 #+end_src
-*** Git Gutter
+*** Diff-hl
 #+begin_src emacs-lisp
-(use-package git-gutter)
-
-;; Disable git-gutter over tramp
-(add-hook 'find-file-hook #'(lambda()
-  (unless (file-remote-p (buffer-file-name))
-    (git-gutter-mode t))))
+(use-package diff-hl 
+  :config 
+    (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+    (add-hook 'diff-hl-mode-hook #'diff-hl-margin-mode)
+    (global-diff-hl-mode))
 #+end_src
 ** Misc
 *** Dashboard
