@@ -44,6 +44,7 @@
     - [[#marginalia][Marginalia]]
     - [[#vertico][Vertico]]
   - [[#finding][Finding]]
+    - [[#avy][Avy]]
     - [[#zoxide][Zoxide]]
     - [[#affe][Affe]]
     - [[#consult][Consult]]
@@ -743,6 +744,14 @@
 #+end_src
 
 ** Finding
+*** Avy
+#+begin_src emacs-lisp
+(use-package avy
+  :general
+    (leader
+      "a c" '(avy-goto-char :wk "Jump to character")
+      "a l" '(avy-goto-line :wk "Jump to line")))
+#+end_src
 *** Zoxide
 #+begin_src emacs-lisp
 (use-package zoxide
