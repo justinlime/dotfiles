@@ -30,7 +30,7 @@
     - [[#which-key][Which Key]]
   - [[#tramp][Tramp]]
   - [[#dired][Dired]]
-  - [[#wdired][wDired]]
+    - [[#wdired][wDired]]
     - [[#diredfl][Diredfl]]
     - [[#dired-ranger][Dired Ranger]]
   - [[#eglot][Eglot]]
@@ -568,6 +568,7 @@
 (setq dired-listing-switches "-alFh")
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (advice-add #'dired-do-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
+(advice-add #'dired-do-rename :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
 (advice-add #'dired-do-flagged-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
 (general-define-key
   :states 'normal
@@ -581,7 +582,7 @@
   (auto-revert-mode)
   (dired-hide-details-mode)))
 #+end_src
-** wDired
+*** wDired
 #+begin_src emacs-lisp
 (setq wdired-allow-to-change-permissions t)
 (general-define-key
@@ -648,6 +649,7 @@
 (add-hook 'erc-mode-hook #'(lambda ()
   (toggle-truncate-lines) ; truncate lines in erc mode
   (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
+  (corfu-mode -1)
   (display-line-numbers-mode -1)))
 #+end_src
 ** Term
