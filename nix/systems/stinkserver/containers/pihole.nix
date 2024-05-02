@@ -1,4 +1,4 @@
-{ ... }:
+{ hush, ... }:
 {
   systemd.tmpfiles.rules = [
     "d /configs/pihole/etc 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
@@ -10,6 +10,7 @@
      image = "pihole/pihole:latest";
      environment = {
        TZ = "America/Chicago";
+       WEBPASSWORD = hush.pihole.stinkserver.password;
      };
      ports = [ "53:53" "53:53/udp" "89:80" ];
      volumes = [
