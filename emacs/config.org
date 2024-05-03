@@ -583,7 +583,7 @@
   :keymaps 'dired-mode-map
   "s" #'dired-hide-details-mode
   "f" #'jl/dired-open
-  "a" #'dired-up-directory
+  "a" #'(lambda () (interactive) (find-alternate-file ".."))
   "A" #'dired-create-directory
   "W" #'wdired-change-to-wdired-mode
   "RET" #'jl/dired-open)
@@ -899,11 +899,12 @@
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
-(use-package git-gutter)
-;; Disable git-gutter over tramp
-(add-hook 'find-file-hook #'(lambda()
-  (unless (file-remote-p (buffer-file-name))
-    (git-gutter-mode t))))
+(use-package git-gutter 
+  :config
+    ;; Disable git-gutter over tramp
+    (add-hook 'find-file-hook #'(lambda()
+      (unless (file-remote-p (buffer-file-name))
+        (git-gutter-mode)))))
 #+end_src
 ** Misc
 *** Dashboard
@@ -924,6 +925,7 @@
 #+end_src
 *** Perspective
 #+begin_src emacs-lisp
+(require 'ibuffer)
 (use-package perspective
   :init
     (setq persp-suppress-no-prefix-key-warning t)
@@ -1074,11 +1076,18 @@
 ** Style
 *** Themes
 #+begin_src emacs-lisp
-(use-package catppuccin-theme
+(use-package doom-themes
   :config
-    (setq catppuccin-highlight-matches t)
-    ;; (catppuccin-set-color 'base "#11111B")
-    (load-theme 'catppuccin :no-confirm))
+    (set-face-attribute 'org-block nil :background "#181825") ; src blocks
+    (set-face-attribute 'default nil :background "#1e1e2e") ; emacs background
+    (set-face-attribute 'line-number-current-line nil :background "#1e1e2e") ; current line number
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    (load-theme 'doom-vibrant t)
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
 #+end_src
 *** Modeline
 #+begin_src emacs-lisp
@@ -1087,7 +1096,7 @@
   :config
     (setq doom-modeline-total-line-number t)
     (set-face-attribute 'mode-line nil :background "#11111B")
-    ;; (set-face-attribute 'mode-line-inactive nil :background "#25253a")
+    (set-face-attribute 'mode-line-inactive nil :background "#11111B")
     (display-time-mode))
 #+end_src
 *** Nerd Icons

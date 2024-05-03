@@ -1,5 +1,5 @@
 ;; Speeds up startup times, changes reverted after startup is complete
-(setq gc-cons-threshold (* 1024 1024 256)) ;256 MB GC
+(setq gc-cons-threshold most-positive-fixnum)
 ;; IDK what this does tbh, but seems to help startup times a bit
 (setq file-name-handler-alist-original file-name-handler-alist)
 (setq file-name-handler-alist nil)
