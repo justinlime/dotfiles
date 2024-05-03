@@ -41,8 +41,8 @@
     - [[#org-modern][Org Modern]]
     - [[#org-roam][Org Roam]]
   - [[#minibuffer][Minibuffer]]
-    - [[#marginalia][Marginalia]]
     - [[#vertico][Vertico]]
+    - [[#marginalia][Marginalia]]
   - [[#finding][Finding]]
     - [[#avy][Avy]]
     - [[#zoxide][Zoxide]]
@@ -127,7 +127,7 @@
 (unless (package-installed-p 'use-package) 
   (package-install 'use-package))          
 (require 'use-package) ; load use-package
-;; Make use-package uses package.el, prevents having to use :ensure t on everything
+;; Make use-package uses `package.el', prevents having to use :ensure t on everything
 (setq use-package-always-ensure t) 
 #+end_src
 ** Preferences 
@@ -352,7 +352,7 @@
 
   Uses Affe if working with local files, and Consult for remote files"
   (interactive)
-  (let ((dir (magit-toplevel default-directory)))
+  (let ((dir (vc-root-dir)))
     (if (string-prefix-p "/ssh:" default-directory)
       (if dir
         (consult-find dir)
@@ -378,7 +378,7 @@
 
   Uses Ripgrep if working with local files, and Grep for remote files"
   (interactive)
-  (let ((dir (magit-toplevel default-directory)))
+  (let ((dir (vc-root-dir)))
     (if dir
       (if (string-prefix-p "/ssh:" default-directory)
         (consult-grep dir)
@@ -537,6 +537,7 @@
 *** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
+  :defer 2
   :init
     (which-key-mode 1)
   :config
@@ -609,13 +610,15 @@
 #+end_src
 *** Dired Ranger
 #+begin_src emacs-lisp
+(general-define-key 
+  :keymaps 'dired-mode-map 
+  :states '(normal emacs motion)
+    "y" #'dired-ranger-copy
+    "P" #'dired-ranger-paste
+    "M" #'dired-ranger-move)
+
 (use-package dired-ranger
-  :general
-    (:keymaps 'dired-mode-map
-     :states '(normal emacs motion)
-       "y" #'dired-ranger-copy
-       "P" #'dired-ranger-paste
-       "M" #'dired-ranger-move)
+  :defer t
   :config
     ;; remove marks after an action, and also revert buffer to fix broken icons/formatting after
     ;; moving or pasting
@@ -719,14 +722,14 @@
 #+end_src
 *** Org Roam
 #+begin_src emacs-lisp
+(leader
+  "r" '(:ignore t :wk "Org Roam")
+  "r f" '(org-roam-node-find :wk "Find org roam file")
+  "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
+  "r c" '(org-capture-finalize :wk "Capture the roam buffer")
+  "r i" '(org-roam-node-insert :wk "Insert node link"))
 (use-package org-roam
-  :general
-    (leader
-      "r" '(:ignore t :wk "Org Roam")
-      "r f" '(org-roam-node-find :wk "Find org roam file")
-      "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
-      "r c" '(org-capture-finalize :wk "Capture the roam buffer")
-      "r i" '(org-roam-node-insert :wk "Insert node link"))
+  :defer t
   :custom
     (org-roam-directory (file-truename "~/sync/notes/roam"))
   :config
@@ -741,15 +744,10 @@
   :keymaps 'minibuffer-local-map
   "<escape>" #'keyboard-escape-quit)
 #+end_src
-*** Marginalia
-#+begin_src emacs-lisp
-(use-package marginalia
-  :init
-  (marginalia-mode))
-#+end_src
 *** Vertico
 #+begin_src emacs-lisp
 (use-package vertico
+  :defer t
   :general
     (:keymaps 'vertico-map
       "RET" #'vertico-directory-enter
@@ -761,16 +759,22 @@
   :init
     (vertico-mode))
 #+end_src
+*** Marginalia
+#+begin_src emacs-lisp
+(use-package marginalia
+  :after vertico
+  :init
+  (marginalia-mode))
+#+end_src
 
 ** Finding
 *** Avy
 #+begin_src emacs-lisp
-(use-package avy
-  :general
-    (leader
-      "a c" '(avy-goto-char :wk "Jump to character")
-      "a l" '(avy-goto-line :wk "Jump to line")))
-#+end_src
+(leader
+  "a c" '(avy-goto-char :wk "Jump to character")
+  "a l" '(avy-goto-line :wk "Jump to line"))
+(use-package avy :defer t)
+  #+end_src
 *** Zoxide
 #+begin_src emacs-lisp
 (use-package zoxide
@@ -782,17 +786,17 @@
 #+end_src
 *** Affe
 #+begin_src emacs-lisp
-(use-package affe)
+(use-package affe :defer t)
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
+(leader
+  "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
+  "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
+  "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
+  "f W" '(jl/consult-grep-in-dir :wk "Find word in specified dir/project"))
 (use-package consult
-  :general
-    (leader
-      "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
-      "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
-      "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
-      "f W" '(jl/consult-grep-in-dir :wk "Find word in specified dir/project"))
+  :defer t
   :config
     (setq consult-find-args "find . -not ( -path '*/.git*' -prune ) -not ( -path '*.git*' -prune )"))
 #+end_src
@@ -855,18 +859,19 @@
 *** Yasnippet
 #+begin_src emacs-lisp
 (use-package yasnippet
+  :defer 2
   :config
     (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
     (yas-global-mode 1))
 #+end_src
 **** Yasnippet Snippets
 #+begin_src emacs-lisp
-(use-package yasnippet-snippets)
+(use-package yasnippet-snippets :after yasnippet)
 #+end_src
 **** Yasnipped Capf
 #+begin_src emacs-lisp
 (use-package yasnippet-capf
-  :after cape
+  :after '(cape yasnippet)
   :config
     (setq yasnippet-capf-lookup-by 'name) ;; Prefer the name of the snippet instead
     (add-to-list 'completion-at-point-functions #'yasnippet-capf))
@@ -874,26 +879,26 @@
 ** Git
 *** Magit
 #+begin_src emacs-lisp
+(leader
+  "g s" '(magit-stage-file :wk "Stage Files")
+  "g S" '(magit-stage-modified :wk "Stage All Files")
+  "g u" '(magit-unstage-file :wk "Unstage Files")
+  "g U" '(magit-unstage-all :wk "Unstage All Files")
+  "g f" '(magit-fetch :wk "Fetch")
+  "g F" '(magit-fetch-all :wk "Fetch")
+  "g i" '(magit-init :wk "Init")
+  "g l" '(magit-log :wk "Log")
+  "g b" '(magit-branch :wk "Branch")
+  "g d" '(magit-diff :wk "Diff")
+  "g c" '(magit-commit :wk "Commit")
+  "g r" '(magit-rebase :wk "Rebase")
+  "g R" '(magit-reset :wk "Reset")
+  "g p" '(magit-push :wk "Push")
+  "g P" '(magit-pull :wk "Pull")
+  "g m" '(magit :wk "Magit Menu"))
 (use-package magit 
+  :defer 2
   :config
-   (leader
-    "g s" '(magit-stage-file :wk "Stage Files")
-    "g S" '(magit-stage-modified :wk "Stage All Files")
-    "g u" '(magit-unstage-file :wk "Unstage Files")
-    "g U" '(magit-unstage-all :wk "Unstage All Files")
-    "g f" '(magit-fetch :wk "Fetch")
-    "g F" '(magit-fetch-all :wk "Fetch")
-    "g i" '(magit-init :wk "Init")
-    "g l" '(magit-log :wk "Log")
-    "g b" '(magit-branch :wk "Branch")
-    "g d" '(magit-diff :wk "Diff")
-    "g c" '(magit-commit :wk "Commit")
-    "g r" '(magit-rebase :wk "Rebase")
-    "g R" '(magit-reset :wk "Reset")
-    "g p" '(magit-push :wk "Push")
-    "g P" '(magit-pull :wk "Pull")
-    "g m" '(magit :wk "Magit Menu"))
-
     (add-hook 'magit-post-stage-hook #'(lambda ()
       (message "Staged"))))
 #+end_src
@@ -1005,7 +1010,7 @@
 #+end_src
 *** Sudo Edit
 #+begin_src emacs-lisp
-(use-package sudo-edit)
+(use-package sudo-edit :defer t)
 #+end_src
 ** Programming Modes
 *** Python Mode
