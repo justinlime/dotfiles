@@ -582,6 +582,8 @@
   :states 'normal
   :keymaps 'dired-mode-map
   "s" #'dired-hide-details-mode
+  "f" #'jl/dired-open
+  "a" #'dired-up-directory
   "A" #'dired-create-directory
   "W" #'wdired-change-to-wdired-mode
   "RET" #'jl/dired-open)
