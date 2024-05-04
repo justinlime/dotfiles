@@ -9,6 +9,8 @@
   - [[#late-init][Late Init]]
     - [[#package-manger][Package Manger]]
     - [[#use-package][Use Package]]
+    - [[#quelpa][Quelpa]]
+      - [[#quelpa-use-package][Quelpa use-package]]
   - [[#preferences][Preferences]]
     - [[#littering][Littering]]
       - [[#buffer-litter][Buffer Litter]]
@@ -129,6 +131,27 @@
 (require 'use-package) ; load use-package
 ;; Make use-package uses `package.el', prevents having to use :ensure t on everything
 (setq use-package-always-ensure t) 
+#+end_src
+*** Quelpa
+#+begin_src emacs-lisp 
+(setq quelpa-update-melpa-p nil) ;; stop quelpa from trying to update the melpa all the time
+(unless (package-installed-p 'quelpa)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+    (eval-buffer)
+    (quelpa-self-upgrade)))
+#+end_src
+**** Quelpa use-package
+#+begin_src emacs-lisp 
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://github.com/quelpa/quelpa-use-package.git"))
+(require 'quelpa-use-package)
+;; `USAGE'
+;; uses the given recipe
+;; (use-package abc-mode
+;;  :quelpa (abc-mode :fetcher github :repo "mkjunker/abc-mode"))
 #+end_src
 ** Preferences 
 *** Littering

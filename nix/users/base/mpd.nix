@@ -28,7 +28,7 @@
   # ];
   home.packages = with pkgs; [
     libnotify
-    ffmpeg
+    ffmpeg-full
     mpc-cli
     (pkgs.writeScriptBin "songinfo" ''
       music_dir="$HOME/music"
