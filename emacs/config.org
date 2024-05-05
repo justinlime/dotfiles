@@ -216,7 +216,7 @@
   :font "RobotoMono Nerd Font"
   :height 120
   :weight 'medium)
-(setq-default line-spacing 0.12)
+(setq-default line-spacing 0.10)
 (set-language-environment "UTF-8")
 #+end_src
 *** Misc
@@ -706,8 +706,10 @@
 #+end_src
 ** Org
 #+begin_src emacs-lisp
-(setq org-src-preserve-indentation t)
-(setq org-startup-with-inline-images t)
+(setq org-src-preserve-indentation t
+      org-hide-emphasis-markers t
+      org-pretty-entities t)
+
 (general-define-key
   :states 'normal 
   :keymaps 'org-mode-map
@@ -741,7 +743,14 @@
 #+begin_src emacs-lisp
 (use-package org-modern
   :init 
-    (with-eval-after-load 'org (global-org-modern-mode)))
+    (with-eval-after-load 'org (global-org-modern-mode))
+  :config
+    (setq org-modern-fold-stars
+          '(("󰴈" . "󰴈")
+            ("󰊹" . "󰊹")
+            ("󰨑" . "󰨑")
+            ("󰗮" . "󰗮")
+            ("" . ""))))
 #+end_src
 *** Org Roam
 #+begin_src emacs-lisp
