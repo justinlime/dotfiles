@@ -597,7 +597,9 @@
 #+end_src
 ** Dired
 #+begin_src emacs-lisp
-(setq dired-listing-switches "-alFh")
+(setq dired-listing-switches "-alFh"
+      dired-recursive-copies 'always
+      dired-recursive-deletes 'always)
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (advice-add #'dired-do-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
 (advice-add #'dired-do-rename :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
@@ -891,7 +893,6 @@
 *** Yasnippet
 #+begin_src emacs-lisp
 (use-package yasnippet
-  :defer 2
   :config
     (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
     (yas-global-mode 1))
