@@ -55,9 +55,6 @@
       - [[#corfu-terminal][Corfu Terminal]]
     - [[#cape][Cape]]
     - [[#orderless][Orderless]]
-    - [[#yasnippet][Yasnippet]]
-      - [[#yasnippet-snippets][Yasnippet Snippets]]
-      - [[#yasnipped-capf][Yasnipped Capf]]
   - [[#git][Git]]
     - [[#magit][Magit]]
     - [[#git-gutter][Git Gutter]]
@@ -889,25 +886,6 @@
   :custom
     (completion-styles '(orderless basic))
     (completion-category-overrides '((file (styles basic partial-completion)))))
-#+end_src
-*** Yasnippet
-#+begin_src emacs-lisp
-(use-package yasnippet
-  :config
-    (setq yas-snippet-dirs `(,(expand-file-name "snips/" user-emacs-directory)))
-    (yas-global-mode 1))
-#+end_src
-**** Yasnippet Snippets
-#+begin_src emacs-lisp
-(use-package yasnippet-snippets :after yasnippet)
-#+end_src
-**** Yasnipped Capf
-#+begin_src emacs-lisp
-(use-package yasnippet-capf
-  :after '(cape yasnippet)
-  :config
-    (setq yasnippet-capf-lookup-by 'name) ;; Prefer the name of the snippet instead
-    (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 #+end_src
 ** Git
 *** Magit
