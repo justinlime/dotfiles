@@ -35,6 +35,7 @@
     - [[#wdired][wDired]]
     - [[#diredfl][Diredfl]]
     - [[#dired-ranger][Dired Ranger]]
+    - [[#dired-async][Dired Async]]
   - [[#eglot][Eglot]]
   - [[#erc][ERC]]
   - [[#term][Term]]
@@ -648,6 +649,10 @@
     (advice-add #'dired-ranger-move :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
     (advice-add #'dired-ranger-paste :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
+#+end_src
+*** Dired Async
+#+begin_src emacs-lisp
+(use-package async :config (dired-async-mode 1))
 #+end_src
 ** Eglot
 #+begin_src emacs-lisp
