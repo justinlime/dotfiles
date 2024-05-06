@@ -312,19 +312,9 @@
 #+begin_src emacs-lisp
 (defun jl/ssh (host formatter)
   (persp-switch host)
-  (advice-add #'read-passwd :around #'jl/capture-password)
   (let ((format-host (format formatter host host)))
     (find-file format-host)
-    (jl/toggle-term host (format "ssh %s" host)))
-  ;; Poll the buffer every .2 seconds for the prompt
-  (setq jl/password-timer (run-at-time .20 .20 #'(lambda()
-  (if (string-match "Enter Passphrase for key" (buffer-string))
-    (progn
-      (jl/str-to-input jl/pass)
-      (execute-kbd-macro (kbd "RET"))
-      (setq jl/pass nil)
-      (cancel-timer jl/password-timer)
-      (advice-remove #'read-passwd #'jl/capture-password)))))))
+    (jl/toggle-term host (format "ssh %s" host))))
 (defun jl/ssh-root (host)
   "SSH with sudo privledges using a host from .ssh/config"
   (interactive "sEnter host: ")
@@ -336,26 +326,6 @@
 (defun jl/samba (host)
   (interactive "sEnter user@ip: ")
   (find-file (format "/smb:%s:" host)))
-
-(defvar jl/pass nil)
-(defun jl/capture-password (orig-func &rest args)
-  "Capture the password temporarily to send to send somewhere
-   Probably pretty insecure but I dont really care"
-
-  (let ((pass (apply orig-func args)))
-    ;; only capture if jl/pass is not active
-    (if (eq jl/pass nil)
-      (setq jl/pass pass)
-      (run-at-time 60 nil #'(lambda()
-          ;; clear the pass from memory
-          (setq jl/pass nil))))
-    ;; always return the original value so the orig-function works like normal
-    pass))
-
-(defun jl/str-to-input (str)
-  (mapc (lambda (char)
-    (execute-kbd-macro (char-to-string char)))
-    str))
 
 (defun jl/consult-find-in-dir ()
   "Find a file in a specific directory
@@ -577,24 +547,30 @@
 #+end_src
 ** Tramp
 #+begin_src emacs-lisp
-(setq password-cache-expiry nil) ; so tramp doesnt keep prompting for passwords while connected
 ;; Prevent tramp from trying to save to auth-info
 ;; It stores passwords in plain text (WTF...)
 (connection-local-set-profile-variables
  'remote-without-auth-sources '((auth-sources . nil)))
 (connection-local-set-profiles
  '(:application tramp) 'remote-without-auth-sources)
-;; Speeds up tramp allegedly
+
+;; Tramp optomizations
 (with-eval-after-load 'tramp
+  (add-to-list 'tramp-connection-properties
+                  (list "/ssh:" "direct-async-process" t))
   (setq tramp-inline-compress-start-size 1000
         tramp-copy-size-limit 10000
         vc-handled-backends '(git)
-        tramp-default-method "rcp"
-        tramp-use-ssh-controlmaster-options nil
-        projectile--mode-line "Projectile"))
+        tramp-verbose 1 ; shut the fuck up tramp
+        password-cache-expiry nil ; stop tramp from forgetting passwords
+        ;; force tramp to use the default .ssh config for controlmaster
+        ;; makes things quicker and retains passwords
+        tramp-use-ssh-controlmaster-options nil 
+        remote-file-name-inhibit-cache nil)) ; remember more filenames
 #+end_src
 ** Dired
 #+begin_src emacs-lisp
+;; dont prompt ever time for recursion
 (setq dired-listing-switches "-alFh"
       dired-recursive-copies 'always
       dired-recursive-deletes 'always)
