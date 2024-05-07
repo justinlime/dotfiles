@@ -62,6 +62,7 @@
   - [[#misc-2][Misc]]
     - [[#dashboard][Dashboard]]
     - [[#perspective][Perspective]]
+    - [[#highlight-indnet][Highlight Indnet]]
     - [[#undo-tree][Undo Tree]]
     - [[#direnv][Direnv]]
     - [[#sideline][Sideline]]
@@ -192,11 +193,12 @@
 (setq-default pixel-scroll-precision-mode t
       mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
       mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
-      mouse-wheel-follow-mouse 't ;; scroll window under mouse
-      scroll-margin 1
+      mouse-wheel-follow-mouse t ;; scroll window under mouse
+      scroll-margin 0
       scroll-conservatively 0
       scroll-up-aggressively 0.01
       scroll-down-aggressively 0.01)
+
 (unless (display-graphic-p) 
   (setq scroll-conservatively 101))
 #+end_src
@@ -204,17 +206,17 @@
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
-  :height 120
+  :height 110
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
   :font "Roboto"
-  :height 120
+  :height 110
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
   :font "RobotoMono Nerd Font"
-  :height 120
+  :height 110
   :weight 'medium)
-(setq-default line-spacing 0.10)
+(setq-default line-spacing 0)
 (set-language-environment "UTF-8")
 #+end_src
 *** Misc
@@ -889,7 +891,7 @@
   "g P" '(magit-pull :wk "Pull")
   "g m" '(magit :wk "Magit Menu"))
 (use-package magit 
-  :defer 2
+  :defer t
   :config
     (add-hook 'magit-post-stage-hook #'(lambda ()
       (message "Staged"))))
@@ -964,6 +966,14 @@
                    (sort persps (lambda (a b)
                      (time-less-p (persp-created-time a)
                        (persp-created-time b))))))))))
+#+end_src
+*** Highlight Indnet
+#+begin_src emacs-lisp
+(use-package highlight-indent-guides 
+  :config 
+  (setq highlight-indent-guides-responsive t
+        highlight-indent-guides-method 'bitmap)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+end_src
 *** Undo Tree
 #+begin_src emacs-lisp
