@@ -216,7 +216,7 @@
   :font "RobotoMono Nerd Font"
   :height 110
   :weight 'medium)
-(setq-default line-spacing 0)
+(setq-default line-spacing 0.10)
 (set-language-environment "UTF-8")
 #+end_src
 *** Misc
@@ -530,7 +530,7 @@
 *** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
-  :defer 2
+  :defer t
   :init
     (which-key-mode 1)
   :config
@@ -605,9 +605,8 @@
 #+end_src
 *** Diredfl
 #+begin_src emacs-lisp
-(use-package diredfl
-  :config
-    (diredfl-global-mode))
+(use-package diredfl :defer t)
+(add-hook 'dired-mode-hook #'(lambda () (diredfl-global-mode 1)))
 #+end_src
 *** Dired Ranger
 #+begin_src emacs-lisp
@@ -716,10 +715,10 @@
 *** Org Toc
 #+begin_src emacs-lisp
 (use-package toc-org
-  :commands toc-org-enable
-  :init
-    (add-hook 'org-mode-hook 'toc-org-enable)
-    (add-hook 'markdown-mode-hook 'toc-org-enable))
+  :defer t
+  :commands toc-org-enable)
+(add-hook 'org-mode-hook 'toc-org-enable)
+(add-hook 'markdown-mode-hook 'toc-org-enable)
 #+end_src
 *** Org Modern
 #+begin_src emacs-lisp
@@ -792,11 +791,11 @@
 *** Zoxide
 #+begin_src emacs-lisp
 (use-package zoxide
+  :defer t
   :general
     (leader
-      "f d" '(zoxide-travel :wk "Find directory with Zoxide"))
-  :config
-    (add-hook 'dired-mode-hook #'zoxide-add))
+      "f d" '(zoxide-travel :wk "Find directory with Zoxide")))
+(add-hook 'dired-mode-hook #'zoxide-add)
 #+end_src
 *** Affe
 #+begin_src emacs-lisp
@@ -853,6 +852,7 @@
 *** Cape
 #+begin_src emacs-lisp
 (use-package cape
+  :defer t
   :init
     ;; Add to the global default value of `completion-at-point-functions' which is
     ;; used by `completion-at-point'.  The order of the functions matters, the
@@ -861,11 +861,13 @@
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
 #+end_src
 *** Orderless
 #+begin_src emacs-lisp
 (use-package orderless
+  :defer t
   :custom
     (completion-styles '(orderless basic))
     (completion-category-overrides '((file (styles basic partial-completion)))))
@@ -924,8 +926,9 @@
 #+end_src
 *** Perspective
 #+begin_src emacs-lisp
-(require 'ibuffer)
+(with-eval-after-load 'perspective (require 'ibuffer))
 (use-package perspective
+  :defer t
   :init
     (setq persp-suppress-no-prefix-key-warning t)
     (setq persp-initial-frame-name "emacs")
@@ -970,10 +973,11 @@
 *** Highlight Indnet
 #+begin_src emacs-lisp
 (use-package highlight-indent-guides 
+  :defer t
   :config 
   (setq highlight-indent-guides-responsive t
-        highlight-indent-guides-method 'bitmap)
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+        highlight-indent-guides-method 'bitmap))
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 #+end_src
 *** Undo Tree
 #+begin_src emacs-lisp
@@ -992,6 +996,7 @@
 *** Sideline
 #+begin_src emacs-lisp
 (use-package sideline
+  :defer t
   :init
     (setq sideline-backends-left-skip-current-line t   ; don't display on current line (left)
           sideline-backends-right-skip-current-line t  ; don't display on current line (right)
@@ -1036,7 +1041,7 @@
 #+end_src
 *** Vue Mode
 #+begin_src emacs-lisp 
-(use-package vue-mode :mode "\\.vue\\'")
+(use-package vue-mode :defer t :mode "\\.vue\\'")
 
 (add-hook 'vue-mode-hook #'(lambda()
   (setq tab-width 2
@@ -1051,21 +1056,20 @@
 #+end_src
 *** Nix Mode
 #+begin_src emacs-lisp
-(use-package nix-ts-mode :mode "\\.nix\\'")
+(use-package nix-ts-mode :defer t :mode "\\.nix\\'")
 (add-hook 'nix-ts-mode #'(lambda()
   
 ))
 #+end_src
 *** Lua Mode
 #+begin_src emacs-lisp
-(use-package lua-mode :mode "\\.lua\\'")
-
+(use-package lua-mode :defer t :mode "\\.lua\\'")
 (add-hook 'lua-mode-hook #'(lambda()
   (setq tab-width 4)))
 #+end_src
 *** Elixir Mode
 #+begin_src emacs-lisp
-(use-package elixir-ts-mode :mode "\\.exs\\'")
+(use-package elixir-ts-mode :defer t :mode "\\.exs\\'")
 #+end_src
 *** Rust Mode
 #+begin_src emacs-lisp
@@ -1074,11 +1078,11 @@
 #+end_src
 *** PowerShell Mode
 #+begin_src emacs-lisp
-(use-package powershell)
+(use-package powershell :defer t)
 #+end_src
 *** Markdown Mode
 #+begin_src emacs-lisp
-(use-package markdown-mode :mode "\\.md\\'")
+(use-package markdown-mode :defer t :mode "\\.md\\'")
 #+end_src
 ** Style
 *** Themes
@@ -1114,39 +1118,35 @@
 #+end_src
 **** Nerd Icons Dired
 #+begin_src emacs-lisp
-(use-package nerd-icons-dired
-  :config  
-    (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
+(use-package nerd-icons-dired :defer t)
+(add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
 #+end_src
 **** Nerd Icons Dired
 #+begin_src emacs-lisp
-(use-package nerd-icons-corfu
-  :config
-    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+(use-package nerd-icons-corfu :defer t)
+(add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
 #+end_src
 *** Highlight TODO
 #+begin_src emacs-lisp
 (use-package hl-todo
   :config
-    (global-hl-todo-mode)
     (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
           ("FIXME"  . "#FF0000")
           ("DEBUG"  . "#A020F0")
           ("GOTCHA" . "#FF4500")
           ("STUB"   . "#1E90FF"))))
+(add-hook 'prog-mode-hook #'hl-todo-mode)
 #+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
-(use-package rainbow-mode
-  :config
-    (add-hook 'prog-mode-hook #'rainbow-mode))
+(use-package rainbow-mode :defer t)
+(add-hook 'prog-mode-hook #'rainbow-mode)
 #+end_src
 *** Rainbow Delimiters
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :config
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+(use-package rainbow-delimiters :defer t)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
