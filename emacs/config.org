@@ -575,6 +575,7 @@
 ;; dont prompt ever time for recursion
 (setq dired-listing-switches "-alFh"
       dired-recursive-copies 'always
+      large-file-warning-threshold nil
       dired-recursive-deletes 'always)
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (advice-add #'dired-do-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
