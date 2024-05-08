@@ -67,6 +67,7 @@
     - [[#direnv][Direnv]]
     - [[#sideline][Sideline]]
       - [[#sideline-flymake][Sideline Flymake]]
+      - [[#yasnippet][Yasnippet]]
     - [[#sudo-edit][Sudo Edit]]
   - [[#programming-modes][Programming Modes]]
     - [[#python-mode][Python Mode]]
@@ -151,6 +152,7 @@
 ;; uses the given recipe
 ;; (use-package abc-mode
 ;;  :quelpa (abc-mode :fetcher github :repo "mkjunker/abc-mode"))
+;; (use-package chan :quelpa (:fetcher))
 #+end_src
 ** Preferences 
 *** Littering
@@ -194,13 +196,10 @@
       mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
       mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
       mouse-wheel-follow-mouse t ;; scroll window under mouse
-      scroll-margin 0
-      scroll-conservatively 0
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
-
-(unless (display-graphic-p) 
-  (setq scroll-conservatively 101))
+      mouse-wheel-tilt-scroll t
+      scroll-margin 7
+      scroll-preserve-screen-position t
+      scroll-conservatively 101)
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
@@ -236,6 +235,7 @@
 (global-hl-line-mode) ; Highlight the current line
 (electric-indent-mode t) ; Auto Indent
 (global-display-line-numbers-mode 1) ;Display line numbers
+(global-prettify-symbols-mode)
 #+end_src
 ** Custom Functions
 *** Toggle-Term
@@ -698,19 +698,18 @@
   "<tab>" #'org-cycle
   "TAB" #'org-cycle)
 
-
 (add-hook 'org-mode-hook #'(lambda ()
   (org-indent-mode)
   (setq-local electric-indent-mode nil)))
 
-;; Scale inline images to the windows size adaptively
-;; This lags the shit out of emacs
-;; (defun org-image-resize (frame)
-;;   (when (derived-mode-p 'org-mode)
-;;       (setq org-image-actual-width (round (* (window-pixel-width) 0.5)))
-;;       (org-redisplay-inline-images)))
-
-;; (add-hook 'window-size-change-functions 'org-image-resize)
+(setq org-startup-with-inline-images t)
+(defun jl/resize-inline ()
+  (if (derived-mode-p 'org-mode)
+      (progn
+        (setq org-image-actual-width (round (* (window-pixel-width) 0.5)))
+        (org-redisplay-inline-images))))
+(add-hook 'after-save-hook #'jl/resize-inline)
+(add-hook 'org-mode-hook #'jl/resize-inline)
 #+end_src
 *** Org Toc
 #+begin_src emacs-lisp
@@ -1014,6 +1013,18 @@
   :init
     (setq sideline-flymake-display-mode 'line) ; 'line or 'point
     (setq sideline-backends-right '(sideline-flymake)))
+#+end_src
+**** Yasnippet
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :ensure t
+  :general (:states 'insert "<tab>")
+  :config (use-package yasnippet-snippets :ensure t) (yas-reload-all))
+(use-package yasnippet-capf 
+  :after cape
+  :config
+    (setq yasnippet-capf-lookup-by 'name)
+    (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 #+end_src
 *** Sudo Edit
 #+begin_src emacs-lisp
