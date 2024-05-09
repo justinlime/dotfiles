@@ -205,15 +205,15 @@
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
-  :height 110
+  :height 120
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
   :font "Roboto"
-  :height 110
+  :height 120
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
   :font "RobotoMono Nerd Font"
-  :height 110
+  :height 120
   :weight 'medium)
 (setq-default line-spacing 0.10)
 (set-language-environment "UTF-8")
@@ -573,7 +573,7 @@
 ** Dired
 #+begin_src emacs-lisp
 ;; dont prompt ever time for recursion
-(setq dired-listing-switches "-alFh"
+(setq dired-listing-switches "-alFh --group-directories-first"
       dired-recursive-copies 'always
       large-file-warning-threshold nil
       dired-recursive-deletes 'always)
@@ -586,6 +586,7 @@
   :keymaps 'dired-mode-map
   "s" #'dired-hide-details-mode
   "f" #'jl/dired-open
+  "d" nil
   "a" #'(lambda () (interactive) (find-alternate-file ".."))
   "A" #'dired-create-directory
   "W" #'wdired-change-to-wdired-mode
@@ -630,7 +631,23 @@
 #+end_src
 *** Dired Async
 #+begin_src emacs-lisp
-(use-package async :config (dired-async-mode 1))
+(use-package async 
+  :config 
+  (dired-async-mode 1))
+;; Autorefresh the buffer if visible and other conditions
+(run-with-timer 0 2 #'(lambda ()
+  (dolist (buf (buffer-list))
+      (if (get-buffer-window buf)
+        (with-current-buffer buf
+          (if (and (derived-mode-p 'dired-mode)
+                   (not dired-hide-details-mode)
+                   (not (derived-mode-p 'wdired-mode))
+                   (not (file-remote-p default-directory))
+                   (eq evil-state 'normal))
+              (progn
+                (dired-revert)
+                (hl-line-mode)
+                (hl-line-mode))))))))
 #+end_src
 ** Eglot
 #+begin_src emacs-lisp
