@@ -846,11 +846,10 @@
     (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (evil-make-overriding-map corfu-map)
-    (set-face-attribute 'corfu-default nil :background "#11111B")
-    (set-face-attribute 'corfu-current nil :background "#2a2e38")
-    (set-face-attribute 'corfu-popupinfo nil :background "#181825")
-    (set-face-attribute 'corfu-border nil :background "#cba6f7")
-    (set-face-attribute 'corfu-bar nil :background "#89b4fa")
+    (set-face-attribute 'corfu-default nil :background "#1e1e2e")
+    (set-face-attribute 'corfu-current nil :background "#2a2e38" :box "#cba6f7")
+    (set-face-attribute 'corfu-border nil :background "#89b4fa")
+    (set-face-attribute 'corfu-bar nil :background "#cba6f7")
     (advice-add 'corfu-insert-separator :after #'(lambda () 
       (unless (= corfu--index -1)
           (corfu-insert))))
@@ -998,9 +997,11 @@
 (use-package highlight-indent-guides 
   :defer t
   :config 
-  (setq highlight-indent-guides-responsive t
+  (setq highlight-indent-guides-responsive 'top
         highlight-indent-guides-method 'bitmap))
-(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (add-hook 'prog-mode-hook #'(lambda ()
+    (highlight-indent-guides-mode)
+    (set-face-foreground 'highlight-indent-guides-top-character-face "#cba6f7")))
 #+end_src
 *** Undo Tree
 #+begin_src emacs-lisp
