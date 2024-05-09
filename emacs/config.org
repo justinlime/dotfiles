@@ -843,17 +843,24 @@
   :config
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
     ;; Prevent evil from overriding corfu bindings
-    (with-eval-after-load #'corfu
-      (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
-      (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
-      (evil-make-overriding-map corfu-map))
-    (setq corfu-popupinfo-delay 0)
+    (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
+    (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
+    (evil-make-overriding-map corfu-map)
+    (set-face-attribute 'corfu-default nil :background "#11111B")
+    (set-face-attribute 'corfu-current nil :background "#2a2e38")
+    (set-face-attribute 'corfu-popupinfo nil :background "#181825")
+    (set-face-attribute 'corfu-border nil :background "#cba6f7")
+    (set-face-attribute 'corfu-bar nil :background "#89b4fa")
+    (advice-add 'corfu-insert-separator :after #'(lambda () 
+      (unless (= corfu--index -1)
+          (corfu-insert))))
   :custom
     (corfu-auto t)
     (corfu-cycle t)
     (corfu-preselect 'prompt)
     (corfu-auto-delay 0.05)
     (corfu-auto-prefix 2)
+    (corfu-popupinfo-delay 0)
   :init
     (corfu-popupinfo-mode)
     (global-corfu-mode)
@@ -878,7 +885,6 @@
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-    (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
 #+end_src
 *** Orderless
@@ -1036,8 +1042,9 @@
 #+begin_src emacs-lisp
 (use-package yasnippet
   :ensure t
-  :general (:states 'insert "<tab>")
-  :config (use-package yasnippet-snippets :ensure t) (yas-reload-all))
+  :config 
+  (yas-reload-all)
+  (use-package yasnippet-snippets :ensure t) (yas-reload-all))
 (use-package yasnippet-capf 
   :after cape
   :config
