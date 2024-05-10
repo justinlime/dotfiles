@@ -167,10 +167,10 @@
         (kill-buffer b)))))
 
 ;; ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
-(setq warning-minimum-level :emergency)
-(setq-default message-log-max nil)
-(add-hook 'emacs-startup-hook #'(lambda() ;Kills the warning buffer for even emergency messages
-  (kill-buffer (get-buffer "*Messages*"))))
+;; (setq warning-minimum-level :emergency)
+;; (setq-default message-log-max nil)
+;; (add-hook 'emacs-startup-hook #'(lambda() ;Kills the warning buffer for even emergency messages
+;;   (kill-buffer (get-buffer "*Messages*"))))
 #+end_src
 **** File litter
 #+begin_src emacs-lisp
@@ -885,6 +885,15 @@
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-elisp-block)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
+
+(use-package company-nixos-options 
+  :after nix-ts-mode
+  :config 
+    (add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-nixos-options))
+    ;; prevent eglot from overriding
+    (add-hook 'eglot-managed-mode-hook #'(lambda()
+     (setq-local completion-at-point-functions 
+       `(,(cape-company-to-capf #'company-nixos-options) cape-dabbrev cape-file cape-keyword)))))
 #+end_src
 *** Orderless
 #+begin_src emacs-lisp
