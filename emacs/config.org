@@ -3,7 +3,7 @@
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
 #+STARTUP: showeverything, inlineimages
-      
+
 * TABLE OF CONTENTS :TOC_4:
 - [[#general][General]]
   - [[#late-init][Late Init]]
@@ -167,10 +167,10 @@
         (kill-buffer b)))))
 
 ;; ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
-;; (setq warning-minimum-level :emergency)
-;; (setq-default message-log-max nil)
-;; (add-hook 'emacs-startup-hook #'(lambda() ;Kills the warning buffer for even emergency messages
-;;   (kill-buffer (get-buffer "*Messages*"))))
+(setq warning-minimum-level :emergency)
+(setq-default message-log-max nil)
+(add-hook 'emacs-startup-hook #'(lambda() ;Kills the warning buffer for even emergency messages
+  (kill-buffer (get-buffer "*Messages*"))))
 #+end_src
 **** File litter
 #+begin_src emacs-lisp
@@ -187,8 +187,9 @@
 (tool-bar-mode -1) ;Disable toolbar
 (scroll-bar-mode -1) ;Disable scroll bar
 ;; Transparency
-(set-frame-parameter nil 'alpha-background 100) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background . 100)) ; For all new frames henceforth
+(let ((opacity 100))
+  (set-frame-parameter nil 'alpha-background opacity) ; For current frame
+  (add-to-list 'default-frame-alist `(alpha-background . ,opacity))) ; For all new frames henceforth
 #+end_src
 *** Scrolling
 #+begin_src emacs-lisp 
@@ -722,15 +723,19 @@
   (setq-local electric-indent-mode nil)))
 
 ;; Inline images
-(setq org-startup-with-inline-images t)
 (defun jl/org-resize-inline ()
-  (if (derived-mode-p 'org-mode)
-      (progn
-        (setq org-image-actual-width (round (* (window-pixel-width) 0.4)))
-        (setq-local scroll-conservatively 0)
-        (org-display-inline-images t t))))
-(add-hook 'after-save-hook #'jl/org-resize-inline)
+  (when (derived-mode-p 'org-mode)
+    (save-excursion
+      (save-restriction
+        (goto-char (point-min))
+        ;; Check if the org buffer even has images first
+        (when (re-search-forward "\\[\\[.*\\(png\\|jpe?g\\|gif\\|webp\\)\\]\\]" nil :noerror)
+          (setq org-image-actual-width (round (* (window-pixel-width) 0.4)))
+          (setq-local scroll-conservatively 0)
+          (org-display-inline-images t t))))))
+
 (add-hook 'org-mode-hook #'jl/org-resize-inline)
+(add-hook 'after-save-hook #'jl/org-resize-inline)
 ;; Modified from org-ros to work with grim and slurp
 (defun jl/org-grim-slurp ()
   "Screenshots an image to an org-file."
@@ -745,7 +750,7 @@
                        ".png"))
                (full-path (concat default-directory filename))
                (rel-path (concat "./" filename)))
-          (shell-command (replace-regexp-in-string "\n" "" (format "grim -g \"%s\" %s" (shell-command-to-string "slurp -d -c \"#ffffff\"") full-path)))
+          (shell-command (replace-regexp-in-string "\n" "" (format "grim -g \"%s\" %s" (shell-command-to-string "slurp -d -c \"#cba6f7\"") full-path)))
           (insert "[[" rel-path "]]")
           (org-display-inline-images t t))
         (message "File created and linked..."))
@@ -911,11 +916,11 @@
 (use-package company-nixos-options 
   :after nix-ts-mode
   :config 
-    (add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-nixos-options))
     ;; prevent eglot from overriding
     (add-hook 'eglot-managed-mode-hook #'(lambda()
-     (setq-local completion-at-point-functions 
-       `(,(cape-company-to-capf #'company-nixos-options) cape-dabbrev cape-file cape-keyword)))))
+     (if (derived-mode-p 'nix-ts-mode)
+       (setq-local completion-at-point-functions 
+         `(,(cape-company-to-capf #'company-nixos-options) cape-dabbrev cape-file cape-keyword))))))
 #+end_src
 *** Orderless
 #+begin_src emacs-lisp
