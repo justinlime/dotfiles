@@ -15,6 +15,7 @@ pkgs,
 {
   # Extra packages my hyprland config uses
   home.packages = with pkgs; [
+    libnotify
     foot 
     grim
     slurp
@@ -22,11 +23,11 @@ pkgs,
     swayidle
     swaylock-effects
     swaynotificationcenter
+    wl-clipboard
   ];
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-    enableNvidiaPatches = false;
     settings = {
       "$mainMod" = "ALT";
       monitor = [
@@ -116,8 +117,8 @@ pkgs,
         # Launch
         "$mainMod, RETURN, exec, foot"
         "$mainMod, D, exec, wofi"
-        ''$mainMod,P,exec,mkdir -p ~/photos/screenshots; grim -t png -g "$(slurp)" ~/photos/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png''
-        "$mainMod SHIFT,N,exec, swaync-client -t -sw"
+        ''$mainMod,P,exec,IMG=~/photos/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png && mkdir -p ~/photos/screenshots && grim -g "$(slurp -d)" $IMG && wl-copy < $IMG; notify-send -i $IMG Screenshot "Screenshot saved to ''${IMG} and copied to clipboard"''
+        "$mainMod ,N,exec, swaync-client -t -sw"
         "$mainMod SHIFT,M,exec, swaylock -f -i ~/photos/wallpapers/wallpaper.png"
         # Window Options
         "$mainMod, V, pseudo"

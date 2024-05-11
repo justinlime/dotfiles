@@ -714,20 +714,42 @@
   :keymaps 'org-mode-map
   "RET" #'org-open-at-point
   "<tab>" #'org-cycle
-  "TAB" #'org-cycle)
+  "TAB" #'org-cycle
+  "P" #'jl/org-grim-slurp)
 
 (add-hook 'org-mode-hook #'(lambda ()
   (org-indent-mode)
   (setq-local electric-indent-mode nil)))
 
+;; Inline images
 (setq org-startup-with-inline-images t)
-(defun jl/resize-inline ()
+(defun jl/org-resize-inline ()
   (if (derived-mode-p 'org-mode)
       (progn
-        (setq org-image-actual-width (round (* (window-pixel-width) 0.5)))
-        (org-redisplay-inline-images))))
-(add-hook 'after-save-hook #'jl/resize-inline)
-(add-hook 'org-mode-hook #'jl/resize-inline)
+        (setq org-image-actual-width (round (* (window-pixel-width) 0.4)))
+        (setq-local scroll-conservatively 0)
+        (org-display-inline-images t t))))
+(add-hook 'after-save-hook #'jl/org-resize-inline)
+(add-hook 'org-mode-hook #'jl/org-resize-inline)
+;; Modified from org-ros to work with grim and slurp
+(defun jl/org-grim-slurp ()
+  "Screenshots an image to an org-file."
+  (interactive)
+  (if buffer-file-name
+      (progn
+        (message "Waiting for region selection with mouse...")
+        (let* ((filename
+               (concat (file-name-nondirectory buffer-file-name)
+                       "_"
+                       (format-time-string "%Y%m%d_%H%M%S")
+                       ".png"))
+               (full-path (concat default-directory filename))
+               (rel-path (concat "./" filename)))
+          (shell-command (replace-regexp-in-string "\n" "" (format "grim -g \"%s\" %s" (shell-command-to-string "slurp -d -c \"#ffffff\"") full-path)))
+          (insert "[[" rel-path "]]")
+          (org-display-inline-images t t))
+        (message "File created and linked..."))
+    (message "You're in a not saved buffer! Save it first!")))
 #+end_src
 *** Org Toc
 #+begin_src emacs-lisp
