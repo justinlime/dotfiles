@@ -34,6 +34,7 @@
   - [[#dired][Dired]]
     - [[#wdired][wDired]]
     - [[#diredfl][Diredfl]]
+    - [[#dired-filter][Dired Filter]]
     - [[#dired-ranger][Dired Ranger]]
     - [[#dired-async][Dired Async]]
   - [[#eglot][Eglot]]
@@ -506,6 +507,7 @@
         (if (eq evil-state 'insert)
           (send-string-to-terminal "\e[5 q")
           (send-string-to-terminal "\e[2 q")))
+      (run-with-idle-timer nil 1 #'correct-cursor)
       (add-hook 'evil-insert-state-entry-hook #'correct-cursor)
       (add-hook 'evil-normal-state-entry-hook #'correct-cursor)
       (advice-add 'eldoc-documentation-default :after #'correct-cursor) ;;Echo Area
@@ -614,6 +616,14 @@
 (use-package diredfl :defer t)
 (add-hook 'dired-mode-hook #'(lambda () (diredfl-global-mode 1)))
 #+end_src
+*** Dired Filter
+#+begin_src emacs-lisp
+(use-package dired-filter
+  :general (:keymaps 'dired-mode-map 
+            :states 'normal
+              "/" #'dired-filter-by-name
+              ";" #'dired-filter-pop-all))
+#+end_src
 *** Dired Ranger
 #+begin_src emacs-lisp
 (general-define-key 
@@ -684,6 +694,20 @@
 #+end_src
 ** ERC
 #+begin_src emacs-lisp
+(use-package erc-hl-nicks
+  :after erc
+  :config
+    (add-to-list 'erc-modules 'hl-nicks))
+(use-package erc-image
+  :after erc
+  :config
+    (setq erc-image-inline-rescale 300)
+    (add-to-list 'erc-modules 'image))
+(use-package emojify
+  :hook (erc-mode . emojify-mode))
+(setq erc-fill-column 120
+      erc-fill-function 'erc-fill-static
+      erc-fill-static-center 20)
 (add-hook 'erc-mode-hook #'(lambda ()
   (toggle-truncate-lines) ; truncate lines in erc mode
   (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
@@ -713,6 +737,11 @@
       org-hide-emphasis-markers t
       org-pretty-entities t)
 
+(let ((langs 
+        (mapcar #'(lambda (lang) `(,lang . t)) 
+          '(python lisp awk emacs-lisp eshell clojure calc C shell sed js ocaml scheme sql sqlite perl haskell css lua))))
+  (org-babel-do-load-languages 'org-babel-load-languages langs))
+
 (general-define-key
   :states 'normal 
   :keymaps 'org-mode-map
@@ -723,6 +752,7 @@
 
 (add-hook 'org-mode-hook #'(lambda ()
   (org-indent-mode)
+  (display-line-numbers-mode -1)
   (setq-local electric-indent-mode nil)))
 
 ;; Inline images
@@ -1036,11 +1066,12 @@
 (use-package highlight-indent-guides 
   :defer t
   :config 
-  (setq highlight-indent-guides-responsive 'top
-        highlight-indent-guides-method 'bitmap))
-  (add-hook 'prog-mode-hook #'(lambda ()
-    (highlight-indent-guides-mode)
-    (set-face-foreground 'highlight-indent-guides-top-character-face "#cba6f7")))
+    (unless (display-graphic-p)
+      (setq highlight-indent-guides-responsive 'top
+            highlight-indent-guides-method 'bitmap))
+      (add-hook 'prog-mode-hook #'(lambda ()
+        (highlight-indent-guides-mode)
+        (set-face-foreground 'highlight-indent-guides-top-character-face "#cba6f7"))))
 #+end_src
 *** Undo Tree
 #+begin_src emacs-lisp
@@ -1086,10 +1117,10 @@
   (yas-reload-all)
   (use-package yasnippet-snippets :ensure t) (yas-reload-all))
 (use-package yasnippet-capf 
-  :after cape
+  :ensure t
   :config
     (setq yasnippet-capf-lookup-by 'name)
-    (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+    (add-to-list'completion-at-point-functions #'yasnippet-capf))
 #+end_src
 *** Sudo Edit
 #+begin_src emacs-lisp
