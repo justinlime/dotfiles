@@ -26,13 +26,13 @@
         }
         #window {
           border-radius: 40px;
-          background: ${custom.palette.primary_background_rgba}
+          background: #${custom.background};
         }
         #input {
           border-radius: 100px;
           margin: 20px;
           padding: 15px 25px;
-          background: ${custom.palette.tertiary_background_rgba};
+          background: #${custom.background};
           color: #${custom.tertiary_accent};
         }
         #outer-box {

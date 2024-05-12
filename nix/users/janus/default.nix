@@ -4,18 +4,15 @@
   # a headless server of some kind
   _module.args = { inherit profile inputs username; };
   imports = [ 
-    ../base/emacs.nix
-    ../base/zsh.nix
-    ../base/neovim.nix
-    ../base/tmux.nix
-    ../base/btop.nix
     ../base/configuration.nix
+    ../base/editors/emacs.nix
+    ../base/editors/neovim.nix
+    ../base/programs/zsh.nix
+    ../base/programs/tmux.nix
+    ../base/programs/btop.nix
+    ../base/programs/direnv.nix
   ];
 
-  home.packages = with pkgs; [
-    inputs.maxfetch.packages.${pkgs.system}.default
-  ];
-  programs.direnv.enable = true;
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards

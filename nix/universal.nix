@@ -22,5 +22,6 @@ with pkgs; [
   inputs.maxfetch.packages.${pkgs.system}.default
   roboto
   git-crypt
+  ffmpeg-full
   (nerdfonts.override { fonts = [ "RobotoMono" ]; })
 ]

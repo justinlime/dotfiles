@@ -10,7 +10,7 @@ let
     background = "11111B";
     opacity = "1";
     cursor = "Numix-Cursor";
-    palette = import ./colors;
+    palette = import ./colors.nix;
   };
 in
 {
@@ -18,20 +18,13 @@ in
   # of tools and services i use on a daily basis
   _module.args = { inherit pkgsStable profile inputs username custom; };
   imports = [ 
-    ./themes
-    ./wayland
     ../base/configuration.nix
-    ../base/zsh.nix
-    ../base/btop.nix
-    ../base/tmux.nix
-    ../base/emacs.nix
-    ../base/neovim.nix
-    ../base/cava.nix
-    ../base/mpv.nix
-    ../base/mpd.nix
+    ../base/wayland
+    ../base/themes
+    ../base/programs
+    ../base/services
+    ../base/editors
   ];
-  programs.direnv.enable = true;
-  services.syncthing.enable = true;
   home.packages = with pkgs; [
     brave 
     firefox

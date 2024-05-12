@@ -9,5 +9,6 @@
     ./virtulization.nix
     ./ssh.nix
     ./gaming.nix
+    ./smart.nix
   ];
 }

@@ -10,6 +10,7 @@
     ../base/networking.nix
     ../base/usb.nix
     ../base/avahi.nix
+    ../base/smart.nix
   ];
 
   networking = {

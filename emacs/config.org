@@ -407,9 +407,12 @@
 (defun jl/dired-open ()
   "Open path in the same buffer if a file, and a new one if a directory in dired"
   (interactive)
-  (if (file-directory-p (dired-get-file-for-visit))
-    (dired-find-alternate-file)
-    (dired-find-file)))
+  (let ((file (dired-get-file-for-visit)))
+    (if (file-directory-p file)
+      (dired-find-alternate-file)
+      (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "mp3" "ogg" "opus" "aac"))
+        (apply #'start-process "" nil "mpv" (dired-get-marked-files))
+        (dired-find-file)))))
 #+end_src
 * Configurations
 ** Keybinds
