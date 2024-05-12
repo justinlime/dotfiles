@@ -13,7 +13,6 @@
      };
      ports = [ "3000:3000" "222:22" ];
      volumes = [
-       "/configs/gitea:/configs"
        "/storage/pool/git:/data"
        # "/etc/timezone:/etc/timezone:ro"
        "/etc/localtime:/etc/localtime:ro"
@@ -23,7 +22,7 @@
   services.nginx = {
     enable = true;
     virtualHosts = {
-      "test.justinlime.dev" = {
+      "git.justinlime.dev" = {
         listen = [{
           port = 90;
           addr = "0.0.0.0";
