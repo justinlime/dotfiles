@@ -16,5 +16,6 @@
     ./deemix.nix
     ./komga.nix
     ./syncthing.nix
+    ./gitea.nix
   ];
 }

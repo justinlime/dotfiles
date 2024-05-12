@@ -9,7 +9,8 @@
     enable = true;
     virtualHosts = {
       "justinlime.dev" = {
-        serverName = "justinlime.dev test.justinlime.dev";
+        # serverName = "justinlime.dev test.justinlime.dev";
+        serverName = "justinlime.dev";
         root = "/sites/justinlime.dev/src/public";
         listen = [{
           port = 90;

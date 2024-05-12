@@ -672,12 +672,21 @@
   (add-to-list 'eglot-server-programs
                '((nix-ts-mode nix-mode) . ("nixd"))))
 
+(defvar jl/eglot-enabled-langs 
+    '(go-ts-mode  
+      python-ts-mode
+      js-ts-mode
+      typescript-ts-mode
+      rust-ts-mode
+      elixir-ts-mode
+      nix-ts-mode
+      java-ts-mode
+      c-ts-mode
+      bash-ts-mode))
+
 (add-hook 'find-file-hook #'(lambda()
     (unless (file-remote-p (buffer-file-name)) 
-      (dolist (lang '(go-ts-mode python-ts-mode js-ts-mode
-                      typescript-ts-mode rust-ts-mode elixir-ts-mode
-                      nix-ts-mode java-ts-mode c-ts-mode
-                      bash-ts-mode))
+      (dolist (lang jl/eglot-enabled-langs)
         (if (eq major-mode lang)
           (progn
             (eglot-ensure)
