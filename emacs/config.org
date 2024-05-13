@@ -63,7 +63,7 @@
   - [[#misc-2][Misc]]
     - [[#dashboard][Dashboard]]
     - [[#perspective][Perspective]]
-    - [[#highlight-indnet][Highlight Indnet]]
+    - [[#highlight-indent][Highlight Indent]]
     - [[#undo-tree][Undo Tree]]
     - [[#direnv][Direnv]]
     - [[#sideline][Sideline]]
@@ -1055,17 +1055,17 @@
                      (time-less-p (persp-created-time a)
                        (persp-created-time b))))))))))
 #+end_src
-*** Highlight Indnet
+*** Highlight Indent
 #+begin_src emacs-lisp
+(add-hook 'prog-mode-hook #'(lambda ()
+  (highlight-indent-guides-mode)))
 (use-package highlight-indent-guides 
   :defer t
   :config 
-    (unless (display-graphic-p)
-      (setq highlight-indent-guides-responsive 'top
-            highlight-indent-guides-method 'bitmap))
-      (add-hook 'prog-mode-hook #'(lambda ()
-        (highlight-indent-guides-mode)
-        (set-face-foreground 'highlight-indent-guides-top-character-face "#cba6f7"))))
+      (add-hook 'highlight-indent-guides-mode-hook #'(lambda ()
+        (set-face-foreground 'highlight-indent-guides-top-character-face "#cba6f7")
+        (setq highlight-indent-guides-responsive 'top
+              highlight-indent-guides-method 'character))))
 #+end_src
 *** Undo Tree
 #+begin_src emacs-lisp
