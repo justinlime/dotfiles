@@ -518,7 +518,7 @@
 (use-package evil-collection
   :after evil
   :config
-    (setq evil-collection-mode-list '(magit term help dashboard dired ibuffer tetris))
+    (setq evil-collection-mode-list '(magit term minibuffer help dashboard dired ibuffer tetris))
     (evil-collection-init))
 #+end_src
 *** Keychord
@@ -687,21 +687,25 @@
 #+end_src
 ** ERC
 #+begin_src emacs-lisp
-(use-package erc-hl-nicks
-  :after erc
-  :config
-    (add-to-list 'erc-modules 'hl-nicks))
-(use-package erc-image
-  :after erc
-  :config
-    (setq erc-image-inline-rescale 300)
-    (add-to-list 'erc-modules 'image))
-(use-package emojify
-  :hook (erc-mode . emojify-mode))
 (setq erc-fill-column 120
       erc-fill-function 'erc-fill-static
       erc-fill-static-center 20)
+
+(use-package erc-hl-nicks 
+  :after erc
+  :config
+  (add-to-list 'erc-modules 'hl-nicks))
+
+(use-package erc-image
+  :after erc
+  :config
+    (add-to-list 'erc-modules 'image)
+    (setq erc-image-inline-rescale 300))
+
+(use-package emojify :defer t)
+
 (add-hook 'erc-mode-hook #'(lambda ()
+  (emojify-mode)
   (toggle-truncate-lines) ; truncate lines in erc mode
   (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
   (corfu-mode -1)
@@ -797,8 +801,7 @@
 *** Org Modern
 #+begin_src emacs-lisp
 (use-package org-modern
-  :init 
-    (with-eval-after-load 'org (global-org-modern-mode))
+  :init (with-eval-after-load 'org (global-org-modern-mode))
   :config
     (setq org-modern-fold-stars
           '(("󰴈" . "󰴈")
@@ -837,6 +840,7 @@
   :defer t
   :general
     (:keymaps 'vertico-map
+     :states '(normal insert)
       "RET" #'vertico-directory-enter
       "<tab>" #'vertico-next
       "TAB" #'vertico-next
@@ -907,9 +911,16 @@
     (set-face-attribute 'corfu-current nil :background "#2a2e38" :box "#cba6f7")
     (set-face-attribute 'corfu-border nil :background "#89b4fa")
     (set-face-attribute 'corfu-bar nil :background "#cba6f7")
+    ;; `corfu-insert-separator' is needed for orderless matching
+    ;; 1.) insert space if nothing is selected, to continue orderless matching 
+    ;; 2.) if option is selected, insert it, along with a space
+    ;; 3.) quit corfu if there are no matches when entering the seperator
     (advice-add 'corfu-insert-separator :after #'(lambda () 
-      (unless (= corfu--index -1)
-          (corfu-insert))))
+      (if (= corfu--index -1)
+          (when (= corfu--total 0) 
+            (corfu-quit))
+          (corfu-insert)
+          (insert " "))))
   :custom
     (corfu-auto t)
     (corfu-cycle t)
@@ -1232,7 +1243,9 @@
 #+end_src
 *** Highlight TODO
 #+begin_src emacs-lisp
+(add-hook 'prog-mode-hook #'hl-todo-mode)
 (use-package hl-todo
+  :defer t
   :config
     (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
@@ -1240,7 +1253,6 @@
           ("DEBUG"  . "#A020F0")
           ("GOTCHA" . "#FF4500")
           ("STUB"   . "#1E90FF"))))
-(add-hook 'prog-mode-hook #'hl-todo-mode)
 #+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
