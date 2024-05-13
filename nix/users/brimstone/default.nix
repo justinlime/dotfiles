@@ -37,5 +37,6 @@ in
     telegram-desktop
     via
     imagemagick
+    jellyfin-media-player
   ];
 }
