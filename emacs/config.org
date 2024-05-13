@@ -772,8 +772,11 @@
                        "_"
                        (format-time-string "%Y%m%d_%H%M%S")
                        ".png"))
-               (full-path (concat default-directory filename))
-               (rel-path (concat "./" filename)))
+               (directory-path (concat default-directory "assets/docs/"))
+               (full-path (concat directory-path filename))
+               (rel-path (concat "./assets/docs/" filename)))
+          (unless (file-directory-p directory-path)
+            (make-directory directory-path t))
           (shell-command (replace-regexp-in-string "\n" "" (format "grim -g \"%s\" %s" (shell-command-to-string "slurp -d -c \"#cba6f7\"") full-path)))
           (insert "[[" rel-path "]]")
           (org-display-inline-images t t))

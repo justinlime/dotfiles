@@ -13,7 +13,7 @@
 ![Imgur](https://imgur.com/BsWkXCz.png)
 ![Imgur](https://imgur.com/F4gGRqa.png)
 
-## Emacs configurations can be found [here](https://github.com/justinlime/dotfiles/blob/main/config.org)
+## Emacs configurations can be found [here](https://github.com/justinlime/dotfiles/blob/main/emacs/config.org)
 ![Imgur](https://imgur.com/EFsbLze.png)
 
 ## Neovim configurations can be found [here](https://github.com/justinlime/dotfiles/tree/main/nvim)
