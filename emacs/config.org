@@ -591,9 +591,9 @@
   :states 'normal
   :keymaps 'dired-mode-map
   "s" #'dired-hide-details-mode
-  "f" #'jl/dired-open
+  "l" #'jl/dired-open
   "d" nil
-  "a" #'(lambda () (interactive) (find-alternate-file ".."))
+  "h" #'(lambda () (interactive) (find-alternate-file ".."))
   "A" #'dired-create-directory
   "W" #'wdired-change-to-wdired-mode
   "RET" #'jl/dired-open)
@@ -610,6 +610,8 @@
   :keymaps 'wdired-mode-map
   "W" #'wdired-finish-edit
   "<escape>" #'wdired-exit)
+; fix icons looking weird after exiting 
+(advice-add #'wdired-exit :after #'(lambda (&rest r) (dired-revert)))
 #+end_src
 *** Diredfl
 #+begin_src emacs-lisp
