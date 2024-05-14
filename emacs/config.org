@@ -823,11 +823,10 @@
   "r i" '(org-roam-node-insert :wk "Insert node link"))
 (use-package org-roam
   :defer t
-  :custom
-    (org-roam-directory (file-truename "~/sync/notes/roam"))
   :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
-    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))
+          org-roam-directory (file-truename "~/sync/notes/roam"))
     (org-roam-db-autosync-mode 1)
     (require 'org-roam-protocol))
 #+end_src
@@ -905,11 +904,19 @@
       "TAB" #'corfu-next
       "<backtab>" #'corfu-previous) 
   :config
+    (setq corfu-auto t
+          corfu-cycle t
+          corfu-preselect 'prompt
+          corfu-auto-delay 0.05
+          corfu-auto-prefix 2
+          corfu-popupinfo-delay 0)
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+
     ;; Prevent evil from overriding corfu bindings
     (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (evil-make-overriding-map corfu-map)
+
     (set-face-attribute 'corfu-default nil :background "#1e1e2e")
     (set-face-attribute 'corfu-current nil :background "#2a2e38" :box "#cba6f7")
     (set-face-attribute 'corfu-border nil :background "#89b4fa")
@@ -923,13 +930,6 @@
           (when (= corfu--total 0) 
             (corfu-quit))
           (corfu-insert))))
-  :custom
-    (corfu-auto t)
-    (corfu-cycle t)
-    (corfu-preselect 'prompt)
-    (corfu-auto-delay 0.05)
-    (corfu-auto-prefix 2)
-    (corfu-popupinfo-delay 0)
   :init
     (corfu-popupinfo-mode)
     (global-corfu-mode)
@@ -969,9 +969,9 @@
 #+begin_src emacs-lisp
 (use-package orderless
   :defer t
-  :custom
-    (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (styles basic partial-completion)))))
+  :config
+    (setq completion-styles '(orderless basic)
+          completion-category-overrides '((file (styles basic partial-completion)))))
 #+end_src
 ** Git
 *** Magit
@@ -1229,8 +1229,8 @@
 *** Nerd Icons
 #+begin_src emacs-lisp
 (use-package nerd-icons
-  :custom
-    (nerd-icons-font-family "RobotoMono Nerd Font"))
+  :config
+    (setq nerd-icons-font-family "RobotoMono Nerd Font"))
 #+end_src
 **** Nerd Icons Dired
 #+begin_src emacs-lisp
