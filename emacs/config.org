@@ -913,10 +913,19 @@
     (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
     (evil-make-overriding-map corfu-map)
 
+    ;; Rice it up 
     (set-face-attribute 'corfu-default nil :background "#1e1e2e")
     (set-face-attribute 'corfu-current nil :background "#2a2e38" :box "#cba6f7")
     (set-face-attribute 'corfu-border nil :background "#89b4fa")
     (set-face-attribute 'corfu-bar nil :background "#cba6f7")
+
+    ;; Quit completion after entering normal mode
+    (add-hook 'evil-insert-state-exit-hook #'corfu-quit)
+
+    ;; `SPC' is used as my separator, this comes with some quirks which this advice solves
+    ;; 1. If there is a candidate selected, insert it when hitting `SPC'
+    ;; 2. If not, insert the seperator like normal
+    ;; 3. If there are no candidates, quit completion
     (advice-add 'corfu-insert-separator :after #'(lambda () 
       (if (= corfu--index -1)
           (when (= corfu--total 0) 
