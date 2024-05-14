@@ -890,6 +890,7 @@
 #+begin_src emacs-lisp
 (use-package corfu
   :hook (after-init . (lambda () (add-hook 'find-file-hook #'global-corfu-mode)))
+        (eval-expression-minibuffer-setup . corfu-mode)
   :general
     (:keymaps 'corfu-map :states 'insert
       "SPC" #'corfu-insert-separator
