@@ -1201,7 +1201,9 @@
 #+begin_src emacs-lisp
 (use-package doom-themes
   :config
-    (evil-set-cursor-color "#cba6f7")
+    ;; something keeps overriding the cursor color, so run it in a one-shot timer
+    (run-with-idle-timer 0.01 nil #'(lambda ()
+      (set-cursor-color "#cba6f7")))
     (set-face-attribute'line-number-current-line nil :foreground "#cba6f7")
     (set-face-attribute 'org-block nil :background "#181825") ; src blocks
     (set-face-attribute 'default nil :background "#1e1e2e") ; emacs background
