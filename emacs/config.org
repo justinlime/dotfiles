@@ -38,7 +38,9 @@
     - [[#dired-ranger][Dired Ranger]]
     - [[#dired-async][Dired Async]]
   - [[#eglot][Eglot]]
-  - [[#erc][ERC]]
+  - [[#communication][Communication]]
+    - [[#erc][ERC]]
+    - [[#ement][Ement]]
   - [[#term][Term]]
   - [[#org][Org]]
     - [[#org-toc][Org Toc]]
@@ -521,7 +523,7 @@
 (use-package evil-collection
   :after evil
   :config
-    (setq evil-collection-mode-list '(magit term minibuffer help dashboard dired ibuffer tetris))
+    (setq evil-collection-mode-list '(magit ement term minibuffer help dashboard dired ibuffer tetris))
     (evil-collection-init))
 #+end_src
 *** Keychord
@@ -595,6 +597,7 @@
     "d" nil
     "h" #'(lambda () (interactive) (find-alternate-file ".."))
     "A" #'dired-create-directory
+    "a" nil
     "W" #'wdired-change-to-wdired-mode
     "RET" #'jl/dired-open)
 ;; (setq dired-dwim-target t) ; Dired will prompt to copy/move to another dired buffer if its visible
@@ -682,8 +685,12 @@
           (progn
             (eglot-ensure)))))))
 #+end_src
-** ERC
+** Communication 
+*** ERC
 #+begin_src emacs-lisp
+(leader 
+  "m i" '((lambda () (interactive) (persp-switch "irc") (erc-tls)) :wk "IRC with erc-tls"))
+
 (setq erc-prompt (lambda () (concat (buffer-name) " > " ))
       erc-fill-column 120
       erc-fill-function 'erc-fill-static
@@ -708,6 +715,17 @@
   (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
   (corfu-mode -1)
   (display-line-numbers-mode -1)))
+#+end_src
+*** Ement
+#+begin_src emacs-lisp
+;; connect with @<username>:host.org
+(use-package ement
+  :general
+    (leader 
+      "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect)) :wk "Matrix with ement"))
+    (:keymaps 'ement-room-minibuffer-map :states 'insert "RET" #'newline)
+  :config
+    (setq ement-notify-dbus-p nil))
 #+end_src
 ** Term
 #+begin_src  emacs-lisp
@@ -968,7 +986,6 @@
 *** Orderless
 #+begin_src emacs-lisp
 (use-package orderless
-  :after corfu
   :config
     (setq completion-styles '(orderless basic)
           completion-category-overrides '((file (styles basic partial-completion)))))
