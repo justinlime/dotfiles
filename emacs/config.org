@@ -129,7 +129,8 @@
 ;; install use-package if it doesn't exist yet
 (unless (package-installed-p 'use-package) 
   (package-install 'use-package))          
-(require 'use-package) ; load use-package
+(eval-when-compile
+  (require 'use-package))
 ;; Make use-package uses `package.el', prevents having to use :ensure t on everything
 (setq use-package-always-ensure t) 
 #+end_src
@@ -687,7 +688,8 @@
 #+end_src
 ** ERC
 #+begin_src emacs-lisp
-(setq erc-fill-column 120
+(setq erc-prompt (lambda () (concat (buffer-name) " > " ))
+      erc-fill-column 120
       erc-fill-function 'erc-fill-static
       erc-fill-static-center 20)
 
@@ -702,7 +704,8 @@
     (add-to-list 'erc-modules 'image)
     (setq erc-image-inline-rescale 300))
 
-(use-package emojify :defer t)
+(use-package emojify
+  :hook (erc-mode . emojify-mode))
 
 (add-hook 'erc-mode-hook #'(lambda ()
   (emojify-mode)
@@ -919,8 +922,7 @@
       (if (= corfu--index -1)
           (when (= corfu--total 0) 
             (corfu-quit))
-          (corfu-insert)
-          (insert " "))))
+          (corfu-insert))))
   :custom
     (corfu-auto t)
     (corfu-cycle t)
@@ -1071,11 +1073,10 @@
 #+end_src
 *** Highlight Indent
 #+begin_src emacs-lisp
-(add-hook 'prog-mode-hook #'(lambda ()
-  (highlight-indent-guides-mode)))
 (use-package highlight-indent-guides 
-  :defer t
   :config 
+      (add-hook 'prog-mode-hook #'(lambda ()
+        (highlight-indent-guides-mode)))
       (add-hook 'highlight-indent-guides-mode-hook #'(lambda ()
         (set-face-foreground 'highlight-indent-guides-top-character-face "#cba6f7")
         (setq highlight-indent-guides-responsive 'top
@@ -1243,10 +1244,9 @@
 #+end_src
 *** Highlight TODO
 #+begin_src emacs-lisp
-(add-hook 'prog-mode-hook #'hl-todo-mode)
 (use-package hl-todo
-  :defer t
   :config
+    (add-hook 'prog-mode-hook #'hl-todo-mode)
     (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
           ("FIXME"  . "#FF0000")
@@ -1256,13 +1256,13 @@
 #+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
-(use-package rainbow-mode :defer t)
-(add-hook 'prog-mode-hook #'rainbow-mode)
+(use-package rainbow-mode :config
+  (add-hook 'prog-mode-hook #'rainbow-mode))
 #+end_src
 *** Rainbow Delimiters
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters :defer t)
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(use-package rainbow-delimiters :config 
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
