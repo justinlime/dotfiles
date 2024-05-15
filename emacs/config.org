@@ -508,16 +508,18 @@
     ;; These hooks may not work if TERM isnt xterm/xterm256
     ;; Let cursor change based on mode when using emacs in the terminal
     (unless (display-graphic-p)
-      (defun correct-cursor (&rest r)
+      (defun jl/correct-cursor (&rest r)
         (setq visible-cursor nil) 
         (if (eq evil-state 'insert)
           (send-string-to-terminal "\e[5 q")
           (send-string-to-terminal "\e[2 q")))
-      (run-with-idle-timer nil 1 #'correct-cursor)
-      (add-hook 'evil-insert-state-entry-hook #'correct-cursor)
-      (add-hook 'evil-normal-state-entry-hook #'correct-cursor)
-      (advice-add 'eldoc-documentation-default :after #'correct-cursor) ;;Echo Area
-      (advice-add 'eldoc-display-in-buffer :after #'correct-cursor))) ;;Buffer
+      (add-hook 'evil-insert-state-entry-hook #'jl/correct-cursor)
+      (add-hook 'evil-insert-state-exit-hook #'jl/correct-cursor)
+      (add-hook 'evil-normal-state-entry-hook #'jl/correct-cursor)
+      (add-hook 'evil-normal-state-exit-hook #'jl/correct-cursor)
+      (add-hook 'after-save-hook #'jl/correct-cursor)
+      (advice-add 'eldoc-documentation-default :after #'jl/correct-cursor) ;;Echo Area
+      (advice-add 'eldoc-display-in-buffer :after #'jl/correct-cursor))) ;;Buffer
 #+end_src
 **** Evil Collection
 #+begin_src emacs-lisp
@@ -616,7 +618,7 @@
     "W" #'wdired-finish-edit
     "<escape>" #'wdired-exit)
 ; fix icons looking weird after exiting 
-(advice-add #'wdired-exit :after #'(lambda (&rest r) (dired-revert)))
+(advice-add #'wdired-exit :after #'(lambda (&rest r) (revert-buffer)))
 #+end_src
 *** Diredfl
 #+begin_src emacs-lisp
@@ -666,12 +668,19 @@
                        (not (file-remote-p default-directory))
                        (eq evil-state 'normal))
                   (progn
-                    (dired-revert)))))))))
+                    (revert-buffer)
+                    (set-face-attribute 'dirvish-hl-line nil :background "#89b4fa")
+                    ))))))))
 #+end_src
 *** Dirvish 
 #+begin_src emacs-lisp
 (use-package dirvish
-  :after dired
+  :demand t
+  :general 
+    (:keymaps 'dired-mode-map 
+     :states '(normal emacs motion)
+       "S" #'dirvish-symlink
+       "H" #'dirvish-hardlink)
   :config
    (setq dirvish-header-line-format
          '(:left (path) :right (free-space))
@@ -738,7 +747,7 @@
   :hook (ement-room-mode . (lambda () (display-line-numbers-mode -1)))
   :general
     (leader 
-      "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect :uri-prefix "http://localhost:8008" )) :wk "Matrix with ement"))
+      "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect)) :wk "Matrix with ement"))
     (:keymaps 'ement-room-minibuffer-map :states 'insert "RET" #'newline)
   :config
     (setq ement-notify-dbus-p nil))
