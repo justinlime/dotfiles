@@ -37,7 +37,6 @@
     - [[#dired-filter][Dired Filter]]
     - [[#dired-ranger][Dired Ranger]]
     - [[#dired-async][Dired Async]]
-    - [[#dirvish][Dirvish]]
   - [[#eglot][Eglot]]
   - [[#communication][Communication]]
     - [[#erc][ERC]]
@@ -589,8 +588,12 @@
       large-file-warning-threshold nil
       dired-recursive-deletes 'always)
 (add-hook 'dired-mode-hook #'(lambda () 
+  (setq-local hl-line-face
+                '(:foreground "#11111B"  :background "#89b4fa" :extend t)
+              cursor-type nil
+              evil-force-cursor t
+              auto-revert-verbose nil)
   (auto-revert-mode)
-  (setq-local auto-revert-verbose nil)
   (dired-hide-details-mode)
   (display-line-numbers-mode -1)))
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
@@ -637,13 +640,18 @@
 #+end_src
 *** Dired Ranger
 #+begin_src emacs-lisp
+(quelpa-use-package-activate-advice)
 (use-package dired-ranger
+  :quelpa (dired-ranger :fetcher github :repo "justinlime/dired-hacks")
   :general 
     (:keymaps 'dired-mode-map 
      :states '(normal emacs motion)
        "y" #'dired-ranger-copy
        "P" #'dired-ranger-paste
-       "M" #'dired-ranger-move)
+       "M" #'dired-ranger-move
+       "S" #'dired-ranger-symlink
+       "L" #'dired-ranger-symlink-relative
+       "H" #'dired-ranger-hardlink)
   :config
     ;; remove marks after an action, and also revert buffer to fix broken icons/formatting after
     ;; moving or pasting
@@ -651,6 +659,7 @@
     (advice-add #'dired-ranger-move :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
     (advice-add #'dired-ranger-paste :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
+(quelpa-use-package-deactivate-advice)
 #+end_src
 *** Dired Async
 #+begin_src emacs-lisp
@@ -668,27 +677,9 @@
                        (not (file-remote-p default-directory))
                        (eq evil-state 'normal))
                   (progn
-                    (revert-buffer)
-                    (set-face-attribute 'dirvish-hl-line nil :background "#89b4fa")
-                    ))))))))
-#+end_src
-*** Dirvish 
-#+begin_src emacs-lisp
-(use-package dirvish
-  :demand t
-  :general 
-    (:keymaps 'dired-mode-map 
-     :states '(normal emacs motion)
-       "S" #'dirvish-symlink
-       "H" #'dirvish-hardlink)
-  :config
-   (setq dirvish-header-line-format
-         '(:left (path) :right (free-space))
-         dirvish-mode-line-format
-         '(:left (sort file-time " " file-size symlink) :right (omit yank index)))
-    (set-face-attribute 'dirvish-hl-line nil :background "#89b4fa")
-    (dirvish-override-dired-mode)
-    (dirvish-peek-mode))
+                    (dired-revert)
+                    (hl-line-mode)
+                    (hl-line-mode)))))))))
 #+end_src
 ** Eglot
 #+begin_src emacs-lisp
