@@ -37,6 +37,7 @@
     - [[#dired-filter][Dired Filter]]
     - [[#dired-ranger][Dired Ranger]]
     - [[#dired-async][Dired Async]]
+    - [[#dirvish][Dirvish]]
   - [[#eglot][Eglot]]
   - [[#communication][Communication]]
     - [[#erc][ERC]]
@@ -585,6 +586,11 @@
       dired-recursive-copies 'always
       large-file-warning-threshold nil
       dired-recursive-deletes 'always)
+(add-hook 'dired-mode-hook #'(lambda () 
+  (auto-revert-mode)
+  (setq-local auto-revert-verbose nil)
+  (dired-hide-details-mode)
+  (display-line-numbers-mode -1)))
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 (advice-add #'dired-do-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
 (advice-add #'dired-do-rename :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
@@ -600,10 +606,6 @@
     "a" nil
     "W" #'wdired-change-to-wdired-mode
     "RET" #'jl/dired-open)
-;; (setq dired-dwim-target t) ; Dired will prompt to copy/move to another dired buffer if its visible
-(add-hook 'dired-mode-hook #'(lambda ()
-  (auto-revert-mode)
-  (dired-hide-details-mode)))
 #+end_src
 *** wDired
 #+begin_src emacs-lisp
@@ -627,7 +629,9 @@
   :general (:keymaps 'dired-mode-map 
             :states 'normal
               "/" #'dired-filter-by-name
-              ";" #'dired-filter-pop-all))
+              ";" #'dired-filter-pop-all)
+  :config
+  (setq dired-filter-revert 'always))
 #+end_src
 *** Dired Ranger
 #+begin_src emacs-lisp
@@ -649,8 +653,8 @@
 *** Dired Async
 #+begin_src emacs-lisp
 (use-package async 
-  :hook (dired-mode . (lambda ()
-    (dired-async-mode 1)
+  :hook (dired-mode . dired-async-mode)
+  :config
     ;; Autorefresh the buffer if visible and other conditions
     (run-with-timer 0 2 #'(lambda ()
       (dolist (buf (buffer-list))
@@ -662,9 +666,20 @@
                        (not (file-remote-p default-directory))
                        (eq evil-state 'normal))
                   (progn
-                    (dired-revert)
-                    (hl-line-mode)
-                    (hl-line-mode)))))))))))
+                    (dired-revert)))))))))
+#+end_src
+*** Dirvish 
+#+begin_src emacs-lisp
+(use-package dirvish
+  :after dired
+  :config
+   (setq dirvish-header-line-format
+         '(:left (path) :right (free-space))
+         dirvish-mode-line-format
+         '(:left (sort file-time " " file-size symlink) :right (omit yank index)))
+    (set-face-attribute 'dirvish-hl-line nil :background "#89b4fa")
+    (dirvish-override-dired-mode)
+    (dirvish-peek-mode))
 #+end_src
 ** Eglot
 #+begin_src emacs-lisp
@@ -720,6 +735,7 @@
 #+begin_src emacs-lisp
 ;; connect with @<username>:host.org
 (use-package ement
+  :hook (ement-room-mode . (lambda () (display-line-numbers-mode -1)))
   :general
     (leader 
       "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect :uri-prefix "http://localhost:8008" )) :wk "Matrix with ement"))
@@ -909,6 +925,10 @@
 (use-package corfu
   :hook (after-init . (lambda () (add-hook 'find-file-hook #'global-corfu-mode)))
         (eval-expression-minibuffer-setup . corfu-mode)
+        (ement-room-read-string-setup . (lambda () 
+          (setq-local completion-at-point-functions 
+            '(ement-room--complete-members-at-point ement-room--complete-rooms-at-point cape-emoji))
+          (corfu-mode 1)))
   :general
     (:keymaps 'corfu-map :states 'insert
       "SPC" #'corfu-insert-separator
@@ -960,18 +980,12 @@
 #+end_src
 *** Cape
 #+begin_src emacs-lisp
-(use-package cape
-  :after corfu
-  :config
-    ;; Add to the global default value of `completion-at-point-functions' which is
-    ;; used by `completion-at-point'.  The order of the functions matters, the
-    ;; first function returning a result wins.  Note that the list of buffer-local
-    ;; completion functions takes precedence over the global list.
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-emoji)
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-    (add-to-list 'completion-at-point-functions #'cape-keyword))
+(use-package cape :defer t)
+(add-to-list 'completion-at-point-functions #'cape-dabbrev)
+(add-to-list 'completion-at-point-functions #'cape-emoji)
+(add-to-list 'completion-at-point-functions #'cape-file)
+(add-to-list 'completion-at-point-functions #'cape-elisp-block)
+(add-to-list 'completion-at-point-functions #'cape-keyword)
 #+end_src
 **** Company Nixos Options
 #+begin_src emacs-lisp
@@ -1134,8 +1148,8 @@
 (use-package yasnippet
   :after corfu
   :config 
-  (yas-reload-all)
-  (use-package yasnippet-snippets :ensure t) (yas-reload-all))
+    (yas-reload-all)
+    (use-package yasnippet-snippets :ensure t) (yas-reload-all))
 #+end_src
 **** Yasnippet Capf
 #+begin_src emacs-lisp
