@@ -1234,8 +1234,8 @@
 (use-package doom-themes
   :config
     ;; something keeps overriding the cursor color, so run it in a one-shot timer
-    (run-with-idle-timer 0.01 nil #'(lambda ()
-      (set-cursor-color "#cba6f7")))
+    (add-hook 'post-command-hook #'(lambda ()
+      (set-cursor-color (if (derived-mode-p 'dired-mode) "#89b4fa" "#cba6f7"))))
     (set-face-attribute'line-number-current-line nil :foreground "#cba6f7")
     (set-face-attribute 'org-block nil :background "#181825") ; src blocks
     (set-face-attribute 'default nil :background "#1e1e2e") ; emacs background
