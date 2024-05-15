@@ -1,5 +1,6 @@
 { inputs , pkgs, username, ... }:
 {
+  imports = [ ../services/pantalaimon.nix ];
   home.packages = with pkgs; [
     # Runtime
     emacs29-pgtk

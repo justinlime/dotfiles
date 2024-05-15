@@ -38,5 +38,6 @@ in
     via
     imagemagick
     jellyfin-media-player
+    element-desktop
   ];
 }

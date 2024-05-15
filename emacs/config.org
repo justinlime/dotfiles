@@ -722,7 +722,7 @@
 (use-package ement
   :general
     (leader 
-      "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect)) :wk "Matrix with ement"))
+      "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect :uri-prefix "http://localhost:8008" )) :wk "Matrix with ement"))
     (:keymaps 'ement-room-minibuffer-map :states 'insert "RET" #'newline)
   :config
     (setq ement-notify-dbus-p nil))
@@ -968,6 +968,7 @@
     ;; first function returning a result wins.  Note that the list of buffer-local
     ;; completion functions takes precedence over the global list.
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-emoji)
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-elisp-block)
     (add-to-list 'completion-at-point-functions #'cape-keyword))
