@@ -19,7 +19,7 @@
       MaxAuthTries = 3;
       ChallengeResponseAuthentication = false;
       AllowTcpForwarding = "yes";
-      UsePAM = "no";
+      UsePAM = false;
     };
   };
 }

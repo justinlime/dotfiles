@@ -12,12 +12,12 @@
       enable = true; 
       enableRenice = true; 
       settings = {
-        custom = {
+        # custom = {
           # Set the monitor to an unreachable location to lock the mouse to the monitor
           # with the current version of gamescope it escapes :(
-          start = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl keyword monitor DP-2,2560x1440@165,3840x0,1";
-          end = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl keyword monitor DP-2,2560x1440@165,2560x0,1";
-        }; 
+          # start = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl keyword monitor DP-2,2560x1440@165,3840x0,1";
+          # end = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl keyword monitor DP-2,2560x1440@165,2560x0,1";
+        # }; 
       };
     };
 

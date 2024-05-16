@@ -1211,6 +1211,7 @@
 *** Javascript Mode
 #+begin_src emacs-lisp
 (add-hook 'js-ts-mode-hook #'(lambda()
+  ;; (setq-local eglot-ignored-server-capabilities '(:hoverProvider))
   (setq tab-width 2
         indent-tabs-mode nil
         js-indent-level 2)))
@@ -1218,6 +1219,7 @@
 *** TypeScript Mode
 #+begin_src emacs-lisp
 (add-hook 'typescript-ts-mode-hook #'(lambda()
+  ;; (setq-local eglot-ignored-server-capabilities '(:hoverProvider))
   (setq tab-width 2
         indent-tabs-mode nil)))
 #+end_src

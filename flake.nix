@@ -96,10 +96,10 @@
       url = "github:jobcmax/maxfetch";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # hyprland = {
+    #   url = "github:hyprwm/Hyprland";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     pipecord = {
       url = "github:justinlime/pipecord";
       inputs.nixpkgs.follows = "nixpkgs";
