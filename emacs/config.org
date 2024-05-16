@@ -36,6 +36,7 @@
     - [[#diredfl][Diredfl]]
     - [[#dired-filter][Dired Filter]]
     - [[#dired-ranger][Dired Ranger]]
+    - [[#dired-subtree][Dired Subtree]]
     - [[#dired-sidebar][Dired Sidebar]]
     - [[#dired-async][Dired Async]]
   - [[#eglot][Eglot]]
@@ -594,6 +595,7 @@
               cursor-type nil
               evil-force-cursor t
               auto-revert-verbose nil)
+  (dired-omit-mode)
   (auto-revert-mode)
   (dired-hide-details-mode)
   (display-line-numbers-mode -1)))
@@ -627,7 +629,9 @@
 *** Diredfl
 #+begin_src emacs-lisp
 (use-package diredfl 
-  :hook (dired-mode . diredfl-mode))
+  :hook (dired-mode . diredfl-mode)
+  :config
+    (set-face-attribute 'diredfl-dir-heading nil :height 140 :foreground "#cba6f7" :background "#1e1e2b" :extend t))
 #+end_src
 *** Dired Filter
 #+begin_src emacs-lisp
@@ -661,6 +665,18 @@
     (advice-add #'dired-ranger-paste :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 (quelpa-use-package-deactivate-advice)
+#+end_src
+*** Dired Subtree
+#+begin_src emacs-lisp
+(use-package dired-subtree
+  :after diredfl
+  :config 
+    (set-face-attribute 'dired-subtree-depth-1-face nil :background "#1e1e2e")
+    (set-face-attribute 'dired-subtree-depth-2-face nil :background "#1e1e2e")
+    (set-face-attribute 'dired-subtree-depth-3-face nil :background "#1e1e2e")
+    (set-face-attribute 'dired-subtree-depth-4-face nil :background "#1e1e2e")
+    (set-face-attribute 'dired-subtree-depth-5-face nil :background "#1e1e2e")
+    (set-face-attribute 'dired-subtree-depth-6-face nil :background "#1e1e2e"))
 #+end_src
 *** Dired Sidebar
 #+begin_src emacs-lisp
