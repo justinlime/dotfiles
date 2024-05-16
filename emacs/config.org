@@ -36,6 +36,7 @@
     - [[#diredfl][Diredfl]]
     - [[#dired-filter][Dired Filter]]
     - [[#dired-ranger][Dired Ranger]]
+    - [[#dired-sidebar][Dired Sidebar]]
     - [[#dired-async][Dired Async]]
   - [[#eglot][Eglot]]
   - [[#communication][Communication]]
@@ -660,6 +661,27 @@
     (advice-add #'dired-ranger-paste :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 (quelpa-use-package-deactivate-advice)
+#+end_src
+*** Dired Sidebar
+#+begin_src emacs-lisp
+(use-package dired-sidebar
+  :general
+    (leader "d t" '(dired-sidebar-toggle-sidebar :wk "Toggle sidebar directory"))
+  :config
+  (add-hook 'dired-sidebar-mode-hook #'(lambda ()
+    (general-define-key
+      :keymaps 'local
+      :states 'normal
+        "l" #'dired-sidebar-find-file
+        "h" #'(lambda () (interactive) (dired-sidebar-find-file "../")))
+    (face-remap-set-base 'default :background "#181825")
+    (display-line-numbers-mode -1)))
+
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+  (setq dired-sidebar-use-one-instance t)
+  (setq dired-sidebar-theme 'nerd))
 #+end_src
 *** Dired Async
 #+begin_src emacs-lisp
