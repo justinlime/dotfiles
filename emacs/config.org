@@ -590,11 +590,9 @@
 (add-hook 'dired-mode-hook #'(lambda () 
   (setq-local hl-line-face
                 '(:foreground "#11111B"  :background "#89b4fa" :extend t)
-              text-scale-mode-amount 1.2
               cursor-type nil
               evil-force-cursor t
               auto-revert-verbose nil)
-  (text-scale-mode)
   (auto-revert-mode)
   (dired-hide-details-mode)
   (display-line-numbers-mode -1)))
