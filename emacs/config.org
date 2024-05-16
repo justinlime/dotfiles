@@ -631,7 +631,7 @@
 (use-package diredfl 
   :hook (dired-mode . diredfl-mode)
   :config
-    (set-face-attribute 'diredfl-dir-heading nil :height 140 :foreground "#cba6f7" :background "#1e1e2b" :extend t))
+    (set-face-attribute 'diredfl-dir-heading nil :foreground "#cba6f7"))
 #+end_src
 *** Dired Filter
 #+begin_src emacs-lisp
@@ -671,12 +671,12 @@
 (use-package dired-subtree
   :after diredfl
   :config 
-    (set-face-attribute 'dired-subtree-depth-1-face nil :background "#1e1e2e")
-    (set-face-attribute 'dired-subtree-depth-2-face nil :background "#1e1e2e")
-    (set-face-attribute 'dired-subtree-depth-3-face nil :background "#1e1e2e")
-    (set-face-attribute 'dired-subtree-depth-4-face nil :background "#1e1e2e")
-    (set-face-attribute 'dired-subtree-depth-5-face nil :background "#1e1e2e")
-    (set-face-attribute 'dired-subtree-depth-6-face nil :background "#1e1e2e"))
+    (set-face-attribute 'dired-subtree-depth-1-face nil :background nil)
+    (set-face-attribute 'dired-subtree-depth-2-face nil :background nil)
+    (set-face-attribute 'dired-subtree-depth-3-face nil :background nil)
+    (set-face-attribute 'dired-subtree-depth-4-face nil :background nil)
+    (set-face-attribute 'dired-subtree-depth-5-face nil :background nil)
+    (set-face-attribute 'dired-subtree-depth-6-face nil :background nil))
 #+end_src
 *** Dired Sidebar
 #+begin_src emacs-lisp
