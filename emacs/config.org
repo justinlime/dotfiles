@@ -827,7 +827,9 @@
 ** Minibuffer
 #+begin_src emacs-lisp
 (general-define-key
+  :states '(normal emacs)
   :keymaps 'minibuffer-local-map
+  "ESC" #'keyboard-escape-quit
   "<escape>" #'keyboard-escape-quit)
 #+end_src
 *** Vertico
