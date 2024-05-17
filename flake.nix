@@ -6,11 +6,18 @@
 
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
+    usernames = [ ];
+
     # Shhhhh
     # Read all the files, and mush them into a top level hush attribute set; Expects TOML format
-    hush = let dir = ./hush; temp = {}; in
-      head (map (x: temp // (importTOML "${dir}/${x}")) (attrNames (readDir dir)));
-
+    hush =
+      if (builtins.length usernames) != 0
+      then { inherit usernames; } # Allow unencrypted username if set in this flake above
+      else
+        let
+          dir = ./hush; temp = {};
+        in
+          head (map (x: temp // (importTOML "${dir}/${x}")) (attrNames (readDir dir)));
     # Prefix every string in a ${list} with a given ${flag}, seperated by dots
     #
     # EX: addFlags [ "brimstone" ] "x86_64-linux" -> [ "brimstone.x86_64-linux" ]

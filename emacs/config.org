@@ -1346,7 +1346,7 @@
 (use-package doom-modeline
   :config
     (doom-modeline-mode 1)
-    (setq doom-modeline-total-line-number t)
+    (display-battery-mode 1)
     (set-face-attribute 'mode-line nil :background "#11111B")
     (set-face-attribute 'mode-line-inactive nil :background "#11111B")
     (display-time-mode))
@@ -1403,7 +1403,7 @@
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
-;; sexiest lock level
+;; levels from 1 - 4, higher numbers being more "colorful"
 (setq-default treesit-font-lock-level 4)
 
 ;; where to source the langs
