@@ -93,7 +93,9 @@
     - [[#modeline][Modeline]]
     - [[#nerd-icons][Nerd Icons]]
       - [[#nerd-icons-dired][Nerd Icons Dired]]
-      - [[#nerd-icons-dired-1][Nerd Icons Dired]]
+      - [[#nerd-icons-corfu][Nerd Icons Corfu]]
+      - [[#nerd-icons-completion][Nerd Icons Completion]]
+      - [[#nerd-icons-ibuffer][Nerd Icons Ibuffer]]
     - [[#highlight-todo][Highlight TODO]]
     - [[#rainbow-mode][Rainbow Mode]]
     - [[#rainbow-delimiters][Rainbow Delimiters]]
@@ -403,6 +405,44 @@
     "Stink Boys Inc. ©"
     "/home/justinlime/.config"
     "No emacs???"))) (nth (random (length ops)) ops)))
+
+(defun jl/random-ascii ()
+  "Generate a random quote for dashboard"
+  (interactive)
+  (let ((ops '(
+"
+    ⠀⠀⠀⠀⠀⡰⢂⣾⠿⠛⠒⠚⠛⠃⠺⢶⡀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⢠⡣⠋⠁⠀⠀⠀⠀⠀⢀⡐⠒⢙⣄⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⡘⠀⠀⠀⠀⠀⠀⢄⠉⠀⠐⠀⠀⠙⢦⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⣾⠁⠀⠀⠄⠂⢈⣠⠎⠀⠀⣸⣿⡿⠓⢬⡇⠀⠀⠀⠀⠀
+    ⠀⠀⢸⡟⠀⠔⣁⣤⣶⣿⠋⢰⠀⠀⣿⡟⠻⣦⠀⢳⠀⠀⠀⠀⠀
+    ⠀⠀⣷⡇⢠⣾⢟⢭⣭⡭⡄⠀⡆⠀⣿⣷⣶⠺⡆⢸⡄⠀⠀⠀⠀
+    ⠀⠀⠇⡇⠛⠡⣑⣈⣛⠝⢁⡀⠇⠀⣿⡿⠛⠒⣡⠇⣧⣀⠀⠀⠀
+    ⠀⠀⢠⠁⠈⠐⠤⠄⠀⣠⢸⠈⠢⠀⣿⡇⠀⠀⠠⠚⣿⣿⠀⠀⠀
+    ⡄⠀⢾⠀⡆⠠⣴⠞⠯⡀⠈⠙⠲⣶⣿⡇⠑⣦⡄⠀⣿⣿⠀⠀⠀
+    ⠈⠺⡮⠀⢡⠀⠀⠀⠀⠀⠁⠐⠒⠒⠛⠃⠈⠛⠇⠀⡏⡏⠀⠀⠀
+    ⠀⢰⠁⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⢷⠀⠀⠀
+    ⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠃⠀⢸⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⠀
+    ⠀⠀⢣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠸⡳⡀⠀
+    ⠀⠀⠀⠑⢄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣯⣼⡇⠑⣄
+"
+"
+⠀⣞⢽⢪⢣⢣⢣⢫⡺⡵⣝⡮⣗⢷⢽⢽⢽⣮⡷⡽⣜⣜⢮⢺⣜⢷⢽⢝⡽⣝
+⠸⡸⠜⠕⠕⠁⢁⢇⢏⢽⢺⣪⡳⡝⣎⣏⢯⢞⡿⣟⣷⣳⢯⡷⣽⢽⢯⣳⣫⠇
+⠀⠀⢀⢀⢄⢬⢪⡪⡎⣆⡈⠚⠜⠕⠇⠗⠝⢕⢯⢫⣞⣯⣿⣻⡽⣏⢗⣗⠏⠀
+⠀⠪⡪⡪⣪⢪⢺⢸⢢⢓⢆⢤⢀⠀⠀⠀⠀⠈⢊⢞⡾⣿⡯⣏⢮⠷⠁⠀⠀⠀
+⠀⠀⠀⠈⠊⠆⡃⠕⢕⢇⢇⢇⢇⢇⢏⢎⢎⢆⢄⠀⢑⣽⣿⢝⠲⠉⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡿⠂⠠⠀⡇⢇⠕⢈⣀⠀⠁⠡⠣⡣⡫⣂⣿⠯⢪⠰⠂⠀⠀⠀⠀
+⠀⠀⠀⠀⡦⡙⡂⢀⢤⢣⠣⡈⣾⡃⠠⠄⠀⡄⢱⣌⣶⢏⢊⠂⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢝⡲⣜⡮⡏⢎⢌⢂⠙⠢⠐⢀⢘⢵⣽⣿⡿⠁⠁⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠨⣺⡺⡕⡕⡱⡑⡆⡕⡅⡕⡜⡼⢽⡻⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣼⣳⣫⣾⣵⣗⡵⡱⡡⢣⢑⢕⢜⢕⡝⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣴⣿⣾⣿⣿⣿⡿⡽⡑⢌⠪⡢⡣⣣⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+"
+    ))) (nth (random (length ops)) ops)))
 (defun jl/random-icon ()
   "Generate a random image for dashboard"
   (interactive)
@@ -631,7 +671,7 @@
 (use-package diredfl 
   :hook (dired-mode . diredfl-mode)
   :config
-    (set-face-attribute 'diredfl-dir-heading nil :foreground "#cba6f7"))
+    (set-face-attribute 'diredfl-dir-heading nil :height 140 :foreground "#cba6f7" :underline t))
 #+end_src
 *** Dired Filter
 #+begin_src emacs-lisp
@@ -671,6 +711,9 @@
 (use-package dired-subtree
   :after diredfl
   :config 
+    ;; force subtree to respect omit settings
+    (add-hook 'dired-subtree-after-insert-hook #'(lambda ()
+      (dired-omit-mode 1)))
     (set-face-attribute 'dired-subtree-depth-1-face nil :background nil)
     (set-face-attribute 'dired-subtree-depth-2-face nil :background nil)
     (set-face-attribute 'dired-subtree-depth-3-face nil :background nil)
@@ -1082,11 +1125,19 @@
 (use-package dashboard
   :config
     (setq default-directory "~/"
+          dashboard-icon-type 'nerd-icons
+          dashboard-set-file-icons t
+          dashboard-vertically-center-content t
+          dashboard-center-content t
+          dashboard-display-icons-p t
           initial-buffer-choice (lambda() (get-buffer-create "*dashboard*")) 
           dashboard-banner-logo-title (jl/random-quote)
           dashboard-footer-messages `(,(jl/random-quote)))
-    (when (display-graphic-p)
-      (setq dashboard-startup-banner (jl/random-icon)))
+    (if (display-graphic-p)
+      (setq dashboard-startup-banner (jl/random-icon))
+      (progn
+        (setq dashboard-startup-banner 'ascii)
+        (setq dashboard-banner-ascii (jl/random-ascii))))
     (dashboard-setup-startup-hook))
 #+end_src
 *** Perspective
@@ -1309,12 +1360,22 @@
 (use-package nerd-icons-dired 
   :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
-**** Nerd Icons Dired
+**** Nerd Icons Corfu
 #+begin_src emacs-lisp
 (use-package nerd-icons-corfu 
   :after corfu 
   :config
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+#+end_src
+**** Nerd Icons Completion
+#+begin_src emacs-lisp
+(use-package nerd-icons-completion
+  :hook (minibuffer-setup . nerd-icons-completion-mode))
+#+end_src
+**** Nerd Icons Ibuffer
+#+begin_src emacs-lisp
+(advice-add 'persp-ibuffer :after #'(lambda (&rest r) (nerd-icons-ibuffer-mode 1)))
+(use-package nerd-icons-ibuffer :defer t)
 #+end_src
 *** Highlight TODO
 #+begin_src emacs-lisp
