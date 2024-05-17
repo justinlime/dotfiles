@@ -19,9 +19,6 @@
     - [[#scrolling][Scrolling]]
     - [[#fonts][Fonts]]
     - [[#misc][Misc]]
-  - [[#custom-functions][Custom Functions]]
-    - [[#toggle-term][Toggle-Term]]
-    - [[#misc-1][Misc]]
 - [[#configurations][Configurations]]
   - [[#keybinds][Keybinds]]
     - [[#generalel][General.el]]
@@ -30,6 +27,7 @@
       - [[#evil-collection][Evil Collection]]
     - [[#keychord][Keychord]]
     - [[#which-key][Which Key]]
+  - [[#toggle-term][Toggle Term]]
   - [[#tramp][Tramp]]
   - [[#dired][Dired]]
     - [[#wdired][wDired]]
@@ -65,7 +63,7 @@
   - [[#git][Git]]
     - [[#magit][Magit]]
     - [[#git-gutter][Git Gutter]]
-  - [[#misc-2][Misc]]
+  - [[#misc-1][Misc]]
     - [[#dashboard][Dashboard]]
     - [[#perspective][Perspective]]
     - [[#highlight-indent][Highlight Indent]]
@@ -251,220 +249,6 @@
 (global-display-line-numbers-mode 1) ; Display line numbers
 (global-prettify-symbols-mode) ; prettyyyyyyy
 #+end_src
-** Custom Functions
-*** Toggle-Term
-#+begin_src emacs-lisp
-;; This is sphagetti code but I dont care
-(let ((init-term "*toggle-term-main*"))
-  (defvar jl/active-toggle-term `(("main" ,init-term)) "The most recently used toggle term")
-  (defvar jl/current-toggles `(("main" (,init-term))) "List of the current toggle terms"))
-
-(defun jl/toggle-term (&optional name command)
-  "Toggle a terminal window with $SHELL, and make it the active term
-
-  If NAME is not provided, prompt to user for one. Closes any other toggle-terms
-  currently open that aren't NAME
-
-  NAME can be in the *name* format or just name, but the buffers' name will always output to *name*
-
-  Integrated with perspective.el
-
-  If COMMAND is set, the created terminal will execute the command using your shell's -c flag"
-  (interactive)
-  ;; Create a key and default value for the alist if it doesnt exist for the perspective 
-  (if (eq (assoc (persp-current-name) jl/current-toggles) nil)
-    (progn
-      (let ((wrapped-name (format "*toggle-term-%s*" (persp-current-name))))
-        (add-to-list 'jl/current-toggles `(,(persp-current-name) (,wrapped-name)))
-        (setq name wrapped-name)
-        (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term)))))
-  (let* (
-    (current-toggles-persp (car (cdr (assoc (persp-current-name) jl/current-toggles))))
-    ;; Wrapping and unwrapping to force a *name* naming scheme
-    (name (if name name (completing-read "Toggle-Term: " current-toggles-persp)))
-    (unwrapped-name (replace-regexp-in-string "\\*" "" name))
-    (wrapped-name (format "*%s*" unwrapped-name))) 
-      ;; Check if another toggle-term is active
-      (dolist (c current-toggles-persp)
-        (if (string-equal c wrapped-name)
-          nil
-          (let ((w (get-buffer-window c)))
-            (if w (delete-window w)))))
-        ;; Toggle the term
-        (let (
-          (height (window-total-height))
-          (window (get-buffer-window wrapped-name)))
-            (if window (delete-window window)
-                ;; Creates a window below the current window at 22% of the windows height
-                (select-window (split-root-window-below (round (* height 0.78))))
-                ;; If command is provided, start the term using the shells -c flag
-                (if (eq command nil)
-                  (make-term unwrapped-name (getenv "SHELL")) ; The make-term function automatically wraps *'s around the name given, hence the unwrapped name being used.
-                  (make-term unwrapped-name (getenv "SHELL") nil "-c" command)) 
-                ;; Sets the active terminal for the current perspective in the alist
-                (let ((key (assoc (persp-current-name) jl/active-toggle-term)))
-                  (if key
-                    (setcdr key `(,wrapped-name))
-                    (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term))))
-                ;; Adds the terminal to the current-toggles alist if its not already included
-                (if (member wrapped-name current-toggles-persp) nil
-                  (let* ((key (assoc (persp-current-name) jl/current-toggles))
-                         (orig-list (car(cdr key))))
-                    (if key
-                      (progn
-                        (add-to-list 'orig-list wrapped-name)
-                        (setcdr key `(,orig-list)))
-                      (add-to-list 'jl/current-toggles `(,(persp-current-name) (,wrapped-name))))))
-                ;; Switch to the buffer and enter insert mode
-                (switch-to-buffer wrapped-name)
-                (evil-insert 1)))))
-
-(defun jl/toggle-active-term ()
-  "Toggle the most recently used toggle-term"
-  (interactive)
-  (jl/toggle-term (car (cdr (assoc (persp-current-name) jl/active-toggle-term)))))
-#+end_src
-*** Misc
-#+begin_src emacs-lisp
-(defun jl/ssh (host formatter)
-  (persp-switch host)
-  (let ((format-host (format formatter host host)))
-    (find-file format-host)
-    (jl/toggle-term host (format "ssh %s" host))))
-(defun jl/ssh-root (host)
-  "SSH with sudo privledges using a host from .ssh/config"
-  (interactive "sEnter host: ")
-  (jl/ssh host "/ssh:%s|sudo:%s:/"))
-(defun jl/ssh-user (host)
-  "SSH using a host from .ssh/config"
-  (interactive "sEnter host: ")
-  (jl/ssh host "/ssh:%s:~"))
-(defun jl/samba (host)
-  (interactive "sEnter user@ip: ")
-  (find-file (format "/smb:%s:" host)))
-
-(defun jl/consult-find-in-dir ()
-  "Find a file in a specific directory
-   
-  Uses Affe if working with local files, and Consult for remote files"
-  (interactive)
-  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
-    (if (string-prefix-p "/ssh:" default-directory)
-      (consult-find dir)
-      (affe-find dir))))
-(defun jl/consult-find-in-current ()
-  "Find a file in the project's directory
-
-  Sets the root of the search to the folders' .git parent path if present
-
-  Uses Affe if working with local files, and Consult for remote files"
-  (interactive)
-  (let ((dir (vc-root-dir)))
-    (if (string-prefix-p "/ssh:" default-directory)
-      (if dir
-        (consult-find dir)
-        (consult-find))
-      (if dir
-        (affe-find dir)
-        (affe-find)))))
-
-(defun jl/consult-grep-in-dir ()
-  "Find a word in a specified project/folder
-
-  Uses Ripgrep if working with local files, and Grep for remote files"
-  (interactive)
-  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
-    (if (string-prefix-p "/ssh:" default-directory)
-      (consult-grep dir)
-      (consult-ripgrep dir))))
-
-(defun jl/consult-grep-in-current ()
-  "Find a word in the current project/folder
-
-  Sets the root of the search to the folders' .git parent path if present
-
-  Uses Ripgrep if working with local files, and Grep for remote files"
-  (interactive)
-  (let ((dir (vc-root-dir)))
-    (if dir
-      (if (string-prefix-p "/ssh:" default-directory)
-        (consult-grep dir)
-        (consult-ripgrep dir))
-      (if (string-prefix-p "/ssh:" default-directory)
-        (consult-grep)
-        (consult-ripgrep)))))
-
-(defun jl/random-quote ()
-  "Generate a random quote for dashboard"
-  (interactive)
-  (let ((ops '(
-    "Hello World!"
-    "Whopper Whopper Whopper Whopper Junior Double Triple Whopper"
-    "sudo systemctl stop justinlime"
-    "sudo systemctl start justinlime"
-    "sudo systemctl restart justinlime"
-    "White Monster"
-    "https://stinkboys.com"
-    "Stink Boys Inc. ©"
-    "/home/justinlime/.config"
-    "No emacs???"))) (nth (random (length ops)) ops)))
-
-(defun jl/random-ascii ()
-  "Generate a random quote for dashboard"
-  (interactive)
-  (let ((ops '(
-"
-    ⠀⠀⠀⠀⠀⡰⢂⣾⠿⠛⠒⠚⠛⠃⠺⢶⡀⠀⠀⠀⠀⠀⠀⠀⠀
-    ⠀⠀⠀⠀⢠⡣⠋⠁⠀⠀⠀⠀⠀⢀⡐⠒⢙⣄⠀⠀⠀⠀⠀⠀⠀
-    ⠀⠀⠀⠀⡘⠀⠀⠀⠀⠀⠀⢄⠉⠀⠐⠀⠀⠙⢦⠀⠀⠀⠀⠀⠀
-    ⠀⠀⠀⣾⠁⠀⠀⠄⠂⢈⣠⠎⠀⠀⣸⣿⡿⠓⢬⡇⠀⠀⠀⠀⠀
-    ⠀⠀⢸⡟⠀⠔⣁⣤⣶⣿⠋⢰⠀⠀⣿⡟⠻⣦⠀⢳⠀⠀⠀⠀⠀
-    ⠀⠀⣷⡇⢠⣾⢟⢭⣭⡭⡄⠀⡆⠀⣿⣷⣶⠺⡆⢸⡄⠀⠀⠀⠀
-    ⠀⠀⠇⡇⠛⠡⣑⣈⣛⠝⢁⡀⠇⠀⣿⡿⠛⠒⣡⠇⣧⣀⠀⠀⠀
-    ⠀⠀⢠⠁⠈⠐⠤⠄⠀⣠⢸⠈⠢⠀⣿⡇⠀⠀⠠⠚⣿⣿⠀⠀⠀
-    ⡄⠀⢾⠀⡆⠠⣴⠞⠯⡀⠈⠙⠲⣶⣿⡇⠑⣦⡄⠀⣿⣿⠀⠀⠀
-    ⠈⠺⡮⠀⢡⠀⠀⠀⠀⠀⠁⠐⠒⠒⠛⠃⠈⠛⠇⠀⡏⡏⠀⠀⠀
-    ⠀⢰⠁⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⢷⠀⠀⠀
-    ⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠃⠀⢸⠀⠀⠀
-    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⠀
-    ⠀⠀⢣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠸⡳⡀⠀
-    ⠀⠀⠀⠑⢄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣯⣼⡇⠑⣄
-"
-"
-⠀⣞⢽⢪⢣⢣⢣⢫⡺⡵⣝⡮⣗⢷⢽⢽⢽⣮⡷⡽⣜⣜⢮⢺⣜⢷⢽⢝⡽⣝
-⠸⡸⠜⠕⠕⠁⢁⢇⢏⢽⢺⣪⡳⡝⣎⣏⢯⢞⡿⣟⣷⣳⢯⡷⣽⢽⢯⣳⣫⠇
-⠀⠀⢀⢀⢄⢬⢪⡪⡎⣆⡈⠚⠜⠕⠇⠗⠝⢕⢯⢫⣞⣯⣿⣻⡽⣏⢗⣗⠏⠀
-⠀⠪⡪⡪⣪⢪⢺⢸⢢⢓⢆⢤⢀⠀⠀⠀⠀⠈⢊⢞⡾⣿⡯⣏⢮⠷⠁⠀⠀⠀
-⠀⠀⠀⠈⠊⠆⡃⠕⢕⢇⢇⢇⢇⢇⢏⢎⢎⢆⢄⠀⢑⣽⣿⢝⠲⠉⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⡿⠂⠠⠀⡇⢇⠕⢈⣀⠀⠁⠡⠣⡣⡫⣂⣿⠯⢪⠰⠂⠀⠀⠀⠀
-⠀⠀⠀⠀⡦⡙⡂⢀⢤⢣⠣⡈⣾⡃⠠⠄⠀⡄⢱⣌⣶⢏⢊⠂⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢝⡲⣜⡮⡏⢎⢌⢂⠙⠢⠐⢀⢘⢵⣽⣿⡿⠁⠁⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠨⣺⡺⡕⡕⡱⡑⡆⡕⡅⡕⡜⡼⢽⡻⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⣼⣳⣫⣾⣵⣗⡵⡱⡡⢣⢑⢕⢜⢕⡝⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⣴⣿⣾⣿⣿⣿⡿⡽⡑⢌⠪⡢⡣⣣⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-"
-    ))) (nth (random (length ops)) ops)))
-(defun jl/random-icon ()
-  "Generate a random image for dashboard"
-  (interactive)
-  (let* ((icons-dir (expand-file-name "icons/" user-emacs-directory))
-        (ops (directory-files icons-dir))
-        (ops (delete "." ops))
-        (ops (delete ".." ops))
-        (file (nth (random (length ops)) ops)))
-          (expand-file-name file icons-dir)))
-(defun jl/dired-open ()
-  "Open path in the same buffer if a file, and a new one if a directory in dired"
-  (interactive)
-  (let ((file (dired-get-file-for-visit)))
-    (if (file-directory-p file)
-      (dired-find-alternate-file)
-      (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "mp3" "ogg" "opus" "aac"))
-        (apply #'start-process "" nil "mpv" (dired-get-marked-files))
-        (dired-find-file)))))
-#+end_src
 * Configurations
 ** Keybinds
 *** General.el
@@ -486,14 +270,6 @@
       :prefix "SPC" ;; set leader
       :global-prefix "M-SPC") ;; access leader in insert mode
     (leader
-      "w" '(:ignore t :wk "Window Navigation")
-      "w h" '(evil-window-left :wk "Move left to window")
-      "w j" '(evil-window-down :wk "Move down to window")
-      "w k" '(evil-window-up :wk "Move up to window")
-      "w l" '(evil-window-right :wk "Move right to window")
-      "w s" '(evil-window-split :wk "Split window horizontally")
-      "w v" '(evil-window-vsplit :wk "Split window vertically"))
-    (leader
       "b k" '(kill-this-buffer :wk "Kill this buffer")
       "b r" '(revert-buffer :wk "Reload this buffer"))
     (leader
@@ -512,22 +288,23 @@
       "c r" '(comment-region :wk "Comment selection")
       "c l" '(comment-line :wk "Comment line"))
     (leader
-      "t t" '(jl/toggle-active-term :wk "Toggle the active toggle-term")
-      "t f" '(jl/toggle-term :wk "Find a toggle-term, or create a new one"))
-    (leader
       "f f" '(find-file :wk "Find File"))
     (leader
-      "i r" '(indent-rigidly :wk "Indent Rigidly"))
-    (leader
-      "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
-      "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
-      "s m" '(jl/samba :wk "Access an SMB share")))
+      "i r" '(indent-rigidly :wk "Indent Rigidly")))
 #+end_src
 *** Evil
 **** Evil Mode
 #+begin_src emacs-lisp
 (use-package evil
   :general
+    (leader
+      "w" '(:ignore t :wk "Window Navigation")
+      "w h" '(evil-window-left :wk "Move left to window")
+      "w j" '(evil-window-down :wk "Move down to window")
+      "w k" '(evil-window-up :wk "Move up to window")
+      "w l" '(evil-window-right :wk "Move right to window")
+      "w s" '(evil-window-split :wk "Split window horizontally")
+      "w v" '(evil-window-vsplit :wk "Split window vertically"))
     (:states 'insert
       "<tab>" #'tab-to-tab-stop
       "TAB" #'tab-to-tab-stop)
@@ -603,8 +380,104 @@
       which-key-allow-imprecise-window-fit t
       which-key-separator " → " ))
 #+end_src
+** Toggle Term
+#+begin_src emacs-lisp
+;; This is sphagetti code but I dont care
+(let ((init-term "*toggle-term-main*"))
+  (defvar jl/active-toggle-term `(("main" ,init-term)) "The most recently used toggle term")
+  (defvar jl/current-toggles `(("main" (,init-term))) "List of the current toggle terms"))
+
+(defun jl/toggle-term (&optional name command)
+  "Toggle a terminal window with $SHELL, and make it the active term
+
+  If NAME is not provided, prompt to user for one. Closes any other toggle-terms
+  currently open that aren't NAME
+
+  NAME can be in the *name* format or just name, but the buffers' name will always output to *name*
+
+  Integrated with perspective.el
+
+  If COMMAND is set, the created terminal will execute the command using your shell's -c flag"
+  (interactive)
+  ;; Create a key and default value for the alist if it doesnt exist for the perspective 
+  (if (eq (assoc (persp-current-name) jl/current-toggles) nil)
+    (progn
+      (let ((wrapped-name (format "*toggle-term-%s*" (persp-current-name))))
+        (add-to-list 'jl/current-toggles `(,(persp-current-name) (,wrapped-name)))
+        (setq name wrapped-name)
+        (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term)))))
+  (let* (
+    (current-toggles-persp (car (cdr (assoc (persp-current-name) jl/current-toggles))))
+    ;; Wrapping and unwrapping to force a *name* naming scheme
+    (name (if name name (completing-read "Toggle-Term: " current-toggles-persp)))
+    (unwrapped-name (replace-regexp-in-string "\\*" "" name))
+    (wrapped-name (format "*%s*" unwrapped-name))) 
+      ;; Check if another toggle-term is active
+      (dolist (c current-toggles-persp)
+        (if (string-equal c wrapped-name)
+          nil
+          (let ((w (get-buffer-window c)))
+            (if w (delete-window w)))))
+        ;; Toggle the term
+        (let (
+          (height (window-total-height))
+          (window (get-buffer-window wrapped-name)))
+            (if window (delete-window window)
+                ;; Creates a window below the current window at 22% of the windows height
+                (select-window (split-root-window-below (round (* height 0.78))))
+                ;; If command is provided, start the term using the shells -c flag
+                (if (eq command nil)
+                  (make-term unwrapped-name (getenv "SHELL")) ; The make-term function automatically wraps *'s around the name given, hence the unwrapped name being used.
+                  (make-term unwrapped-name (getenv "SHELL") nil "-c" command)) 
+                ;; Sets the active terminal for the current perspective in the alist
+                (let ((key (assoc (persp-current-name) jl/active-toggle-term)))
+                  (if key
+                    (setcdr key `(,wrapped-name))
+                    (setq jl/active-toggle-term (cons `(,(persp-current-name) ,wrapped-name) jl/active-toggle-term))))
+                ;; Adds the terminal to the current-toggles alist if its not already included
+                (if (member wrapped-name current-toggles-persp) nil
+                  (let* ((key (assoc (persp-current-name) jl/current-toggles))
+                         (orig-list (car(cdr key))))
+                    (if key
+                      (progn
+                        (add-to-list 'orig-list wrapped-name)
+                        (setcdr key `(,orig-list)))
+                      (add-to-list 'jl/current-toggles `(,(persp-current-name) (,wrapped-name))))))
+                ;; Switch to the buffer and enter insert mode
+                (switch-to-buffer wrapped-name)
+                (evil-insert 1)))))
+
+(defun jl/toggle-active-term ()
+  "Toggle the most recently used toggle-term"
+  (interactive)
+  (jl/toggle-term (car (cdr (assoc (persp-current-name) jl/active-toggle-term)))))
+(leader
+  "t t" '(jl/toggle-active-term :wk "Toggle the active toggle-term")
+  "t f" '(jl/toggle-term :wk "Find a toggle-term, or create a new one"))
+#+end_src
 ** Tramp
 #+begin_src emacs-lisp
+(defun jl/ssh (host formatter)
+  (persp-switch host)
+  (let ((format-host (format formatter host host)))
+    (find-file format-host)
+    (jl/toggle-term host (format "ssh %s" host))))
+(defun jl/ssh-root (host)
+  "SSH with sudo privledges using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (jl/ssh host "/ssh:%s|sudo:%s:/"))
+(defun jl/ssh-user (host)
+  "SSH using a host from .ssh/config"
+  (interactive "sEnter host: ")
+  (jl/ssh host "/ssh:%s:~"))
+(defun jl/samba (host)
+  (interactive "sEnter user@ip: ")
+  (find-file (format "/smb:%s:" host)))
+(leader
+  "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
+  "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
+  "s m" '(jl/samba :wk "Access an SMB share"))
+
 ;; Prevent tramp from trying to save to auth-info
 ;; It stores passwords in plain text (WTF...)
 (connection-local-set-profile-variables
@@ -628,6 +501,15 @@
 #+end_src
 ** Dired
 #+begin_src emacs-lisp
+(defun jl/dired-open ()
+  "Open path in the same buffer if a file, and a new one if a directory in dired"
+  (interactive)
+  (let ((file (dired-get-file-for-visit)))
+    (if (file-directory-p file)
+      (dired-find-alternate-file)
+      (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "mp3" "ogg" "opus" "aac"))
+        (apply #'start-process "" nil "mpv" (dired-get-marked-files))
+        (dired-find-file)))))
 ;; dont prompt ever time for recursion
 (setq dired-listing-switches "-alFh --group-directories-first"
       dired-recursive-copies 'always
@@ -994,6 +876,57 @@
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
+(defun jl/consult-find-in-dir ()
+  "Find a file in a specific directory
+   
+  Uses Affe if working with local files, and Consult for remote files"
+  (interactive)
+  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
+    (if (string-prefix-p "/ssh:" default-directory)
+      (consult-find dir)
+      (affe-find dir))))
+(defun jl/consult-find-in-current ()
+  "Find a file in the project's directory
+
+  Sets the root of the search to the folders' .git parent path if present
+
+  Uses Affe if working with local files, and Consult for remote files"
+  (interactive)
+  (let ((dir (vc-root-dir)))
+    (if (string-prefix-p "/ssh:" default-directory)
+      (if dir
+        (consult-find dir)
+        (consult-find))
+      (if dir
+        (affe-find dir)
+        (affe-find)))))
+
+(defun jl/consult-grep-in-dir ()
+  "Find a word in a specified project/folder
+
+  Uses Ripgrep if working with local files, and Grep for remote files"
+  (interactive)
+  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
+    (if (string-prefix-p "/ssh:" default-directory)
+      (consult-grep dir)
+      (consult-ripgrep dir))))
+
+(defun jl/consult-grep-in-current ()
+  "Find a word in the current project/folder
+
+  Sets the root of the search to the folders' .git parent path if present
+
+  Uses Ripgrep if working with local files, and Grep for remote files"
+  (interactive)
+  (let ((dir (vc-root-dir)))
+    (if dir
+      (if (string-prefix-p "/ssh:" default-directory)
+        (consult-grep dir)
+        (consult-ripgrep dir))
+      (if (string-prefix-p "/ssh:" default-directory)
+        (consult-grep)
+        (consult-ripgrep)))))
+
 (use-package consult
   :general
     (leader
@@ -1126,6 +1059,68 @@
 ** Misc
 *** Dashboard
 #+begin_src emacs-lisp
+(defun jl/random-quote ()
+  "Generate a random quote for dashboard"
+  (interactive)
+  (let ((ops '(
+    "Hello World!"
+    "Whopper Whopper Whopper Whopper Junior Double Triple Whopper"
+    "sudo systemctl stop justinlime"
+    "sudo systemctl start justinlime"
+    "sudo systemctl restart justinlime"
+    "White Monster"
+    "https://stinkboys.com"
+    "Stink Boys Inc. ©"
+    "/home/justinlime/.config"
+    "No emacs???"))) (nth (random (length ops)) ops)))
+
+(defun jl/random-ascii ()
+  "Generate a random quote for dashboard"
+  (interactive)
+  (let ((ops '(
+"
+    ⠀⠀⠀⠀⠀⡰⢂⣾⠿⠛⠒⠚⠛⠃⠺⢶⡀⠀⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⢠⡣⠋⠁⠀⠀⠀⠀⠀⢀⡐⠒⢙⣄⠀⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⠀⡘⠀⠀⠀⠀⠀⠀⢄⠉⠀⠐⠀⠀⠙⢦⠀⠀⠀⠀⠀⠀
+    ⠀⠀⠀⣾⠁⠀⠀⠄⠂⢈⣠⠎⠀⠀⣸⣿⡿⠓⢬⡇⠀⠀⠀⠀⠀
+    ⠀⠀⢸⡟⠀⠔⣁⣤⣶⣿⠋⢰⠀⠀⣿⡟⠻⣦⠀⢳⠀⠀⠀⠀⠀
+    ⠀⠀⣷⡇⢠⣾⢟⢭⣭⡭⡄⠀⡆⠀⣿⣷⣶⠺⡆⢸⡄⠀⠀⠀⠀
+    ⠀⠀⠇⡇⠛⠡⣑⣈⣛⠝⢁⡀⠇⠀⣿⡿⠛⠒⣡⠇⣧⣀⠀⠀⠀
+    ⠀⠀⢠⠁⠈⠐⠤⠄⠀⣠⢸⠈⠢⠀⣿⡇⠀⠀⠠⠚⣿⣿⠀⠀⠀
+    ⡄⠀⢾⠀⡆⠠⣴⠞⠯⡀⠈⠙⠲⣶⣿⡇⠑⣦⡄⠀⣿⣿⠀⠀⠀
+    ⠈⠺⡮⠀⢡⠀⠀⠀⠀⠀⠁⠐⠒⠒⠛⠃⠈⠛⠇⠀⡏⡏⠀⠀⠀
+    ⠀⢰⠁⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⢷⠀⠀⠀
+    ⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠃⠀⢸⠀⠀⠀
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⠀
+    ⠀⠀⢣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠸⡳⡀⠀
+    ⠀⠀⠀⠑⢄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣯⣼⡇⠑⣄
+"
+"
+⠀⣞⢽⢪⢣⢣⢣⢫⡺⡵⣝⡮⣗⢷⢽⢽⢽⣮⡷⡽⣜⣜⢮⢺⣜⢷⢽⢝⡽⣝
+⠸⡸⠜⠕⠕⠁⢁⢇⢏⢽⢺⣪⡳⡝⣎⣏⢯⢞⡿⣟⣷⣳⢯⡷⣽⢽⢯⣳⣫⠇
+⠀⠀⢀⢀⢄⢬⢪⡪⡎⣆⡈⠚⠜⠕⠇⠗⠝⢕⢯⢫⣞⣯⣿⣻⡽⣏⢗⣗⠏⠀
+⠀⠪⡪⡪⣪⢪⢺⢸⢢⢓⢆⢤⢀⠀⠀⠀⠀⠈⢊⢞⡾⣿⡯⣏⢮⠷⠁⠀⠀⠀
+⠀⠀⠀⠈⠊⠆⡃⠕⢕⢇⢇⢇⢇⢇⢏⢎⢎⢆⢄⠀⢑⣽⣿⢝⠲⠉⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡿⠂⠠⠀⡇⢇⠕⢈⣀⠀⠁⠡⠣⡣⡫⣂⣿⠯⢪⠰⠂⠀⠀⠀⠀
+⠀⠀⠀⠀⡦⡙⡂⢀⢤⢣⠣⡈⣾⡃⠠⠄⠀⡄⢱⣌⣶⢏⢊⠂⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢝⡲⣜⡮⡏⢎⢌⢂⠙⠢⠐⢀⢘⢵⣽⣿⡿⠁⠁⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠨⣺⡺⡕⡕⡱⡑⡆⡕⡅⡕⡜⡼⢽⡻⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣼⣳⣫⣾⣵⣗⡵⡱⡡⢣⢑⢕⢜⢕⡝⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣴⣿⣾⣿⣿⣿⡿⡽⡑⢌⠪⡢⡣⣣⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+"
+    ))) (nth (random (length ops)) ops)))
+(defun jl/random-icon ()
+  "Generate a random image for dashboard"
+  (interactive)
+  (let* ((icons-dir (expand-file-name "icons/" user-emacs-directory))
+        (ops (directory-files icons-dir))
+        (ops (delete "." ops))
+        (ops (delete ".." ops))
+        (file (nth (random (length ops)) ops)))
+          (expand-file-name file icons-dir)))
+
 (use-package dashboard
   :config
     (setq default-directory "~/"
@@ -1143,6 +1138,7 @@
         (setq dashboard-startup-banner 'ascii)
         (setq dashboard-banner-ascii (jl/random-ascii))))
     (dashboard-setup-startup-hook))
+
 #+end_src
 *** Perspective
 #+begin_src emacs-lisp
