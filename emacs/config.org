@@ -233,7 +233,10 @@
 #+begin_src emacs-lisp
 ;; Enable mouse in term-mode
 (unless (display-graphic-p)
-  (xterm-mouse-mode 1))
+  (xterm-mouse-mode 1)
+  ;; let terminal emacs use system clipboard
+  ;; check out the xclip package if this doesn't work
+  (setq xterm-extra-capabilities '(getSelection setSelection)))
 (setq blink-cursor-mode nil ; Exactly what is sounds like
       use-short-answers t ; Set y or n instead of yes or no for questions
       display-line-numbers-type 'relative ; Realive line numbers
@@ -245,8 +248,8 @@
 (save-place-mode) ; Save cursor position in buffer on reopen
 (global-hl-line-mode) ; Highlight the current line
 (electric-indent-mode t) ; Auto Indent
-(global-display-line-numbers-mode 1) ;Display line numbers
-(global-prettify-symbols-mode)
+(global-display-line-numbers-mode 1) ; Display line numbers
+(global-prettify-symbols-mode) ; prettyyyyyyy
 #+end_src
 ** Custom Functions
 *** Toggle-Term
@@ -555,6 +558,7 @@
           (send-string-to-terminal "\e[5 q")
           (send-string-to-terminal "\e[2 q")))
       (add-hook 'evil-insert-state-entry-hook #'jl/correct-cursor)
+      (add-hook 'evil-command-window-mode-hook #'jl/correct-cursor)
       (add-hook 'evil-insert-state-exit-hook #'jl/correct-cursor)
       (add-hook 'evil-normal-state-entry-hook #'jl/correct-cursor)
       (add-hook 'evil-normal-state-exit-hook #'jl/correct-cursor)
