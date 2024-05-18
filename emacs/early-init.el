@@ -1,9 +1,10 @@
 ;; Speeds up startup times, changes reverted after startup is complete
-(setq gc-cons-threshold most-positive-fixnum)
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6
 ;; IDK what this does tbh, but seems to help startup times a bit
-(setq file-name-handler-alist-original file-name-handler-alist)
-(setq file-name-handler-alist nil)
-(setq frame-inhibit-implied-resize t)
+      file-name-handler-alist-original file-name-handler-alist
+      file-name-handler-alist nil
+      frame-inhibit-implied-resize t)
 ;; disable package.el at early init
 ;; even though it will be loaded later
 ;; shaves off some startup time

@@ -46,6 +46,8 @@
   - [[#org][Org]]
     - [[#org-agenda][Org Agenda]]
     - [[#org-toc][Org Toc]]
+    - [[#org-autolist][Org Autolist]]
+    - [[#org-appear][Org Appear]]
     - [[#org-modern][Org Modern]]
     - [[#org-roam][Org Roam]]
     - [[#olivetti][Olivetti]]
@@ -111,12 +113,14 @@
 ;; Revert again just in case if out of focus (doesnt work for terminal emacs)
 ;; and use the chance to collect garbage
 (add-hook 'focus-out-hook #'(lambda ()
-  (setq gc-cons-threshold (* 1024 1024 16))
+  (setq gc-cons-threshold (* 1024 1024 16) ; 16mb
+        gc-cons-percentage 0.1)
   (garbage-collect)))
 ;; Revert after 5 seconds of being idle as an additonal precaution
 (run-with-idle-timer 5 nil
   (lambda ()
-    (setq gc-cons-threshold (* 1024 1024 16))))
+    (setq gc-cons-threshold (* 1024 1024 16) ; 16mb
+          gc-cons-percentage 0.1)))
 #+end_src 
 *** Package Manger
 #+begin_src emacs-lisp 
@@ -882,13 +886,31 @@
 (use-package toc-org
   :hook ((org-mode markdown-mode) . toc-org-enable))
 #+end_src
+*** Org Autolist
+#+begin_src emacs-lisp
+(use-package org-autolist
+  :hook (org-mode . org-autolist-mode))
+#+end_src
+*** Org Appear
+#+begin_src emacs-lisp
+(use-package org-appear
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-hide-emphasis-markers t		;; A default setting that needs to be t for org-appear
+        org-appear-autoemphasis t		;; Enable org-appear on emphasis (bold, italics, etc)
+        org-appear-autolinks nil		;; Don't enable on links
+        org-appear-autosubmarkers t))	;; Enable on subscript and superscript
+#+end_src
 *** Org Modern
 #+begin_src emacs-lisp
 (use-package org-modern
   :hook (after-init . (lambda () (add-hook 'find-file-hook #'global-org-modern-mode)))
   :config
     (global-org-modern-mode)
-    (setq org-modern-fold-stars
+    (setq org-modern-todo nil 
+          org-modern-priority nil
+          org-modern-tag nil
+          org-modern-fold-stars
           '(("󰴈" . "󰴈")
             ("󰊹" . "󰊹")
             ("󰨑" . "󰨑")
