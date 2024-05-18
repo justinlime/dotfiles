@@ -226,6 +226,19 @@
   :font "RobotoMono Nerd Font"
   :height 120
   :weight 'medium)
+(set-face-attribute 'italic nil 
+  :font "RobotoMono Nerd Font"
+  :slant 'italic
+  :height 120) 
+(set-face-attribute 'bold nil 
+  :font "RobotoMono Nerd Font"
+  :weight 'ultra-bold
+  :height 120) 
+(set-face-attribute 'bold-italic nil 
+  :font "RobotoMono Nerd Font"
+  :weight 'ultra-bold
+  :slant 'italic
+  :height 120) 
 (setq-default line-spacing 0.10)
 (set-language-environment "UTF-8")
 #+end_src
@@ -838,6 +851,7 @@
       org-agenda-category-icon-alist
         '(("Birthday" ("" nil nil :ascent center))
           ("Holiday" ("" nil nil :ascent center))
+          ("Agenda" ("" nil nil :ascent center))
           ("Reminder" ("" nil nil :ascent center)))) 
 
 
@@ -857,8 +871,7 @@
   "a a" '(org-agenda :wk "Display the org agenda view")
   "a t" '(org-time-stamp :wk "Insert a timestamp")
   "a p" '(org-priority :wk "Set the priority for a tag")
-  "a e" '((lambda () (interactive) (find-file (concat jl/org-agenda-dir "/agenda.org"))) :wk "Edit the org agenda file")
-)
+  "a e" '((lambda () (interactive) (find-file (concat jl/org-agenda-dir "/agenda.org"))) :wk "Edit the org agenda file"))
 (general-define-key 
   :keymaps 'calendar-mode-map
   :states '(normal insert motion emacs)
@@ -904,7 +917,7 @@
 (use-package olivetti
   :hook ((org-mode org-agenda-mode) . olivetti-mode)
   :config
-    (setq-default olivetti-body-width 0.65)
+    (setq-default olivetti-body-width 0.80)
     (remove-hook 'olivetti-mode-on-hook 'visual-line-mode))
 #+end_src
 ** Minibuffer
