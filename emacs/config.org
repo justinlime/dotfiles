@@ -121,6 +121,11 @@
   (lambda ()
     (setq gc-cons-threshold (* 1024 1024 16) ; 16mb
           gc-cons-percentage 0.1)))
+
+;; Check if running on WSL
+(if (string-match-p "Microsoft" (getenv "PATH"))
+  (setq jl/is-wsl t)
+  (setq jl/is-wsl nil))
 #+end_src 
 *** Package Manger
 #+begin_src emacs-lisp 
@@ -218,31 +223,32 @@
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
+(let ((size (if jl/is-wsl 180 120)))
 (set-face-attribute 'default nil
   :font "RobotoMono Nerd Font"
-  :height 120
+  :height size
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
   :font "Roboto"
-  :height 120
+  :height size
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
   :font "RobotoMono Nerd Font"
-  :height 120
+  :height size
   :weight 'medium)
 (set-face-attribute 'italic nil 
   :font "RobotoMono Nerd Font"
   :slant 'italic
-  :height 120) 
+  :height size) 
 (set-face-attribute 'bold nil 
   :font "RobotoMono Nerd Font"
   :weight 'ultra-bold
-  :height 120) 
+  :height size) 
 (set-face-attribute 'bold-italic nil 
   :font "RobotoMono Nerd Font"
   :weight 'ultra-bold
   :slant 'italic
-  :height 120) 
+  :height size))
 (setq-default line-spacing 0.10)
 (set-language-environment "UTF-8")
 #+end_src
