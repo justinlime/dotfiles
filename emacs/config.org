@@ -576,7 +576,7 @@
 (use-package diredfl 
   :hook (dired-mode . diredfl-mode)
   :config
-    (set-face-attribute 'diredfl-dir-heading nil :height 140 :foreground "#cba6f7" :underline t))
+    (set-face-attribute 'diredfl-dir-heading nil :height 140 :foreground "#cba6f7"))
 #+end_src
 *** Dired Filter
 #+begin_src emacs-lisp
