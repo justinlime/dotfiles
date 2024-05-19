@@ -20,6 +20,7 @@ with pkgs; [
   websocat
   lm_sensors
   inputs.maxfetch.packages.${pkgs.system}.default
+  veracrypt
   roboto
   git-crypt
   ffmpeg-full

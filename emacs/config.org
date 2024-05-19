@@ -353,14 +353,7 @@
         (if (eq evil-state 'insert)
           (send-string-to-terminal "\e[5 q")
           (send-string-to-terminal "\e[2 q")))
-      (add-hook 'evil-insert-state-entry-hook #'jl/correct-cursor)
-      (add-hook 'evil-command-window-mode-hook #'jl/correct-cursor)
-      (add-hook 'evil-insert-state-exit-hook #'jl/correct-cursor)
-      (add-hook 'evil-normal-state-entry-hook #'jl/correct-cursor)
-      (add-hook 'evil-normal-state-exit-hook #'jl/correct-cursor)
-      (add-hook 'after-save-hook #'jl/correct-cursor)
-      (advice-add 'eldoc-documentation-default :after #'jl/correct-cursor) ;;Echo Area
-      (advice-add 'eldoc-display-in-buffer :after #'jl/correct-cursor))) ;;Buffer
+      (add-hook 'post-command-hook #'jl/correct-cursor)))
 #+end_src
 **** Evil Collection
 #+begin_src emacs-lisp
@@ -1327,6 +1320,7 @@
 (use-package sideline
   :hook (prog-mode . sideline-mode)
   :config
+    (set-face-attribute 'sideline-default nil :foreground "#cba6f7")
     (setq sideline-backends-left-skip-current-line t   ; don't display on current line (left)
           sideline-backends-right-skip-current-line t  ; don't display on current line (right)
           sideline-order-left 'down                    ; or 'up
