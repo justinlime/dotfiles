@@ -7,6 +7,7 @@
     gcc 
     imagemagick
     zoxide
+    ispell
     # Language Servers
 		lua-language-server 
     elixir-ls
