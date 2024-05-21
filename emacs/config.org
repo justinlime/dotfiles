@@ -509,10 +509,11 @@
 (connection-local-set-profiles
  '(:application tramp) 'remote-without-auth-sources)
 
-;; Tramp optomizations
+;; Optimization
 (with-eval-after-load 'tramp
   (add-to-list 'tramp-connection-properties
-                  (list "/ssh:" "direct-async-process" t))
+                  (list "/ssh:" "direct-async-process" t)
+                  (list "/rsync:" "direct-async-process" t))
   (setq tramp-inline-compress-start-size 1000
         tramp-copy-size-limit 10000
         vc-handled-backends '(git)
@@ -520,7 +521,20 @@
         password-cache-expiry nil ; stop tramp from forgetting passwords
         ;; force tramp to use the default .ssh config for controlmaster
         ;; makes things quicker and retains passwords
-        tramp-use-ssh-controlmaster-options nil 
+        tramp-use-ssh-controlmaster-options t
+        ;; Let tramp re-use the ssh connection
+        ;; The preferred way to do this is to add the following
+        ;; to your ~/.ssh/config:
+        ;; 
+        ;; Host *
+        ;;   ControlMaster auto
+        ;;   ControlPath ~/.ssh/master-%r@%h:%p
+        ;;   Compression yes
+        ;;   ControlPersist 15m
+        tramp-ssh-controlmaster-options (concat
+          "-o ControlMaster=auto "
+          "-o ControlPath=~/.ssh/master-%%r@%%h:%%p "
+          "-o ControlPersist=15m ")
         remote-file-name-inhibit-cache nil)) ; remember more filenames
 #+end_src
 ** Dired
