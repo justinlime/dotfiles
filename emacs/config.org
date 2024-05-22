@@ -1610,6 +1610,23 @@
 ;; (setq treesit-load-name-override-list
 ;;    '((cc "libtree-sitter-c")
 ;;      (gomod "libtree-sitter-go")))
+
+;; Org mode src blocks for treesitter
+(setq org-src-lang-modes 
+  '(("go" . go-ts)
+    ("cpp" . c++-ts)
+    ("toml" . toml-ts)
+    ("yaml" . toml-ts)
+    ("json" . json-ts)
+    ("bash" . bash-ts)
+    ("rust" . rust-ts)
+    ("c" . c-ts)
+    ("nix" . nix-ts)
+    ("python" . python-ts)
+    ("js" . js-ts)
+    ("ts" . typescript-ts)
+    ("java" . java-ts)
+    ("css" . css-ts)))
 #+end_src
 
 
