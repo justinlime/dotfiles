@@ -923,9 +923,9 @@
           org-modern-priority nil
           org-modern-tag nil
           org-modern-list
-          '((43 . "")
+          '((43 . "◦")
             (45 . "")
-            (42 . ""))
+            (42 . "•"))
           org-modern-fold-stars
           '(("󰴈" . "󰴈")
             ("󰊹" . "󰊹")
