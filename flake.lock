@@ -56,6 +56,22 @@
         "type": "github"
       }
     },
+    "nixpkgsJustinLime": {
+      "locked": {
+        "lastModified": 1717307167,
+        "narHash": "sha256-KCs+1FFIAJAMKxdPPNc0Wy3ZePlfw3/tfJqQpKdHnCY=",
+        "owner": "justinlime",
+        "repo": "nixpkgs",
+        "rev": "8b4b87c8fa9d315b82628c88136bdaca4f511a72",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justinlime",
+        "ref": "jellyfin",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgsStable": {
       "locked": {
         "lastModified": 1715668745,
@@ -97,6 +113,7 @@
         "home-manager": "home-manager",
         "maxfetch": "maxfetch",
         "nixpkgs": "nixpkgs",
+        "nixpkgsJustinLime": "nixpkgsJustinLime",
         "nixpkgsStable": "nixpkgsStable",
         "pipecord": "pipecord"
       }

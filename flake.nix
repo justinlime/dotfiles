@@ -1,5 +1,5 @@
 {
-  outputs = { self, nixpkgs, nixpkgsStable, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgsStable, nixpkgsJustinLime, home-manager, ... }@inputs:
   let
     inherit (builtins) head fromTOML readFile elemAt attrNames readDir; 
     inherit (nixpkgs.lib) importTOML flatten genAttrs splitString;
@@ -40,6 +40,7 @@
       username = elemAt split 2;
       pkgs = nixpkgs.legacyPackages.${system};
       pkgsStable = nixpkgsStable.legacyPackages.${system};
+      pkgsJustinLime = nixpkgsJustinLime.legacyPackages.${system};
       flake_path = "/home/${username}/dotfiles";
     };
 
@@ -58,7 +59,7 @@
         # after first build and subsequent shell reload, you can rebuild with the "home-switch" alias instead
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit pkgsStable profile username flake_path hush inputs; };
+          extraSpecialArgs = { inherit pkgsStable pkgsJustinLime profile username flake_path hush inputs; };
           modules = [
             ./nix/users/${name}
             # Enable flakes after bootstrapping, if you dont have home-manager, flakes, or nix-command setup yet,
@@ -77,7 +78,7 @@
         # after first build and subsequent shell reload, you can rebuild with the "nix-switch" alias instead
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit pkgsStable profile username flake_path hush inputs; }; 
+          specialArgs = { inherit pkgsJustinLime pkgsStable profile username flake_path hush inputs; }; 
           modules = [
             ./nix/systems/${name}
             { nix.settings.experimental-features = [ "nix-command" "flakes" ]; }
@@ -93,6 +94,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgsJustinLime.url = "github:justinlime/nixpkgs/jellyfin";
     nixpkgsStable.url = "github:nixos/nixpkgs/nixos-23.11";
     # nixpkgsStable.url = "github:nixos/nixpkgs?rev=8817fe97f02c8cdb761d01a1cfb65327444e0b17";
     home-manager = {
