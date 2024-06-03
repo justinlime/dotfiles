@@ -325,9 +325,13 @@
     (leader
       "w" '(:ignore t :wk "Window Navigation")
       "w h" '(evil-window-left :wk "Move left to window")
+      "w <left>" '(evil-window-left :wk "Move left to window")
       "w j" '(evil-window-down :wk "Move down to window")
+      "w <down>" '(evil-window-down :wk "Move down to window")
       "w k" '(evil-window-up :wk "Move up to window")
+      "w <up>" '(evil-window-up :wk "Move up to window")
       "w l" '(evil-window-right :wk "Move right to window")
+      "w <right>" '(evil-window-right :wk "Move right to window")
       "w s" '(evil-window-split :wk "Split window horizontally")
       "w v" '(evil-window-vsplit :wk "Split window vertically"))
     (:states 'insert
@@ -384,6 +388,7 @@
           key-chord-one-key-delay 1.2
           key-chord-safety-interval-forward 0.1
           key-chord-safety-interval-backward 1)
+    (key-chord-define evil-insert-state-map  "nn" 'evil-normal-state)
     (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 *** Which Key
