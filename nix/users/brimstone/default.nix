@@ -35,7 +35,7 @@ in
     prismlauncher
     speedtest-cli
     telegram-desktop
-    via
+    vial
     imagemagick
     jellyfin-media-player
     element-desktop
