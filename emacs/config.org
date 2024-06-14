@@ -185,7 +185,7 @@
     (dolist (b (magit-mode-get-buffers))
         (kill-buffer b)))))
 
-;; ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
+;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
 (setq-default message-log-max nil)
 (add-hook 'emacs-startup-hook #'(lambda() ;Kills the warning buffer for even emergency messages
@@ -548,11 +548,9 @@
   "Open path in the same buffer if a file, and a new one if a directory in dired"
   (interactive)
   (let ((file (dired-get-file-for-visit)))
-    (if (file-directory-p file)
-      (dired-find-alternate-file)
-      (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "mp3" "ogg" "opus" "aac"))
-        (apply #'start-process "" nil "mpv" (dired-get-marked-files))
-        (dired-find-file)))))
+    (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "mp3" "ogg" "opus" "aac"))
+      (apply #'start-process "" nil "mpv" (dired-get-marked-files))
+      (dired-find-file))))
 ;; dont prompt ever time for recursion
 (setq dired-listing-switches "-alFh --group-directories-first"
       dired-recursive-copies 'always
@@ -1060,15 +1058,46 @@
       (if (string-prefix-p "/ssh:" default-directory)
         (consult-grep)
         (consult-ripgrep)))))
+;; TODO: this is a retarded way to do this, find 
+;; a way to make your own buffer source instead
+(defun jl/switch-to-buffer ()
+  "Use consult with perspective buffers, and also filter out dired buffers"
+  (interactive)
+  (defvar jl/filter-orig-func (plist-get persp-consult-source :items))
+  (plist-put persp-consult-source :items #'(lambda () 
+    (let ((candidates (funcall jl/filter-orig-func)))
+      (delq nil ; for some reason the returned list includes nil instead of just excluding the dired buffers
+        (mapcar #'(lambda (buf)
+                    (with-current-buffer buf
+                      (unless (derived-mode-p 'dired-mode) buf))) candidates)))))
+   (setq consult-buffer-sources '(persp-consult-source))
+   (consult-buffer))
+
+(defun jl/switch-to-dired ()
+  "Use consult with perspective buffers, and only show"
+  (interactive)
+  (defvar jl/filter-orig-func (plist-get persp-consult-source :items))
+  (plist-put persp-consult-source :items #'(lambda () 
+    (let ((candidates (funcall jl/filter-orig-func)))
+      (delq nil ; for some reason the returned list includes nil instead of just excluding the dired buffers
+        (mapcar #'(lambda (buf)
+                    (with-current-buffer buf
+                      (when (derived-mode-p 'dired-mode) buf))) candidates)))))
+   (setq consult-buffer-sources '(persp-consult-source))
+   (consult-buffer))
 
 (use-package consult
+  :demand t ; persp-consult-source needs to be loaded
   :general
     (leader
+      "b f" '(jl/switch-to-buffer :wk "Find a buffer, or create a new one")
+      "b d" '(jl/switch-to-dired :wk "Find a dired buffer, or create a new one")
       "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
       "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
       "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
       "f W" '(jl/consult-grep-in-dir :wk "Find word in specified dir/project"))
   :config
+    ;; Exclude dired buffers from the buffer list and use consult with perspective
     (setq consult-find-args "find . -not ( -path '*/.git*' -prune ) -not ( -path '*.git*' -prune )"))
 #+end_src
 ** Completion
@@ -1310,7 +1339,6 @@
     (persp-mode)
   :general
     (leader
-      "b f" '(persp-switch-to-buffer* :wk "Find a buffer, or create a new one")
       "b i" '(persp-ibuffer :wk "Buffer Menu (IBuffer)")
       "p f" '(persp-switch :wk "Find perspective, or create new one")
       "p h" '(persp-prev :wk "Previous perspective")
