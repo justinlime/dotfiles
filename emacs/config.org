@@ -177,13 +177,11 @@
 *** Littering
 **** Buffer Litter
 #+begin_src emacs-lisp
-;; Kill *Help* after :q'ing, and kill magit buffers when quitting them
-(advice-add #'evil-quit :after #'(lambda(&rest r)
+;; Kill *Help* after :q'ing
+(advice-add #'evil-quit :after #'(lambda (&rest r)
   (let ((buf (get-buffer "*Help*")))
     (if (eq buf nil) nil
-      (kill-buffer buf))
-    (dolist (b (magit-mode-get-buffers))
-        (kill-buffer b)))))
+      (kill-buffer buf)))))
 
 ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
@@ -548,7 +546,7 @@
   "Open path in the same buffer if a file, and a new one if a directory in dired"
   (interactive)
   (let ((file (dired-get-file-for-visit)))
-    (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "mp3" "ogg" "opus" "aac"))
+    (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "webm" "mp3" "ogg" "opus" "aac"))
       (apply #'start-process "" nil "mpv" (dired-get-marked-files))
       (dired-find-file))))
 ;; dont prompt ever time for recursion
@@ -576,7 +574,7 @@
     "s" #'dired-hide-details-mode
     "l" #'jl/dired-open
     "d" nil
-    "h" #'(lambda () (interactive) (find-alternate-file ".."))
+    "h" #'(lambda () (interactive) (find-file ".."))
     "A" #'dired-create-directory
     "a" nil
     "W" #'wdired-change-to-wdired-mode
@@ -1069,7 +1067,8 @@
       (delq nil ; for some reason the returned list includes nil instead of just excluding the dired buffers
         (mapcar #'(lambda (buf)
                     (with-current-buffer buf
-                      (unless (derived-mode-p 'dired-mode) buf))) candidates)))))
+                      (unless (or (derived-mode-p 'dired-mode)
+                                  (derived-mode-p 'magit-mode)) buf))) candidates)))))
    (setq consult-buffer-sources '(persp-consult-source))
    (consult-buffer))
 
@@ -1092,6 +1091,7 @@
     (leader
       "b f" '(jl/switch-to-buffer :wk "Find a buffer, or create a new one")
       "b d" '(jl/switch-to-dired :wk "Find a dired buffer, or create a new one")
+      "f b" '(consult-bookmark :wk "Find a bookmark")
       "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
       "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
       "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
