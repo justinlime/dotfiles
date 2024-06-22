@@ -8,8 +8,9 @@ with pkgs; [
   zip
   unzip
   bat
-  gnutar
+  duf
   btop
+  gnutar
   speedtest-cli
   neofetch
   tree
