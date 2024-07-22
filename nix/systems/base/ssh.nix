@@ -6,9 +6,33 @@
       22
     ];
   };
+  services.fail2ban = {
+    enable = true;
+    maxretry = 3;
+    bantime = "-1"; # Bans them forever, fuck off
+    ignoreIP = [
+      "192.168.0.0/16" 
+      "172.16.0.0/12"
+      "10.0.0.0/8"
+      "127.0.0.0/8"
+    ];
+    jails = {
+      sshd = {
+        settings = {
+          enabled = true; 
+          findtime = "1d"; # fails within 1 day
+          mode = "aggressive"; # includes keyfile attempts 
+          port = "ssh";
+          logpath = "%(sshd_log)s";
+          backend = "%(sshd_backend)s";
+        };
+      };
+    };
+  };
   services.openssh = {
     enable = true;
     settings = {
+      LogLevel = "VERBOSE";
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";

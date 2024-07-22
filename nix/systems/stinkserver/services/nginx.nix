@@ -52,7 +52,7 @@
         };
       };
       "downloads.stinkboys.com" = {
-        serverName = "downloads.stinkboys.com download.stinkboys.com";
+        serverName = "stinkboys.com downloads.stinkboys.com download.stinkboys.com";
         listen = [{
           port = 90;
           addr = "0.0.0.0";

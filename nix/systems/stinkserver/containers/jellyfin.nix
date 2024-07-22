@@ -8,7 +8,7 @@
   virtualisation.oci-containers.containers = {
     jellyfin = {
      autoStart = true; 
-     image = "lscr.io/linuxserver/jellyfin:latest";
+     image = "lscr.io/linuxserver/jellyfin:10.9.8";
      environment = {
        TZ = "America/Chicago";
        PUID = "1000";
@@ -22,7 +22,7 @@
        "/storage/pool/media/watch/tv:/tv"
        "/storage/pool/media/watch/anime:/anime"
     ];
-     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card0" ];
+     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
     };  
   };
   services.nginx = {
