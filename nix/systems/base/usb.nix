@@ -108,12 +108,18 @@
     '');
 in
 {
-  services.udev.extraRules = ''
-    KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
-    KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
-    KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
-    KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
-  '';
+  users.users.${username}.extraGroups = [ "kvm" "adbusers" ];
+  services.udev = {
+    packages = with pkgs; [
+      android-udev-rules
+    ];
+    extraRules = ''
+      KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
+      KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
+      KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
+      KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
+      '';
+  };
 
   systemd.services = {
    "automount-usbdrive@" = {
