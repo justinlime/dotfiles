@@ -543,12 +543,16 @@
 ** Dired
 #+begin_src emacs-lisp
 (defun jl/dired-open ()
-  "Open path in the same buffer if a file, and a new one if a directory in dired"
+  "Open a file, or play marked files with MPV depending on media extension"
   (interactive)
   (let ((file (dired-get-file-for-visit)))
     (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "webm" "mp3" "ogg" "opus" "aac"))
       (apply #'start-process "" nil "mpv" (dired-get-marked-files))
       (dired-find-file))))
+(defun jl/clear-marks (&rest r)
+  "Helper used as advice, for clearing marks and reverting the buffer"
+  (dired-unmark-all-marks)
+  (revert-buffer))
 ;; dont prompt ever time for recursion
 (setq dired-listing-switches "-alFh --group-directories-first"
       dired-recursive-copies 'always
@@ -565,9 +569,10 @@
   (dired-hide-details-mode)
   (display-line-numbers-mode -1)))
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
-(advice-add #'dired-do-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
-(advice-add #'dired-do-rename :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
-(advice-add #'dired-do-flagged-delete :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
+;; Clear all marked files upon action
+(advice-add #'dired-do-delete :after #'jl/clear-marks)
+(advice-add #'dired-do-rename :after #'jl/clear-marks)
+(advice-add #'dired-do-flagged-delete :after #'jl/clear-marks)
 (general-define-key
   :states 'normal
   :keymaps 'dired-mode-map
@@ -611,6 +616,7 @@
 *** Dired Ranger
 #+begin_src emacs-lisp
 (quelpa-use-package-activate-advice)
+;; blood wont merge my changes so im using my own fork
 (use-package dired-ranger
   :quelpa (dired-ranger :fetcher github :repo "justinlime/dired-hacks")
   :general 
@@ -623,11 +629,11 @@
        "L" #'dired-ranger-symlink-relative
        "H" #'dired-ranger-hardlink)
   :config
-    ;; remove marks after an action, and also revert buffer to fix broken icons/formatting after
-    ;; moving or pasting
-    (advice-add #'dired-ranger-copy :after #'(lambda(&rest r) (dired-unmark-all-marks)))
-    (advice-add #'dired-ranger-move :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
-    (advice-add #'dired-ranger-paste :after #'(lambda(&rest r) (dired-unmark-all-marks) (revert-buffer)))
+    ;; remove marks after an action, and also revert buffer to fix broken 
+    ;; icons/formatting after moving or pasting
+    (advice-add #'dired-ranger-copy :after #'(lambda (&rest r) (dired-unmark-all-marks)))
+    (advice-add #'dired-ranger-move :after #'jl/clear-marks)
+    (advice-add #'dired-ranger-paste :after #'jl/clear-marks)
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 (quelpa-use-package-deactivate-advice)
 #+end_src
@@ -639,12 +645,8 @@
     ;; force subtree to respect omit settings
     (add-hook 'dired-subtree-after-insert-hook #'(lambda ()
       (dired-omit-mode 1)))
-    (set-face-attribute 'dired-subtree-depth-1-face nil :background nil)
-    (set-face-attribute 'dired-subtree-depth-2-face nil :background nil)
-    (set-face-attribute 'dired-subtree-depth-3-face nil :background nil)
-    (set-face-attribute 'dired-subtree-depth-4-face nil :background nil)
-    (set-face-attribute 'dired-subtree-depth-5-face nil :background nil)
-    (set-face-attribute 'dired-subtree-depth-6-face nil :background nil))
+    (mapcar #'(lambda (depth) 
+                (set-face-attribute (read (format "dired-subtree-depth-%s-face" depth)) nil :background nil)) '(1 2 3 4 5 6)))
 #+end_src
 *** Dired Sidebar
 #+begin_src emacs-lisp
@@ -691,16 +693,16 @@
 #+begin_src emacs-lisp
 ;; Override the binary being used on startup
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '((java-ts-mode java-mode) . ("java-language-server")))
-  (add-to-list 'eglot-server-programs
-               '((nix-ts-mode nix-mode) . ("nixd"))))
+  (mapcar #'(lambda (server-prog)
+              (add-to-list 'eglot-server-programs server-prog))
+                '(((java-ts-mode java-mode) . ("java-language-server")) 
+                  ((nix-ts-mode nix-mode) . ("nixd")))))
 
 (add-hook 'find-file-hook #'(lambda()
     (unless (file-remote-p (buffer-file-name)) 
       (dolist (lang '(go-ts-mode python-ts-mode js-ts-mode
                       typescript-ts-mode rust-ts-mode elixir-ts-mode
-                      nix-ts-mode java-ts-mode c-ts-mode
+                      nix-ts-mode csharp-ts-mode java-ts-mode c-ts-mode
                       bash-ts-mode))
         (if (eq major-mode lang)
           (progn
@@ -1598,6 +1600,7 @@
 (setq treesit-language-source-alist
   '((nix "https://github.com/nix-community/tree-sitter-nix")
     (c "https://github.com/tree-sitter/tree-sitter-c")
+    (c-sharp "https://github.com/tree-sitter/tree-sitter-c-sharp")
     (python "https://github.com/tree-sitter/tree-sitter-python")
     (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
@@ -1615,35 +1618,6 @@
     (java "https://github.com/tree-sitter/tree-sitter-java")
     (bash "https://github.com/tree-sitter/tree-sitter-bash")))
 
-;; auto install any missing defined langs
-(dolist (lang treesit-language-source-alist)
-  (unless (treesit-language-available-p (car lang))
-    (treesit-install-language-grammar (car lang))))
-
-;; maps the ts modes to normal modes
-(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-(add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
-(add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
-(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-(add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
-(add-to-list 'major-mode-remap-alist '(java-mode . java-ts-mode))
-
-;; for modes that have an existing ts mode but no existing normal mode
-(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-
-;; If you need to override the names of the expected libraries, defualt emacs looks for libtree-sitter-${LANG_NAME}
-;; (setq treesit-load-name-override-list
-;;    '((cc "libtree-sitter-c")
-;;      (gomod "libtree-sitter-go")))
-
 ;; Org mode src blocks for treesitter
 (setq org-src-lang-modes 
   '(("go" . go-ts)
@@ -1660,6 +1634,37 @@
     ("ts" . typescript-ts)
     ("java" . java-ts)
     ("css" . css-ts)))
+
+;; auto install any missing defined langs
+(mapcar #'(lambda (lang) (unless (treesit-language-available-p (car lang))
+                      (treesit-install-language-grammar (car lang)))) treesit-language-source-alist)
+
+;; maps the ts modes to normal modes
+(mapcar #'(lambda (mode-remap) (add-to-list 'major-mode-remap-alist mode-remap))
+  '((c-mode . c-ts-mode)
+    (c++-mode . c++-ts-mode)
+    (csharp-mode . csharp-ts-mode)
+    (sh-mode . bash-ts-mode)
+    (css-mode . css-ts-mode)
+    (python-mode . python-ts-mode)
+    (javascript-mode . js-ts-mode)
+    (java-mode . java-ts-mode)))
+
+;; for modes that have an existing ts mode but no existing normal mode
+(mapcar #'(lambda (auto-mode) (add-to-list 'auto-mode-alist auto-mode))
+  '(("\\.go\\'" . go-ts-mode)
+    ("\\.rs\\'" . rust-ts-mode)
+    ("\\.toml\\'" . toml-ts-mode)
+    ("\\.yml\\'" . yaml-ts-mode)
+    ("\\.yaml\\'" . yaml-ts-mode)
+    ("\\.json\\'" . json-ts-mode)
+    ("\\.ts\\'" . typescript-ts-mode)
+    ("\\.tsx\\'" . tsx-ts-mode)))
+
+;; If you need to override the names of the expected libraries, defualt emacs looks for libtree-sitter-${LANG_NAME}
+;; (setq treesit-load-name-override-list
+;;    '((cc "libtree-sitter-c")
+;;      (gomod "libtree-sitter-go")))
 #+end_src
 
 

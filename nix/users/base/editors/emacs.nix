@@ -10,6 +10,7 @@
     ispell
     # Language Servers
 		lua-language-server 
+    csharp-ls
     elixir-ls
     nixd 
     samba
