@@ -645,8 +645,8 @@
     ;; force subtree to respect omit settings
     (add-hook 'dired-subtree-after-insert-hook #'(lambda ()
       (dired-omit-mode 1)))
-    (mapcar #'(lambda (depth) 
-                (set-face-attribute (read (format "dired-subtree-depth-%s-face" depth)) nil :background nil)) '(1 2 3 4 5 6)))
+    (dolist (depth '(1 2 3 4 5 6))
+      (set-face-attribute (read (format "dired-subtree-depth-%s-face" depth)) nil :background nil)))
 #+end_src
 *** Dired Sidebar
 #+begin_src emacs-lisp
@@ -693,20 +693,20 @@
 #+begin_src emacs-lisp
 ;; Override the binary being used on startup
 (with-eval-after-load 'eglot
-  (mapcar #'(lambda (server-prog)
-              (add-to-list 'eglot-server-programs server-prog))
-                '(((java-ts-mode java-mode) . ("java-language-server")) 
-                  ((nix-ts-mode nix-mode) . ("nixd")))))
-
+  (mapcar #'(lambda (server-remap)
+              (add-to-list 'eglot-server-programs server-remap))
+    '(((java-ts-mode java-mode) . ("java-language-server"))
+      ((nix-ts-mode nix-mode) . ("nixd")))))
+;; Enable modes for eglot
 (add-hook 'find-file-hook #'(lambda()
-    (unless (file-remote-p (buffer-file-name)) 
-      (dolist (lang '(go-ts-mode python-ts-mode js-ts-mode
-                      typescript-ts-mode rust-ts-mode elixir-ts-mode
-                      nix-ts-mode csharp-ts-mode java-ts-mode c-ts-mode
-                      bash-ts-mode))
-        (if (eq major-mode lang)
-          (progn
-            (eglot-ensure)))))))
+  (unless (file-remote-p (buffer-file-name)) 
+    (mapcar #'(lambda (eglot-enabled-mode)
+                (if (eq major-mode eglot-enabled-mode)
+                  (eglot-ensure)))
+      '(go-ts-mode python-ts-mode js-ts-mode
+        typescript-ts-mode rust-ts-mode elixir-ts-mode
+        nix-ts-mode csharp-ts-mode java-ts-mode c-ts-mode
+        bash-ts-mode)))))
 #+end_src
 ** Communication 
 *** ERC
@@ -757,7 +757,7 @@
   (general-define-key
     :states 'insert
     :keymaps 'term-raw-map
-      "TAB" #'(lambda() (interactive) (term-send-raw-string "\t")))
+      "TAB" #'(lambda () (interactive) (term-send-raw-string "\t")))
   (face-remap-set-base 'default :background "#11111B")
   (face-remap-set-base 'fringe :background "#11111B")
   (hl-line-mode 'toggle)
@@ -776,7 +776,8 @@
 
 (let ((langs 
         (mapcar #'(lambda (lang) `(,lang . t)) 
-          '(python lisp awk emacs-lisp eshell clojure calc C shell sed js ocaml scheme sql sqlite perl haskell css lua))))
+          '(python lisp awk emacs-lisp eshell clojure calc C 
+            shell sed js ocaml scheme sql sqlite perl haskell css lua))))
   (org-babel-do-load-languages 'org-babel-load-languages langs))
 
 (general-define-key
@@ -1066,7 +1067,7 @@
   (defvar jl/filter-orig-func (plist-get persp-consult-source :items))
   (plist-put persp-consult-source :items #'(lambda () 
     (let ((candidates (funcall jl/filter-orig-func)))
-      (delq nil ; for some reason the returned list includes nil instead of just excluding the dired buffers
+      (delq nil ; remove nils from the resulting list
         (mapcar #'(lambda (buf)
                     (with-current-buffer buf
                       (unless (or (derived-mode-p 'dired-mode)
@@ -1130,8 +1131,8 @@
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
 
     ;; Prevent evil from overriding corfu bindings
-    (advice-add #'corfu--setup :after #'(lambda(&rest r) (evil-normalize-keymaps)))
-    (advice-add #'corfu--teardown :after #'(lambda(&rest r) (evil-normalize-keymaps)))
+    (advice-add #'corfu--setup :after #'(lambda (&rest r) (evil-normalize-keymaps)))
+    (advice-add #'corfu--teardown :after #'(lambda (&rest r) (evil-normalize-keymaps)))
     (evil-make-overriding-map corfu-map)
 
     ;; Rice it up 
@@ -1275,33 +1276,6 @@
 ⠀⠀⠀⡟⡾⣿⢿⢿⢵⣽⣾⣼⣘⢸⢸⣞⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠁⠇⠡⠩⡫⢿⣝⡻⡮⣒⢽⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 "
-"
-⠀⠀⠀⠀⠀⠀⢀⣤⣤⡴⢾⠾⠛⠾⠛⠶⠟⠷⡿⠶⡶⢶⣄⣀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⣠⣶⠟⠁⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⣦⡀⠀⠀⠀⠀
-⠀⠀⢀⣴⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣆⠀⠀⠀
-⠀⠀⣼⠋⠀⠀⢀⣀⣠⡄⠤⣀⣤⣠⣀⣠⣠⢆⢤⡠⣄⣠⠀⠀⠀⠀⢻⡆⠀⠀
-⠀⢰⡏⠀⠀⡴⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠢⡀⠀⠀⢿⠀⠀
-⠀⢸⡇⠀⡜⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠘⡄⠀⢸⡀⠀
-⠀⢸⡇⢸⠀⠀⠀⠀⠀⠀⠀⠐⠉⠀⠀⠀⠈⠉⠀⠀⠀⠀⠀⠀⠀⠘⡄⢸⡇⠀
-⠀⢸⡇⢸⠀⠀⠀⠀⠀⠀⢀⠤⠐⠊⠉⠉⠒⠂⠤⠀⠀⠀⠀⠀⠀⠀⡇⢸⡇⠀
-⠀⢸⡇⢸⢠⣤⣤⣤⣤⣤⣤⣤⣤⡀⠀⠀⢠⡴⠶⠶⠶⠶⠶⠶⢶⡄⡇⢸⡇⠀
-⠀⣸⠇⣸⣾⠃⠀⢀⣀⣒⣰⠀⠸⣷⠾⠷⣾⡇⠀⣮⠕⢒⣄⠀⠘⡟⣷⣸⣧⡀
-⣼⢛⣾⡻⢸⠀⢠⠁⢴⡆⠈⡆⠀⡇⠀⠀⢸⡆⠸⡁⠰⡆⠀⣧⢰⡇⠷⢻⠊⣿
-⢿⠀⢳⠀⠸⣇⠀⠉⠒⠒⠉⠀⣸⠇⠀⠀⠸⣇⠀⠈⠑⠒⠉⠁⣸⠇⠀⡇⠀⡿
-⠸⣇⠘⢰⠀⠈⠛⠓⠒⠒⠒⠛⠉⠀⠀⠀⠀⡉⠛⠛⠛⠛⠛⠋⠁⠀⢣⠁⢸⠇
-⠀⢻⣆⡇⠀⠀⠀⠀⠀⠀⠀⣠⠊⠀⠀⠀⠀⠘⢆⠀⠀⠀⠀⠀⠀⠀⢸⣤⡟⠀
-⠀⠀⠸⣷⠀⠀⠀⠀⠀⢀⠐⢇⠚⠳⢄⣠⠔⠉⠡⠇⢄⠀⠀⠀⠀⡀⢸⡇⠀⠀
-⠀⠀⠀⣿⠀⠈⠒⠒⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠐⠂⠉⠀⣾⠃⠀⠀
-⠀⠀⠀⢻⡄⠀⠀⠀⠀⠀⡀⠀⢀⣀⣀⣀⣀⣀⣀⡀⡀⠀⠀⠀⠀⠀⣿⠀⠀⠀
-⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠈⠉⠠⣀⣀⣀⣀⡠⠄⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀
-⠀⠀⠀⢸⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀
-⠀⠀⠀⠀⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⠀⠀⠀
-⠀⠀⠀⠀⠘⣗⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠐⣿⠁⠀⠀⠀
-⠀⠀⠀⠀⠀⢿⠀⠀⠀⠀⠈⠑⠒⠤⠤⠤⠤⠤⠐⠊⠁⠀⠀⠀⢠⡏⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣸⡷⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠈⠙⠛⠶⠶⢤⣤⣤⣤⣤⣤⣤⣤⣤⠤⠶⠶⠛⠋⠁⠀⠀⠀⠀⠀
-"
     ))) (nth (random (length ops)) ops)))
 (defun jl/random-icon ()
   "Generate a random image for dashboard"
@@ -1321,7 +1295,7 @@
           dashboard-vertically-center-content t
           dashboard-center-content t
           dashboard-display-icons-p t
-          initial-buffer-choice (lambda() (get-buffer-create "*dashboard*")) 
+          initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")) 
           dashboard-banner-logo-title (jl/random-quote)
           dashboard-footer-messages `(,(jl/random-quote)))
     (if (display-graphic-p)
@@ -1519,7 +1493,7 @@
     ;; something keeps overriding the cursor color, so run it in a one-shot timer
     (add-hook 'post-command-hook #'(lambda ()
       (set-cursor-color (if (derived-mode-p 'dired-mode) "#89b4fa" "#cba6f7"))))
-    (set-face-attribute'line-number-current-line nil :foreground "#cba6f7")
+    (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")
     (set-face-attribute 'org-block nil :background "#181825") ; src blocks
     (set-face-attribute 'default nil :background "#1e1e2e") ; emacs background
     (set-face-attribute 'line-number-current-line nil :background "#1e1e2e") ; current line number
@@ -1636,8 +1610,9 @@
     ("css" . css-ts)))
 
 ;; auto install any missing defined langs
-(mapcar #'(lambda (lang) (unless (treesit-language-available-p (car lang))
-                      (treesit-install-language-grammar (car lang)))) treesit-language-source-alist)
+(dolist (lang treesit-language-source-alist)
+  (unless (treesit-language-available-p (car lang))
+    (treesit-install-language-grammar (car lang))))
 
 ;; maps the ts modes to normal modes
 (mapcar #'(lambda (mode-remap) (add-to-list 'major-mode-remap-alist mode-remap))
