@@ -50,6 +50,7 @@
     - [[#org-appear][Org Appear]]
     - [[#org-modern][Org Modern]]
     - [[#org-roam][Org Roam]]
+    - [[#org-roam-ui][Org Roam UI]]
     - [[#olivetti][Olivetti]]
   - [[#minibuffer][Minibuffer]]
     - [[#vertico][Vertico]]
@@ -417,7 +418,7 @@
   :hook (toggle-term-spawn . (lambda () (evil-insert 1)))
   :config
     (setq toggle-term-size 25)
-    (setq toggle-term-init-toggle '("emacs" . "term"))
+    (setq toggle-term-init-toggle '("term" . "term"))
     (setq toggle-term-use-persp t)
     (setq toggle-term-switch-upon-toggle t))
 #+end_src
@@ -427,8 +428,8 @@
   (persp-switch host)
   (let ((format-host (format formatter host host)))
     (find-file format-host))
-    (toggle-term-find host "term")
-    (mapcar #'(lambda (char) (execute-kbd-macro (char-to-string char))) (format "ssh %s" host))
+    (toggle-term-find "term" "term")
+    (mapc #'(lambda (char) (execute-kbd-macro (char-to-string char))) (format "ssh %s" host))
     (execute-kbd-macro (kbd "RET")))
 (defun jl/ssh-root (host)
   "SSH with sudo privledges using a host from .ssh/config"
@@ -490,7 +491,7 @@
     (if (member (file-name-extension file) '("mp4" "mkv" "mov" "flac" "webm" "mp3" "ogg" "opus" "aac"))
       (apply #'start-process "" nil "mpv" (dired-get-marked-files))
       (dired-find-file))))
-(defun jl/clear-marks (&rest r)
+(defun jl/clear-marks-advice (&rest r)
   "Helper used as advice, for clearing marks and reverting the buffer"
   (dired-unmark-all-marks)
   (revert-buffer))
@@ -511,9 +512,9 @@
   (display-line-numbers-mode -1)))
 (put 'dired-find-alternate-file 'disabled nil) ;Allow "dired-find-alternate-file to work without a prompt"
 ;; Clear all marked files upon action
-(advice-add #'dired-do-delete :after #'jl/clear-marks)
-(advice-add #'dired-do-rename :after #'jl/clear-marks)
-(advice-add #'dired-do-flagged-delete :after #'jl/clear-marks)
+(advice-add #'dired-do-delete :after #'jl/clear-marks-advice)
+(advice-add #'dired-do-rename :after #'jl/clear-marks-advice)
+(advice-add #'dired-do-flagged-delete :after #'jl/clear-marks-advice)
 (general-define-key
   :states 'normal
   :keymaps 'dired-mode-map
@@ -573,8 +574,8 @@
     ;; remove marks after an action, and also revert buffer to fix broken 
     ;; icons/formatting after moving or pasting
     (advice-add #'dired-ranger-copy :after #'(lambda (&rest r) (dired-unmark-all-marks)))
-    (advice-add #'dired-ranger-move :after #'jl/clear-marks)
-    (advice-add #'dired-ranger-paste :after #'jl/clear-marks)
+    (advice-add #'dired-ranger-move :after #'jl/clear-marks-advice)
+    (advice-add #'dired-ranger-paste :after #'jl/clear-marks-advice)
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 (quelpa-use-package-deactivate-advice)
 #+end_src
@@ -634,26 +635,23 @@
 #+begin_src emacs-lisp
 ;; Override the binary being used on startup
 (with-eval-after-load 'eglot
-  (mapcar #'(lambda (server-remap)
-              (add-to-list 'eglot-server-programs server-remap))
+  (mapc #'(lambda (server-remap) (add-to-list 'eglot-server-programs server-remap))
     '(((java-ts-mode java-mode) . ("java-language-server"))
       ((nix-ts-mode nix-mode) . ("nixd")))))
 ;; Enable modes for eglot
 (add-hook 'find-file-hook #'(lambda()
   (unless (file-remote-p (buffer-file-name)) 
-    (mapcar #'(lambda (eglot-enabled-mode)
-                (if (eq major-mode eglot-enabled-mode)
-                  (eglot-ensure)))
+    (when (member major-mode 
       '(go-ts-mode python-ts-mode js-ts-mode
         typescript-ts-mode rust-ts-mode elixir-ts-mode
-        nix-ts-mode csharp-ts-mode java-ts-mode c-ts-mode
-        bash-ts-mode)))))
+        nix-ts-mode csharp-ts-mode csharp-mode java-ts-mode c-ts-mode
+        bash-ts-mode)) (eglot-ensure)))))
 #+end_src
 ** Communication 
 *** ERC
 #+begin_src emacs-lisp
 (leader 
-  "m i" '((lambda () (interactive) (persp-switch "irc") (erc-tls)) :wk "IRC with erc-tls"))
+  "m i" '((lambda () (interactive) (persp-switch "irc") (switch-to-buffer (erc-tls))) :wk "IRC with erc-tls"))
 
 (setq erc-prompt (lambda () (concat (buffer-name) " > " ))
       erc-fill-column 120
@@ -715,10 +713,9 @@
       org-hide-emphasis-markers t
       org-pretty-entities t)
 
-(let ((langs 
-        (mapcar #'(lambda (lang) `(,lang . t)) 
-          '(python lisp awk emacs-lisp eshell clojure calc C 
-            shell sed js ocaml scheme sql sqlite perl haskell css lua))))
+(let ((langs (mapcar #'(lambda (lang) `(,lang . t)) 
+        '(python lisp awk emacs-lisp eshell clojure calc C 
+          shell sed js ocaml scheme sql sqlite perl haskell css lua))))
   (org-babel-do-load-languages 'org-babel-load-languages langs))
 
 (general-define-key
@@ -895,6 +892,16 @@
           org-roam-directory (file-truename "~/sync/notes/roam"))
     (org-roam-db-autosync-mode 1)
     (require 'org-roam-protocol))
+#+end_src
+*** Org Roam UI
+#+begin_src emacs-lisp
+(use-package org-roam-ui
+  :general
+    (leader
+      "r u" '(org-roam-ui-open :wk "Open the roam UI"))
+  :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-open-on-start nil))
 #+end_src
 *** Olivetti
 #+begin_src emacs-lisp
@@ -1185,21 +1192,21 @@
   (interactive)
   (let ((ops '(
 "
-    ⠀⠀⠀⠀⠀⡰⢂⣾⠿⠛⠒⠚⠛⠃⠺⢶⡀⠀⠀⠀⠀⠀⠀⠀⠀
-    ⠀⠀⠀⠀⢠⡣⠋⠁⠀⠀⠀⠀⠀⢀⡐⠒⢙⣄⠀⠀⠀⠀⠀⠀⠀
-    ⠀⠀⠀⠀⡘⠀⠀⠀⠀⠀⠀⢄⠉⠀⠐⠀⠀⠙⢦⠀⠀⠀⠀⠀⠀
-    ⠀⠀⠀⣾⠁⠀⠀⠄⠂⢈⣠⠎⠀⠀⣸⣿⡿⠓⢬⡇⠀⠀⠀⠀⠀
-    ⠀⠀⢸⡟⠀⠔⣁⣤⣶⣿⠋⢰⠀⠀⣿⡟⠻⣦⠀⢳⠀⠀⠀⠀⠀
-    ⠀⠀⣷⡇⢠⣾⢟⢭⣭⡭⡄⠀⡆⠀⣿⣷⣶⠺⡆⢸⡄⠀⠀⠀⠀
-    ⠀⠀⠇⡇⠛⠡⣑⣈⣛⠝⢁⡀⠇⠀⣿⡿⠛⠒⣡⠇⣧⣀⠀⠀⠀
-    ⠀⠀⢠⠁⠈⠐⠤⠄⠀⣠⢸⠈⠢⠀⣿⡇⠀⠀⠠⠚⣿⣿⠀⠀⠀
-    ⡄⠀⢾⠀⡆⠠⣴⠞⠯⡀⠈⠙⠲⣶⣿⡇⠑⣦⡄⠀⣿⣿⠀⠀⠀
-    ⠈⠺⡮⠀⢡⠀⠀⠀⠀⠀⠁⠐⠒⠒⠛⠃⠈⠛⠇⠀⡏⡏⠀⠀⠀
-    ⠀⢰⠁⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⢷⠀⠀⠀
-    ⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠃⠀⢸⠀⠀⠀
-    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⠀
-    ⠀⠀⢣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠸⡳⡀⠀
-    ⠀⠀⠀⠑⢄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣯⣼⡇⠑⣄
+⠀⠀⠀⠀⠀⡰⢂⣾⠿⠛⠒⠚⠛⠃⠺⢶⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢠⡣⠋⠁⠀⠀⠀⠀⠀⢀⡐⠒⢙⣄⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⡘⠀⠀⠀⠀⠀⠀⢄⠉⠀⠐⠀⠀⠙⢦⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣾⠁⠀⠀⠄⠂⢈⣠⠎⠀⠀⣸⣿⡿⠓⢬⡇⠀⠀⠀⠀⠀
+⠀⠀⢸⡟⠀⠔⣁⣤⣶⣿⠋⢰⠀⠀⣿⡟⠻⣦⠀⢳⠀⠀⠀⠀⠀
+⠀⠀⣷⡇⢠⣾⢟⢭⣭⡭⡄⠀⡆⠀⣿⣷⣶⠺⡆⢸⡄⠀⠀⠀⠀
+⠀⠀⠇⡇⠛⠡⣑⣈⣛⠝⢁⡀⠇⠀⣿⡿⠛⠒⣡⠇⣧⣀⠀⠀⠀
+⠀⠀⢠⠁⠈⠐⠤⠄⠀⣠⢸⠈⠢⠀⣿⡇⠀⠀⠠⠚⣿⣿⠀⠀⠀
+⡄⠀⢾⠀⡆⠠⣴⠞⠯⡀⠈⠙⠲⣶⣿⡇⠑⣦⡄⠀⣿⣿⠀⠀⠀
+⠈⠺⡮⠀⢡⠀⠀⠀⠀⠀⠁⠐⠒⠒⠛⠃⠈⠛⠇⠀⡏⡏⠀⠀⠀
+⠀⢰⠁⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⢷⠀⠀⠀
+⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠃⠀⢸⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡄⠀⠀
+⠀⠀⢣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠸⡳⡀⠀
+⠀⠀⠀⠑⢄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣯⣼⡇⠑⣄
 "
 "
 ⠀⣞⢽⢪⢣⢣⢣⢫⡺⡵⣝⡮⣗⢷⢽⢽⢽⣮⡷⡽⣜⣜⢮⢺⣜⢷⢽⢝⡽⣝
@@ -1555,10 +1562,10 @@
     (treesit-install-language-grammar (car lang))))
 
 ;; maps the ts modes to normal modes
-(mapcar #'(lambda (mode-remap) (add-to-list 'major-mode-remap-alist mode-remap))
+(mapc #'(lambda (mode-remap) (add-to-list 'major-mode-remap-alist mode-remap))
   '((c-mode . c-ts-mode)
     (c++-mode . c++-ts-mode)
-    (csharp-mode . csharp-ts-mode)
+    ;; (csharp-mode . csharp-ts-mode) ;; csharp-ts-mode is broken for me, idk why
     (sh-mode . bash-ts-mode)
     (css-mode . css-ts-mode)
     (python-mode . python-ts-mode)
@@ -1566,7 +1573,7 @@
     (java-mode . java-ts-mode)))
 
 ;; for modes that have an existing ts mode but no existing normal mode
-(mapcar #'(lambda (auto-mode) (add-to-list 'auto-mode-alist auto-mode))
+(mapc #'(lambda (auto-mode) (add-to-list 'auto-mode-alist auto-mode))
   '(("\\.go\\'" . go-ts-mode)
     ("\\.rs\\'" . rust-ts-mode)
     ("\\.toml\\'" . toml-ts-mode)

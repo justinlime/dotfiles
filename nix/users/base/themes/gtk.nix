@@ -20,8 +20,8 @@
             package = pkgs.numix-cursor-theme;
         };
         theme = {
-            name = "Catppuccin-Mocha-Standard-Blue-Dark";
-            package = pkgs.catppuccin-gtk.override { variant="mocha"; };
+            name = "Catppuccin-GTK-Purple-Dark";
+            package = pkgs.magnetic-catppuccin-gtk.override { accent = [ "purple" ]; };
         };
         gtk3.extraConfig = {
             Settings = ''

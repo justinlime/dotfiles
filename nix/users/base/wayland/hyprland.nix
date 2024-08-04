@@ -101,7 +101,7 @@ pkgs,
         force_split = 2;
       };
       master = {
-        new_is_master = true;
+        new_status = "slave";
       };
       gestures = {
         workspace_swipe = false;
