@@ -853,10 +853,10 @@
 (use-package org-appear
   :hook (org-mode . org-appear-mode)
   :config
-  (setq org-hide-emphasis-markers t		;; A default setting that needs to be t for org-appear
-        org-appear-autoemphasis t		;; Enable org-appear on emphasis (bold, italics, etc)
-        org-appear-autolinks nil		;; Don't enable on links
-        org-appear-autosubmarkers t))	;; Enable on subscript and superscript
+    (setq org-hide-emphasis-markers t		;; A default setting that needs to be t for org-appear
+          org-appear-autoemphasis t		;; Enable org-appear on emphasis (bold, italics, etc)
+          org-appear-autolinks nil		;; Don't enable on links
+          org-appear-autosubmarkers t))	;; Enable on subscript and superscript
 #+end_src
 *** Org Modern
 #+begin_src emacs-lisp
@@ -909,8 +909,8 @@
 (general-define-key
   :states '(normal emacs)
   :keymaps 'minibuffer-local-map
-  "ESC" #'keyboard-escape-quit
-  "<escape>" #'keyboard-escape-quit)
+    "ESC" #'keyboard-escape-quit
+    "<escape>" #'keyboard-escape-quit)
 #+end_src
 *** Vertico
 #+begin_src emacs-lisp
@@ -1135,6 +1135,7 @@
 *** Magit
 #+begin_src emacs-lisp
 (use-package magit 
+  :hook (magit-post-stage . (lambda () (message "Staged")))
   :general
     (leader
       "g s" '(magit-stage-file :wk "Stage Files")
@@ -1152,10 +1153,7 @@
       "g R" '(magit-reset :wk "Reset")
       "g p" '(magit-push :wk "Push")
       "g P" '(magit-pull :wk "Pull")
-      "g m" '(magit :wk "Magit Menu"))
-  :config
-    (add-hook 'magit-post-stage-hook #'(lambda ()
-      (message "Staged"))))
+      "g m" '(magit :wk "Magit Menu")))
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
