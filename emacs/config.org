@@ -1068,6 +1068,7 @@
           corfu-preselect 'prompt
           corfu-auto-delay 0.05
           corfu-auto-prefix 2
+          global-corfu-minibuffer nil
           corfu-popupinfo-delay 0)
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
 
