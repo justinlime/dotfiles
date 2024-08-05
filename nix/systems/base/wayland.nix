@@ -1,6 +1,7 @@
 { lib, pkgs, inputs, ... }:
 {
   # Services needed for my desktop environment
+  security.rtkit.enable = true; 
   services = {
     xserver = {
       enable = true; 
