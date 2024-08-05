@@ -99,6 +99,7 @@
       - [[#nerd-icons-corfu][Nerd Icons Corfu]]
       - [[#nerd-icons-completion][Nerd Icons Completion]]
       - [[#nerd-icons-ibuffer][Nerd Icons Ibuffer]]
+    - [[#additional-touches][Additional touches]]
     - [[#highlight-todo][Highlight TODO]]
     - [[#rainbow-mode][Rainbow Mode]]
     - [[#rainbow-delimiters][Rainbow Delimiters]]
@@ -1438,12 +1439,6 @@
 (use-package doom-themes
   :config
     ;; something keeps overriding the cursor color, so run it in a one-shot timer
-    (add-hook 'post-command-hook #'(lambda ()
-      (set-cursor-color (if (derived-mode-p 'dired-mode) "#89b4fa" "#cba6f7"))))
-    (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")
-    (set-face-attribute 'org-block nil :background "#181825") ; src blocks
-    (set-face-attribute 'default nil :background "#1e1e2e") ; emacs background
-    (set-face-attribute 'line-number-current-line nil :background "#1e1e2e") ; current line number
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
           doom-themes-enable-italic t) ; if nil, italics is universally disabled
     (load-theme 'doom-vibrant t)
@@ -1458,8 +1453,6 @@
   :config
     (doom-modeline-mode 1)
     (display-battery-mode 1)
-    (set-face-attribute 'mode-line nil :background "#11111B")
-    (set-face-attribute 'mode-line-inactive nil :background "#11111B")
     (display-time-mode))
 #+end_src
 *** Nerd Icons
@@ -1490,6 +1483,22 @@
 (advice-add 'persp-ibuffer :after #'(lambda (&rest r) (nerd-icons-ibuffer-mode 1)))
 (use-package nerd-icons-ibuffer :defer t)
 #+end_src
+*** Additional touches
+#+begin_src emacs-lisp
+(let ((bg "#181825"))
+  (add-hook 'post-command-hook #'(lambda ()
+    (set-cursor-color (if (derived-mode-p 'dired-mode) "#89b4fa" "#cba6f7"))))
+  (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")
+  (set-face-attribute 'org-block nil :background "#1e1e2e") ; src blocks
+  (set-face-attribute 'default nil :background bg) ; emacs background
+  (set-face-attribute 'org-hide nil :foreground bg) ; asterisks preceding org headings
+  (set-face-attribute 'fringe nil :background bg) ; fringes/borders on the sides
+  (set-face-attribute 'org-block-begin-line nil :background bg) ; the #+begin_src and #+end_src bits
+  (set-face-attribute 'line-number nil :background bg) ; line number background
+  (set-face-attribute 'line-number-current-line nil :background bg) ; current line number
+  (set-face-attribute 'mode-line nil :background "#11111B") ; mode line background
+  (set-face-attribute 'mode-line-inactive nil :background "#11111B")) ; mode line background on inactive buffers
+#+end_src
 *** Highlight TODO
 #+begin_src emacs-lisp
 (use-package hl-todo
@@ -1497,9 +1506,9 @@
   :config
     (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
-          ("FIXME"  . "#FF0000")
+          ("FIXME"  . "#f9e2af")
           ("DEBUG"  . "#A020F0")
-          ("GOTCHA" . "#FF4500")
+          ("GOTCHA" . "#a6e3a1")
           ("STUB"   . "#1E90FF"))))
 #+end_src
 *** Rainbow Mode
