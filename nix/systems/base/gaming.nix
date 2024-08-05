@@ -47,7 +47,7 @@
     };
   };
   hardware = {
-    opengl.enable = true; 
+    graphics.enable = true; 
   };
   environment = {
     systemPackages = with pkgs; [

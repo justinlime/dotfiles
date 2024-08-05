@@ -20,10 +20,11 @@ with pkgs; [
   pciutils
   websocat
   lm_sensors
-  inputs.maxfetch.packages.${pkgs.system}.default
+  maxfetch
   veracrypt
   roboto
   git-crypt
   ffmpeg-full
+  podman-tui
   (nerdfonts.override { fonts = [ "RobotoMono" ]; })
 ]

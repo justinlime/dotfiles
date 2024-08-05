@@ -20,26 +20,6 @@
         "type": "github"
       }
     },
-    "maxfetch": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1690770330,
-        "narHash": "sha256-LzOhrFFjGs9GIDjk1lUFKhlnzJuEUrKjBcv1eT3kaY8=",
-        "owner": "jobcmax",
-        "repo": "maxfetch",
-        "rev": "17baa4047073e20572403b70703c69696af6b68d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jobcmax",
-        "repo": "maxfetch",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1722630782,
@@ -111,7 +91,6 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "maxfetch": "maxfetch",
         "nixpkgs": "nixpkgs",
         "nixpkgsJustinLime": "nixpkgsJustinLime",
         "nixpkgsStable": "nixpkgsStable",
