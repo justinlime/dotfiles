@@ -71,7 +71,6 @@
   - [[#misc-1][Misc]]
     - [[#dashboard][Dashboard]]
     - [[#perspective][Perspective]]
-    - [[#highlight-indent][Highlight Indent]]
     - [[#undo-tree][Undo Tree]]
     - [[#direnv][Direnv]]
     - [[#sideline][Sideline]]
@@ -716,7 +715,7 @@
       org-pretty-entities t)
 
 (let ((langs (mapcar #'(lambda (lang) `(,lang . t)) 
-        '(python lisp awk emacs-lisp eshell clojure calc D C C++ ruby
+        '(python lisp awk emacs-lisp eshell clojure calc C ruby
           shell sed js ocaml scheme sql sqlite perl haskell css lua java))))
   (org-babel-do-load-languages 'org-babel-load-languages langs))
 
@@ -1298,16 +1297,6 @@
                    (sort persps (lambda (a b)
                      (time-less-p (persp-created-time a)
                        (persp-created-time b))))))))))
-#+end_src
-*** Highlight Indent
-#+begin_src emacs-lisp
-(use-package highlight-indent-guides 
-  :hook (prog-mode . highlight-indent-guides-mode)
-  :config 
-    (add-hook 'highlight-indent-guides-mode-hook #'(lambda ()
-      (set-face-foreground 'highlight-indent-guides-top-character-face "#cba6f7")
-      (setq highlight-indent-guides-responsive 'top
-            highlight-indent-guides-method 'character))))
 #+end_src
 *** Undo Tree
 #+begin_src emacs-lisp
