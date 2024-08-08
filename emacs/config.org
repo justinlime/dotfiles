@@ -175,6 +175,7 @@
 ;;  :quelpa (abc-mode :fetcher github :repo "mkjunker/abc-mode"))
 ;; (use-package chan :quelpa (:fetcher))
 #+end_src
+
 ** Preferences 
 *** Littering
 **** Buffer Litter
@@ -715,8 +716,8 @@
       org-pretty-entities t)
 
 (let ((langs (mapcar #'(lambda (lang) `(,lang . t)) 
-        '(python lisp awk emacs-lisp eshell clojure calc C 
-          shell sed js ocaml scheme sql sqlite perl haskell css lua))))
+        '(python lisp awk emacs-lisp eshell clojure calc D C C++ ruby
+          shell sed js ocaml scheme sql sqlite perl haskell css lua java))))
   (org-babel-do-load-languages 'org-babel-load-languages langs))
 
 (general-define-key
@@ -1541,7 +1542,7 @@
     ("json" . json-ts)
     ("bash" . bash-ts)
     ("rust" . rust-ts)
-    ("c" . c-ts)
+    ("C" . c-ts)
     ("nix" . nix-ts)
     ("python" . python-ts)
     ("js" . js-ts)
