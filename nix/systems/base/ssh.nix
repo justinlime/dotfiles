@@ -1,11 +1,5 @@
-{ username, ... }:
+{ username, hush, ... }:
 {
-  # Enable SSH on the machine, and open the necessary ports
-  networking.firewall = {
-    allowedTCPPorts = [
-      22
-    ];
-  };
   services.fail2ban = {
     enable = true;
     maxretry = 3;
@@ -15,7 +9,7 @@
       "172.16.0.0/12"
       "10.0.0.0/8"
       "127.0.0.0/8"
-    ];
+    ] ++ hush.ssh.fail2ban.ignoreIPs;
     jails = {
       sshd = {
         settings = {
@@ -31,6 +25,7 @@
   };
   services.openssh = {
     enable = true;
+    openFirewall = true;
     settings = {
       LogLevel = "VERBOSE";
       PasswordAuthentication = false;

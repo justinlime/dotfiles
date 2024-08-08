@@ -10,5 +10,7 @@
     ./ssh.nix
     ./gaming.nix
     ./smart.nix
+    ./avahi.nix
+    ./xrdp.nix
   ];
 }

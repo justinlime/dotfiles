@@ -11,6 +11,7 @@
     ../base/usb.nix
     ../base/avahi.nix
     ../base/smart.nix
+    ../base/xrdp.nix
   ];
 
   networking = {
@@ -21,11 +22,9 @@
       allowedUDPPorts = [ 1313 ];
    };
   };
-  services.avahi.hostName = "stink";
   users.users.${username}.openssh.authorizedKeys.keys = [
     "${hush.ssh.public-keys.stinkserver}" 
   ];
-
   environment.systemPackages = with pkgs; [
     mergerfs
     snapraid
@@ -35,3 +34,4 @@
     # inputs.pipecord.packages.${pkgs.system}.default
   ];
 }
+ 
