@@ -213,13 +213,14 @@
 *** Scrolling
 #+begin_src emacs-lisp 
 (setq-default pixel-scroll-precision-mode t
-      mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; one line at a time
-      mouse-wheel-progressive-speed nil ; don't accelerate scrolling
-      mouse-wheel-follow-mouse t ; scroll window under mouse
-      mouse-wheel-tilt-scroll t
-      scroll-margin 7
-      scroll-preserve-screen-position t
-      scroll-conservatively 101)
+              fast-but-imprecise-scrolling t
+              mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; one line at a time
+              mouse-wheel-progressive-speed nil ; don't accelerate scrolling
+              mouse-wheel-follow-mouse t ; scroll window under mouse
+              mouse-wheel-tilt-scroll t
+              scroll-margin 7
+              scroll-preserve-screen-position t
+              scroll-conservatively 101)
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
@@ -254,14 +255,20 @@
 #+end_src
 *** Misc
 #+begin_src emacs-lisp
-;; Enable mouse in term-mode
+;; emacs -nw settings
 (unless (display-graphic-p)
-  (xterm-mouse-mode 1)
+  ;; Disable $ on truncated lines
+  (set-display-table-slot standard-display-table 'truncation 32)
+  (xterm-mouse-mode 1) ; Enable mouse in term-mode
   ;; let terminal emacs use system clipboard
   ;; check out the xclip package if this doesn't work
   (setq xterm-extra-capabilities '(getSelection setSelection)))
 (setq blink-cursor-mode nil ; Exactly what is sounds like
       use-short-answers t ; Set y or n instead of yes or no for questions
+      comment-empty-lines t ; Comment empty lines in selecetd region too
+      initial-scratch-message ";; The system plays us everyday
+
+"
       display-line-numbers-type 'relative ; Realive line numbers
       frame-resize-pixelwise t) ; Better frame resizing
 (setq-default tab-width 2 ; self explanitory
@@ -388,7 +395,7 @@
           key-chord-one-key-delay 1.2
           key-chord-safety-interval-forward 0.1
           key-chord-safety-interval-backward 1)
-    (key-chord-define evil-insert-state-map  "nn" 'evil-normal-state)
+    ;; (key-chord-define evil-insert-state-map  "nn" 'evil-normal-state)
     (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
 *** Which Key
@@ -958,20 +965,24 @@
 #+end_src
 *** Affe
 #+begin_src emacs-lisp
-(use-package affe :defer t)
+(use-package affe 
+  :defer t 
+  :config 
+    (setq affe-find-command "rg --color=never --files --hidden --glob=!.git/")
+    (setq affe-grep-command "rg --null --color=never --max-columns=1000 --no-heading --glob=!.git --line-number -v ^$"))
 #+end_src
 *** Consult
 #+begin_src emacs-lisp
-(defun jl/consult-find-in-dir ()
+(defun jl/find-in-dir (&optional directory)
   "Find a file in a specific directory
    
   Uses Affe if working with local files, and Consult for remote files"
   (interactive)
-  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
+  (let ((dir (or directory (file-name-directory (read-file-name "Find in directory: ")))))
     (if (string-prefix-p "/ssh:" default-directory)
       (consult-find dir)
       (affe-find dir))))
-(defun jl/consult-find-in-current ()
+(defun jl/find-in-current ()
   "Find a file in the project's directory
 
   Sets the root of the search to the folders' .git parent path if present
@@ -987,17 +998,17 @@
         (affe-find dir)
         (affe-find)))))
 
-(defun jl/consult-grep-in-dir ()
+(defun jl/grep-in-dir (&optional directory)
   "Find a word in a specified project/folder
 
   Uses Ripgrep if working with local files, and Grep for remote files"
   (interactive)
-  (let ((dir (file-name-directory (read-file-name "Find in directory: "))))
+  (let ((dir (or directory (file-name-directory (read-file-name "Find in directory: ")))))
     (if (string-prefix-p "/ssh:" default-directory)
       (consult-grep dir)
       (consult-ripgrep dir))))
 
-(defun jl/consult-grep-in-current ()
+(defun jl/grep-in-current ()
   "Find a word in the current project/folder
 
   Sets the root of the search to the folders' .git parent path if present
@@ -1048,10 +1059,12 @@
       "b f" '(jl/switch-to-buffer :wk "Find a buffer, or create a new one")
       "b d" '(jl/switch-to-dired :wk "Find a dired buffer, or create a new one")
       "f b" '(consult-bookmark :wk "Find a bookmark")
-      "f r" '(jl/consult-find-in-current :wk "Find file in current dir/project")
-      "f R" '(jl/consult-find-in-dir :wk "Find file in specified dir/project")
-      "f w" '(jl/consult-grep-in-current :wk "Find word in current dir/project")
-      "f W" '(jl/consult-grep-in-dir :wk "Find word in specified dir/project"))
+      "f r" '(jl/find-in-current :wk "Find file in current dir/project")
+      "f R" '(jl/find-in-dir :wk "Find file in specified dir/project")
+      "f h" '((lambda () (interactive) (jl/find-in-dir "~")) :wk "Find file in $HOME")
+      "f H" '((lambda () (interactive) (jl/find-in-dir "/")) :wk "Find file in /")
+      "f w" '(jl/grep-in-current :wk "Find word in current dir/project")
+      "f W" '(jl/grep-in-dir :wk "Find word in specified dir/project"))
   :config
     ;; Exclude dired buffers from the buffer list and use consult with perspective
     (setq consult-find-args "find . -not ( -path '*/.git*' -prune ) -not ( -path '*.git*' -prune )"))
@@ -1590,6 +1603,7 @@
   (set-face-attribute 'line-number-current-line nil :background bg) ; current line number
   (set-face-attribute 'mode-line nil :background "#11111B") ; mode line background
   (set-face-attribute 'mode-line-inactive nil :background "#11111B")) ; mode line background on inactive buffers
+  (set-face-attribute 'vertical-border nil :background "#181825" :foreground "#11111B")
 #+end_src
 
 
