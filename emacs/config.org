@@ -890,7 +890,11 @@
   :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))
-          org-roam-directory (file-truename "~/sync/notes/roam"))
+          org-roam-directory (file-truename "~/sync/notes/roam")
+          org-roam-capture-templates  
+            '(("d" "default" plain "%?" :target
+              (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+OPTIONS: f:nil toc:nil\n#+EXPORT_SELECT_TAGS: noexport\n#+title: ${title}")
+              :unnarrowed t)))
     (org-roam-db-autosync-mode 1)
     (require 'org-roam-protocol))
 #+end_src
