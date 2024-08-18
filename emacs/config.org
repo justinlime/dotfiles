@@ -317,8 +317,7 @@
       "h c" '(describe-char :wk "Help character")
       "h k" '(describe-key :wk "Help key/keybind"))
     (leader
-      "c r" '(comment-region :wk "Comment selection")
-      "c l" '(comment-line :wk "Comment line"))
+      "c r" '(comment-or-uncomment-region :wk "Comment selection"))
     (leader
       "f f" '(find-file :wk "Find File"))
     (leader
