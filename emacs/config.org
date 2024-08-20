@@ -220,36 +220,38 @@
               mouse-wheel-tilt-scroll t
               scroll-margin 7
               scroll-preserve-screen-position t
-              scroll-conservatively 101)
+              scroll-conservatively 10)
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
-(let ((size (if jl/is-wsl 180 120)))
+(setq jl/font-size (if jl/is-wsl 160 120))
+(let ((mono "FiraCodeNerdFont")
+      (variable "Roboto"))
   (set-face-attribute 'default nil
-    :font "RobotoMono Nerd Font"
-    :height size
+    :font mono
+    :height jl/font-size
     :weight 'medium)
   (set-face-attribute 'variable-pitch nil
-    :font "Roboto"
-    :height size
+    :font variable
+    :height jl/font-size
     :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
-    :font "RobotoMono Nerd Font"
-    :height size
+    :font mono
+    :height jl/font-size 
     :weight 'medium)
   (set-face-attribute 'italic nil 
-    :font "RobotoMono Nerd Font"
+    :font mono
     :slant 'italic
-    :height size) 
+    :height jl/font-size) 
   (set-face-attribute 'bold nil 
-    :font "RobotoMono Nerd Font"
+    :font mono
     :weight 'ultra-bold
-    :height size) 
+    :height jl/font-size) 
   (set-face-attribute 'bold-italic nil 
-    :font "RobotoMono Nerd Font"
+    :font mono
     :weight 'ultra-bold
     :slant 'italic
-    :height size))
+    :height jl/font-size))
 (setq-default line-spacing 0.10)
 (set-language-environment "UTF-8")
 #+end_src
@@ -513,6 +515,7 @@
               cursor-type nil
               evil-force-cursor t
               auto-revert-verbose nil)
+  (face-remap-add-relative 'default `(:height ,(+ jl/font-size 20)))
   (dired-omit-mode)
   (auto-revert-mode)
   (dired-hide-details-mode)
@@ -550,7 +553,7 @@
 (use-package diredfl 
   :hook (dired-mode . diredfl-mode)
   :config
-    (set-face-attribute 'diredfl-dir-heading nil :height 140 :foreground "#cba6f7"))
+    (set-face-attribute 'diredfl-dir-heading nil :height (+ jl/font-size 40) :foreground "#cba6f7"))
 #+end_src
 *** Dired Filter
 #+begin_src emacs-lisp
@@ -734,6 +737,7 @@
   "P" #'jl/org-grim-slurp)
 
 (add-hook 'org-mode-hook #'(lambda ()
+  (face-remap-add-relative 'default `(:height ,(+ jl/font-size 20)))
   (org-indent-mode)
   (display-line-numbers-mode -1)
   (setq-local electric-indent-mode nil)))

@@ -28,7 +28,7 @@
     nodePackages_latest.yaml-language-server
     # Fonts
     roboto
-    (nerdfonts.override { fonts = [ "RobotoMono" ]; })
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
   xdg.configFile = {
     "emacs/early-init.el".source = "${inputs.self}/emacs/early-init.el";
