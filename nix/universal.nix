@@ -26,5 +26,5 @@ with pkgs; [
   git-crypt
   ffmpeg-full
   podman-tui
-  (nerdfonts.override { fonts = [ "RobotoMono" ]; })
+  (nerdfonts.override { fonts = [ "FiraCode" ]; })
 ]

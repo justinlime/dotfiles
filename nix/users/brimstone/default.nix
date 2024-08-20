@@ -2,7 +2,7 @@
 let 
   # Variables to share accross configs
   custom = {
-    font = "RobotoMono Nerd Font";
+    font = "FiraCodeNerdFont";
     fontsize = "12";
     primary_accent = "cba6f7";
     secondary_accent= "89b4fa";

@@ -225,10 +225,10 @@
 *** Fonts
 #+begin_src emacs-lisp
 (setq jl/font-size (if jl/is-wsl 160 120))
-(let ((mono "FiraCodeNerdFont")
-      (variable "Roboto"))
+(setq jl/mono-font "FiraCodeNerdFont")
+(let ((variable "Roboto"))
   (set-face-attribute 'default nil
-    :font mono
+    :font jl/mono-font
     :height jl/font-size
     :weight 'medium)
   (set-face-attribute 'variable-pitch nil
@@ -236,19 +236,19 @@
     :height jl/font-size
     :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
-    :font mono
+    :font jl/mono-font
     :height jl/font-size 
     :weight 'medium)
   (set-face-attribute 'italic nil 
-    :font mono
+    :font jl/mono-font
     :slant 'italic
     :height jl/font-size) 
   (set-face-attribute 'bold nil 
-    :font mono
+    :font jl/mono-font
     :weight 'ultra-bold
     :height jl/font-size) 
   (set-face-attribute 'bold-italic nil 
-    :font mono
+    :font jl/mono-font
     :weight 'ultra-bold
     :slant 'italic
     :height jl/font-size))
@@ -737,7 +737,7 @@
   "P" #'jl/org-grim-slurp)
 
 (add-hook 'org-mode-hook #'(lambda ()
-  (face-remap-add-relative 'default `(:height ,(+ jl/font-size 20)))
+  (face-remap-add-relative 'default `(:height ,(+ jl/font-size 10)))
   (org-indent-mode)
   (display-line-numbers-mode -1)
   (setq-local electric-indent-mode nil)))
@@ -923,7 +923,7 @@
 (use-package olivetti
   :hook ((org-mode org-agenda-mode) . olivetti-mode)
   :config
-    (setq-default olivetti-body-width 0.80)
+    (setq-default olivetti-body-width 0.70)
     (remove-hook 'olivetti-mode-on-hook 'visual-line-mode))
 #+end_src
 ** Minibuffer
@@ -1256,6 +1256,7 @@
           (expand-file-name file icons-dir)))
 
 (use-package dashboard
+  :hook (dashboard-mode . (lambda () (face-remap-add-relative 'default `(:height ,(+ jl/font-size 20)))))
   :config
     (setq default-directory "~/"
           dashboard-icon-type 'nerd-icons
@@ -1469,7 +1470,7 @@
 #+begin_src emacs-lisp
 (use-package nerd-icons
   :config
-    (setq nerd-icons-font-family "RobotoMono Nerd Font"))
+    (setq nerd-icons-font-family jl/mono-font))
 #+end_src
 **** Nerd Icons Dired
 #+begin_src emacs-lisp
