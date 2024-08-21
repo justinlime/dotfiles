@@ -226,6 +226,14 @@
 #+begin_src emacs-lisp
 (setq jl/font-size (if jl/is-wsl 160 120))
 (setq jl/mono-font "FiraCodeNerdFont")
+(defun jl/set-local-font (font-size)
+  "Function to be added in a hook, to set the font size for specific modes"
+  (face-remap-add-relative 'default `(:height ,font-size))
+  (face-remap-add-relative 'variable-pitch `(:height ,font-size))
+  (face-remap-add-relative 'fixed-pitch `(:height ,font-size))
+  (face-remap-add-relative 'italic `(:height ,font-size))
+  (face-remap-add-relative 'bold `(:height ,font-size))
+  (face-remap-add-relative 'bold-italic `(:height ,font-size)))
 (let ((variable "Roboto"))
   (set-face-attribute 'default nil
     :font jl/mono-font
@@ -319,7 +327,8 @@
       "h c" '(describe-char :wk "Help character")
       "h k" '(describe-key :wk "Help key/keybind"))
     (leader
-      "c r" '(comment-or-uncomment-region :wk "Comment selection"))
+      "c r" '(comment-or-uncomment-region :wk "Comment selection")
+      "c l" '(comment-line :wk "Comment selection"))
     (leader
       "f f" '(find-file :wk "Find File"))
     (leader
@@ -515,7 +524,7 @@
               cursor-type nil
               evil-force-cursor t
               auto-revert-verbose nil)
-  (face-remap-add-relative 'default `(:height ,(+ jl/font-size 20)))
+  (jl/set-local-font (+ jl/font-size 10))
   (dired-omit-mode)
   (auto-revert-mode)
   (dired-hide-details-mode)
@@ -553,7 +562,7 @@
 (use-package diredfl 
   :hook (dired-mode . diredfl-mode)
   :config
-    (set-face-attribute 'diredfl-dir-heading nil :height (+ jl/font-size 40) :foreground "#cba6f7"))
+    (set-face-attribute 'diredfl-dir-heading nil :height (+ jl/font-size 20) :foreground "#cba6f7"))
 #+end_src
 *** Dired Filter
 #+begin_src emacs-lisp
@@ -737,7 +746,7 @@
   "P" #'jl/org-grim-slurp)
 
 (add-hook 'org-mode-hook #'(lambda ()
-  (face-remap-add-relative 'default `(:height ,(+ jl/font-size 10)))
+  (jl/set-local-font (+ jl/font-size 10))
   (org-indent-mode)
   (display-line-numbers-mode -1)
   (setq-local electric-indent-mode nil)))
@@ -1249,14 +1258,12 @@
   "Generate a random image for dashboard"
   (interactive)
   (let* ((icons-dir (expand-file-name "icons/" user-emacs-directory))
-        (ops (directory-files icons-dir))
-        (ops (delete "." ops))
-        (ops (delete ".." ops))
+        (ops (delete "." (delete ".." (directory-files icons-dir))))
         (file (nth (random (length ops)) ops)))
           (expand-file-name file icons-dir)))
 
 (use-package dashboard
-  :hook (dashboard-mode . (lambda () (face-remap-add-relative 'default `(:height ,(+ jl/font-size 20)))))
+  :hook (dashboard-mode . (lambda () (jl/set-local-font (+ jl/font-size 10))))
   :config
     (setq default-directory "~/"
           dashboard-icon-type 'nerd-icons
@@ -1378,6 +1385,10 @@
 (use-package sudo-edit :defer t)
 #+end_src
 ** Programming Modes
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook (lambda ()
+  (jl/set-local-font (- jl/font-size 10))))
+#+end_src
 *** Python Mode
 #+begin_src emacs-lisp
 (add-hook 'python-ts-mode-hook #'(lambda()
