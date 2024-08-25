@@ -303,7 +303,8 @@
 (use-package meow 
   :config
     (defun jl/meow-setup ()
-      (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+      (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty
+            meow-use-cursor-position-hack t)
       (meow-motion-overwrite-define-key
        '("j" . meow-next)
        '("k" . meow-prev)
@@ -343,11 +344,10 @@
        '("[" . meow-beginning-of-thing)
        '("]" . meow-end-of-thing)
        '("a" . meow-append)
-       '("A" . meow-open-below)
        '("b" . meow-back-word)
        '("B" . meow-back-symbol)
-       '("c" . meow-change)
-       '("d" . meow-delete)
+       '("s" . meow-change)
+       '("x" . meow-delete)
        '("D" . meow-backward-delete)
        '("e" . meow-next-word)
        '("E" . meow-next-symbol)
@@ -357,7 +357,6 @@
        '("h" . meow-left)
        '("H" . meow-left-expand)
        '("i" . meow-insert)
-       '("I" . meow-open-above)
        '("j" . meow-next)
        '("J" . meow-next-expand)
        '("k" . meow-prev)
@@ -366,8 +365,10 @@
        '("L" . meow-right-expand)
        '("m" . meow-join)
        '("n" . meow-search)
-       '("o" . meow-block)
-       '("O" . meow-to-block)
+       ;; '("o" . meow-block)
+       '("o" . meow-open-below)
+       '("O" . meow-open-above)
+       ;; '("O" . meow-to-block)
        '("p" . meow-yank)
        '("q" . meow-quit)
        '("Q" . meow-goto-line)
@@ -1603,9 +1604,9 @@
 (add-hook 'post-command-hook #'(lambda ()
   (set-cursor-color (if (derived-mode-p 'dired-mode) jl/acc-1 jl/acc-0))))
 (set-face-attribute 'line-number-current-line nil :foreground jl/acc-0)
-(set-face-attribute 'org-block nil :background jl/bg-2) ; src blocks
-(set-face-attribute 'org-block-begin-line nil :background jl/bg-2) ; #+begin_src
-(set-face-attribute 'org-block-end-line nil :background jl/bg-2) ; #+end_src
+(set-face-attribute 'org-block nil :background jl/bg-0) ; src blocks
+(set-face-attribute 'org-block-begin-line nil :background jl/bg-0) ; #+begin_src
+(set-face-attribute 'org-block-end-line nil :background jl/bg-0) ; #+end_src
 (set-face-attribute 'mode-line nil :background jl/bg-0) ; mode line background
 (set-face-attribute 'mode-line-inactive nil :background jl/bg-0) ; mode line background on inactive buffers
 (set-face-attribute 'default nil :background jl/bg-1) ; emacs background
