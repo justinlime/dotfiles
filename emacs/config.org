@@ -22,11 +22,7 @@
     - [[#misc][Misc]]
 - [[#configurations][Configurations]]
   - [[#keybinds][Keybinds]]
-    - [[#generalel][General.el]]
-    - [[#evil][Evil]]
-      - [[#evil-mode][Evil Mode]]
-      - [[#evil-collection][Evil Collection]]
-      - [[#evil-org-agenda][Evil Org Agenda]]
+    - [[#meow][Meow]]
     - [[#keychord][Keychord]]
     - [[#which-key][Which Key]]
   - [[#toggle-term][Toggle Term]]
@@ -114,6 +110,7 @@
     (makunbound 'file-name-handler-alist-original)))
 ;; Revert again just in case if out of focus (doesnt work for terminal emacs)
 ;; and use the chance to collect garbage
+
 (add-hook 'focus-out-hook #'(lambda ()
   (setq gc-cons-threshold (* 1024 1024 16) ; 16mb
         gc-cons-percentage 0.1)
@@ -181,10 +178,10 @@
 **** Buffer Litter
 #+begin_src emacs-lisp
 ;; Kill *Help* after :q'ing
-(advice-add #'evil-quit :after #'(lambda (&rest r)
-  (let ((buf (get-buffer "*Help*")))
-    (if (eq buf nil) nil
-      (kill-buffer buf)))))
+;; (advice-add #'evil-quit :after #'(lambda (&rest r)
+;;   (let ((buf (get-buffer "*Help*")))
+;;     (if (eq buf nil) nil
+;;       (kill-buffer buf)))))
 
 ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
@@ -301,120 +298,106 @@
 #+end_src
 * Configurations
 ** Keybinds
-*** General.el
+*** Meow
 #+begin_src emacs-lisp
-(use-package general
+(use-package meow 
   :config
-    (general-define-key 
-      :keymaps 'indent-rigidly-map
-        "TAB" #'indent-rigidly-right-to-tab-stop
-        "<tab>" #'indent-rigidly-right-to-tab-stop
-        "DEL" #'indent-rigidly-left-to-tab-stop
-        "<backtab>" #'indent-rigidly-left-to-tab-stop
-        "h" #'indent-rigidly-left
-        "l" #'indent-rigidly-right)
-    ;; set up 'SPC' as the global leader key
-    (general-create-definer leader
-      :states '(normal insert visual emacs motion)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "M-SPC") ;; access leader in insert mode
-    (leader
-      "b k" '(kill-this-buffer :wk "Kill this buffer")
-      "b r" '(revert-buffer :wk "Reload this buffer"))
-    (leader
-      "e" '(:ignore t :wk "Evaluate")    
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e e" '(eval-expression :wk "Evaluate and elisp expression")
-      "e r" '(eval-region :wk "Evaluate selected elisp")) 
-    (leader
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Help function")
-      "h v" '(describe-variable :wk "Help variable")
-      "h m" '(describe-mode :wk "Help mode")
-      "h c" '(describe-char :wk "Help character")
-      "h k" '(describe-key :wk "Help key/keybind"))
-    (leader
-      "c r" '(comment-or-uncomment-region :wk "Comment selection")
-      "c l" '(comment-line :wk "Comment selection"))
-    (leader
-      "f f" '(find-file :wk "Find File"))
-    (leader
-      "i r" '(indent-rigidly :wk "Indent Rigidly")))
-#+end_src
-*** Evil
-**** Evil Mode
-#+begin_src emacs-lisp
-(use-package evil
-  :general
-    (leader
-      "w" '(:ignore t :wk "Window Navigation")
-      "w h" '(evil-window-left :wk "Move left to window")
-      "w <left>" '(evil-window-left :wk "Move left to window")
-      "w j" '(evil-window-down :wk "Move down to window")
-      "w <down>" '(evil-window-down :wk "Move down to window")
-      "w k" '(evil-window-up :wk "Move up to window")
-      "w <up>" '(evil-window-up :wk "Move up to window")
-      "w l" '(evil-window-right :wk "Move right to window")
-      "w <right>" '(evil-window-right :wk "Move right to window")
-      "w s" '(evil-window-split :wk "Split window horizontally")
-      "w v" '(evil-window-vsplit :wk "Split window vertically"))
-    (:states 'insert
-      "<tab>" #'tab-to-tab-stop
-      "TAB" #'tab-to-tab-stop)
-    (:states '(normal insert visual emacs)
-      "C-u" #'evil-scroll-up
-      "C-d" #'evil-scroll-down)
-    (:states '(normal emacs)
-      "J" #'shrink-window
-      "K" #'enlarge-window
-      "H" #'shrink-window-horizontally
-      "L" #'enlarge-window-horizontally
-      "u" #'undo-tree-undo
-      "R" #'undo-tree-redo)
-  :init      
-    (setq evil-want-integration t 
-          evil-want-keybinding nil
-          evil-vsplit-window-right t
-          evil-split-window-below t
-          evil-shift-width 4)
-    (evil-mode)
-  :config
-    ;; These hooks may not work if TERM isnt xterm/xterm256
-    ;; Let cursor change based on mode when using emacs in the terminal
-    (unless (display-graphic-p)
-      (add-hook 'post-command-hook #'(lambda ()
-        (setq visible-cursor nil) 
-        (if (eq evil-state 'insert)
-          (send-string-to-terminal "\e[5 q")
-          (send-string-to-terminal "\e[2 q"))))))
-#+end_src
-**** Evil Collection
-#+begin_src emacs-lisp
-(use-package evil-collection
-  :after evil
-  :config
-    (setq evil-collection-mode-list '(magit ement term minibuffer help dashboard dired ibuffer tetris))
-    (evil-collection-init))
-#+end_src
-**** Evil Org Agenda
-#+begin_src emacs-lisp
-(use-package evil-org
-  :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
+    (defun jl/meow-setup ()
+      (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+      (meow-motion-overwrite-define-key
+       '("j" . meow-next)
+       '("k" . meow-prev)
+       '("<escape>" . ignore))
+      (meow-leader-define-key
+       ;; SPC j/k will run the original command in MOTION state.
+       '("j" . "H-j")
+       '("k" . "H-k")
+       ;; Use SPC (0-9) for digit arguments.
+       '("1" . meow-digit-argument)
+       '("2" . meow-digit-argument)
+       '("3" . meow-digit-argument)
+       '("4" . meow-digit-argument)
+       '("5" . meow-digit-argument)
+       '("6" . meow-digit-argument)
+       '("7" . meow-digit-argument)
+       '("8" . meow-digit-argument)
+       '("9" . meow-digit-argument)
+       '("0" . meow-digit-argument)
+       '("/" . meow-keypad-describe-key)
+       '("?" . meow-cheatsheet))
+      (meow-normal-define-key
+       '("0" . meow-expand-0)
+       '("9" . meow-expand-9)
+       '("8" . meow-expand-8)
+       '("7" . meow-expand-7)
+       '("6" . meow-expand-6)
+       '("5" . meow-expand-5)
+       '("4" . meow-expand-4)
+       '("3" . meow-expand-3)
+       '("2" . meow-expand-2)
+       '("1" . meow-expand-1)
+       '("-" . negative-argument)
+       '(";" . meow-reverse)
+       '("," . meow-inner-of-thing)
+       '("." . meow-bounds-of-thing)
+       '("[" . meow-beginning-of-thing)
+       '("]" . meow-end-of-thing)
+       '("a" . meow-append)
+       '("A" . meow-open-below)
+       '("b" . meow-back-word)
+       '("B" . meow-back-symbol)
+       '("c" . meow-change)
+       '("d" . meow-delete)
+       '("D" . meow-backward-delete)
+       '("e" . meow-next-word)
+       '("E" . meow-next-symbol)
+       '("f" . meow-find)
+       '("g" . meow-cancel-selection)
+       '("G" . meow-grab)
+       '("h" . meow-left)
+       '("H" . meow-left-expand)
+       '("i" . meow-insert)
+       '("I" . meow-open-above)
+       '("j" . meow-next)
+       '("J" . meow-next-expand)
+       '("k" . meow-prev)
+       '("K" . meow-prev-expand)
+       '("l" . meow-right)
+       '("L" . meow-right-expand)
+       '("m" . meow-join)
+       '("n" . meow-search)
+       '("o" . meow-block)
+       '("O" . meow-to-block)
+       '("p" . meow-yank)
+       '("q" . meow-quit)
+       '("Q" . meow-goto-line)
+       '("r" . meow-replace)
+       '("R" . meow-swap-grab)
+       '("s" . meow-kill)
+       '("t" . meow-till)
+       '("u" . meow-undo)
+       '("U" . meow-undo-in-selection)
+       '("v" . meow-visit)
+       '("w" . meow-mark-word)
+       '("W" . meow-mark-symbol)
+       '("x" . meow-line)
+       '("X" . meow-goto-line)
+       '("y" . meow-save)
+       '("Y" . meow-sync-grab)
+       '("z" . meow-pop-selection)
+       '("'" . repeat)
+       '("<escape>" . ignore)))
+    (jl/meow-setup)
+    (meow-global-mode 1))
 #+end_src
 *** Keychord
 #+begin_src emacs-lisp
 (use-package key-chord
-  :hook (evil-insert-state-entry . key-chord-mode)
   :config
-    (setq key-chord-two-keys-delay 1
-          key-chord-one-key-delay 1.2
-          key-chord-safety-interval-forward 0.1
-          key-chord-safety-interval-backward 1)
-    ;; (key-chord-define evil-insert-state-map  "nn" 'evil-normal-state)
-    (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
+    (key-chord-mode 1)
+    (setq key-chord-two-keys-delay 0.5
+          key-chord-one-key-delay 0.5)
+    (key-chord-define meow-insert-state-keymap  "jj" 'meow-insert-exit))
 #+end_src 
 *** Which Key
 #+begin_src emacs-lisp 
@@ -437,11 +420,11 @@
 ** Toggle Term
 #+begin_src emacs-lisp
 (use-package toggle-term
-  :general
-    (leader
-      "t t" '(toggle-term-toggle :wk "Toggle the active toggle-term")
-      "t f" '(toggle-term-find :wk "Find a toggle-term, or create a new one"))
-  :hook (toggle-term-spawn . (lambda () (evil-insert 1)))
+  ;; :general
+  ;;   (leader
+  ;;     "t t" '(toggle-term-toggle :wk "Toggle the active toggle-term")
+  ;;     "t f" '(toggle-term-find :wk "Find a toggle-term, or create a new one"))
+  :hook (toggle-term-spawn . (lambda () (meow-insert)))
   :config
     (setq toggle-term-size 25)
     (setq toggle-term-init-toggle '("term" . "term"))
@@ -468,10 +451,10 @@
 (defun jl/samba (host)
   (interactive "sEnter user@ip: ")
   (find-file (format "/smb:%s:" host)))
-(leader
-  "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
-  "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
-  "s m" '(jl/samba :wk "Access an SMB share"))
+;; (leader
+;;   "s u" '(jl/ssh-user :wk "SSH as user, using the ssh config file")
+;;   "s r" '(jl/ssh-root :wk "SSH as user with root privledges, using the ssh config file")
+;;   "s m" '(jl/samba :wk "Access an SMB share"))
 
 ;; Prevent tramp from trying to save to auth-info
 ;; It stores passwords in plain text (WTF...)
@@ -531,7 +514,7 @@
   (face-remap-add-relative 'hl-line
                 `(:foreground ,jl/bg-0 :background ,jl/acc-1 :extend t))
   (setq-local cursor-type nil
-              evil-force-cursor t
+              ;; evil-force-cursor t
               auto-revert-verbose nil)
   (jl/set-local-font (+ jl/font-size 10))
   (dired-omit-mode)
@@ -543,26 +526,26 @@
 (advice-add #'dired-do-delete :after #'jl/clear-marks-advice)
 (advice-add #'dired-do-rename :after #'jl/clear-marks-advice)
 (advice-add #'dired-do-flagged-delete :after #'jl/clear-marks-advice)
-(general-define-key
-  :states 'normal
-  :keymaps 'dired-mode-map
-    "s" #'dired-hide-details-mode
-    "l" #'jl/dired-open
-    "d" nil
-    "h" #'(lambda () (interactive) (find-file ".."))
-    "A" #'dired-create-directory
-    "a" nil
-    "W" #'wdired-change-to-wdired-mode
-    "RET" #'jl/dired-open)
+;; (general-define-key
+;;   :states 'normal
+;;   :keymaps 'dired-mode-map
+;;     "s" #'dired-hide-details-mode
+;;     "l" #'jl/dired-open
+;;     "d" nil
+;;     "h" #'(lambda () (interactive) (find-file ".."))
+;;     "A" #'dired-create-directory
+;;     "a" nil
+;;     "W" #'wdired-change-to-wdired-mode
+;;     "RET" #'jl/dired-open)
 #+end_src
 *** wDired
 #+begin_src emacs-lisp
 (setq wdired-allow-to-change-permissions t)
-(general-define-key
-  :states 'normal
-  :keymaps 'wdired-mode-map
-    "W" #'wdired-finish-edit
-    "<escape>" #'wdired-exit)
+;; (general-define-key
+;;   :states 'normal
+;;   :keymaps 'wdired-mode-map
+;;     "W" #'wdired-finish-edit
+;;     "<escape>" #'wdired-exit)
 ; fix icons looking weird after exiting 
 (advice-add #'wdired-exit :after #'(lambda (&rest r) (revert-buffer)))
 #+end_src
@@ -576,10 +559,10 @@
 *** Dired Filter
 #+begin_src emacs-lisp
 (use-package dired-filter
-  :general (:keymaps 'dired-mode-map 
-            :states 'normal
-              "/" #'dired-filter-by-name
-              ";" #'dired-filter-pop-all)
+  ;; :general (:keymaps 'dired-mode-map 
+  ;;           :states 'normal
+  ;;             "/" #'dired-filter-by-name
+  ;;             ";" #'dired-filter-pop-all)
   :config
   (setq dired-filter-revert 'always))
 #+end_src
@@ -589,15 +572,15 @@
 ;; blood wont merge my changes so im using my own fork
 (use-package dired-ranger
   :quelpa (dired-ranger :fetcher github :repo "justinlime/dired-hacks")
-  :general 
-    (:keymaps 'dired-mode-map 
-     :states '(normal emacs motion)
-       "y" #'dired-ranger-copy
-       "P" #'dired-ranger-paste
-       "M" #'dired-ranger-move
-       "S" #'dired-ranger-symlink
-       "L" #'dired-ranger-symlink-relative
-       "H" #'dired-ranger-hardlink)
+  ;; :general 
+  ;;   (:keymaps 'dired-mode-map 
+  ;;    :states '(normal emacs motion)
+  ;;      "y" #'dired-ranger-copy
+  ;;      "P" #'dired-ranger-paste
+  ;;      "M" #'dired-ranger-move
+  ;;      "S" #'dired-ranger-symlink
+  ;;      "L" #'dired-ranger-symlink-relative
+  ;;      "H" #'dired-ranger-hardlink)
   :config
     ;; remove marks after an action, and also revert buffer to fix broken 
     ;; icons/formatting after moving or pasting
@@ -621,15 +604,15 @@
 *** Dired Sidebar
 #+begin_src emacs-lisp
 (use-package dired-sidebar
-  :general
-    (leader "d t" '(dired-sidebar-toggle-sidebar :wk "Toggle sidebar directory"))
+  ;; :general
+  ;;   (leader "d t" '(dired-sidebar-toggle-sidebar :wk "Toggle sidebar directory"))
   :config
   (add-hook 'dired-sidebar-mode-hook #'(lambda ()
-    (general-define-key
-      :keymaps 'local
-      :states 'normal
-        "l" #'dired-sidebar-find-file
-        "h" #'(lambda () (interactive) (dired-sidebar-find-file "../")))
+    ;; (general-define-key
+    ;;   :keymaps 'local
+    ;;   :states 'normal
+    ;;     "l" #'dired-sidebar-find-file
+    ;;     "h" #'(lambda () (interactive) (dired-sidebar-find-file "../")))
     (face-remap-set-base 'default :background "#181825")
     (display-line-numbers-mode -1)))
 
@@ -652,8 +635,8 @@
               (if (and (derived-mode-p 'dired-mode)
                        (not dired-hide-details-mode)
                        (not (derived-mode-p 'wdired-mode))
-                       (not (file-remote-p default-directory))
-                       (eq evil-state 'normal))
+                       (not (file-remote-p default-directory)))
+                       ;; (eq evil-state 'normal))
                   (progn
                     (dired-revert)
                     (hl-line-mode)
@@ -678,8 +661,8 @@
 ** Communication 
 *** ERC
 #+begin_src emacs-lisp
-(leader 
-  "m i" '((lambda () (interactive) (persp-switch "irc") (switch-to-buffer (erc-tls))) :wk "IRC with erc-tls"))
+;; (leader 
+;;   "m i" '((lambda () (interactive) (persp-switch "irc") (switch-to-buffer (erc-tls))) :wk "IRC with erc-tls"))
 
 (setq erc-prompt (lambda () (concat (buffer-name) " > " ))
       erc-fill-column 120
@@ -711,20 +694,20 @@
 ;; connect with @<username>:host.org
 (use-package ement
   :hook (ement-room-mode . (lambda () (display-line-numbers-mode -1)))
-  :general
-    (leader 
-      "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect)) :wk "Matrix with ement"))
-    (:keymaps 'ement-room-minibuffer-map :states 'insert "RET" #'newline)
+  ;; :general
+  ;;   (leader 
+  ;;     "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect)) :wk "Matrix with ement"))
+    ;; (:keymaps 'ement-room-minibuffer-map :states 'insert "RET" #'newline)
   :config
     (setq ement-notify-dbus-p nil))
 #+end_src
 ** Term
 #+begin_src  emacs-lisp
 (add-hook 'term-mode-hook #'(lambda()
-  (general-define-key
-    :states 'insert
-    :keymaps 'term-raw-map
-      "TAB" #'(lambda () (interactive) (term-send-raw-string "\t")))
+  ;; (general-define-key
+  ;;   :states 'insert
+  ;;   :keymaps 'term-raw-map
+  ;;     "TAB" #'(lambda () (interactive) (term-send-raw-string "\t")))
   (face-remap-set-base 'default :background jl/bg-0)
   (face-remap-set-base 'fringe :background jl/bg-0)
   (defface term-background
@@ -745,13 +728,13 @@
           shell sed js ocaml scheme sql sqlite perl haskell css lua java))))
   (org-babel-do-load-languages 'org-babel-load-languages langs))
 
-(general-define-key
-  :states 'normal 
-  :keymaps 'org-mode-map
-  "RET" #'org-open-at-point
-  "<tab>" #'org-cycle
-  "TAB" #'org-cycle
-  "P" #'jl/org-grim-slurp)
+;; (general-define-key
+;;   :states 'normal 
+;;   :keymaps 'org-mode-map
+;;   "RET" #'org-open-at-point
+;;   "<tab>" #'org-cycle
+;;   "TAB" #'org-cycle
+;;   "P" #'jl/org-grim-slurp)
 
 (add-hook 'org-mode-hook #'(lambda ()
   (jl/set-local-font (+ jl/font-size 10))
@@ -852,16 +835,16 @@
 
 (set-face-attribute 'org-agenda-date-today nil :foreground "#89b4fa")
 
-(leader
-  "a" '(:ignore t :wk "Org Agenda")
-  "a a" '(org-agenda :wk "Display the org agenda view")
-  "a t" '(org-time-stamp :wk "Insert a timestamp")
-  "a p" '(org-priority :wk "Set the priority for a tag")
-  "a e" '((lambda () (interactive) (find-file (concat jl/org-agenda-dir "/agenda.org"))) :wk "Edit the org agenda file"))
-(general-define-key 
-  :keymaps 'calendar-mode-map
-  :states '(normal insert motion emacs)
-  "RET" #'org-calendar-select)
+;; (leader
+;;   "a" '(:ignore t :wk "Org Agenda")
+;;   "a a" '(org-agenda :wk "Display the org agenda view")
+;;   "a t" '(org-time-stamp :wk "Insert a timestamp")
+;;   "a p" '(org-priority :wk "Set the priority for a tag")
+;;   "a e" '((lambda () (interactive) (find-file (concat jl/org-agenda-dir "/agenda.org"))) :wk "Edit the org agenda file"))
+;; (general-define-key 
+;;   :keymaps 'calendar-mode-map
+;;   :states '(normal insert motion emacs)
+;;   "RET" #'org-calendar-select)
 #+end_src
 *** Org Toc
 #+begin_src emacs-lisp
@@ -907,13 +890,13 @@
 *** Org Roam
 #+begin_src emacs-lisp
 (use-package org-roam
-  :general
-    (leader
-      "r" '(:ignore t :wk "Org Roam")
-      "r f" '(org-roam-node-find :wk "Find org roam file")
-      "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
-      "r c" '(org-capture-finalize :wk "Capture the roam buffer")
-      "r i" '(org-roam-node-insert :wk "Insert node link"))
+  ;; :general
+  ;;   (leader
+  ;;     "r" '(:ignore t :wk "Org Roam")
+  ;;     "r f" '(org-roam-node-find :wk "Find org roam file")
+  ;;     "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
+  ;;     "r c" '(org-capture-finalize :wk "Capture the roam buffer")
+  ;;     "r i" '(org-roam-node-insert :wk "Insert node link"))
   :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))
@@ -928,9 +911,9 @@
 *** Org Roam UI
 #+begin_src emacs-lisp
 (use-package org-roam-ui
-  :general
-    (leader
-      "r u" '(org-roam-ui-open :wk "Open the roam UI"))
+  ;; :general
+  ;;   (leader
+  ;;     "r u" '(org-roam-ui-open :wk "Open the roam UI"))
   :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-open-on-start nil))
@@ -946,26 +929,26 @@
 #+end_src
 ** Minibuffer
 #+begin_src emacs-lisp
-(general-define-key
-  :states '(normal emacs)
-  :keymaps 'minibuffer-local-map
-    "ESC" #'keyboard-escape-quit
-    "<escape>" #'keyboard-escape-quit)
+;; (general-define-key
+;;   :states '(normal emacs)
+;;   :keymaps 'minibuffer-local-map
+;;     "ESC" #'keyboard-escape-quit
+;;     "<escape>" #'keyboard-escape-quit)
 #+end_src
 *** Vertico
 #+begin_src emacs-lisp
 (use-package vertico
   :init
-    (vertico-mode)
-  :general
-    (:keymaps 'vertico-map
-     :states '(normal insert)
-      "RET" #'vertico-directory-enter
-      "<tab>" #'vertico-next
-      "TAB" #'vertico-next
-      "<backspace>" #'vertico-directory-delete-char
-      "DEL" #'vertico-directory-delete-char
-      "<backtab>" #'vertico-previous))
+    (vertico-mode))
+  ;; :general
+  ;;   (:keymaps 'vertico-map
+  ;;    :states '(normal insert)
+  ;;     "RET" #'vertico-directory-enter
+  ;;     "<tab>" #'vertico-next
+  ;;     "TAB" #'vertico-next
+  ;;     "<backspace>" #'vertico-directory-delete-char
+  ;;     "DEL" #'vertico-directory-delete-char
+  ;;     "<backtab>" #'vertico-previous))
 #+end_src
 *** Marginalia
 #+begin_src emacs-lisp
@@ -979,10 +962,10 @@
 *** Zoxide
 #+begin_src emacs-lisp
 (use-package zoxide
-  :hook (dired-mode . zoxide-add)
-  :general
-    (leader
-      "f d" '(zoxide-travel :wk "Find directory with Zoxide")))
+  :hook (dired-mode . zoxide-add))
+  ;; :general
+  ;;   (leader
+  ;;     "f d" '(zoxide-travel :wk "Find directory with Zoxide")))
 #+end_src
 *** Affe
 #+begin_src emacs-lisp
@@ -1075,17 +1058,17 @@
 
 (use-package consult
   :demand t ; persp-consult-source needs to be loaded
-  :general
-    (leader
-      "b f" '(jl/switch-to-buffer :wk "Find a buffer, or create a new one")
-      "b d" '(jl/switch-to-dired :wk "Find a dired buffer, or create a new one")
-      "f b" '(consult-bookmark :wk "Find a bookmark")
-      "f r" '(jl/find-in-current :wk "Find file in current dir/project")
-      "f R" '(jl/find-in-dir :wk "Find file in specified dir/project")
-      "f h" '((lambda () (interactive) (jl/find-in-dir "~")) :wk "Find file in $HOME")
-      "f H" '((lambda () (interactive) (jl/find-in-dir "/")) :wk "Find file in /")
-      "f w" '(jl/grep-in-current :wk "Find word in current dir/project")
-      "f W" '(jl/grep-in-dir :wk "Find word in specified dir/project"))
+  ;; :general
+  ;;   (leader
+  ;;     "b f" '(jl/switch-to-buffer :wk "Find a buffer, or create a new one")
+  ;;     "b d" '(jl/switch-to-dired :wk "Find a dired buffer, or create a new one")
+  ;;     "f b" '(consult-bookmark :wk "Find a bookmark")
+  ;;     "f r" '(jl/find-in-current :wk "Find file in current dir/project")
+  ;;     "f R" '(jl/find-in-dir :wk "Find file in specified dir/project")
+  ;;     "f h" '((lambda () (interactive) (jl/find-in-dir "~")) :wk "Find file in $HOME")
+  ;;     "f H" '((lambda () (interactive) (jl/find-in-dir "/")) :wk "Find file in /")
+  ;;     "f w" '(jl/grep-in-current :wk "Find word in current dir/project")
+  ;;     "f W" '(jl/grep-in-dir :wk "Find word in specified dir/project"))
   :config
     ;; Exclude dired buffers from the buffer list and use consult with perspective
     (setq consult-find-args "find . -not ( -path '*/.git*' -prune ) -not ( -path '*.git*' -prune )"))
@@ -1100,12 +1083,12 @@
           (setq-local completion-at-point-functions 
             '(ement-room--complete-members-at-point ement-room--complete-rooms-at-point cape-emoji))
           (corfu-mode 1)))
-  :general
-    (:keymaps 'corfu-map :states 'insert
-      "SPC" #'corfu-insert-separator
-      "<tab>" #'corfu-next
-      "TAB" #'corfu-next
-      "<backtab>" #'corfu-previous)
+  ;; :general
+  ;;   (:keymaps 'corfu-map :states 'insert
+  ;;     "SPC" #'corfu-insert-separator
+  ;;     "<tab>" #'corfu-next
+  ;;     "TAB" #'corfu-next
+  ;;     "<backtab>" #'corfu-previous)
   :config
     (corfu-popupinfo-mode)
     (corfu-history-mode)
@@ -1119,9 +1102,9 @@
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
 
     ;; Prevent evil from overriding corfu bindings
-    (advice-add #'corfu--setup :after #'(lambda (&rest r) (evil-normalize-keymaps)))
-    (advice-add #'corfu--teardown :after #'(lambda (&rest r) (evil-normalize-keymaps)))
-    (evil-make-overriding-map corfu-map)
+    ;; (advice-add #'corfu--setup :after #'(lambda (&rest r) (evil-normalize-keymaps)))
+    ;; (advice-add #'corfu--teardown :after #'(lambda (&rest r) (evil-normalize-keymaps)))
+    ;; (evil-make-overriding-map corfu-map)
 
     ;; Rice it up 
     (set-face-attribute 'corfu-default nil :background jl/bg-2)
@@ -1130,7 +1113,7 @@
     (set-face-attribute 'corfu-bar nil :background jl/acc-0)
 
     ;; Quit completion after entering normal mode
-    (add-hook 'evil-insert-state-exit-hook #'corfu-quit)
+    ;; (add-hook 'evil-insert-state-exit-hook #'corfu-quit)
 
     ;; `SPC' is used as my separator, this comes with some quirks which this advice solves
     ;; 1. If there is a candidate selected, insert it when hitting `SPC'
@@ -1181,25 +1164,25 @@
 *** Magit
 #+begin_src emacs-lisp
 (use-package magit 
-  :hook (magit-post-stage . (lambda () (message "Staged")))
-  :general
-    (leader
-      "g s" '(magit-stage-file :wk "Stage Files")
-      "g S" '(magit-stage-modified :wk "Stage All Files")
-      "g u" '(magit-unstage-file :wk "Unstage Files")
-      "g U" '(magit-unstage-all :wk "Unstage All Files")
-      "g f" '(magit-fetch :wk "Fetch")
-      "g F" '(magit-fetch-all :wk "Fetch")
-      "g i" '(magit-init :wk "Init")
-      "g l" '(magit-log :wk "Log")
-      "g b" '(magit-branch :wk "Branch")
-      "g d" '(magit-diff :wk "Diff")
-      "g c" '(magit-commit :wk "Commit")
-      "g r" '(magit-rebase :wk "Rebase")
-      "g R" '(magit-reset :wk "Reset")
-      "g p" '(magit-push :wk "Push")
-      "g P" '(magit-pull :wk "Pull")
-      "g m" '(magit :wk "Magit Menu")))
+  :hook (magit-post-stage . (lambda () (message "Staged"))))
+  ;; :general
+  ;;   (leader
+  ;;     "g s" '(magit-stage-file :wk "Stage Files")
+  ;;     "g S" '(magit-stage-modified :wk "Stage All Files")
+  ;;     "g u" '(magit-unstage-file :wk "Unstage Files")
+  ;;     "g U" '(magit-unstage-all :wk "Unstage All Files")
+  ;;     "g f" '(magit-fetch :wk "Fetch")
+  ;;     "g F" '(magit-fetch-all :wk "Fetch")
+  ;;     "g i" '(magit-init :wk "Init")
+  ;;     "g l" '(magit-log :wk "Log")
+  ;;     "g b" '(magit-branch :wk "Branch")
+  ;;     "g d" '(magit-diff :wk "Diff")
+  ;;     "g c" '(magit-commit :wk "Commit")
+  ;;     "g r" '(magit-rebase :wk "Rebase")
+  ;;     "g R" '(magit-reset :wk "Reset")
+  ;;     "g p" '(magit-push :wk "Push")
+  ;;     "g P" '(magit-pull :wk "Pull")
+  ;;     "g m" '(magit :wk "Magit Menu")))
 #+end_src
 *** Git Gutter
 #+begin_src emacs-lisp
@@ -1298,23 +1281,23 @@
     (setq persp-suppress-no-prefix-key-warning t)
     (setq persp-initial-frame-name "emacs")
     (persp-mode)
-  :general
-    (leader
-      "b i" '(persp-ibuffer :wk "Buffer Menu (IBuffer)")
-      "p f" '(persp-switch :wk "Find perspective, or create new one")
-      "p h" '(persp-prev :wk "Previous perspective")
-      "p l" '(persp-next :wk "Next perspective")
-      "p k" '((lambda () (interactive) (if (yes-or-no-p "Kill the current perspective?")(persp-kill (persp-current-name)))) :wk "Kill the current perspective")
-      "p 1" '((lambda () (interactive) (persp-switch-by-number 1)) :wk "Switch to perspective 1")
-      "p 2" '((lambda () (interactive) (persp-switch-by-number 2)) :wk "Switch to perspective 2")
-      "p 3" '((lambda () (interactive) (persp-switch-by-number 3)) :wk "Switch to perspective 3")
-      "p 4" '((lambda () (interactive) (persp-switch-by-number 4)) :wk "Switch to perspective 4")
-      "p 5" '((lambda () (interactive) (persp-switch-by-number 5)) :wk "Switch to perspective 5")
-      "p 6" '((lambda () (interactive) (persp-switch-by-number 6)) :wk "Switch to perspective 6")
-      "p 7" '((lambda () (interactive) (persp-switch-by-number 7)) :wk "Switch to perspective 7")
-      "p 8" '((lambda () (interactive) (persp-switch-by-number 8)) :wk "Switch to perspective 8")
-      "p 9" '((lambda () (interactive) (persp-switch-by-number 9)) :wk "Switch to perspective 9")
-      "p 0" '((lambda () (interactive) (persp-switch-by-number 0)) :wk "Switch to perspective 0"))
+  ;; :general
+  ;;   (leader
+  ;;     "b i" '(persp-ibuffer :wk "Buffer Menu (IBuffer)")
+  ;;     "p f" '(persp-switch :wk "Find perspective, or create new one")
+  ;;     "p h" '(persp-prev :wk "Previous perspective")
+  ;;     "p l" '(persp-next :wk "Next perspective")
+  ;;     "p k" '((lambda () (interactive) (if (yes-or-no-p "Kill the current perspective?")(persp-kill (persp-current-name)))) :wk "Kill the current perspective")
+  ;;     "p 1" '((lambda () (interactive) (persp-switch-by-number 1)) :wk "Switch to perspective 1")
+  ;;     "p 2" '((lambda () (interactive) (persp-switch-by-number 2)) :wk "Switch to perspective 2")
+  ;;     "p 3" '((lambda () (interactive) (persp-switch-by-number 3)) :wk "Switch to perspective 3")
+  ;;     "p 4" '((lambda () (interactive) (persp-switch-by-number 4)) :wk "Switch to perspective 4")
+  ;;     "p 5" '((lambda () (interactive) (persp-switch-by-number 5)) :wk "Switch to perspective 5")
+  ;;     "p 6" '((lambda () (interactive) (persp-switch-by-number 6)) :wk "Switch to perspective 6")
+  ;;     "p 7" '((lambda () (interactive) (persp-switch-by-number 7)) :wk "Switch to perspective 7")
+  ;;     "p 8" '((lambda () (interactive) (persp-switch-by-number 8)) :wk "Switch to perspective 8")
+  ;;     "p 9" '((lambda () (interactive) (persp-switch-by-number 9)) :wk "Switch to perspective 9")
+  ;;     "p 0" '((lambda () (interactive) (persp-switch-by-number 0)) :wk "Switch to perspective 0"))
   :config
     (require 'ibuffer)
     (setq persp-sort 'created)
