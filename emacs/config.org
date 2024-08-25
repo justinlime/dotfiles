@@ -18,6 +18,7 @@
     - [[#gui][GUI]]
     - [[#scrolling][Scrolling]]
     - [[#fonts][Fonts]]
+    - [[#colorscheme][Colorscheme]]
     - [[#misc][Misc]]
 - [[#configurations][Configurations]]
   - [[#keybinds][Keybinds]]
@@ -263,6 +264,14 @@
 (setq-default line-spacing 0.10)
 (set-language-environment "UTF-8")
 #+end_src
+*** Colorscheme
+#+begin_src emacs-lisp
+(setq jl/bg-0 "#11111B"
+      jl/bg-1 "#181825"
+      jl/bg-2 "#1e1e2e"
+      jl/acc-0 "#CBA6F7"
+      jl/acc-1 "#89B4FA")
+#+end_src
 *** Misc
 #+begin_src emacs-lisp
 ;; emacs -nw settings
@@ -286,7 +295,6 @@
               truncate-lines t) ;Allow truncated lines
 (electric-pair-mode 1) ; Auto closing pairs like () and {}
 (save-place-mode) ; Save cursor position in buffer on reopen
-(global-hl-line-mode) ; Highlight the current line
 (electric-indent-mode t) ; Auto Indent
 (global-display-line-numbers-mode 1) ; Display line numbers
 (global-prettify-symbols-mode) ; prettyyyyyyy
@@ -519,9 +527,10 @@
       large-file-warning-threshold nil
       dired-recursive-deletes 'always)
 (add-hook 'dired-mode-hook #'(lambda () 
-  (setq-local hl-line-face
-                '(:foreground "#11111B"  :background "#89b4fa" :extend t)
-              cursor-type nil
+  (hl-line-mode 1)
+  (face-remap-add-relative 'hl-line
+                `(:foreground ,jl/bg-0 :background ,jl/acc-1 :extend t))
+  (setq-local cursor-type nil
               evil-force-cursor t
               auto-revert-verbose nil)
   (jl/set-local-font (+ jl/font-size 10))
@@ -562,7 +571,7 @@
 (use-package diredfl 
   :hook (dired-mode . diredfl-mode)
   :config
-    (set-face-attribute 'diredfl-dir-heading nil :height (+ jl/font-size 20) :foreground "#cba6f7"))
+    (set-face-attribute 'diredfl-dir-heading nil :height (+ jl/font-size 20) :foreground jl/acc-0))
 #+end_src
 *** Dired Filter
 #+begin_src emacs-lisp
@@ -716,11 +725,10 @@
     :states 'insert
     :keymaps 'term-raw-map
       "TAB" #'(lambda () (interactive) (term-send-raw-string "\t")))
-  (face-remap-set-base 'default :background "#11111B")
-  (face-remap-set-base 'fringe :background "#11111B")
-  (hl-line-mode 'toggle)
+  (face-remap-set-base 'default :background jl/bg-0)
+  (face-remap-set-base 'fringe :background jl/bg-0)
   (defface term-background
-  '((t (:inherit default :background "#11111B")))
+  `((t (:inherit default :background ,jl/bg-0)))
   "Some bullshit to fix term-mode text-background"
   :group 'basic-faces)
     (setf (elt ansi-term-color-vector 0) 'term-background)
@@ -932,6 +940,7 @@
 (use-package olivetti
   :hook ((org-mode org-agenda-mode) . olivetti-mode)
   :config
+    (set-face-attribute 'olivetti-fringe nil :background jl/bg-1) ; fringes/borders on the sides
     (setq-default olivetti-body-width 0.70)
     (remove-hook 'olivetti-mode-on-hook 'visual-line-mode))
 #+end_src
@@ -1115,10 +1124,10 @@
     (evil-make-overriding-map corfu-map)
 
     ;; Rice it up 
-    (set-face-attribute 'corfu-default nil :background "#1e1e2e")
-    (set-face-attribute 'corfu-current nil :background "#2a2e38" :box "#cba6f7")
-    (set-face-attribute 'corfu-border nil :background "#89b4fa")
-    (set-face-attribute 'corfu-bar nil :background "#cba6f7")
+    (set-face-attribute 'corfu-default nil :background jl/bg-2)
+    (set-face-attribute 'corfu-current nil :box jl/acc-0)
+    (set-face-attribute 'corfu-border nil :background jl/acc-1)
+    (set-face-attribute 'corfu-bar nil :background jl/acc-0)
 
     ;; Quit completion after entering normal mode
     (add-hook 'evil-insert-state-exit-hook #'corfu-quit)
@@ -1346,7 +1355,7 @@
 (use-package sideline
   :hook (prog-mode . sideline-mode)
   :config
-    (set-face-attribute 'sideline-default nil :foreground "#cba6f7")
+    (set-face-attribute 'sideline-default nil :foreground jl/acc-0)
     (setq sideline-backends-left-skip-current-line t   ; don't display on current line (left)
           sideline-backends-right-skip-current-line t  ; don't display on current line (right)
           sideline-order-left 'down                    ; or 'up
@@ -1473,6 +1482,7 @@
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :config
+    (set-face-attribute 'doom-modeline nil :background jl/bg-0) ; doom mode line background
     (doom-modeline-mode 1)
     (display-battery-mode 1)
     (display-time-mode))
@@ -1512,10 +1522,10 @@
   :config
     (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
-          ("FIXME"  . "#f9e2af")
+          ("FIXME"  . "#1E90FF")
           ("DEBUG"  . "#A020F0")
           ("GOTCHA" . "#a6e3a1")
-          ("STUB"   . "#1E90FF"))))
+          ("STUB"   . "#f9e2af"))))
 #+end_src
 *** Rainbow Mode
 #+begin_src emacs-lisp
@@ -1605,22 +1615,23 @@
 #+end_src
 *** Additional touches
 #+begin_src emacs-lisp
-(let ((bg "#181825"))
-  (add-hook 'post-command-hook #'(lambda ()
-    (set-cursor-color (if (derived-mode-p 'dired-mode) "#89b4fa" "#cba6f7"))))
-  (set-face-attribute 'line-number-current-line nil :foreground "#cba6f7")
-  (set-face-attribute 'org-block nil :background "#1e1e2e") ; src blocks
-  (set-face-attribute 'default nil :background bg) ; emacs background
-  (set-face-attribute 'org-hide nil :foreground bg) ; asterisks preceding org headings
-  (set-face-attribute 'fringe nil :background bg) ; fringes/borders on the sides
-  ;; (set-face-attribute 'org-block-begin-line nil :background bg) ; the #+begin_src and #+end_src bits
-  (set-face-attribute 'line-number nil :background bg) ; line number background
-  (set-face-attribute 'line-number-current-line nil :background bg) ; current line number
-  (set-face-attribute 'mode-line nil :background "#11111B") ; mode line background
-  (set-face-attribute 'mode-line-inactive nil :background "#11111B")) ; mode line background on inactive buffers
-  (set-face-attribute 'vertical-border nil :background "#181825" :foreground "#11111B")
+;; I mostly use themes just for the text highlighting, 
+;; pretty much everything else here
+(add-hook 'post-command-hook #'(lambda ()
+  (set-cursor-color (if (derived-mode-p 'dired-mode) jl/acc-1 jl/acc-0))))
+(set-face-attribute 'line-number-current-line nil :foreground jl/acc-0)
+(set-face-attribute 'org-block nil :background jl/bg-0) ; src blocks
+(set-face-attribute 'org-block-begin-line nil :background jl/bg-0) ; #+begin_src
+(set-face-attribute 'org-block-end-line nil :background jl/bg-0) ; #+end_src
+(set-face-attribute 'mode-line nil :background jl/bg-0) ; mode line background
+(set-face-attribute 'mode-line-inactive nil :background jl/bg-0) ; mode line background on inactive buffers
+(set-face-attribute 'default nil :background jl/bg-1) ; emacs background
+(set-face-attribute 'fringe nil :background jl/bg-1) ; fringes/borders on the sides
+(set-face-attribute 'org-hide nil :foreground jl/bg-1) ; asterisks preceding org headings
+(set-face-attribute 'line-number nil :background jl/bg-1) ; line number background
+(set-face-attribute 'line-number-current-line nil :background jl/bg-1) ; current line number
+(set-face-attribute 'vertical-border nil :background jl/bg-0 :foreground jl/bg-0)
 #+end_src
-
 
 
 
