@@ -64,7 +64,6 @@
     - [[#corfu][Corfu]]
       - [[#corfu-terminal][Corfu Terminal]]
     - [[#cape][Cape]]
-      - [[#company-nixos-options][Company Nixos Options]]
     - [[#orderless][Orderless]]
   - [[#git][Git]]
     - [[#magit][Magit]]
@@ -1158,17 +1157,6 @@
 (add-to-list 'completion-at-point-functions #'cape-file)
 (add-to-list 'completion-at-point-functions #'cape-elisp-block)
 (add-to-list 'completion-at-point-functions #'cape-keyword)
-#+end_src
-**** Company Nixos Options
-#+begin_src emacs-lisp
-(use-package company-nixos-options 
-  :after nix-ts-mode
-  :config 
-    ;; prevent eglot from overriding
-    (add-hook 'eglot-managed-mode-hook #'(lambda()
-     (if (derived-mode-p 'nix-ts-mode)
-       (setq-local completion-at-point-functions 
-         `(,(cape-company-to-capf #'company-nixos-options) cape-dabbrev cape-file cape-keyword))))))
 #+end_src
 *** Orderless
 #+begin_src emacs-lisp
