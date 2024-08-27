@@ -7,7 +7,7 @@
 
     lua-language-server #Lua
     # nil #Nix
-    nixd 
+    nixd
     gopls #Golang
     rust-analyzer #Rust
     zls #Zig

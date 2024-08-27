@@ -408,10 +408,8 @@
 (use-package key-chord
   :hook (evil-insert-state-entry . key-chord-mode)
   :config
-    (setq key-chord-two-keys-delay 1
-          key-chord-one-key-delay 1.2
-          key-chord-safety-interval-forward 0.1
-          key-chord-safety-interval-backward 1)
+    (setq key-chord-two-keys-delay 0.5
+          key-chord-one-key-delay 0.5)
     ;; (key-chord-define evil-insert-state-map  "nn" 'evil-normal-state)
     (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state))
 #+end_src 
@@ -661,6 +659,7 @@
 ** Eglot
 #+begin_src emacs-lisp
 ;; Override the binary being used on startup
+(setq eglot-events-buffer-size 0)
 (with-eval-after-load 'eglot
   (mapc #'(lambda (server-remap) (add-to-list 'eglot-server-programs server-remap))
     '(((java-ts-mode java-mode) . ("java-language-server"))
