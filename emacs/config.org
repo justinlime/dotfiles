@@ -3,8 +3,10 @@
 #+DESCRIPTION: Justinlime's Emacs
 #+PROPERTY: header-args :tangle yes
 #+STARTUP: showeverything, inlineimages
+#+OPTIONS: f:nil
+#+EXPORT_SELECT_TAGS: noexport
 
-* TABLE OF CONTENTS :TOC_4:
+* TABLE OF CONTENTS :toc_4:noexport:
 - [[#general][General]]
   - [[#late-init][Late Init]]
     - [[#package-manger][Package Manger]]
@@ -1604,8 +1606,15 @@
 #+begin_src emacs-lisp
 ;; I mostly use themes just for the text highlighting, 
 ;; pretty much everything else here
+(add-hook 'minibuffer-setup-hook #'(lambda ()
+  (face-remap-add-relative 'default
+                `(:background ,jl/bg-0))
+  (face-remap-add-relative 'fringe
+                `(:background ,jl/bg-0 :foreground ,jl/bg-0))))
+
 (add-hook 'post-command-hook #'(lambda ()
   (set-cursor-color (if (derived-mode-p 'dired-mode) jl/acc-1 jl/acc-0))))
+
 (set-face-attribute 'line-number-current-line nil :foreground jl/acc-0)
 (set-face-attribute 'org-block nil :background jl/bg-0) ; src blocks
 (set-face-attribute 'org-block-begin-line nil :background jl/bg-0) ; #+begin_src
