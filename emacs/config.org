@@ -103,6 +103,7 @@
     - [[#highlight-todo][Highlight TODO]]
     - [[#rainbow-mode][Rainbow Mode]]
     - [[#rainbow-delimiters][Rainbow Delimiters]]
+    - [[#pulsar][Pulsar]]
     - [[#treesitter][Treesitter]]
     - [[#additional-touches][Additional touches]]
 
@@ -1525,6 +1526,28 @@
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters 
   :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+*** Pulsar
+#+begin_src emacs-lisp
+(use-package pulsar
+  :quelpa
+    (pulsar :fetcher github :repo "protesilaos/pulsar")
+  :config 
+    (set-face-attribute 'pulsar-generic nil :background jl/acc-0)
+    (pulsar-global-mode 1)
+    (setq pulsar-pulse-functions
+          '(evil-scroll-up
+            evil-scroll-down
+            evil-window-down
+            evil-window-up
+            evil-window-left
+            evil-window-right
+            evil-window-vsplit
+            evil-window-split
+            evil-goto-first-line
+            evil-goto-line
+            undo-tree-undo
+            undo-tree-redo)))
 #+end_src
 *** Treesitter
 #+begin_src emacs-lisp
