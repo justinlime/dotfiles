@@ -553,7 +553,7 @@
     "A" #'dired-create-directory
     "a" nil
     "W" #'wdired-change-to-wdired-mode
-    "RET" #'jl/dired-open)
+    "RET" #'dired-find-file-other-window)
 #+end_src
 *** wDired
 #+begin_src emacs-lisp
