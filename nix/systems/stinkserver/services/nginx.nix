@@ -8,6 +8,19 @@
   services.nginx = {
     enable = true;
     virtualHosts = {
+      # Give a 404 on unknown subdomains
+      "unknown" = {
+        serverName = "*.justinlime.dev *.stinkboys.com *.refundvalidator.com";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }];
+         locations."/" = {
+           extraConfig = ''
+             return 404;
+           '';
+         };
+      };
       "justinlime.dev" = {
         # serverName = "justinlime.dev test.justinlime.dev";
         serverName = "justinlime.dev";
@@ -34,6 +47,21 @@
             index index.html;
            '';
          };
+      };
+      "test.justinlime.dev" = {
+        serverName = "test.justinlime.dev";
+        listen = [{
+          port = 90;
+          addr = "0.0.0.0";
+        }];
+        locations."/" = {
+          proxyPass = "http://localhost:6969";
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;    
+          '';
+        };
       };
       "download.justinlime.dev" = {
         serverName = "downloads.justinlime.dev download.justinlime.dev";
