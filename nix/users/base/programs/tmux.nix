@@ -4,6 +4,7 @@
     prefix = "C-x";
     terminal = "xterm-256color";
     extraConfig = ''
+      setw -g mouse on
       bind-key h select-pane -L
       bind-key j select-pane -D
       bind-key k select-pane -U
