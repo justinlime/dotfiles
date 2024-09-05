@@ -38,8 +38,7 @@
     - [[#diredfl][Diredfl]]
     - [[#dired-filter][Dired Filter]]
     - [[#dired-ranger][Dired Ranger]]
-    - [[#dired-subtree][Dired Subtree]]
-    - [[#dired-sidebar][Dired Sidebar]]
+    - [[#dired-sidetree][Dired Sidetree]]
     - [[#dired-async][Dired Async]]
   - [[#eglot][Eglot]]
   - [[#communication][Communication]]
@@ -607,37 +606,52 @@
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 (quelpa-use-package-deactivate-advice)
 #+end_src
-*** Dired Subtree
+*** Dired Sidetree
 #+begin_src emacs-lisp
-(use-package dired-subtree
-  :after diredfl
-  :config 
-    ;; force subtree to respect omit settings
-    (add-hook 'dired-subtree-after-insert-hook #'(lambda ()
-      (dired-omit-mode 1)))
-    (dolist (depth '(1 2 3 4 5 6))
-      (set-face-attribute (read (format "dired-subtree-depth-%s-face" depth)) nil :background nil)))
-#+end_src
-*** Dired Sidebar
-#+begin_src emacs-lisp
-(use-package dired-sidebar
-  :general
-    (leader "d t" '(dired-sidebar-toggle-sidebar :wk "Toggle sidebar directory"))
-  :config
-  (add-hook 'dired-sidebar-mode-hook #'(lambda ()
-    (general-define-key
-      :keymaps 'local
-      :states 'normal
-        "l" #'dired-sidebar-find-file
-        "h" #'(lambda () (interactive) (dired-sidebar-find-file "../")))
-    (face-remap-set-base 'default :background "#181825")
-    (display-line-numbers-mode -1)))
+(leader "d t" '(jl/dired-sidetree-toggle :wk "Toggle sidebar directory"))
 
-  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
-  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+(setq jl/dired-sidetree-visible-p nil)
 
-  (setq dired-sidebar-use-one-instance t)
-  (setq dired-sidebar-theme 'nerd))
+(defun jl/dired-sidetree-toggle ()
+  "Spawn a dired window on the lefthand side"
+  (interactive)
+  (if jl/dired-sidetree-visible-p
+      (progn
+        (setq jl/dired-sidetree-visible-p nil)
+        (window-toggle-side-windows))
+      (jl/dired-sidetree)))
+
+(defun jl/dired-sidetree (&optional dir)
+  "Spawn a dired window on the lefthand side"
+  (interactive)
+  (setq jl/dired-sidetree-visible-p t)
+  (let ((buffer (dired-noselect (or dir default-directory))))
+    (with-current-buffer buffer
+      (dired-hide-details-mode t)
+      (jl/set-local-font (- jl/font-size 10))
+      (face-remap-add-relative 'default
+                    `(:background ,jl/bg-0))
+      (face-remap-add-relative 'fringe
+                    `(:background ,jl/bg-0))
+      (general-define-key
+        :states 'normal
+        :keymaps 'local
+          "l" #'jl/dired-sidetree-open
+          "h" #'(lambda () (interactive) (jl/dired-sidetree ".."))))
+    (display-buffer-in-side-window
+     buffer `((side . left) (slot . 0)
+              (window-width . 30)
+              (preserve-size . (t . nil))))
+    (select-window (get-buffer-window buffer))))
+
+(defun jl/dired-sidetree-open ()
+  (interactive)
+  (let ((file (dired-get-file-for-visit)))
+    (if (file-directory-p file)
+        (jl/dired-sidetree file)
+        (let ((other-windows (delete nil (mapcar #'(lambda (win) (unless (eq (selected-window) win) win)) (window-list)))))
+          (select-window (car other-windows))
+          (find-file file)))))
 #+end_src
 *** Dired Async
 #+begin_src emacs-lisp
@@ -1462,9 +1476,12 @@
     ;; something keeps overriding the cursor color, so run it in a one-shot timer
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
           doom-themes-enable-italic t) ; if nil, italics is universally disabled
-    (load-theme 'doom-vibrant t)
+    (load-theme 'doom-one t)
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
+    (set-face-attribute 'font-lock-variable-name-face nil :foreground "#bbc2cf")
+    (set-face-attribute 'font-lock-property-use-face nil :foreground "#51afef")
+    (set-face-attribute 'font-lock-property-name-face nil :foreground "#f38ba8")
     ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config))
 #+end_src
