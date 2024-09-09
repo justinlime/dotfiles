@@ -38,6 +38,7 @@
     - [[#diredfl][Diredfl]]
     - [[#dired-filter][Dired Filter]]
     - [[#dired-ranger][Dired Ranger]]
+    - [[#dired-subtree][Dired Subtree]]
     - [[#dired-sidetree][Dired Sidetree]]
     - [[#dired-async][Dired Async]]
   - [[#eglot][Eglot]]
@@ -606,6 +607,18 @@
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
 (quelpa-use-package-deactivate-advice)
 #+end_src
+
+*** Dired Subtree
+#+begin_src emacs-lisp
+(use-package dired-subtree
+  :after diredfl
+  :config 
+    ;; force subtree to respect omit settings
+    (add-hook 'dired-subtree-after-insert-hook #'(lambda ()
+      (dired-omit-mode 1)))
+    (dolist (depth '(1 2 3 4 5 6))
+      (set-face-attribute (read (format "dired-subtree-depth-%s-face" depth)) nil :background nil)))
+#+end_src
 *** Dired Sidetree
 #+begin_src emacs-lisp
 (leader "d t" '(jl/dired-sidetree-toggle :wk "Toggle sidebar directory"))
@@ -627,6 +640,7 @@
   (setq jl/dired-sidetree-visible-p t)
   (let ((buffer (dired-noselect (or dir default-directory))))
     (with-current-buffer buffer
+      (rename-buffer (format " %s-sidetree" (buffer-name)))
       (dired-hide-details-mode t)
       (jl/set-local-font (- jl/font-size 10))
       (face-remap-add-relative 'default
@@ -767,6 +781,9 @@
   "<tab>" #'org-cycle
   "TAB" #'org-cycle
   "P" #'jl/org-grim-slurp)
+(leader
+  "o" '(:ignore t :wk "Org")
+  "o i" '(org-id-get-create :wk "Insert an ID"))
 
 (add-hook 'org-mode-hook #'(lambda ()
   (jl/set-local-font (+ jl/font-size 10))
@@ -912,10 +929,10 @@
             (45 . "")
             (42 . "•"))
           org-modern-fold-stars
-          '(("󰴈" . "󰴈")
-            ("󰊹" . "󰊹")
+          '(("󰪥" . "󰪥")
             ("󰨑" . "󰨑")
-            ("󰗮" . "󰗮")
+            ("󱓝" . "󱓝")
+            ("◉" . "◉")
             ("" . ""))))
 #+end_src
 
