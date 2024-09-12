@@ -52,6 +52,7 @@
     - [[#org-autolist][Org Autolist]]
     - [[#org-appear][Org Appear]]
     - [[#org-modern][Org Modern]]
+    - [[#org-last-modified][Org Last Modified]]
     - [[#org-roam][Org Roam]]
     - [[#org-roam-ui][Org Roam UI]]
     - [[#olivetti][Olivetti]]
@@ -769,6 +770,9 @@
       org-hide-emphasis-markers t
       org-pretty-entities t)
 
+(set-face-attribute 'org-code nil :foreground "#f38ba8")
+(set-face-attribute 'org-document-info-keyword nil :inherit 'org-meta-line)
+
 (let ((langs (mapcar #'(lambda (lang) `(,lang . t)) 
         '(python lisp awk emacs-lisp eshell clojure calc C ruby
           shell sed js ocaml scheme sql sqlite perl haskell css lua java))))
@@ -932,8 +936,62 @@
           '(("󰪥" . "󰪥")
             ("󰨑" . "󰨑")
             ("󱓝" . "󱓝")
-            ("◉" . "◉")
+            ("󰗮" . "󰗮")
             ("" . ""))))
+#+end_src
+*** Org Last Modified
+#+begin_src emacs-lisp 
+(defun jl/org-find-time-file-property (property &optional anywhere)
+  "Return the position of the time file PROPERTY if it exists.
+
+When ANYWHERE is non-nil, search beyond the preamble."
+  (save-excursion
+    (goto-char (point-min))
+    (let ((first-heading
+           (save-excursion
+             (re-search-forward org-outline-regexp-bol nil t))))
+      (when (re-search-forward (format "^#\\+%s:" property)
+                               (if anywhere nil first-heading)
+                               t)
+        (point)))))
+
+(defun jl/org-has-time-file-property-p (property &optional anywhere)
+  "Return the position of time file PROPERTY if it is defined.
+
+As a special case, return -1 if the time file PROPERTY exists but
+is not defined."
+  (when-let ((pos (jl/org-find-time-file-property property anywhere)))
+    (save-excursion
+      (goto-char pos)
+      (if (and (looking-at-p " ")
+               (progn (forward-char)
+                      (org-at-timestamp-p 'lax)))
+          pos
+        -1))))
+
+(defun jl/org-set-time-file-property (property &optional anywhere pos)
+  "Set the time file PROPERTY in the preamble.
+
+When ANYWHERE is non-nil, search beyond the preamble.
+
+If the position of the file PROPERTY has already been computed,
+it can be passed in POS."
+  (when-let ((pos (or pos
+                      (jl/org-find-time-file-property property))))
+    (save-excursion
+      (goto-char pos)
+      (if (looking-at-p " ")
+          (forward-char)
+        (insert " "))
+      (delete-region (point) (line-end-position))
+      (let* ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
+        (insert now)))))
+
+(defun jl/org-set-last-modified ()
+  "Update the LAST_MODIFIED file property in the preamble."
+  (when (derived-mode-p 'org-mode)
+    (jl/org-set-time-file-property "modified")))
+(add-hook 'before-save-hook #'jl/org-set-last-modified)
 #+end_src
 
 *** Org Roam
@@ -943,20 +1001,40 @@
     (leader
       "r" '(:ignore t :wk "Org Roam")
       "r f" '(org-roam-node-find :wk "Find org roam file")
-      "r t" '(org-roam-buffer-toggle :wk "Toggle the roam buffer")
       "r c" '(org-capture-finalize :wk "Capture the roam buffer")
       "r i" '(org-roam-node-insert :wk "Insert node link"))
   :config
-    ;; If you're using a vertical completion framework, you might want a more informative completion interface
-    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))
+    (cl-defmethod org-roam-node-type ((node org-roam-node))
+      "Return the TYPE of NODE."
+      (condition-case nil
+          (file-name-nondirectory
+           (directory-file-name
+            (file-name-directory
+             (file-relative-name (org-roam-node-file node) org-roam-directory))))
+        (error "")))
+    (setq jl/roam-templ "#+created: %U\n#+modified:\n#+export_select_tags: noexport\n#+options: f:nil toc:nil\n#+title: ${title}\n#+filetags:"
+          org-roam-node-display-template (concat 
+                                           (propertize "${type:10}" 'face 'org-level-2) 
+                                           "${title:100}" 
+                                           (propertize "${tags:*}" 'face 'org-level-1))
           org-roam-directory (file-truename "~/sync/notes/roam")
           org-roam-capture-templates  
-            '(("d" "default" plain "%?" :target
-              (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+OPTIONS: f:nil toc:nil\n#+EXPORT_SELECT_TAGS: noexport\n#+title: ${title}")
-              :unnarrowed t)))
+            `(("w" "work" plain "%?" :target
+                (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org" ,jl/roam-templ)
+                  :immediate-finish t
+                  :unnarrowed t)
+              ("g" "general" plain "%?" :target
+                (file+head "general/%<%Y%m%d%H%M%S>-${slug}.org"  ,jl/roam-templ)
+                  :immediate-finish t
+                  :unnarrowed t)
+              ("s" "scratch" plain "%?" :target
+                (file+head "scratch/%<%Y%m%d%H%M%S>-${slug}.org" ,jl/roam-templ)
+                  :immediate-finish t
+                  :unnarrowed t)))
     (org-roam-db-autosync-mode 1)
     (require 'org-roam-protocol))
 #+end_src
+
 *** Org Roam UI
 #+begin_src emacs-lisp
 (use-package org-roam-ui
@@ -1685,6 +1763,5 @@
 (set-face-attribute 'line-number-current-line nil :background jl/bg-1) ; current line number
 (set-face-attribute 'vertical-border nil :background jl/bg-0 :foreground jl/bg-0)
 #+end_src
-
 
 
