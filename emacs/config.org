@@ -1574,9 +1574,6 @@ it can be passed in POS."
     (load-theme 'doom-one t)
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
-    (set-face-attribute 'font-lock-variable-name-face nil :foreground "#bbc2cf")
-    (set-face-attribute 'font-lock-property-use-face nil :foreground "#51afef")
-    (set-face-attribute 'font-lock-property-name-face nil :foreground "#f38ba8")
     ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config))
 #+end_src
@@ -1665,6 +1662,11 @@ it can be passed in POS."
 #+begin_src emacs-lisp
 ;; levels from 1 - 4, higher numbers being more "colorful"
 (setq-default treesit-font-lock-level 4)
+
+;; some keyword overrides
+(set-face-attribute 'font-lock-variable-name-face nil :foreground "#bbc2cf")
+(set-face-attribute 'font-lock-property-use-face nil :foreground "#51afef")
+(set-face-attribute 'font-lock-property-name-face nil :foreground "#f38ba8")
 
 ;; where to source the langs
 (setq treesit-language-source-alist
