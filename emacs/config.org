@@ -10,9 +10,6 @@
 - [[#general][General]]
   - [[#late-init][Late Init]]
     - [[#package-manger][Package Manger]]
-    - [[#use-package][Use Package]]
-    - [[#quelpa][Quelpa]]
-      - [[#quelpa-use-package][Quelpa use-package]]
   - [[#preferences][Preferences]]
     - [[#littering][Littering]]
       - [[#buffer-litter][Buffer Litter]]
@@ -140,43 +137,13 @@
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize) ; exactly what it sounds like 
+(require 'use-package) ; load use package
+(setq use-package-always-ensure t) ; integrate with package.el
 ;; pull archvies and prevent warning messages only on very first startup
 (unless package-archive-contents
   (progn
     (setq warning-minimum-level :emergency) 
     (package-refresh-contents)))
-#+end_src
-*** Use Package
-#+begin_src emacs-lisp 
-;; install use-package if it doesn't exist yet
-(unless (package-installed-p 'use-package) 
-  (package-install 'use-package))          
-(eval-when-compile
-  (require 'use-package))
-;; Make use-package uses `package.el', prevents having to use :ensure t on everything
-(setq use-package-always-ensure t) 
-#+end_src
-*** Quelpa
-#+begin_src emacs-lisp 
-(setq quelpa-update-melpa-p nil) ;; stop quelpa from trying to update the melpa all the time
-(unless (package-installed-p 'quelpa)
-  (with-temp-buffer
-    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
-    (eval-buffer)
-    (quelpa-self-upgrade)))
-#+end_src
-**** Quelpa use-package
-#+begin_src emacs-lisp 
-(quelpa
- '(quelpa-use-package
-   :fetcher git
-   :url "https://github.com/quelpa/quelpa-use-package.git"))
-(require 'quelpa-use-package)
-;; `USAGE'
-;; uses the given recipe
-;; (use-package abc-mode
-;;  :quelpa (abc-mode :fetcher github :repo "mkjunker/abc-mode"))
-;; (use-package chan :quelpa (:fetcher))
 #+end_src
 
 ** Preferences 
@@ -273,7 +240,8 @@
       jl/bg-1 "#181825"
       jl/bg-2 "#1e1e2e"
       jl/acc-0 "#CBA6F7"
-      jl/acc-1 "#89B4FA")
+      jl/acc-1 "#89B4FA"
+      jl/acc-2 "#cdd6f4")
 #+end_src
 *** Misc
 #+begin_src emacs-lisp
@@ -323,7 +291,7 @@
       :prefix "SPC" ;; set leader
       :global-prefix "M-SPC") ;; access leader in insert mode
     (leader
-      "b k" '(kill-this-buffer :wk "Kill this buffer")
+      "b k" '((lambda () (interactive) (kill-buffer (current-buffer))) :wk "Kill this buffer")
       "b r" '(revert-buffer :wk "Reload this buffer"))
     (leader
       "e" '(:ignore t :wk "Evaluate")    
@@ -488,7 +456,7 @@
                   (list "/rsync:" "direct-async-process" t))
   (setq tramp-inline-compress-start-size 1000
         tramp-copy-size-limit 10000
-        vc-handled-backends '(git)
+        vc-handled-backends '(Git)
         tramp-verbose 1 ; shut the fuck up tramp
         password-cache-expiry nil ; stop tramp from forgetting passwords
         ;; force tramp to use the default .ssh config for controlmaster
@@ -586,10 +554,9 @@
 #+end_src
 *** Dired Ranger
 #+begin_src emacs-lisp
-(quelpa-use-package-activate-advice)
-;; blood wont merge my changes so im using my own fork
+;; blood wont merge my changes, so im using my own fork
 (use-package dired-ranger
-  :quelpa (dired-ranger :fetcher github :repo "justinlime/dired-hacks")
+  :vc (dired-ranger :url "https://github.com/justinlime/dired-hacks")
   :general 
     (:keymaps 'dired-mode-map 
      :states '(normal emacs motion)
@@ -606,7 +573,6 @@
     (advice-add #'dired-ranger-move :after #'jl/clear-marks-advice)
     (advice-add #'dired-ranger-paste :after #'jl/clear-marks-advice)
     (setq dired-ranger-copy-ring-size 1)) ;; only keep latest copy in memory
-(quelpa-use-package-deactivate-advice)
 #+end_src
 
 *** Dired Subtree
@@ -1234,7 +1200,7 @@ it can be passed in POS."
     (evil-make-overriding-map corfu-map)
 
     ;; Rice it up 
-    (set-face-attribute 'corfu-default nil :background jl/bg-2)
+    (set-face-attribute 'corfu-default nil :background jl/bg-0)
     (set-face-attribute 'corfu-current nil :box jl/acc-0)
     (set-face-attribute 'corfu-border nil :background jl/acc-1)
     (set-face-attribute 'corfu-bar nil :background jl/acc-0)
@@ -1639,8 +1605,7 @@ it can be passed in POS."
 *** Pulsar
 #+begin_src emacs-lisp
 (use-package pulsar
-  :quelpa
-    (pulsar :fetcher github :repo "protesilaos/pulsar")
+  :vc (pulsar :url "https://github.com/protesilaos/pulsar")
   :config 
     (set-face-attribute 'pulsar-generic nil :background jl/acc-0)
     (pulsar-global-mode 1)

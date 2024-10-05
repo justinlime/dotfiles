@@ -2,7 +2,7 @@
 {
   home.packages = with pkgs; [
     # Runtime
-    emacs29-pgtk
+    emacs30-pgtk
     tree-sitter
     gcc 
     imagemagick

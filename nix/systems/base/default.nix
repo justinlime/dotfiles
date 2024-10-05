@@ -11,6 +11,7 @@
     ./gaming.nix
     ./smart.nix
     ./avahi.nix
+    ./usb.nix
     ./xrdp.nix
   ];
 }

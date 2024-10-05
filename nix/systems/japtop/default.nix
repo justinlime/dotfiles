@@ -2,7 +2,6 @@
 {
   imports = [ 
     ./hardware-configuration.nix 
-    ../base
     ../base/configuration.nix
     ../base/gaming.nix
     ../base/wayland.nix
@@ -10,6 +9,7 @@
     ../base/virtulization.nix
     ../base/usb.nix
     ../base/avahi.nix
+    ../base/docker.nix
   ];
   programs = {
     light.enable = true;
