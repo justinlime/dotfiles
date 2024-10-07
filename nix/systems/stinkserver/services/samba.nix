@@ -1,29 +1,23 @@
 { ... }:
 {
-  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
-  services.samba.openFirewall = true;
-
-  networking.firewall = {
-    allowedTCPPorts = [
-      5357 # wsdd
-    ];
-    allowedUDPPorts = [
-      3702 # wsdd
-    ];
+  # make shares visible for windows 10 clients 
+  services.samba-wsdd = {
+    openFirewall = true;
+    enable = true; 
   };
   services.samba = {
     enable = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = stinkserver
-      netbios name = stinkserver
-      security = user 
-      guest account = nobody
-      map to guest = bad user
-      unix extensions = no
-    '';
-    shares = {
+    openFirewall = true;
+    settings = {
+      global = {
+        workgroup = "WORKGROUP";
+        "server string" = "stinkserver";
+        "netbios name" = "stinkserver";
+        security = "user";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        "unix extensions" = "no";
+      };
       storage = {
         path = "/storage";
         browseable = "yes";
