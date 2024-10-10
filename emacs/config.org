@@ -101,6 +101,7 @@
     - [[#highlight-todo][Highlight TODO]]
     - [[#rainbow-mode][Rainbow Mode]]
     - [[#rainbow-delimiters][Rainbow Delimiters]]
+    - [[#prism-mode][Prism Mode]]
     - [[#pulsar][Pulsar]]
     - [[#treesitter][Treesitter]]
     - [[#additional-touches][Additional touches]]
@@ -1602,6 +1603,20 @@ it can be passed in POS."
 (use-package rainbow-delimiters 
   :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
+*** Prism Mode
+#+begin_src emacs-lisp
+(use-package prism
+  :config
+    (setq prism-comments nil)
+    (setq prism-strings t)
+    ;; use advice instead of the emacs-lisp mode hook so it activates in org src blocks
+    (advice-add #'emacs-lisp-mode :after #'(lambda (&rest r) (prism-mode 1)))
+    (advice-add #'json-ts-mode :after #'(lambda (&rest r) (prism-mode 1)))
+    (prism-set-colors
+      :desaturations '(0)
+      :lightens '(0)
+      :colors (mapcar #'doom-color '(red magenta blue green violet cyan))))
+#+end_src
 *** Pulsar
 #+begin_src emacs-lisp
 (use-package pulsar
@@ -1667,6 +1682,7 @@ it can be passed in POS."
     ("C" . c-ts)
     ("nix" . nix-ts)
     ("python" . python-ts)
+    ("elisp" . emacs-lisp)
     ("js" . js-ts)
     ("ts" . typescript-ts)
     ("java" . java-ts)
