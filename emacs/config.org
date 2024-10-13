@@ -110,12 +110,12 @@
 ** Late Init
 #+begin_src emacs-lisp
 ;; revert inflated GC defined in early init to avoid GC pauses while editing
-(add-hook 'after-init-hook #'(lambda ()
+(add-hook 'after-init-hook (lambda ()
     (setq file-name-handler-alist file-name-handler-alist-original)
     (makunbound 'file-name-handler-alist-original)))
 ;; Revert again just in case if out of focus (doesnt work for terminal emacs)
 ;; and use the chance to collect garbage
-(add-hook 'focus-out-hook #'(lambda ()
+(add-hook 'focus-out-hook (lambda ()
   (setq gc-cons-threshold (* 1024 1024 16) ; 16mb
         gc-cons-percentage 0.1)
   (garbage-collect)))
@@ -152,7 +152,7 @@
 **** Buffer Litter
 #+begin_src emacs-lisp
 ;; Kill *Help* after :q'ing
-(advice-add #'evil-quit :after #'(lambda (&rest r)
+(advice-add #'evil-quit :after (lambda (&rest r)
   (let ((buf (get-buffer "*Help*")))
     (if (eq buf nil) nil
       (kill-buffer buf)))))
@@ -160,7 +160,7 @@
 ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
 (setq-default message-log-max nil)
-(add-hook 'emacs-startup-hook #'(lambda() ;Kills the warning buffer for even emergency messages
+(add-hook 'emacs-startup-hook (lambda () ;Kills the warning buffer for even emergency messages
   (kill-buffer (get-buffer "*Messages*"))))
 #+end_src
 **** File litter
@@ -355,7 +355,7 @@
     ;; These hooks may not work if TERM isnt xterm/xterm256
     ;; Let cursor change based on mode when using emacs in the terminal
     (unless (display-graphic-p)
-      (add-hook 'post-command-hook #'(lambda ()
+      (add-hook 'post-command-hook (lambda ()
         (setq visible-cursor nil) 
         (if (eq evil-state 'insert)
           (send-string-to-terminal "\e[5 q")
@@ -425,7 +425,7 @@
   (let ((format-host (format formatter host host)))
     (find-file format-host))
     (toggle-term-find "term" "term")
-    (mapc #'(lambda (char) (execute-kbd-macro (char-to-string char))) (format "ssh %s" host))
+    (mapc (lambda (char) (execute-kbd-macro (char-to-string char))) (format "ssh %s" host))
     (execute-kbd-macro (kbd "RET")))
 (defun jl/ssh-root (host)
   "SSH with sudo privledges using a host from .ssh/config"
@@ -496,7 +496,7 @@
       dired-recursive-copies 'always
       large-file-warning-threshold nil
       dired-recursive-deletes 'always)
-(add-hook 'dired-mode-hook #'(lambda () 
+(add-hook 'dired-mode-hook (lambda () 
   (hl-line-mode 1)
   (face-remap-add-relative 'hl-line
                 `(:foreground ,jl/bg-0 :background ,jl/acc-1 :extend t))
@@ -519,7 +519,7 @@
     "s" #'dired-hide-details-mode
     "l" #'jl/dired-open
     "d" nil
-    "h" #'(lambda () (interactive) (find-file ".."))
+    "h" (lambda () (interactive) (find-file ".."))
     "A" #'dired-create-directory
     "a" nil
     "W" #'wdired-change-to-wdired-mode
@@ -534,7 +534,7 @@
     "W" #'wdired-finish-edit
     "<escape>" #'wdired-exit)
 ; fix icons looking weird after exiting 
-(advice-add #'wdired-exit :after #'(lambda (&rest r) (revert-buffer)))
+(advice-add #'wdired-exit :after (lambda (&rest r) (revert-buffer)))
 #+end_src
 *** Diredfl
 #+begin_src emacs-lisp
@@ -574,7 +574,7 @@
   :after diredfl
   :config 
     ;; force subtree to respect omit settings
-    (add-hook 'dired-subtree-after-insert-hook #'(lambda ()
+    (add-hook 'dired-subtree-after-insert-hook (lambda ()
       (dired-omit-mode 1)))
     (dolist (depth '(1 2 3 4 5 6))
       (set-face-attribute (read (format "dired-subtree-depth-%s-face" depth)) nil :background nil)))
@@ -611,7 +611,7 @@
         :states 'normal
         :keymaps 'local
           "l" #'jl/dired-sidetree-open
-          "h" #'(lambda () (interactive) (jl/dired-sidetree ".."))))
+          "h" (lambda () (interactive) (jl/dired-sidetree ".."))))
     (display-buffer-in-side-window
      buffer `((side . left) (slot . 0)
               (window-width . 30)
@@ -623,7 +623,7 @@
   (let ((file (dired-get-file-for-visit)))
     (if (file-directory-p file)
         (jl/dired-sidetree file)
-        (let ((other-windows (delete nil (mapcar #'(lambda (win) (unless (eq (selected-window) win) win)) (window-list)))))
+        (let ((other-windows (delete nil (mapcar (lambda (win) (unless (eq (selected-window) win) win)) (window-list)))))
           (select-window (car other-windows))
           (find-file file)))))
 #+end_src
@@ -633,7 +633,7 @@
   :hook (dired-mode . dired-async-mode)
   :config
     ;; Autorefresh the buffer if visible and other conditions
-    (run-with-timer 0 2 #'(lambda ()
+    (run-with-timer 0 2 (lambda ()
       (dolist (buf (buffer-list))
           (if (get-buffer-window buf)
             (with-current-buffer buf
@@ -652,11 +652,11 @@
 ;; Override the binary being used on startup
 (setq eglot-events-buffer-size 0)
 (with-eval-after-load 'eglot
-  (mapc #'(lambda (server-remap) (add-to-list 'eglot-server-programs server-remap))
+  (mapc (lambda (server-remap) (add-to-list 'eglot-server-programs server-remap))
     '(((java-ts-mode java-mode) . ("java-language-server"))
       ((nix-ts-mode nix-mode) . ("nixd")))))
 ;; Enable modes for eglot
-(add-hook 'find-file-hook #'(lambda()
+(add-hook 'find-file-hook (lambda ()
   (unless (file-remote-p (buffer-file-name)) 
     (when (member major-mode 
       '(go-ts-mode python-ts-mode js-ts-mode
@@ -689,7 +689,7 @@
 (use-package emojify
   :hook (erc-mode . emojify-mode))
 
-(add-hook 'erc-mode-hook #'(lambda ()
+(add-hook 'erc-mode-hook (lambda ()
   (toggle-truncate-lines) ; truncate lines in erc mode
   (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
   (corfu-mode -1)
@@ -709,11 +709,11 @@
 #+end_src
 ** Term
 #+begin_src  emacs-lisp
-(add-hook 'term-mode-hook #'(lambda()
+(add-hook 'term-mode-hook (lambda ()
   (general-define-key
     :states 'insert
     :keymaps 'term-raw-map
-      "TAB" #'(lambda () (interactive) (term-send-raw-string "\t")))
+      "TAB" (lambda () (interactive) (term-send-raw-string "\t")))
   (face-remap-set-base 'default :background jl/bg-0)
   (face-remap-set-base 'fringe :background jl/bg-0)
   (defface term-background
@@ -732,7 +732,7 @@
 (set-face-attribute 'org-code nil :foreground "#f38ba8")
 (set-face-attribute 'org-document-info-keyword nil :inherit 'org-meta-line)
 
-(let ((langs (mapcar #'(lambda (lang) `(,lang . t)) 
+(let ((langs (mapcar (lambda (lang) `(,lang . t)) 
         '(python lisp awk emacs-lisp eshell clojure calc C ruby
           shell sed js ocaml scheme sql sqlite perl haskell css lua java))))
   (org-babel-do-load-languages 'org-babel-load-languages langs))
@@ -748,7 +748,7 @@
   "o" '(:ignore t :wk "Org")
   "o i" '(org-id-get-create :wk "Insert an ID"))
 
-(add-hook 'org-mode-hook #'(lambda ()
+(add-hook 'org-mode-hook (lambda ()
   (jl/set-local-font (+ jl/font-size 10))
   (org-indent-mode)
   (display-line-numbers-mode -1)
@@ -836,11 +836,11 @@
           ("Reminder" ("" nil nil :ascent center)))) 
 
 
-(add-hook 'org-agenda-mode-hook #'(lambda ()
+(add-hook 'org-agenda-mode-hook (lambda ()
   (display-line-numbers-mode -1)))
 
 ;; Archive all "Agenda" entries that are done automatically
-(add-hook 'org-after-todo-state-change-hook #'(lambda ()
+(add-hook 'org-after-todo-state-change-hook (lambda ()
   (when (and (string= org-state "DONE")
              (string= (org-get-category) "Agenda"))
     (org-archive-subtree))))
@@ -1119,10 +1119,10 @@ it can be passed in POS."
   "Use consult with perspective buffers, and also filter out dired buffers"
   (interactive)
   (defvar jl/filter-orig-func (plist-get persp-consult-source :items))
-  (plist-put persp-consult-source :items #'(lambda () 
+  (plist-put persp-consult-source :items (lambda () 
     (let ((candidates (funcall jl/filter-orig-func)))
       (delq nil ; remove nils from the resulting list
-        (mapcar #'(lambda (buf)
+        (mapcar (lambda (buf)
                     (with-current-buffer buf
                       (unless (or (derived-mode-p 'dired-mode)
                                   (derived-mode-p 'magit-mode)) buf))) candidates)))))
@@ -1133,10 +1133,10 @@ it can be passed in POS."
   "Use consult with perspective buffers, and only show"
   (interactive)
   (defvar jl/filter-orig-func (plist-get persp-consult-source :items))
-  (plist-put persp-consult-source :items #'(lambda () 
+  (plist-put persp-consult-source :items (lambda () 
     (let ((candidates (funcall jl/filter-orig-func)))
       (delq nil ; for some reason the returned list includes nil instead of just excluding the dired buffers
-        (mapcar #'(lambda (buf)
+        (mapcar (lambda (buf)
                     (with-current-buffer buf
                       (when (derived-mode-p 'dired-mode) buf))) candidates)))))
    (setq consult-buffer-sources '(persp-consult-source))
@@ -1188,8 +1188,8 @@ it can be passed in POS."
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
 
     ;; Prevent evil from overriding corfu bindings
-    (advice-add #'corfu--setup :after #'(lambda (&rest r) (evil-normalize-keymaps)))
-    (advice-add #'corfu--teardown :after #'(lambda (&rest r) (evil-normalize-keymaps)))
+    (advice-add #'corfu--setup :after (lambda (&rest r) (evil-normalize-keymaps)))
+    (advice-add #'corfu--teardown :after (lambda (&rest r) (evil-normalize-keymaps)))
     (evil-make-overriding-map corfu-map)
 
     ;; Rice it up 
@@ -1205,7 +1205,7 @@ it can be passed in POS."
     ;; 1. If there is a candidate selected, insert it when hitting `SPC'
     ;; 2. If not, insert the seperator like normal
     ;; 3. If there are no candidates, quit completion
-    (advice-add 'corfu-insert-separator :after #'(lambda () 
+    (advice-add 'corfu-insert-separator :after (lambda () 
       (if (= corfu--index -1)
           (when (= corfu--total 0) 
             (corfu-quit))
@@ -1262,7 +1262,7 @@ it can be passed in POS."
 *** Git Gutter
 #+begin_src emacs-lisp
 (use-package git-gutter
-  :hook (after-init . (lambda () (add-hook 'find-file-hook #'(lambda ()
+  :hook (after-init . (lambda () (add-hook 'find-file-hook (lambda ()
     (unless (file-remote-p default-directory)
       (git-gutter-mode 1)))))))
 #+end_src
@@ -1458,13 +1458,13 @@ it can be passed in POS."
 #+end_src
 *** Python Mode
 #+begin_src emacs-lisp
-(add-hook 'python-ts-mode-hook #'(lambda()
+(add-hook 'python-ts-mode-hook (lambda()
   (setq tab-width 4
         indent-tabs-mode nil)))
 #+end_src
 *** Javascript Mode
 #+begin_src emacs-lisp
-(add-hook 'js-ts-mode-hook #'(lambda()
+(add-hook 'js-ts-mode-hook (lambda()
   ;; (setq-local eglot-ignored-server-capabilities '(:hoverProvider))
   (setq tab-width 2
         indent-tabs-mode nil
@@ -1472,7 +1472,7 @@ it can be passed in POS."
 #+end_src
 *** TypeScript Mode
 #+begin_src emacs-lisp
-(add-hook 'typescript-ts-mode-hook #'(lambda()
+(add-hook 'typescript-ts-mode-hook (lambda()
   ;; (setq-local eglot-ignored-server-capabilities '(:hoverProvider))
   (setq tab-width 2
         indent-tabs-mode nil)))
@@ -1482,13 +1482,13 @@ it can be passed in POS."
 (use-package vue-mode 
   :mode "\\.vue\\'" 
   :config 
-  (add-hook 'vue-mode-hook #'(lambda()
+  (add-hook 'vue-mode-hook (lambda()
     (setq tab-width 2
           indent-tabs-mode nil))))
 #+end_src
 *** Go Mode
 #+begin_src emacs-lisp
-(add-hook 'go-ts-mode-hook #'(lambda()
+(add-hook 'go-ts-mode-hook (lambda()
   (setq tab-width 4
         go-ts-mode-indent-offset 4
         indent-tabs-mode nil)))
@@ -1502,7 +1502,7 @@ it can be passed in POS."
 (use-package lua-mode 
   :mode "\\.lua\\'"
   :config
-  (add-hook 'lua-mode-hook #'(lambda()
+  (add-hook 'lua-mode-hook (lambda()
     (setq tab-width 4))))
 #+end_src
 *** Elixir Mode
@@ -1511,7 +1511,7 @@ it can be passed in POS."
 #+end_src
 *** Rust Mode
 #+begin_src emacs-lisp
-(add-hook 'rust-ts-mode-hook #'(lambda()
+(add-hook 'rust-ts-mode-hook (lambda()
   (setq tab-width 4)))
 #+end_src
 *** PowerShell Mode
@@ -1570,7 +1570,7 @@ it can be passed in POS."
 #+end_src
 **** Nerd Icons Ibuffer
 #+begin_src emacs-lisp
-(advice-add 'persp-ibuffer :after #'(lambda (&rest r) (nerd-icons-ibuffer-mode 1)))
+(advice-add 'persp-ibuffer :after (lambda (&rest r) (nerd-icons-ibuffer-mode 1)))
 (use-package nerd-icons-ibuffer :defer t)
 #+end_src
 *** Highlight TODO
@@ -1602,8 +1602,8 @@ it can be passed in POS."
     (setq prism-comments nil)
     (setq prism-strings t)
     ;; use advice instead of the emacs-lisp mode hook so it activates in org src blocks
-    (advice-add #'emacs-lisp-mode :after #'(lambda (&rest r) (prism-mode 1)))
-    (advice-add #'json-ts-mode :after #'(lambda (&rest r) (prism-mode 1)))
+    (advice-add #'emacs-lisp-mode :after (lambda (&rest r) (prism-mode 1)))
+    (advice-add #'json-ts-mode :after (lambda (&rest r) (prism-mode 1)))
     (prism-set-colors
       :desaturations '(0)
       :lightens '(0)
@@ -1686,7 +1686,7 @@ it can be passed in POS."
     (treesit-install-language-grammar (car lang))))
 
 ;; maps the ts modes to normal modes
-(mapc #'(lambda (mode-remap) (add-to-list 'major-mode-remap-alist mode-remap))
+(mapc (lambda (mode-remap) (add-to-list 'major-mode-remap-alist mode-remap))
   '((c-mode . c-ts-mode)
     (c++-mode . c++-ts-mode)
     ;; (csharp-mode . csharp-ts-mode) ;; csharp-ts-mode is broken for me, idk why
@@ -1697,7 +1697,7 @@ it can be passed in POS."
     (java-mode . java-ts-mode)))
 
 ;; for modes that have an existing ts mode but no existing normal mode
-(mapc #'(lambda (auto-mode) (add-to-list 'auto-mode-alist auto-mode))
+(mapc (lambda (auto-mode) (add-to-list 'auto-mode-alist auto-mode))
   '(("\\.go\\'" . go-ts-mode)
     ("\\.rs\\'" . rust-ts-mode)
     ("\\.toml\\'" . toml-ts-mode)
@@ -1716,13 +1716,13 @@ it can be passed in POS."
 #+begin_src emacs-lisp
 ;; I mostly use themes just for the text highlighting, 
 ;; pretty much everything else here
-(add-hook 'minibuffer-setup-hook #'(lambda ()
+(add-hook 'minibuffer-setup-hook (lambda ()
   (face-remap-add-relative 'default
                 `(:background ,jl/bg-0))
   (face-remap-add-relative 'fringe
                 `(:background ,jl/bg-0 :foreground ,jl/bg-0))))
 
-(add-hook 'post-command-hook #'(lambda ()
+(add-hook 'post-command-hook (lambda ()
   (set-cursor-color (if (derived-mode-p 'dired-mode) jl/acc-1 jl/acc-0))))
 
 (set-face-attribute 'line-number-current-line nil :foreground jl/acc-0)
