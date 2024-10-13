@@ -20,8 +20,8 @@ pkgs,
     grim
     slurp
     swaybg
-    swayidle
-    swaylock-effects
+    hyprlock
+    # swaylock-effects
     swaynotificationcenter
     wl-clipboard
   ];
@@ -40,7 +40,6 @@ pkgs,
       exec-once = [
         "waybar"
         "swaybg -i ~/photos/wallpapers/wallpaper.png"
-        ''swayidle -w timeout 1800 'swaylock -f -i ~/photos/wallpapers/wallpaper.png' timeout 1805 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep "swaylock -f -i ~/photos/wallpapers/wallpaper.png"''
         "hyprctl setcursor ${custom.cursor} ${custom.fontsize}"
         "swaync"
       ];
@@ -119,7 +118,7 @@ pkgs,
         "$mainMod, D, exec, wofi"
         ''$mainMod,P,exec,IMG=~/photos/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png && mkdir -p ~/photos/screenshots && grim -g "$(slurp -d)" $IMG && wl-copy < $IMG; notify-send -i $IMG Screenshot "Screenshot saved to ''${IMG} and copied to clipboard"''
         "$mainMod ,N,exec, swaync-client -t -sw"
-        "$mainMod SHIFT,M,exec, swaylock -f -i ~/photos/wallpapers/wallpaper.png"
+        "$mainMod SHIFT,M,exec, hyprlock --immediate"
         # Window Options
         "$mainMod, V, pseudo"
         "$mainMod, W, togglesplit"
@@ -178,8 +177,7 @@ pkgs,
         ",XF86AudioLowerVolume,exec,pactl set-sink-volume @DEFAULT_SINK@ -5%  "
       ];
       bindl = [
-        ",switch:on:Lid Switch, exec, swaylock -f -i ~/photos/wallpapers/wallpaper.png"
-        ",switch:off:Lid Switch, exec, swaylock -f -i ~/photos/wallpapers/wallpaper.png"
+        ",switch:Lid Switch, exec, hyprlock --immediate"
       ];
       windowrulev2 = [
         # "opacity ${custom.opacity} ${custom.opacity},class:^(thunar)$"

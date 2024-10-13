@@ -34,7 +34,7 @@
     - [[#wdired][wDired]]
     - [[#diredfl][Diredfl]]
     - [[#dired-filter][Dired Filter]]
-    - [[#dired-ranger][Dired Ranger]]
+    - [[#dired-actions][Dired Actions]]
     - [[#dired-subtree][Dired Subtree]]
     - [[#dired-sidetree][Dired Sidetree]]
     - [[#dired-async][Dired Async]]
@@ -553,7 +553,7 @@
   :config
   (setq dired-filter-revert 'always))
 #+end_src
-*** Dired Ranger
+*** Dired Actions
 #+begin_src emacs-lisp
 (use-package dired-actions
   :vc (dired-actions :url "https://github.com/justinlime/dired-actions.el")
@@ -563,6 +563,7 @@
        "y" #'dired-actions-copy
        "P" #'dired-actions-paste
        "M" #'dired-actions-move
+       "H" #'dired-actions-hardlink
        "S" #'dired-actions-symlink
        "L" #'dired-actions-symlink-relative))
 #+end_src
