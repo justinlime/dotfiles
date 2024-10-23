@@ -12,6 +12,7 @@
     ../base/avahi.nix
     ../base/smart.nix
     ../base/xrdp.nix
+    ../base/virtulization.nix
   ];
 
   networking = {

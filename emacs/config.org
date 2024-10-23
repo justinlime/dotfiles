@@ -494,6 +494,7 @@
 ;; dont prompt ever time for recursion
 (setq dired-listing-switches "-alFh --group-directories-first"
       dired-recursive-copies 'always
+      dired-hide-details-hide-symlink-targets nil
       large-file-warning-threshold nil
       dired-recursive-deletes 'always)
 (add-hook 'dired-mode-hook (lambda () 
