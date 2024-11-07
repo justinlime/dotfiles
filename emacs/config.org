@@ -561,12 +561,16 @@
   :general 
     (:keymaps 'dired-mode-map 
      :states '(normal emacs motion)
-       "y" #'dired-actions-copy
-       "P" #'dired-actions-paste
+       "y" #'dired-actions-capture
+       "P" #'dired-actions-copy
        "M" #'dired-actions-move
-       "H" #'dired-actions-hardlink
+       "Q" #'dired-actions-clear
+       ;; "H" #'dired-actions-hardlink
        "S" #'dired-actions-symlink
-       "L" #'dired-actions-symlink-relative))
+       "L" #'dired-actions-symlink-relative)
+  :init
+    (add-hook 'dired-actions-post-action-hook #'dired-actions-clear)
+    (add-hook 'dired-actions-post-capture-hook #'dired-unmark-all-marks))
 #+end_src
 
 *** Dired Subtree
@@ -582,51 +586,19 @@
 #+end_src
 *** Dired Sidetree
 #+begin_src emacs-lisp
-(leader "d t" '(jl/dired-sidetree-toggle :wk "Toggle sidebar directory"))
-
-(setq jl/dired-sidetree-visible-p nil)
-
-(defun jl/dired-sidetree-toggle ()
-  "Spawn a dired window on the lefthand side"
-  (interactive)
-  (if jl/dired-sidetree-visible-p
-      (progn
-        (setq jl/dired-sidetree-visible-p nil)
-        (window-toggle-side-windows))
-      (jl/dired-sidetree)))
-
-(defun jl/dired-sidetree (&optional dir)
-  "Spawn a dired window on the lefthand side"
-  (interactive)
-  (setq jl/dired-sidetree-visible-p t)
-  (let ((buffer (dired-noselect (or dir default-directory))))
-    (with-current-buffer buffer
-      (rename-buffer (format " %s-sidetree" (buffer-name)))
-      (dired-hide-details-mode t)
-      (jl/set-local-font (- jl/font-size 10))
-      (face-remap-add-relative 'default
-                    `(:background ,jl/bg-0))
-      (face-remap-add-relative 'fringe
-                    `(:background ,jl/bg-0))
-      (general-define-key
-        :states 'normal
-        :keymaps 'local
-          "l" #'jl/dired-sidetree-open
-          "h" (lambda () (interactive) (jl/dired-sidetree ".."))))
-    (display-buffer-in-side-window
-     buffer `((side . left) (slot . 0)
-              (window-width . 30)
-              (preserve-size . (t . nil))))
-    (select-window (get-buffer-window buffer))))
-
-(defun jl/dired-sidetree-open ()
-  (interactive)
-  (let ((file (dired-get-file-for-visit)))
-    (if (file-directory-p file)
-        (jl/dired-sidetree file)
-        (let ((other-windows (delete nil (mapcar (lambda (win) (unless (eq (selected-window) win) win)) (window-list)))))
-          (select-window (car other-windows))
-          (find-file file)))))
+(use-package dired-sidetree
+  :vc (dired-sidetree :url "https://github.com/justinlime/dired-sidetree.el")
+  :config
+    (setq dired-sidetree-size 30
+          dired-sidetree-side 'left)
+  :general 
+    (leader "d t" '(dired-sidetree-toggle :wk "Toggle the sidetree"))
+    (:keymaps 'dired-sidetree-map
+     :states '(normal emacs motion)
+       "l" #'dired-sidetree-open
+       "h" #'dired-sidetree-open-up
+       "RET" #'dired-sidetree-open
+       "<return>" #'dired-sidetree-open))
 #+end_src
 *** Dired Async
 #+begin_src emacs-lisp
