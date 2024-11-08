@@ -1,9 +1,21 @@
-{ ... }:
+{ username, inputs, pkgs, ... }:
 {
   networking.firewall.allowedTCPPorts = [ 90 ];
   security.acme = {
     acceptTerms = true;
     defaults.email = "justinlime1999@gmail.com";
+  };
+  systemd.services.fileserver = {
+    description="FileServer";
+    serviceConfig = {
+      User=username;
+      Group=username;
+      Restart="always";
+      RestartSec="10s";
+      LimitNOFILE=4096;
+      ExecStart="${inputs.fileserver.packages.${pkgs.system}.default}/bin/go-fileserver --port 6900 --dir /storage/fileshare --debug";
+    };
+    wantedBy = [ "default.target" ];
   };
   services.nginx = {
     enable = true;
@@ -64,34 +76,17 @@
         };
       };
       "download.justinlime.dev" = {
-        serverName = "downloads.justinlime.dev download.justinlime.dev";
+        serverName = "downloads.justinlime.dev download.justinlime.dev stinkboys.com downloads.stinkboys.com download.stinkboys.com";
         listen = [{
           port = 90;
           addr = "0.0.0.0";
         }];
         locations."/" = {
-          root = "/drives/NVME0/fileshare";
+          proxyPass = "http://localhost:6900";
           extraConfig = ''
-            add_before_body /.theme/header.html;
-            add_after_body /.theme/footer.html;
-            autoindex on;
-            autoindex_exact_size off;
-          '';
-        };
-      };
-      "downloads.stinkboys.com" = {
-        serverName = "stinkboys.com downloads.stinkboys.com download.stinkboys.com";
-        listen = [{
-          port = 90;
-          addr = "0.0.0.0";
-        }];
-        locations."/" = {
-          root = "/drives/NVME0/fileshare";
-          extraConfig = ''
-            add_before_body /.theme/header.html;
-            add_after_body /.theme/footer.html;
-            autoindex on;
-            autoindex_exact_size off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;    
           '';
         };
       };

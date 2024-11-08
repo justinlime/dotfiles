@@ -105,5 +105,9 @@
       url = "github:justinlime/pipecord";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    fileserver = {
+      url = "github:justinlime/go-fileserver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 }

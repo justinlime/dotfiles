@@ -27,4 +27,5 @@ with pkgs; [
   ffmpeg-full
   podman-tui
   (nerdfonts.override { fonts = [ "FiraCode" ]; })
+  inputs.fileserver.packages.${pkgs.system}.default
 ]

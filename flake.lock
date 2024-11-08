@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "fileserver": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1731020628,
+        "narHash": "sha256-WnoPqB9iWdaxagUuurwBBMIAE2Y94PsxBxdvyXLRlec=",
+        "owner": "justinlime",
+        "repo": "go-fileserver",
+        "rev": "384071d72aff1b4290838c4c89e59a96a0b34b14",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justinlime",
+        "repo": "go-fileserver",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -90,6 +110,7 @@
     },
     "root": {
       "inputs": {
+        "fileserver": "fileserver",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgsJustinLime": "nixpkgsJustinLime",
