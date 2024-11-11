@@ -14,7 +14,7 @@
         enable = true;
         settings = {
             allow_images = true;
-            width = "25%";
+            width = "50%";
             hide_scroll = true;
             term = "foot";
             show = "drun";
