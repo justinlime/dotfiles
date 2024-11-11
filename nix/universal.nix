@@ -26,6 +26,7 @@ with pkgs; [
   git-crypt
   ffmpeg-full
   podman-tui
+  fastfetch
   (nerdfonts.override { fonts = [ "FiraCode" ]; })
   inputs.fileserver.packages.${pkgs.system}.default
 ]
