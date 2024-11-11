@@ -1,11 +1,7 @@
 { ... }:
 {
-  imports = [
-    ./direnv.nix
-    ./mpv.nix
-    ./zsh.nix
-    ./tmux.nix
-    ./btop.nix
-    ./cava.nix
-  ];  
+  # Import everything in this dir other than default.nix
+  imports = (map (x: ./. + ("/" + x))
+    (with builtins; filter (x: x != "default.nix")
+      (attrNames (readDir ./.))));  
 }

@@ -1,11 +1,7 @@
 { ... }:
 {
-  imports = [
-    ./hyprland.nix
-    ./hyprlock.nix
-    ./hypridle.nix
-    ./waybar.nix
-    ./wofi.nix
-    ./foot.nix
-  ];
+  # Import everything in this dir other than default.nix
+  imports = (map (x: ./. + ("/" + x))
+    (with builtins; filter (x: x != "default.nix")
+      (attrNames (readDir ./.))));  
 }

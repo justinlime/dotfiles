@@ -1,21 +1,7 @@
 { ... }:
 {
-  imports = [
-    ./plex.nix
-    ./wireguard.nix
-    ./duckdns.nix
-    ./radarr.nix
-    ./sonarr.nix
-    ./prowlarr.nix
-    ./requestrr.nix
-    ./qbittorrentvpn.nix
-    ./sabnzbd.nix
-    ./filebot.nix
-    ./jellyfin.nix
-    ./pihole.nix
-    ./deemix.nix
-    ./komga.nix
-    ./syncthing.nix
-    ./gitea.nix
-  ];
+  # Import everything in this dir other than default.nix
+  imports = (map (x: ./. + ("/" + x))
+    (with builtins; filter (x: x != "default.nix")
+      (attrNames (readDir ./.))));  
 }

@@ -1,17 +1,7 @@
 { ... }:
 {
-  # Import everything
-  imports = [
-    ./configuration.nix
-    ./networking.nix
-    ./docker.nix
-    ./wayland.nix
-    ./virtulization.nix
-    ./ssh.nix
-    ./gaming.nix
-    ./smart.nix
-    ./avahi.nix
-    ./usb.nix
-    ./xrdp.nix
-  ];
+  # Import everything in this dir other than default.nix
+  imports = (map (x: ./. + ("/" + x))
+    (with builtins; filter (x: x != "default.nix")
+      (attrNames (readDir ./.))));  
 }
