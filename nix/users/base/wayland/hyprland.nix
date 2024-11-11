@@ -35,7 +35,9 @@ pkgs,
         # position can be negative to swtich monitor to the left or right side
         "DP-1,3840x2160@144,0x0,1.5,bitdepth,10"
         "DP-2,2560x1440@165,2560x0,1"
-        "eDP-1,1920x1080@60,0x0,1"
+        # I have multiple monitors that are "eDP-1", so match basec on description instead
+        "desc:Samsung Display Corp. ATNA60CL10-0,2880x1800@120,0x0,1.5,bitdepth,10"
+        "desc:BOE 0x08A8,1920x1080@60,0x0,1"
       ];
       exec-once = [
         "waybar"
@@ -50,6 +52,8 @@ pkgs,
         kb_layout = "us";
         follow_mouse = true;
         force_no_accel = 1;
+        # This doesnt work :(
+        # sensitivity = -1.0;
         touchpad = {
           natural_scroll = 1;
         };
