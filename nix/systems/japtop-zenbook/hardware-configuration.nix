@@ -21,8 +21,8 @@
       };
     };
     kernelModules = [ "kvm-amd" ];
-    kernelParams = [ "amdgpu.dcdebugmask=0x600" ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelParams = [ "amdgpu.dcdebugmask=0x600" ];
+    kernelPackages = pkgs.linuxPackages_6_10;
     # Enable nested virtualization
     extraModprobeConfig = "options kvm-amd nested=1";
   };
@@ -67,6 +67,12 @@
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware = {
+    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+  };
 }
 
