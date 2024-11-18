@@ -15,33 +15,47 @@
     };
     initrd = {
       availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-      luks.devices."cryptpart".device = "/dev/disk/by-uuid/ade7c385-a68c-40f3-9fae-8e997aa0dee3";
+      luks.devices.root = {
+        device = "/dev/disk/by-uuid/bd1b4c09-46f3-474d-b1a1-fde9f1ea942e";
+        preLVM = true;
+      };
     };
     kernelModules = [ "kvm-amd" ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [ "amdgpu.dcdebugmask=0x600" ];
+    kernelPackages = pkgs.linuxPackages_6_10;
+    # Enable nested virtualization
+    # extraModprobeConfig = "options kvm-amd nested=1";
   };
 
-  fileSystems = {
-    "/" = { 
-      device = "/dev/mapper/cryptpart";
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/758664ba-5ad9-4f2c-8ff9-11c40d830a45";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:3" "noatime" "subvol=root" ];
+      options = [ "subvol=root" "compress-force=zstd:3" "noatime" ];
     };
-    "/home" = { 
-      device = "/dev/mapper/cryptpart";
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/758664ba-5ad9-4f2c-8ff9-11c40d830a45";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:3" "noatime" "subvol=home" ];
+      options = [ "subvol=home" "compress-force=zstd:3" "noatime"  ];
     };
-    "/nix" = { 
-      device = "/dev/mapper/cryptpart";
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/758664ba-5ad9-4f2c-8ff9-11c40d830a45";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:3" "noatime" "subvol=nix" ];
+      options = [ "subvol=nix"  "compress-force=zstd:3" "noatime" ];
     };
-    "/boot" = { 
-      device = "/dev/disk/by-uuid/D586-8FFE";
+
+  fileSystems."/snapshots" =
+    { device = "/dev/disk/by-uuid/758664ba-5ad9-4f2c-8ff9-11c40d830a45";
+      fsType = "btrfs";
+      options = [ "subvol=snapshots" "compress-force=zstd:3" "noatime"  ];
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/1030-50F5";
       fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
     };
-  };
 
   swapDevices = [ ];
 
@@ -50,7 +64,7 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp197s0f0u1.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
@@ -61,4 +75,3 @@
     };
   };
 }
-

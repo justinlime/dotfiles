@@ -38,6 +38,7 @@ pkgs,
         # I have multiple monitors that are "eDP-1", so match basec on description instead
         "desc:Samsung Display Corp. ATNA60CL10-0,2880x1800@120,0x0,1.5,bitdepth,10"
         "desc:BOE 0x08A8,1920x1080@60,0x0,1"
+        "desc:BOE 0x0C9E,2240x1400@60,0x0,1.333333"
       ];
       exec-once = [
         "waybar"

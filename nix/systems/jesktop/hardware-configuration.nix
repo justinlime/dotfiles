@@ -25,7 +25,7 @@
     "/" = { 
       device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
       fsType = "btrfs";
-      options = [ "compress=zstd:1" "noatime" "subvol=root" ];
+      options = [ "compress-force=zstd:3" "noatime" "subvol=root" ];
     };
     "/boot" = { 
       device = "/dev/disk/by-uuid/FC74-CDE4";
@@ -34,17 +34,17 @@
     "/home" = { 
       device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
       fsType = "btrfs";
-      options = [ "compress=zstd:1" "noatime" "subvol=home" ];
+      options = [ "compress-force=zstd:3" "noatime" "subvol=home" ];
     };
     "/nix" = { 
       device = "/dev/disk/by-uuid/9c3f89cf-f24b-45a1-b256-618896c1d1d0";
       fsType = "btrfs";
-      options = [ "compress=zstd:1" "noatime" "subvol=nix" ];
+      options = [ "compress-force=zstd:3" "noatime" "subvol=nix" ];
     };
     "/drives/HDD0" = {
       device = "/dev/disk/by-label/HDD0";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "nofail" ];
+      options = [ "compress-force=zstd:3" "noatime" "nofail" "autodefrag" ];
     };
   };
   swapDevices = [ ];
