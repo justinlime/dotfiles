@@ -70,13 +70,14 @@ pkgs,
       };
       decoration = {
         rounding = 10;
-        shadow_ignore_window = true;
-        drop_shadow = true;
-        shadow_range = 50;
-        shadow_render_power = 3;
-        # "col.shadow" = "rgb(${custom.primary_accent})";
-        "col.shadow" = "rgba(${custom.primary_accent}00)";
-        "col.shadow_inactive" = "rgba(${custom.background}00)";
+        shadow = {
+          enabled = true;
+          ignore_window = true;
+          range = 50;
+          render_power = 3;
+          color = "rgba(${custom.primary_accent}00)";
+          color_inactive = "rgba(${custom.background}00)";
+        };
         blur = {
           enabled = true;
           size = 6;

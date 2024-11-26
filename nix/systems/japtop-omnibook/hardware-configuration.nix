@@ -22,7 +22,7 @@
     };
     kernelModules = [ "kvm-amd" ];
     kernelParams = [ "amdgpu.dcdebugmask=0x600" ];
-    kernelPackages = pkgs.linuxPackages_6_10;
+    kernelPackages = pkgs.linuxPackages_latest;
     # Enable nested virtualization
     # extraModprobeConfig = "options kvm-amd nested=1";
   };

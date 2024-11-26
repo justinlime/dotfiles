@@ -1,7 +1,8 @@
 { ... }:
 {
   programs.cava = {
-    enable = true;
+    # Build failing, gotta disable
+    enable = false;
     settings = {
       general = {
         framerate = 60;

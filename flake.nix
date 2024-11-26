@@ -6,7 +6,7 @@
 
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
-    usernames = [ ];
+    usernames = [ "justinlime" ];
 
     # Shhhhh
     # Read all the files, and mush them into a top level hush attribute set; Expects TOML format
