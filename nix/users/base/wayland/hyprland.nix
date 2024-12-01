@@ -39,6 +39,7 @@ pkgs,
         "desc:Samsung Display Corp. ATNA60CL10-0,2880x1800@120,0x0,1.5,bitdepth,10"
         "desc:BOE 0x08A8,1920x1080@60,0x0,1"
         "desc:BOE 0x0C9E,2240x1400@60,0x0,1.333333"
+        "desc:Lenovo Group Limited 0x8BA1 0x00006003,3200x2000@165, 0x0, 1.666667"
       ];
       exec-once = [
         "waybar"
