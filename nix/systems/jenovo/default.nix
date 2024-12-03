@@ -2,7 +2,7 @@
 {
   imports = [ 
     ./hardware-configuration.nix 
-    ./services
+    # ./services
     ../base/configuration.nix
     ../base/gaming.nix
     ../base/wayland.nix
