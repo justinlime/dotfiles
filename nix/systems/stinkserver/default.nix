@@ -30,7 +30,7 @@
     mergerfs
     snapraid
     intel-gpu-tools
-    ffmpeg-full
+    (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
     linux-firmware
     # inputs.pipecord.packages.${pkgs.system}.default
   ];

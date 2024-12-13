@@ -28,8 +28,8 @@
   # ];
   home.packages = with pkgs; [
     libnotify
-    ffmpeg-full
     mpc-cli
+    (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
     (pkgs.writeScriptBin "songinfo" ''
       music_dir="$HOME/music"
       previewdir="$XDG_CONFIG_HOME/ncmpcpp/previews"

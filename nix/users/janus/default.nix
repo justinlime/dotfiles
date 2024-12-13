@@ -12,6 +12,7 @@
     ../base/programs/btop.nix
     ../base/programs/direnv.nix
   ];
+  jfg.emacs.enable = true;
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

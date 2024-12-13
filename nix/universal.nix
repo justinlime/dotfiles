@@ -24,7 +24,8 @@ with pkgs; [
   veracrypt
   roboto
   git-crypt
-  ffmpeg-full
+  (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
+  (av1an.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
   podman-tui
   fastfetch
   (nerdfonts.override { fonts = [ "FiraCode" ]; })

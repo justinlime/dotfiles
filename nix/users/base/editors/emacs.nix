@@ -1,5 +1,11 @@
-{ inputs , pkgs, username, ... }:
+{ lib, config, inputs , pkgs, username, ... }:
+let cfg = config.jfg.emacs; in 
 {
+  options = {
+   jfg.emacs.enable = lib.mkEnableOption "Enable"; 
+  };
+
+  config = lib.mkIf cfg.enable {
   home.packages = with pkgs; [
     # Runtime
     emacs30-pgtk
@@ -35,5 +41,5 @@
     "emacs/init.el".source = "${inputs.self}/emacs/init.el";
     "emacs/config.org".source = "${inputs.self}/emacs/config.org";
     "emacs/icons/".source = "${inputs.self}/emacs/icons/";
-  };
+  };};
 }
