@@ -36,37 +36,37 @@
     "/drives/NVME0" = {
       device = "/dev/disk/by-uuid/466f73dd-c395-4b82-888e-d2ae99c286da";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" ];
+      options = [ "compress-force=zstd:1" "noatime" "x-systemd.device-timeout=15s" ];
     };
     "/drives/BTRFS0" = { #20tb
       device = "/dev/disk/by-uuid/028f290f-d1f7-4b45-b346-47d7864a2e24";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" "x-systemd.device-timeout=15s" ];
     };
     "/drives/BTRFS1" = { #14tb
       device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" "x-systemd.device-timeout=15s" ];
     };
     "/drives/BTRFS2" = { #14tb 
       device = "/dev/disk/by-uuid/1cdfed35-299b-4b62-93a3-b69e3eebc90e";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" "x-systemd.device-timeout=15s" ];
     };
     "/drives/BTRFS3" = { #12tb
       device = "/dev/disk/by-uuid/b70381ba-3ddb-48ac-9f21-c0f7b342be78";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" "x-systemd.device-timeout=15s" ];
     };
     "/drives/PARITY0" = { #20tb parity
       device = "/dev/disk/by-uuid/27ab9146-6226-47fc-8d91-aedc210b9102";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" "x-systemd.device-timeout=15s" ];
     };
     "/drives/EXTERNAL0" = { #4TB External 
       device = "/dev/disk/by-uuid/78d1947e-0375-4ac3-ad0f-249803877899";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "nofail" "x-systemd.device-timeout=15s" ];
     };
     "/storage/pool" = {
       device = "/drives/BTRFS*";
