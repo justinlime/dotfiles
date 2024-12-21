@@ -27,6 +27,7 @@
       gcon = "git config user.name";
       ls = "exa --group-directories-first";
       cat = "bat -p";
+      cpr = "rsync -ah --info=progress2";
     };
 
     packages = with pkgs; [
