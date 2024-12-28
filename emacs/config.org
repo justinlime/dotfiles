@@ -196,7 +196,7 @@
 #+end_src
 *** Fonts
 #+begin_src emacs-lisp
-(setq jl/font-size (if jl/is-wsl 160 120))
+(setq jl/font-size (if jl/is-wsl 200 120))
 (setq jl/mono-font "FiraCodeNerdFont")
 (defun jl/set-local-font (font-size)
   "Function to be added in a hook, to set the font size for specific modes"
