@@ -767,7 +767,11 @@
 #+end_src
 *** Org Agenda
 #+begin_src emacs-lisp
-(setq jl/org-agenda-dir "~/sync/notes/agenda")
+(let ((dir "~/sync/notes/agenda"))
+  (if (file-directory-p dir)
+      (setq jl/org-agenda-dir dir)
+      (setq jl/org-agenda-dir (expand-file-name "org/agenda" user-emacs-directory))
+      (make-directory jl/org-agenda-dir t)))
 (setq org-agenda-files `(,jl/org-agenda-dir)
       org-todo-keywords '((sequence
         "TODO(t)"           ; Generalized
@@ -928,6 +932,11 @@ it can be passed in POS."
 
 *** Org Roam
 #+begin_src emacs-lisp
+(let ((dir "~/sync/notes/roam"))
+  (if (file-directory-p dir)
+      (setq jl/org-roam-dir dir)
+      (setq jl/org-roam-dir (expand-file-name "org/roam" user-emacs-directory))
+      (make-directory jl/org-roam-dir t)))
 (use-package org-roam
   :general
     (leader
@@ -949,7 +958,7 @@ it can be passed in POS."
                                            (propertize "${type:10}" 'face 'org-level-2) 
                                            "${title:100}" 
                                            (propertize "${tags:*}" 'face 'org-level-1))
-          org-roam-directory (file-truename "~/sync/notes/roam")
+          org-roam-directory (file-truename jl/org-roam-dir)
           org-roam-capture-templates  
             `(("w" "work" plain "%?" :target
                 (file+head "work/%<%Y%m%d%H%M%S>-${slug}.org" ,jl/roam-templ)
