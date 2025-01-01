@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
-let cfg = config.jfg.gtk-qt; in 
+let cfg = config.jfg.theme; in 
 {
-  options.jfg.gtk-qt = with lib.types; {
+  options.jfg.theme = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
     font.name = lib.mkOption {
       default = "FiraCodeNerdFont";

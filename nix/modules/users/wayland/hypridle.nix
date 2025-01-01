@@ -1,25 +1,39 @@
-{ ... }:
+{ config, lib, ... }:
+let cfg = config.jfg.hypridle; in
 {
-  services.hypridle = {
-    enable = true;  
-    settings = {
-      general = {
-        after_sleep_cmd = "hyprctl dispatch dpms on";
-        ignore_dbus_inhibit = false;
-        lock_cmd = "hyprlock";
-      };
-
-      listener = [
-        {
-          timeout = 300;
-          on-timeout = "hyprlock";
-        }
-        {
-          timeout = 330;
-          on-timeout = "systemctl suspend";
-          on-resume = "hyprctl dispatch dpms on";
-        }
-      ];
+  options.jfg.hypridle = with lib.types; {
+    enable = lib.mkEnableOption "Enable";  
+    lockTimeout = lib.mkOption  {
+      default = 300;
+      type = int;
     };
-  }; 
+    sleepTimeout = lib.mkOption {
+      default = 330;
+      type = int;
+    };
+  };
+  config = lib.mkIf cfg.enable {
+    services.hypridle = {
+      enable = true;  
+      settings = {
+        general = {
+          after_sleep_cmd = "hyprctl dispatch dpms on";
+          ignore_dbus_inhibit = false;
+          lock_cmd = "hyprlock";
+        };
+
+        listener = [
+          {
+            timeout = cfg.lockTimeout;
+            on-timeout = "hyprlock";
+          }
+          {
+            timeout = cfg.sleepTimeout;
+            on-timeout = "systemctl suspend";
+            on-resume = "hyprctl dispatch dpms on";
+          }
+        ];
+      };
+    }; 
+  };
 }

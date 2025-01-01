@@ -1,15 +1,22 @@
-{ profile, pkgs, username, inputs, flake_path, ... }:
+{ pkgs,... }:
 {
   # Janus is a home build for tools id be using typically on
   # a headless server of some kind
   jfg = {
-    home.username = "justinlime"; 
+    home = rec {
+      username = "justinlime";
+      homeDirectory = "/home/${username}";
+      flakeDirectory = "/home/${username}/dotfiles";
+    }; 
     emacs.enable = true;
     nvim.enable = true; 
     zsh.enable = true;
     tmux.enable = true;
     btop.enable = true;
   };
+  home.packages = with pkgs; [
+      
+  ];
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
