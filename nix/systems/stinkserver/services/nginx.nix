@@ -1,4 +1,4 @@
-{ username, inputs, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 {
   networking.firewall.allowedTCPPorts = [ 90 ];
   security.acme = {
@@ -8,8 +8,8 @@
   systemd.services.fileserver = {
     description="FileServer";
     serviceConfig = {
-      User=username;
-      Group=username;
+      User=config.jfg.system.username;
+      Group=config.jfg.system.username;
       Restart="always";
       RestartSec="10s";
       LimitNOFILE=4096;

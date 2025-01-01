@@ -1,4 +1,4 @@
-{ username , ... }:
+{ config, ... }:
 {
   services.snapraid = {
     enable = true;
@@ -19,7 +19,7 @@
       d4 = "/drives/BTRFS3"; #12TB
     };
     contentFiles = [
-      "/home/${username}/.snapraid.content"
+      "/home/${config.jfg.system.username}/.snapraid.content"
       "/drives/BTRFS0/.snapraid.content"
       "/drives/BTRFS1/.snapraid.content"
       "/drives/BTRFS2/.snapraid.content"

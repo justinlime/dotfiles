@@ -2,7 +2,7 @@
 let cfg = config.jfg.xrdp; in 
 {
   options.jfg.xrdp = with lib.types; {
-    enable = mkEnableOption "Enable";
+    enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ firefox ];

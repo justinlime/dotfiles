@@ -2,14 +2,17 @@
 let cfg = config.jfg.firewall; in 
 {
   options.jfg.firewall = with lib.types; {
-    enable = mkEnableOption "Enable";  
-    TCPPorts = mkOption {
+    enable = lib.mkEnableOption "Enable";  
+    TCPPorts = lib.mkOption {
+      default = [ ];
       type = listOf int;
     };
-    UDPPorts = mkOption {
+    UDPPorts = lib.mkOption {
+      default = [ ];
       type = listOf int;
     };
-    BothPorts = mkOption {
+    BothPorts = lib.mkOption {
+      default = [ ];
       type = listOf int;
     };
   };

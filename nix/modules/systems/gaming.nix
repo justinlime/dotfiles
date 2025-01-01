@@ -2,7 +2,7 @@
 let cfg = config.jfg.gaming; in 
 {
   options.jfg.gaming = with lib.types; {
-    enable = mkEnableOption "Enable";  
+    enable = lib.mkEnableOption "Enable";  
   };
   config = lib.mkIf cfg.enable {
     # System

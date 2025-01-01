@@ -69,6 +69,7 @@
           inherit system;
           specialArgs = { inherit profile hush inputs; }; 
           modules = [
+            ./nix/modules/systems
             ./nix/systems/${name}
             { nix.settings.experimental-features = [ "nix-command" "flakes" ]; }
             { nix.registry.nixpkgs.flake = nixpkgs; }

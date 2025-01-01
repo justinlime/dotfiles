@@ -110,9 +110,9 @@
 in
 {
   options.jfg.usbautomount = with lib.types; {
-    enable = mkEnableOption "Enable";
+    enable = lib.mkEnableOption "Enable";
   };
-  config = lib.mkIf jfg.usbautomount {
+  config = lib.mkIf cfg.enable {
     users.users.${config.jfg.system.username}.extraGroups = [ "adbusers" ];
     services.udev = {
       packages = with pkgs; [

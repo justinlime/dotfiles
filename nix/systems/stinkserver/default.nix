@@ -4,17 +4,23 @@
     ./hardware-configuration.nix
     ./containers
     ./services
-    ../base/configuration.nix
-    ../base/ssh.nix
-    ../base/docker.nix
-    ../base/networking.nix
-    ../base/usb.nix
-    ../base/avahi.nix
-    ../base/smart.nix
-    ../base/xrdp.nix
-    ../base/virtulization.nix
   ];
-
+  jfg = {
+    system = rec {
+      username = "justinlime";  
+      flakeDirectory = "/home/${username}/dotfiles";
+    }; 
+    docker.enable = true;
+    smart.enable = true;
+    ssh.enable = true;
+    usbautomount.enable = true;
+    virt.enable = true;
+    xrdp.enable = true;
+    firewall = {
+      enable = true;  
+      BothPorts = [ 1313 ];
+    };
+  };
   networking = {
    hostName = "stinkserver"; 
    nameservers = ["9.9.9.9"];

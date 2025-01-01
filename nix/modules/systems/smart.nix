@@ -2,7 +2,7 @@
 let cfg = config.jfg.smart; in 
 {
   options.jfg.smart = with lib.types; {
-    enable = mkEnableOption "Enable";
+    enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
     services.smartd = {

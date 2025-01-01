@@ -2,7 +2,7 @@
 let cfg = config.jfg.wayland; in 
 {
   options.jfg.wayland = with lib.types; {
-    enable = mkEnableOption "Enable";
+    enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
     # Services needed for my desktop environment

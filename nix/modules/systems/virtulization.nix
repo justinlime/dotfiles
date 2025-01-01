@@ -2,7 +2,7 @@
 let cfg = config.jfg.virt; in 
 {
   options.jfg.virt = with lib.types; {
-    enable = mkEnableOption "Enable"; 
+    enable = lib.mkEnableOption "Enable"; 
   };
   config = lib.mkIf cfg.enable {
     # Enable virtualization with qemu and virt-manager and add the admin user to the necessary groups
