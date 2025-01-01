@@ -1,4 +1,4 @@
-{ pkgs, inputs, username, hush, flake_path, ... }:
+{ pkgs, config, hush, ... }:
 {
   imports = [ 
     ./hardware-configuration.nix
@@ -23,14 +23,14 @@
       allowedUDPPorts = [ 1313 ];
    };
   };
-  users.users.${username}.openssh.authorizedKeys.keys = [
+  users.users.${config.jfg.system.username}.openssh.authorizedKeys.keys = [
     "${hush.ssh.public-keys.stinkserver}" 
   ];
   environment.systemPackages = with pkgs; [
     mergerfs
     snapraid
     intel-gpu-tools
-    (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
+    # (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
     linux-firmware
     # inputs.pipecord.packages.${pkgs.system}.default
   ];

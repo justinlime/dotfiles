@@ -11,5 +11,6 @@
     ./programs
     ./services
     ./configuration.nix
+    ./gtk-qt.nix
   ];
 }

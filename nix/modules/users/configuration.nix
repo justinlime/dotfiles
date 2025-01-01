@@ -1,4 +1,4 @@
-{ config, lib, profile, inputs, pkgs, username, flake_path, ... }:
+{ config, lib, profile, inputs, pkgs, ... }:
 let cfg = config.jfg.home; in 
 {
   options.jfg.home = with lib.types; {
@@ -6,17 +6,18 @@ let cfg = config.jfg.home; in
       type = str;
     };
     homeDirectory = lib.mkOption {
+      default = "/home/${cfg.username}";
       type = str;
     };
     flakeDirectory = lib.mkOption {
+      default = "/home/${cfg.username}/dotfiles";
       type = str;
     };
   };
   config = {
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
-    nixpkgs.config.allowUnfree = true; # This is borked for some reason :D
-    nixpkgs.config.allowUnfreePredicate = _: true; # Workaround for the above borked option
+    nixpkgs.config.allowUnfree = true; 
     fonts.fontconfig.enable = true;
     home = {
       username = cfg.username;
@@ -44,7 +45,7 @@ let cfg = config.jfg.home; in
       };
 
       packages = with pkgs; [
-      ] ++ (import ../../universal.nix pkgs inputs);
+      ] ++ (import ../shared/packages.nix pkgs inputs);
     };
 
     # Home Manager needs a bit of information about you and the

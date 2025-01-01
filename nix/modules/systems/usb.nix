@@ -1,5 +1,6 @@
-{ pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
   let
+    cfg = config.jfg.usbautomount;
     mount = (pkgs.writeScriptBin "usb-mount.sh" ''
       #!/bin/sh
       PATH=$PATH:/run/current-system/sw/bin
@@ -108,35 +109,40 @@
     '');
 in
 {
-  users.users.${username}.extraGroups = [ "kvm" "adbusers" ];
-  services.udev = {
-    packages = with pkgs; [
-      android-udev-rules
-    ];
-    extraRules = ''
-      KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
-      KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
-      KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
-      KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
-      '';
+  options.jfg.usbautomount = with lib.types; {
+    enable = mkEnableOption "Enable";
   };
-
-  systemd.services = {
-   "automount-usbdrive@" = {
-    description="Automount USB Drives";
-    serviceConfig = {
-      Type="oneshot";
-      RemainAfterExit = "true";
-      ExecStart = "${mount}/bin/usb-mount.sh add %i";
-      ExecStop = "${mount}/bin/usb-mount.sh remove %i";
+  config = lib.mkIf jfg.usbautomount {
+    users.users.${config.jfg.system.username}.extraGroups = [ "adbusers" ];
+    services.udev = {
+      packages = with pkgs; [
+        android-udev-rules
+      ];
+      extraRules = ''
+        KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
+        KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
+        KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"
+        KERNEL=="sd[a-z]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/bin/sh -c 'systemctl --no-block stop automount-usbdrive@%k.service'"
+        '';
     };
-   };
+
+    systemd.services = {
+     "automount-usbdrive@" = {
+      description="Automount USB Drives";
+      serviceConfig = {
+        Type="oneshot";
+        RemainAfterExit = "true";
+        ExecStart = "${mount}/bin/usb-mount.sh add %i";
+        ExecStop = "${mount}/bin/usb-mount.sh remove %i";
+      };
+     };
+    };
+    environment.systemPackages = with pkgs; [
+      mount
+      btrfs-progs
+      exfatprogs
+      ntfs3g
+      zfs
+    ];
   };
-  environment.systemPackages = with pkgs; [
-    mount
-    btrfs-progs
-    exfatprogs
-    ntfs3g
-    zfs
-  ];
 }
