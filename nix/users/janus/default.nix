@@ -9,7 +9,6 @@
     zsh.enable = true;
     tmux.enable = true;
     btop.enable = true;
-    gtk-qt.enable = true;
   };
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

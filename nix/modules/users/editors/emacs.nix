@@ -37,10 +37,10 @@ let cfg = config.jfg.emacs; in
       (nerdfonts.override { fonts = [ "FiraCode" ]; })
     ];
     xdg.configFile = {
-      "emacs/early-init.el".source = "${inputs.self}/emacs/early-init.el";
-      "emacs/init.el".source = "${inputs.self}/emacs/init.el";
-      "emacs/config.org".source = "${inputs.self}/emacs/config.org";
-      "emacs/icons/".source = "${inputs.self}/emacs/icons/";
+      "emacs/early-init.el".source = "${inputs.self}/non-nix/emacs/early-init.el";
+      "emacs/init.el".source = "${inputs.self}/non-nix/emacs/init.el";
+      "emacs/config.org".source = "${inputs.self}/non-nix/emacs/config.org";
+      "emacs/icons/".source = "${inputs.self}/non-nix/emacs/icons/";
     };
   };
 }

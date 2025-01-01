@@ -26,7 +26,7 @@ let cfg = config.jfg.nvim; in
       nodePackages_latest.yaml-language-server #Yaml
     ];
     xdg.configFile = {
-      "nvim".source = "${inputs.self}/nvim";
+      "nvim".source = "${inputs.self}/non-nix/nvim";
     };
   };
 }
