@@ -1,5 +1,5 @@
 {
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { nixpkgs, home-manager, ... }@inputs:
   let
     inherit (builtins) head elemAt attrNames readDir; 
     inherit (nixpkgs.lib) importTOML flatten genAttrs splitString;
@@ -7,53 +7,53 @@
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
     # Shhhhh
+    # Semi-private files encrypted with git-crypt. Profiles relying on these files will fail if not decrypted first.
     # Read all the files, and mush them into a top level hush attribute set; Expects TOML format
-    hush =
-      let
-        dir = ./hush; temp = {};
-      in
-        head (map (x: temp // (importTOML "${dir}/${x}")) (attrNames (readDir dir)));
+    hush = let dir = ./hush; temp = {}; in
+      head (map (x: temp // (importTOML "${dir}/${x}")) (attrNames (readDir dir)));
 
-    # Prefix every string in a ${list} with a given ${flag}, seperated by dots
+    # Prefix every string in a given LIST with a given FLAG, seperated by dots
     #
-    # EX: addFlags [ "brimstone" "janus" ] "x86_64-linux" -> [ "brimstone.x86_64-linux" "janus.x86_64-linux"]
-    addFlags = list: flag: (map (y: "${flag}.${y}") list);
+    # EX: genProfileNames [ "brimstone" "janus" ] "x86_64-linux" => [ "brimstone.x86_64-linux" "janus.x86_64-linux"]
+    genProfileNames = list: flag: (map (x: "${flag}.${x}") list);
 
-    # Add flags for every username, home profile, and system profile (directory containing a default.nix file)
-    # in a given dir, then apply a given function to each attribute in the resulting set
+    # Use the given FUNC to generate an attribute set, whose attribute name's are a profile,
+    # based upon the names of the subdirs found in the given DIR, and the available systems.
     applyProfiles = dir: func: (genAttrs
-        (flatten (map (addFlags systems)
+        (flatten (map (genProfileNames systems)
           (attrNames (readDir ./nix/${dir})))) func);
 
-    setParams = profile: rec {
-      # Split the attribute's name into independant variables
-      #
-      # EX: brimstone.x86_64-linux -> [ "brimstone" "x86_64-linux" ]
-      split = splitString "." profile;  
-      name = elemAt split 0;            
+    # Generate SYSTEM, PROFILENAME, and PKGS, based on a given profile.
+    #
+    # EX: genParams "brimstone.x86_64-linux" => { profileName = "brimstone"; system = "x86_64-linux"; pkgs = nixpkgs.legacyPackages.x86-64_linux; }
+    genParams = profile: let split = splitString "." profile; in rec {
+      profileName = elemAt split 0;            
       system =  elemAt split 1;         
       pkgs = nixpkgs.legacyPackages.${system};
     };
 
-    # Generate a attributes in a set for every possible combination
-    # of system, and profile. The attribute names will be in the format of
+    # Generate a buildable configuration for every possible combination
+    # of system architecture, and profile.
     #
-    # ${profile}.${system}
+    # The attribute names will be in the format of
     #
-    # EX: brimstone.x86_64-linux jesktop.x86_64-linux
+    # ${subdirname}.${system} 
+    # 
+    # EX: brimstone.x86_64-linux, brimstone.aarch64-linux, jesktop.x86_64-linux
     allHomeConfigurations = applyProfiles "users"
       (profile:                               
-        with (setParams profile);
-        # after first build and subsequent shell reload, you can rebuild with the "home-switch" alias instead
+        with (genParams profile);
+        # Bootstrap a home-manager profile using something like:
+        # nix run --extra-experimental-features 'nix-command flakes' github:nix-community/home-manager -- switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux --experimental-features 'nix-command flakes'
+        #
+        # After first rebuild and subsequent shell reload, you can rebuild with the "home-switch" alias instead
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = { inherit profile hush inputs; };
           modules = [
             ./nix/modules/users
-            ./nix/users/${name}
-            # Enable flakes after bootstrapping, if you dont have home-manager, flakes, or nix-command setup yet,
-            # you can bootstrap this build for the first time on a system with something like:
-            # nix run --extra-experimental-features 'nix-command flakes' github:nix-community/home-manager -- switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux --experimental-features 'nix-command flakes'
+            ./nix/users/${profileName}
+            # enable flakes and nix-command after the first rebuild
             { nix = { package = pkgs.nix; settings.experimental-features = [ "nix-command" "flakes" ];}; }
             # Pin registry to flake
             { nix.registry.nixpkgs.flake = nixpkgs; }
@@ -63,14 +63,17 @@
         });
     allSystemConfigurations = applyProfiles "systems"
       (profile: 
-        with (setParams profile);
-        # after first build and subsequent shell reload, you can rebuild with the "nix-switch" alias instead
+        with (genParams profile);
+        # Bootstrap a system profile using something like:
+        # nixos-rebuild switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux 
+        #
+        # After first build and subsequent shell reload, you can rebuild with the "nix-switch" alias instead
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit profile hush inputs; }; 
           modules = [
             ./nix/modules/systems
-            ./nix/systems/${name}
+            ./nix/systems/${profileName}
             { nix.settings.experimental-features = [ "nix-command" "flakes" ]; }
             { nix.registry.nixpkgs.flake = nixpkgs; }
             { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
