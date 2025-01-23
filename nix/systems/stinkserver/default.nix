@@ -10,7 +10,6 @@
       username = "justinlime";  
       flakeDirectory = "/home/${username}/dotfiles";
     }; 
-    docker.enable = true;
     smart.enable = true;
     ssh.enable = true;
     usbautomount.enable = true;
