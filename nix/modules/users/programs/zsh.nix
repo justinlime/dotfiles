@@ -43,9 +43,9 @@ let cfg = config.jfg.zsh; in
                 fi
             else
                 if [ $# -eq 0 ]; then
-                  builtin cd && ls --group-directories-first
+                  builtin cd && ls --color=auto --group-directories-first
                 else
-                    builtin cd "$@" && ls --group-directories-first
+                    builtin cd "$@" && ls --color=auto --group-directories-first
                 fi
             fi
         }

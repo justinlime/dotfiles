@@ -82,7 +82,7 @@
     - [[#python-mode][Python Mode]]
     - [[#javascript-mode][Javascript Mode]]
     - [[#typescript-mode][TypeScript Mode]]
-    - [[#vue-mode][Vue Mode]]
+    - [[#web-mode][Web Mode]]
     - [[#go-mode][Go Mode]]
     - [[#nix-mode][Nix Mode]]
     - [[#lua-mode][Lua Mode]]
@@ -1459,12 +1459,15 @@ it can be passed in POS."
   (setq tab-width 2
         indent-tabs-mode nil)))
 #+end_src
-*** Vue Mode
+*** Web Mode
 #+begin_src emacs-lisp 
-(use-package vue-mode 
-  :mode "\\.vue\\'" 
+(use-package web-mode 
+  :mode 
+    ("\\.vue\\'"
+     "\\.svelte\\'"
+     "\\.html\\'")
   :config 
-  (add-hook 'vue-mode-hook (lambda()
+  (add-hook 'web-mode-hook (lambda ()
     (setq tab-width 2
           indent-tabs-mode nil))))
 #+end_src
