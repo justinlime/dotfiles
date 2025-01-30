@@ -1467,6 +1467,8 @@ it can be passed in POS."
      "\\.svelte\\'"
      "\\.html\\'")
   :config 
+  (setq web-mode-auto-close-style 2)
+  (setq web-mode-enable-auto-closing t)
   (add-hook 'web-mode-hook (lambda ()
     (setq tab-width 2
           indent-tabs-mode nil))))
