@@ -8,7 +8,7 @@ let cfg = config.jfg.theme; in
       type = str;
     };
     font.package = lib.mkOption {
-      default = (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; });
+      default = pkgs.nerd-fonts.fira-code;
       type = package;
     };
     font.size = lib.mkOption {

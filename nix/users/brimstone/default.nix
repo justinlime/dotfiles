@@ -1,30 +1,32 @@
 { profile, inputs, username, flake_path, pkgs, pkgsStable, ... }:
-let 
-  # Variables to share accross configs
-  custom = {
-    font = "FiraCodeNerdFont";
-    fontsize = "12";
-    primary_accent = "cba6f7";
-    secondary_accent= "89b4fa";
-    tertiary_accent = "f5f5f5";
-    background = "11111B";
-    opacity = "1";
-    cursor = "Numix-Cursor";
-    palette = import ./colors.nix;
-  };
-in
 {
   # Brimstone is my main everyday home configuration, including a number
   # of tools and services i use on a daily basis
-  _module.args = { inherit pkgsStable profile inputs username custom; };
-  imports = [ 
-    ../base/configuration.nix
-    ../base/wayland
-    ../base/themes
-    ../base/programs
-    ../base/services
-    ../base/editors
-  ];
+  jfg = {
+    home = rec {
+      username = "justinlime";
+      homeDirectory = "/home/${username}";
+      flakeDirectory = "/home/${username}/dotfiles";
+    }; 
+    emacs.enable = true;
+    nvim.enable = true; 
+    zsh.enable = true;
+    tmux.enable = true;
+    btop.enable = true;
+    hyprland = {
+      enable = true;
+      monitors = [ "eDP-1,2880x1800@120,0x0,1.6" ];
+    }; 
+    hyprlock.enable = true;
+    hypridle.enable = true;
+    waybar.enable = true;
+    wofi.enable = true;
+    foot.enable = true;
+    syncthing.enable = true;
+    mpd.enable = true;
+    theme.enable = true;
+    direnv.enable = true;
+  };
   home.packages = with pkgs; [
     brave 
     firefox

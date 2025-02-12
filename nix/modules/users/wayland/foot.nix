@@ -24,7 +24,7 @@ in
       settings = {
         main = {
           term = "xterm-256color";
-          font = "${config.jfg.theme.font.name}:size=${config.jfg.theme.font.size}";
+          font = "${config.jfg.theme.font.name}:size=${builtins.toString config.jfg.theme.font.size}";
           pad = "15x15 center";
           dpi-aware = "no";
         };

@@ -8,45 +8,46 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.initrd.luks.devices.root = {
-    device = "/dev/disk/by-uuid/cd0e0e63-45fc-4a4c-aaaa-477c25f099bb";
-    preLVM = true;
-  };
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
-  boot.kernelParams = [ "snd-intel-dspcfg.dsp_driver=1" ];
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    grub = {
+      enable = true;
+      devices = [ "nodev" ];
+      efiSupport = true;
+      useOSProber = true;
+    };
+  };
+ 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.initrd.luks.devices.root = {
+    device = "/dev/disk/by-uuid/a1bdc416-b09a-4e65-adb8-ff837d261076";
+    preLVM = true;
+  };
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/cd6a7e64-673c-4d93-84bd-79b54131b917";
+    { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
       fsType = "btrfs";
       options = [ "subvol=root" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/cd6a7e64-673c-4d93-84bd-79b54131b917";
+    { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
       fsType = "btrfs";
       options = [ "subvol=home" "noatime" "compress=zstd:3" ];
     };
 
-  fileSystems."/snapshots" =
-    { device = "/dev/disk/by-uuid/cd6a7e64-673c-4d93-84bd-79b54131b917";
-      fsType = "btrfs";
-      options = [ "subvol=snapshots" "noatime" "compress=zstd:3" ];
-    };
-
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/cd6a7e64-673c-4d93-84bd-79b54131b917";
+    { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
       fsType = "btrfs";
       options = [ "subvol=nix" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/D460-8A4B";
+    { device = "/dev/disk/by-uuid/1220-07BB";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
@@ -61,13 +62,5 @@
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware = {
-    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-    graphics = {
-      enable = true;
-      extraPackages = with pkgs; [
-        vpl-gpu-rt    
-      ];
-    };
-  };
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

@@ -16,6 +16,7 @@ in
   options.jfg.hyprland = with lib.types; {
     enable = lib.mkEnableOption "Enable";
     monitors = lib.mkOption {
+      default = [ ", preferred, auto, 1" ];
       type = listOf str;
     };
   };
@@ -53,7 +54,7 @@ in
         exec-once = [
           "waybar"
           "swaybg -i ~/photos/wallpapers/wallpaper.png"
-          "hyprctl setcursor ${config.jfg.theme.cursor.name} ${config.jfg.theme.font.size}"
+          "hyprctl setcursor ${config.jfg.theme.cursor.name} ${builtins.toString config.jfg.theme.font.size}"
           "swaync"
         ];
         xwayland = {
@@ -64,9 +65,10 @@ in
           follow_mouse = true;
           force_no_accel = 1;
           # This doesnt work :(
-          # sensitivity = -1.0;
+          # sensitivity = 0.2;
           touchpad = {
             natural_scroll = 1;
+            scroll_factor = 0.2;
           };
         };
         general = {

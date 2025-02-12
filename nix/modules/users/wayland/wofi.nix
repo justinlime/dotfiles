@@ -26,18 +26,18 @@ in
       };
       style =''
       * {
-        font-family: ${custom.font},monospace;
+        font-family: ${config.jfg.theme.font.name},monospace;
         font-weight: bold;
       }
       #window {
         border-radius: 40px;
-        background: #${custom.background};
+        background: #${custom.primary_background};
       }
       #input {
         border-radius: 100px;
         margin: 20px;
         padding: 15px 25px;
-        background: #${custom.background};
+        background: #${custom.primary_background};
         color: #${custom.tertiary_accent};
       }
       #outer-box {
@@ -51,7 +51,7 @@ in
       }
       #entry:selected{
         background-color:#${custom.primary_accent};
-        color: #${custom.background};
+        color: #${custom.primary_background};
       }
       #entry:hover {
       }

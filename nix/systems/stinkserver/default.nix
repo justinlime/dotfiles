@@ -1,6 +1,6 @@
 { pkgs, config, hush, ... }:
 {
-  imports = [ 
+  imports = [
     ./hardware-configuration.nix
     ./containers
     ./services

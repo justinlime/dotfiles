@@ -2,16 +2,20 @@
 {
   imports = [ 
     ./hardware-configuration.nix 
-    # ./services
-    ../base/configuration.nix
-    ../base/gaming.nix
-    ../base/wayland.nix
-    ../base/networking.nix
-    ../base/virtulization.nix
-    ../base/usb.nix
-    ../base/avahi.nix
-    ../base/docker.nix
   ];
+  jfg = {
+    system = rec {
+      username = "justinlime";  
+      flakeDirectory = "/home/${username}/dotfiles";
+    }; 
+    usbautomount.enable = true;
+    wayland.enable = true;
+    virt.enable = true;
+    firewall = {
+      enable = true;  
+      BothPorts = [ 1313 6969 1317 ];
+    };
+  };
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
   '';

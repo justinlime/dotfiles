@@ -221,7 +221,7 @@ in
               }
 
               window#waybar {
-                  background: ${custom.primary_background};
+                  background: #${custom.primary_background};
               }
 
               #cava.left, #cava.right {
@@ -248,7 +248,7 @@ in
                   margin: 0px 3px;
                   border-radius: 16px;
                   color: transparent;
-                  background: ${custom.primary_background};
+                  background: #${custom.primary_background};
                   transition: all 0.3s ease-in-out;
               }
 

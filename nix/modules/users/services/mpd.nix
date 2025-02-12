@@ -1,8 +1,12 @@
 { config, pkgs, username, lib, ... }:
 let cfg = config.jfg.mpd; in 
 {
-  options.jfg.mpd = {
-   enable = lib.mkEnableOption "Enable"; 
+  options.jfg.mpd = with lib.types; {
+    enable = lib.mkEnableOption "Enable"; 
+    musicDirectory = lib.mkOption {
+      default = "/home/${config.jfg.home.username}/music";  
+      type = str;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -10,7 +14,7 @@ let cfg = config.jfg.mpd; in
       mpdris2.enable = true;
       mpd = {
         enable = true;
-        musicDirectory = "/home/${username}/music";
+        musicDirectory = cfg.musicDirectory;
         network.startWhenNeeded = true;  
         extraConfig = ''
           audio_output {

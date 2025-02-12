@@ -34,7 +34,7 @@ let cfg = config.jfg.emacs; in
       nodePackages_latest.yaml-language-server
       # Fonts
       roboto
-      (nerdfonts.override { fonts = [ "FiraCode" ]; })
+      nerd-fonts.fira-code
     ];
     xdg.configFile = {
       "emacs/early-init.el".source = "${inputs.self}/non-nix/emacs/early-init.el";
