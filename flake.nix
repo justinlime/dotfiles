@@ -5,6 +5,7 @@
     inherit (nixpkgs.lib) importTOML flatten genAttrs splitString;
 
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    jlib = import ./nix/lib/default.nix { lib = nixpkgs.lib; };
 
     # Shhhhh
     # Semi-private files encrypted with git-crypt. Profiles relying on these files will fail if not decrypted first.
@@ -49,7 +50,7 @@
         # After first rebuild and subsequent shell reload, you can rebuild with the "home-switch" alias instead
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit profile hush inputs; };
+          extraSpecialArgs = { inherit profile hush jlib inputs; };
           modules = [
             ./nix/modules/users
             ./nix/users/${profileName}
@@ -70,7 +71,7 @@
         # After first build and subsequent shell reload, you can rebuild with the "nix-switch" alias instead
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit profile hush inputs; }; 
+          specialArgs = { inherit profile hush jlib inputs; }; 
           modules = [
             ./nix/modules/systems
             ./nix/systems/${profileName}

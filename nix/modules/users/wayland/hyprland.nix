@@ -1,5 +1,7 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, jlib, ... }:
 let
+  inherit (jlib.colorConvert) hexToRGBString;
+  palette = config.jfg.theme.palette;
   cfg = config.jfg.hyprland;
   #TODO: bake theme accents into theme.nix
   custom = {
@@ -75,7 +77,7 @@ in
           gaps_in = 4;
           gaps_out = 10;
           border_size = 2;
-          "col.active_border" = "rgb(${custom.primary_accent})";
+          "col.active_border" = "rgb(${hexToRGBString "," palette.magenta})";
           "col.inactive_border" = "rgba(${custom.background}00)";
           allow_tearing = true;
           layout = "dwindle";

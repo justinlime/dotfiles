@@ -39,6 +39,27 @@ let cfg = config.jfg.theme; in
       default = pkgs.magnetic-catppuccin-gtk.override { accent = [ "purple" ]; };
       type = package;
     };
+    palette = lib.mkOption {
+      type = attrs;
+      default = {
+        black="11111B";
+        red="ff5555";
+        green="afffd7";
+        yellow="f1fa8c";
+        blue="87afff";
+        magenta="bd93f9";
+        cyan="8be9fd";
+        white="f8f8f2";
+        brightBlack="2d5b69";
+        brightRed="ff665c";
+        brightGreen="84c747";
+        brightYellow="ebc13d";
+        brightBlue="58a3ff";
+        brightMagenta="ff84cd";
+        brightCyan="53d6c7";
+        brightWhite="cad8d9";
+      }; 
+    };
   };
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.font.package ];

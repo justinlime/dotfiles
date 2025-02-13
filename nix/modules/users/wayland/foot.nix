@@ -1,6 +1,7 @@
 { config, lib, ... }:
 let
   cfg = config.jfg.foot;
+  theme = config.jfg.theme;
   # TODO: bake this into theme.nix
   custom = {
     fontsize = "12";
@@ -24,7 +25,7 @@ in
       settings = {
         main = {
           term = "xterm-256color";
-          font = "${config.jfg.theme.font.name}:size=${builtins.toString config.jfg.theme.font.size}";
+          font = "${theme.font.name}:size=${builtins.toString theme.font.size}";
           pad = "15x15 center";
           dpi-aware = "no";
         };
@@ -34,7 +35,7 @@ in
         };
         colors = {
           alpha="${custom.opacity}";
-          background="${custom.background}";
+          background="${theme.palette.black}";
           # background="${custom.background}";
           regular0="11111B";  # black
           regular1="ff5555";  # red
