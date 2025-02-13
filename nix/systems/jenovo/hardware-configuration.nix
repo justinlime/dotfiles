@@ -4,30 +4,29 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
-
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
-  boot.loader = {
-    efi.canTouchEfiVariables = true;
-    grub = {
-      enable = true;
-      devices = [ "nodev" ];
-      efiSupport = true;
-      useOSProber = true;
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
+      kernelModules = [ "dm-snapshot" ];
+      luks.devices.root = {
+        device = "/dev/disk/by-uuid/a1bdc416-b09a-4e65-adb8-ff837d261076";
+        preLVM = true;
+      };
+    };
+    loader = {
+      efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+        useOSProber = true;
+      };
     };
   };
- 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.initrd.luks.devices.root = {
-    device = "/dev/disk/by-uuid/a1bdc416-b09a-4e65-adb8-ff837d261076";
-    preLVM = true;
-  };
-
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
       fsType = "btrfs";
