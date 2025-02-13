@@ -1,6 +1,6 @@
 { pkgs, lib, config, jlib, ... }:
 let
-  inherit (jlib.colorConvert) hexToRGBString;
+  inherit (jlib) hexToRGBString;
   palette = config.jfg.theme.palette;
   cfg = config.jfg.hyprland;
   #TODO: bake theme accents into theme.nix
