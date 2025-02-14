@@ -13,6 +13,14 @@ let cfg = config.jfg.system; in
   # Settings that will apply to all of my systems
   config = {
     nixpkgs.config.allowUnfree = true;
+    nix = {
+      # Enable nix command and flakes
+      settings.experimental-features = [ "nix-command" "flakes" ]; 
+      # Pin registry to flake 
+      registry.nixpkgs.flake = inputs.nixpkgs;
+      # Pin channel to flake
+      nixPath = [ "nixpkgs=configflake:nixpkgs" ];
+    };
 
     time.timeZone = "America/Chicago";
 

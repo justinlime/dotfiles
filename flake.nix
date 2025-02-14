@@ -7,6 +7,8 @@
     # Supported Systems
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
+    sharedModules = [ ./nix/lib ];
+
     # Shhhhh
     # Semi-private files encrypted with git-crypt. Profiles relying on these files will fail if not decrypted first.
     # Read all the files, and mush them into a top level hush attribute set; Expects TOML format
@@ -22,7 +24,7 @@
     # based upon the names of the subdirs found in the given DIR, and the available systems.
     applyProfiles = dir: func: (genAttrs
         (flatten (map (genProfileNames systems)
-          (attrNames (readDir ./nix/${dir})))) func);
+          (attrNames (readDir dir)))) func);
 
     # Generate SYSTEM, PROFILENAME, and PKGS, based on a given profile.
     #
@@ -41,7 +43,7 @@
     # ${subdirname}.${system} 
     # 
     # EX: brimstone.x86_64-linux, brimstone.aarch64-linux, jesktop.x86_64-linux
-    allHomeConfigurations = applyProfiles "users"
+    allHomeConfigurations = applyProfiles ./nix/users
       (profile:                               
         with (genParams profile);
         # Bootstrap a home-manager profile using something like:
@@ -52,35 +54,24 @@
           inherit pkgs;
           extraSpecialArgs = { inherit profile hush inputs; };
           modules = [
-            ./nix/lib
             ./nix/modules/users
             ./nix/users/${profileName}
-            # enable flakes and nix-command after the first rebuild
-            { nix = { package = pkgs.nix; settings.experimental-features = [ "nix-command" "flakes" ];}; }
-            # Pin registry to flake
-            { nix.registry.nixpkgs.flake = nixpkgs; }
-            # Pin channel to flake 
-            { home.sessionVariables.NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}"; }
-          ];
+          ] ++ sharedModules;
         });
-    allSystemConfigurations = applyProfiles "systems"
+    allSystemConfigurations = applyProfiles ./nix/systems
       (profile: 
         with (genParams profile);
         # Bootstrap a system profile using something like:
-        # nixos-rebuild switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux 
+        # nixos-rebuild switch --flake path:/home/justinlime/dotfiles#stinkserver.x86_64-linux 
         #
         # After first build and subsequent shell reload, you can rebuild with the "nix-switch" alias instead
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit profile hush inputs; }; 
           modules = [
-            ./nix/lib
             ./nix/modules/systems
             ./nix/systems/${profileName}
-            { nix.settings.experimental-features = [ "nix-command" "flakes" ]; }
-            { nix.registry.nixpkgs.flake = nixpkgs; }
-            { nix.nixPath = [ "nixpkgs=configflake:nixpkgs" ]; }
-          ];
+          ] ++ sharedModules;
        });
   in
   {

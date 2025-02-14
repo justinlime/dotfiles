@@ -19,9 +19,18 @@ let cfg = config.jfg.home; in
     programs.home-manager.enable = true;
     nixpkgs.config.allowUnfree = true; 
     fonts.fontconfig.enable = true;
+    # Enable flakes 
+    nix = {
+      package = pkgs.nix;
+      settings.experimental-features = [ "nix-command" "flakes" ];
+      # Pin registry to flake
+      registry.nixpkgs.flake = inputs.nixpkgs;
+    }; 
     home = {
       username = cfg.username;
       homeDirectory = cfg.homeDirectory;
+      # Pin channel to flake
+      sessionVariables.NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
       shellAliases = {
         home-switch = "home-manager switch --flake path:${cfg.flakeDirectory}#${profile}";
         emacs = "COLORTERM=truecolor emacs -nw";
