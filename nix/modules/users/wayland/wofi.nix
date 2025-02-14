@@ -1,14 +1,8 @@
 { lib, config, ... }:
 let
   cfg = config.jfg.wofi;
-  custom = {
-    primary_accent = "cba6f7";
-    secondary_accent = "89b4fa";
-    tertiary_accent = "f5f5f5";
-    primary_background = "11111B";
-    secondary_background = "1b1b2b";
-    tertiary_background = "25253a";
-  };
+  theme = config.jfg.theme;
+  palette = theme.palette;
 in
 {
   options.jfg.wofi = with lib.types; {
@@ -26,19 +20,19 @@ in
       };
       style =''
       * {
-        font-family: ${config.jfg.theme.font.name},monospace;
+        font-family: ${theme.font.name},monospace;
         font-weight: bold;
       }
       #window {
         border-radius: 40px;
-        background: #${custom.primary_background};
+        background: #${palette.crust};
       }
       #input {
         border-radius: 100px;
         margin: 20px;
         padding: 15px 25px;
-        background: #${custom.primary_background};
-        color: #${custom.tertiary_accent};
+        background: #${palette.crust};
+        color: #${palette.text};
       }
       #outer-box {
         font-weight: bold;
@@ -50,8 +44,8 @@ in
         border-radius: 200px;
       }
       #entry:selected{
-        background-color:#${custom.primary_accent};
-        color: #${custom.primary_background};
+        background-color:#${palette.mauve};
+        color: #${palette.crust};
       }
       #entry:hover {
       }

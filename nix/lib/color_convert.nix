@@ -6,17 +6,17 @@
 # Function: hexToDec
 # Desciption: Converts hex to decimal
 # Args: string 
-# Example: hexToDec "11111B" -> 1118491
+# Example: hexToDec "11111B" => 1118491
 
 # Function: hexToRGB
 # Desciption: Converts hex to decimal
 # Args: string 
-# Example: hexToRGB "11111B" -> [ 17 17 27 ]
+# Example: hexToRGB "11111B" => [ 17 17 27 ]
 
 # Function: hexToDec
 # Desciption: Converts hex to decimal
 # Args: string string 
-# Example: hexToRGBString "," "11111B" -> "17,17,27"
+# Example: hexToRGBString "," "11111B" => "17,17,27"
 
 { lib, ... }:
 let

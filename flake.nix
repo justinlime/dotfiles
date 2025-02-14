@@ -4,8 +4,8 @@
     inherit (builtins) head elemAt attrNames readDir; 
     inherit (nixpkgs.lib) importTOML flatten genAttrs splitString;
 
+    # Supported Systems
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    jlib = import ./nix/lib/default.nix { lib = nixpkgs.lib; };
 
     # Shhhhh
     # Semi-private files encrypted with git-crypt. Profiles relying on these files will fail if not decrypted first.
@@ -50,8 +50,9 @@
         # After first rebuild and subsequent shell reload, you can rebuild with the "home-switch" alias instead
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit profile hush jlib inputs; };
+          extraSpecialArgs = { inherit profile hush inputs; };
           modules = [
+            ./nix/lib
             ./nix/modules/users
             ./nix/users/${profileName}
             # enable flakes and nix-command after the first rebuild
@@ -71,8 +72,9 @@
         # After first build and subsequent shell reload, you can rebuild with the "nix-switch" alias instead
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit profile hush jlib inputs; }; 
+          specialArgs = { inherit profile hush inputs; }; 
           modules = [
+            ./nix/lib
             ./nix/modules/systems
             ./nix/systems/${profileName}
             { nix.settings.experimental-features = [ "nix-command" "flakes" ]; }

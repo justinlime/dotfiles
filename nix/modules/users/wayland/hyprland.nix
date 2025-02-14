@@ -1,18 +1,9 @@
 { pkgs, lib, config, jlib, ... }:
 let
   inherit (jlib) hexToRGBString;
-  palette = config.jfg.theme.palette;
   cfg = config.jfg.hyprland;
-  #TODO: bake theme accents into theme.nix
-  custom = {
-    fontsize = "12";
-    primary_accent = "cba6f7";
-    secondary_accent = "89b4fa";
-    tertiary_accent = "f5f5f5";
-    background = "11111B";
-    opacity = ".85";
-    cursor = "Numix-Cursor";
-  };
+  theme = config.jfg.theme;
+  palette = theme.palette;
 in
 {
   options.jfg.hyprland = with lib.types; {
@@ -56,7 +47,7 @@ in
         exec-once = [
           "waybar"
           "swaybg -i ~/photos/wallpapers/wallpaper.png"
-          "hyprctl setcursor ${config.jfg.theme.cursor.name} ${builtins.toString config.jfg.theme.font.size}"
+          "hyprctl setcursor ${theme.cursor.name} ${builtins.toString theme.font.size}"
           "swaync"
         ];
         xwayland = {
@@ -77,8 +68,8 @@ in
           gaps_in = 4;
           gaps_out = 10;
           border_size = 2;
-          "col.active_border" = "rgb(${hexToRGBString "," palette.magenta})";
-          "col.inactive_border" = "rgba(${custom.background}00)";
+          "col.active_border" = "rgb(${hexToRGBString "," palette.mauve})";
+          "col.inactive_border" = "rgba(${palette.crust}00)";
           allow_tearing = true;
           layout = "dwindle";
         };
@@ -89,8 +80,8 @@ in
             ignore_window = true;
             range = 50;
             render_power = 3;
-            color = "rgba(${custom.primary_accent}00)";
-            color_inactive = "rgba(${custom.background}00)";
+            color = "rgba(${palette.mauve}00)";
+            color_inactive = "rgba(${palette.crust}00)";
           };
           blur = {
             enabled = true;

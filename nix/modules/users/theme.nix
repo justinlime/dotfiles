@@ -3,6 +3,14 @@ let cfg = config.jfg.theme; in
 {
   options.jfg.theme = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
+    name = lib.mkOption {
+      default = "Catppuccin-GTK-Purple-Dark";
+      type = str;
+    };
+    package = lib.mkOption {
+      default = pkgs.magnetic-catppuccin-gtk.override { accent = [ "purple" ]; };
+      type = package;
+    };
     font.name = lib.mkOption {
       default = "FiraCodeNerdFont";
       type = str;
@@ -31,33 +39,35 @@ let cfg = config.jfg.theme; in
       default = pkgs.numix-cursor-theme;
       type = package;
     };
-    theme.name = lib.mkOption {
-      default = "Catppuccin-GTK-Purple-Dark";
-      type = str;
-    };
-    theme.package = lib.mkOption {
-      default = pkgs.magnetic-catppuccin-gtk.override { accent = [ "purple" ]; };
-      type = package;
-    };
     palette = lib.mkOption {
       type = attrs;
       default = {
-        black="11111B";
-        red="ff5555";
-        green="afffd7";
-        yellow="f1fa8c";
-        blue="87afff";
-        magenta="bd93f9";
-        cyan="8be9fd";
-        white="f8f8f2";
-        brightBlack="2d5b69";
-        brightRed="ff665c";
-        brightGreen="84c747";
-        brightYellow="ebc13d";
-        brightBlue="58a3ff";
-        brightMagenta="ff84cd";
-        brightCyan="53d6c7";
-        brightWhite="cad8d9";
+        rosewater = "f5e0dc";
+        flamingo = "f2cdcd";
+        pink = "f5c2e7";
+        mauve = "cba6f7";
+        red = "f38ba8";
+        maroon = "eba0ac";
+        peach = "fab387";
+        yellow = "f9e2af";
+        green = "a6e3a1";
+        teal = "94e2d5";
+        sky = "89dceb";
+        sapphire = "74c7ec";
+        blue = "89b4fa";
+        lavender = "b4befe";
+        text = "cdd6f4";
+        subtext1 = "bac2de";
+        subtext0 = "a6adc8";
+        overlay2 = "9399b2";
+        overlay1 = "7f849c";
+        overlay0 = "6c7086";
+        surface2 = "585b70";
+        surface1 = "45475a";
+        surface0 = "313244";
+        base = "1e1e2e";
+        mantle = "181825";
+        crust = "11111b";
       }; 
     };
   };
@@ -80,8 +90,8 @@ let cfg = config.jfg.theme; in
         package = cfg.cursor.package;
       };
       theme = {
-        name = cfg.theme.name;
-        package = cfg.theme.package;
+        name = cfg.name;
+        package = cfg.package;
       };
       gtk3.extraConfig = {
         Settings = ''

@@ -2,16 +2,7 @@
 let
   cfg = config.jfg.foot;
   theme = config.jfg.theme;
-  # TODO: bake this into theme.nix
-  custom = {
-    fontsize = "12";
-    primary_accent = "cba6f7";
-    secondary_accent = "89b4fa";
-    tertiary_accent = "f5f5f5";
-    background = "11111B";
-    opacity = ".85";
-    cursor = "Numix-Cursor";
-  };
+  palette = theme.palette;
 in 
 {
   options.jfg.foot = with lib.types; {
@@ -30,29 +21,29 @@ in
           dpi-aware = "no";
         };
         cursor = {
-          color = "${custom.primary_accent} ${custom.primary_accent}";
+          color = "${palette.mauve} ${palette.mauve}";
           style = "beam";
         };
-        colors = {
-          alpha="${custom.opacity}";
-          background="${theme.palette.black}";
+        colors = rec {
+          alpha="1.0";
+          background="${palette.crust}";
           # background="${custom.background}";
-          regular0="11111B";  # black
-          regular1="ff5555";  # red
-          regular2="afffd7";  # green
-          regular3="f1fa8c";  # yellow
-          regular4="87afff";  # blue
-          regular5="bd93f9";  # magenta
-          regular6="8be9fd";  # cyan
-          regular7="f8f8f2";  # white
-          bright0="2d5b69";   # bright black
-          bright1="ff665c";   # bright red
-          bright2="84c747";   # bright green
-          bright3="ebc13d";   # bright yellow
-          bright4="58a3ff";   # bright blue
-          bright5="ff84cd";   # bright magenta
-          bright6="53d6c7";   # bright cyan
-          bright7="cad8d9";   # bright white
+          regular0="${palette.crust}";  # black
+          regular1="${palette.red}";  # red
+          regular2="${palette.green}";  # green
+          regular3="${palette.yellow}";  # yellow
+          regular4="${palette.blue}";  # blue
+          regular5="${palette.mauve}";  # magenta
+          regular6="${palette.sky}";  # cyan
+          regular7="${palette.text}";  # white
+          bright0= regular0; # bright black
+          bright1= regular1; # bright red
+          bright2= regular2;   # bright green
+          bright3= regular3;   # bright yellow
+          bright4= regular4;   # bright blue
+          bright5= regular5;   # bright magenta
+          bright6= regular6;   # bright cyan
+          bright7= regular7;   # bright white
         };
         tweak = {
           sixel = "yes";

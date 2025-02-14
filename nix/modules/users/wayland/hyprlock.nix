@@ -1,5 +1,10 @@
-{ lib, config, ... }:
-let cfg = config.jfg.hyprlock; in
+{ lib, config, jlib, ... }:
+let
+  inherit (jlib) hexToRGBString;
+  cfg = config.jfg.hyprlock;
+  theme = config.jfg.theme;
+  palette = theme.palette;
+in
 {
   options.jfg.hyprlock = with lib.types; {
     enable = lib.mkEnableOption "Enable";
@@ -39,9 +44,9 @@ let cfg = config.jfg.hyprlock; in
             monitor = "";
             dots_center = true;
             fade_on_empty = false;
-            font_color = "rgb(205, 214, 244)";
-            inner_color = "rgb(17, 17, 27)";
-            outer_color = "rgb(17, 17, 27)";
+            font_color = "rgb(${hexToRGBString "," palette.text})";
+            inner_color = "rgb(${hexToRGBString "," palette.crust})";
+            outer_color = "rgb(${hexToRGBString "," palette.crust})";
             outline_thickness = 5;
             placeholder_text = "";
             shadow_passes = 0;

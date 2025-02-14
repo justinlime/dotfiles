@@ -1,14 +1,8 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, jlib, ... }:
 let
   cfg = config.jfg.waybar;
-  custom = {
-    primary_accent = "cba6f7";
-    secondary_accent = "89b4fa";
-    tertiary_accent = "f5f5f5";
-    primary_background = "11111B";
-    secondary_background = "1b1b2b";
-    tertiary_background = "25253a";
-  };
+  theme = config.jfg.theme;
+  palette = theme.palette;
 in
 {
   options.jfg.waybar = with lib.types; {
@@ -87,14 +81,14 @@ in
           waves = false;
           input_delay = 2;
           format-icons = [ 
-            "<span foreground='#${custom.primary_accent}'>▁</span>" 
-            "<span foreground='#${custom.primary_accent}'>▂</span>" 
-            "<span foreground='#${custom.primary_accent}'>▃</span>" 
-            "<span foreground='#${custom.primary_accent}'>▄</span>" 
-            "<span foreground='#${custom.secondary_accent}'>▅</span>" 
-            "<span foreground='#${custom.secondary_accent}'>▆</span>" 
-            "<span foreground='#${custom.secondary_accent}'>▇</span>" 
-            "<span foreground='#${custom.secondary_accent}'>█</span>" 
+            "<span foreground='#${palette.mauve}'>▁</span>" 
+            "<span foreground='#${palette.mauve}'>▂</span>" 
+            "<span foreground='#${palette.mauve}'>▃</span>" 
+            "<span foreground='#${palette.mauve}'>▄</span>" 
+            "<span foreground='#${palette.blue}'>▅</span>" 
+            "<span foreground='#${palette.blue}'>▆</span>" 
+            "<span foreground='#${palette.blue}'>▇</span>" 
+            "<span foreground='#${palette.blue}'>█</span>" 
           ];
         };
         "cava#right" = {
@@ -112,14 +106,14 @@ in
           waves = false;
           input_delay = 2;
           format-icons = [ 
-            "<span foreground='#${custom.primary_accent}'>▁</span>" 
-            "<span foreground='#${custom.primary_accent}'>▂</span>" 
-            "<span foreground='#${custom.primary_accent}'>▃</span>" 
-            "<span foreground='#${custom.primary_accent}'>▄</span>" 
-            "<span foreground='#${custom.secondary_accent}'>▅</span>" 
-            "<span foreground='#${custom.secondary_accent}'>▆</span>" 
-            "<span foreground='#${custom.secondary_accent}'>▇</span>" 
-            "<span foreground='#${custom.secondary_accent}'>█</span>" 
+            "<span foreground='#${palette.mauve}'>▁</span>" 
+            "<span foreground='#${palette.mauve}'>▂</span>" 
+            "<span foreground='#${palette.mauve}'>▃</span>" 
+            "<span foreground='#${palette.mauve}'>▄</span>" 
+            "<span foreground='#${palette.blue}'>▅</span>" 
+            "<span foreground='#${palette.blue}'>▆</span>" 
+            "<span foreground='#${palette.blue}'>▇</span>" 
+            "<span foreground='#${palette.blue}'>█</span>" 
           ];
         };
         "custom/playerctl#backward"= {
@@ -215,20 +209,20 @@ in
               * {
                   border: none;
                   border-radius: 0px;
-                  font-family: ${config.jfg.theme.font.name};
+                  font-family: ${theme.font.name};
                   font-size: 14px;
                   min-height: 0;
               }
 
               window#waybar {
-                  background: #${custom.primary_background};
+                  background: #${palette.crust};
               }
 
               #cava.left, #cava.right {
-                  background: #${custom.tertiary_background};
+                  background: #${palette.base};
                   margin: 5px; 
                   padding: 8px 16px;
-                  color: #${custom.primary_accent};
+                  color: #${palette.mauve};
               }
               #cava.left {
                   border-radius: 24px 10px 24px 10px;
@@ -237,24 +231,24 @@ in
                   border-radius: 10px 24px 10px 24px;
               }
               #workspaces {
-                  background: #${custom.tertiary_background};
+                  background: #${palette.base};
                   margin: 5px 5px;
                   padding: 8px 5px;
                   border-radius: 16px;
-                  color: #${custom.primary_accent}
+                  color: #${palette.mauve}
               }
               #workspaces button {
                   padding: 0px 5px;
                   margin: 0px 3px;
                   border-radius: 16px;
                   color: transparent;
-                  background: #${custom.primary_background};
+                  background: #${palette.crust};
                   transition: all 0.3s ease-in-out;
               }
 
               #workspaces button.active {
-                  background-color: #${custom.secondary_accent};
-                  color: #${custom.primary_background};
+                  background-color: #${palette.blue};
+                  color: #${palette.crust};
                   border-radius: 16px;
                   min-width: 50px;
                   background-size: 400% 400%;
@@ -262,8 +256,8 @@ in
               }
 
               #workspaces button:hover {
-                  background-color: #${custom.tertiary_accent};
-                  color: #${custom.primary_background};
+                  background-color: #${palette.text};
+                  color: #${palette.crust};
                   border-radius: 16px;
                   min-width: 50px;
                   background-size: 400% 400%;
@@ -271,19 +265,19 @@ in
 
               #tray, #pulseaudio, #network, #battery,
               #custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.foward{
-                  background: #${custom.tertiary_background};
+                  background: #${palette.base};
                   font-weight: bold;
                   margin: 5px 0px;
               }
               #tray, #pulseaudio, #network, #battery{
-                  color: #${custom.tertiary_accent};
+                  color: #${palette.text};
                   border-radius: 10px 24px 10px 24px;
                   padding: 0 20px;
                   margin-left: 7px;
               }
               #clock {
-                  color: #${custom.tertiary_accent};
-                  background: #${custom.tertiary_background};
+                  color: #${palette.text};
+                  background: #${palette.base};
                   border-radius: 0px 0px 0px 40px;
                   padding: 10px 10px 15px 25px;
                   margin-left: 7px;
@@ -291,8 +285,8 @@ in
                   font-size: 16px;
               }
               #custom-launcher {
-                  color: #${custom.secondary_accent};
-                  background: #${custom.tertiary_background};
+                  color: #${palette.blue};
+                  background: #${palette.base};
                   border-radius: 0px 0px 40px 0px;
                   margin: 0px;
                   padding: 0px 35px 0px 15px;
@@ -300,38 +294,38 @@ in
               }
 
               #custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.foward {
-                  background: #${custom.tertiary_background};
+                  background: #${palette.base};
                   font-size: 22px;
               }
               #custom-playerctl.backward:hover, #custom-playerctl.play:hover, #custom-playerctl.foward:hover{
-                  color: #${custom.tertiary_accent};
+                  color: #${palette.text};
               }
               #custom-playerctl.backward {
-                  color: #${custom.primary_accent};
+                  color: #${palette.mauve};
                   border-radius: 24px 0px 0px 10px;
                   padding-left: 16px;
                   margin-left: 7px;
               }
               #custom-playerctl.play {
-                  color: #${custom.secondary_accent};
+                  color: #${palette.blue};
                   padding: 0 5px;
               }
               #custom-playerctl.foward {
-                  color: #${custom.primary_accent};
+                  color: #${palette.mauve};
                   border-radius: 0px 10px 24px 0px;
                   padding-right: 12px;
                   margin-right: 7px
               }
               #custom-playerlabel {
-                  background: #${custom.tertiary_background};
-                  color: #${custom.tertiary_accent};
+                  background: #${palette.base};
+                  color: #${palette.text};
                   padding: 0 20px;
                   border-radius: 24px 10px 24px 10px;
                   margin: 5px 0;
                   font-weight: bold;
               }
               #window{
-                  background: #${custom.tertiary_background};
+                  background: #${palette.base};
                   padding-left: 15px;
                   padding-right: 15px;
                   border-radius: 16px;
