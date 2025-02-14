@@ -9,12 +9,12 @@
 # Example: hexToDec "11111B" => 1118491
 
 # Function: hexToRGB
-# Desciption: Converts hex to decimal
+# Desciption: Converts hex to RGB as a list  
 # Args: string 
 # Example: hexToRGB "11111B" => [ 17 17 27 ]
 
 # Function: hexToDec
-# Desciption: Converts hex to decimal
+# Desciption: Converts hex to RGB as a string
 # Args: string string 
 # Example: hexToRGBString "," "11111B" => "17,17,27"
 
