@@ -8,8 +8,8 @@
   systemd.services.fileserver = {
     description="FileServer";
     serviceConfig = {
-      User=config.jfg.system.username;
-      Group=config.jfg.system.username;
+      User=config.sysMods.system.username;
+      Group=config.sysMods.system.username;
       Restart="always";
       RestartSec="10s";
       LimitNOFILE=4096;

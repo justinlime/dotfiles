@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
-let cfg = config.jfg.docker; in 
+let cfg = config.sysMods.docker; in 
 {
-  options.jfg.docker = with lib.types; {
+  options.sysMods.docker = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
   };
   config = lib.mkIf cfg.enable {
     #Enable docker on the system and add the admin user to the docker group
-    users.users.${config.jfg.system.username}.extraGroups = [ "docker" ];
+    users.users.${config.sysMods.system.username}.extraGroups = [ "docker" ];
     environment.systemPackages = with pkgs; [
       docker-compose
     ];

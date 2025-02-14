@@ -5,7 +5,7 @@
     ./containers
     ./services
   ];
-  jfg = {
+  sysMods = {
     system = rec {
       username = "justinlime";  
       flakeDirectory = "/home/${username}/dotfiles";
@@ -17,6 +17,7 @@
     xrdp.enable = true;
     firewall = {
       enable = true;  
+      TCPPorts = [ 1313 ];
       BothPorts = [ 1313 ];
     };
   };
@@ -28,7 +29,7 @@
       allowedUDPPorts = [ 1313 ];
    };
   };
-  users.users.${config.jfg.system.username}.openssh.authorizedKeys.keys = [
+  users.users.${config.sysMods.system.username}.openssh.authorizedKeys.keys = [
     "${hush.ssh.public-keys.stinkserver}" 
   ];
   environment.systemPackages = with pkgs; [

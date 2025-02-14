@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
-let cfg = config.jfg.virt; in 
+let cfg = config.sysMods.virt; in 
 {
-  options.jfg.virt = with lib.types; {
+  options.sysMods.virt = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
   };
   config = lib.mkIf cfg.enable {
     # Enable virtualization with qemu and virt-manager and add the admin user to the necessary groups
-    users.users.${config.jfg.system.username}.extraGroups = [ "kvm" "input" "libvirtd" ];
+    users.users.${config.sysMods.system.username}.extraGroups = [ "kvm" "input" "libvirtd" ];
     environment.systemPackages = with pkgs; [
       virt-manager
       virt-viewer

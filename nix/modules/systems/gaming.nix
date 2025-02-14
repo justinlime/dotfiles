@@ -1,12 +1,12 @@
 { pkgs, config, lib, inputs, ... }:
-let cfg = config.jfg.gaming; in 
+let cfg = config.sysMods.gaming; in 
 {
-  options.jfg.gaming = with lib.types; {
+  options.sysMods.gaming = with lib.types; {
     enable = lib.mkEnableOption "Enable";  
   };
   config = lib.mkIf cfg.enable {
     # System
-    users.users.${config.jfg.system.username}.extraGroups = [ "gamemode" ];
+    users.users.${config.sysMods.system.username}.extraGroups = [ "gamemode" ];
     programs = {
       gamescope = {
         enable = true;

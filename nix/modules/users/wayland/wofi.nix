@@ -1,11 +1,11 @@
 { lib, config, ... }:
 let
-  cfg = config.jfg.wofi;
-  theme = config.jfg.theme;
+  cfg = config.homeMods.wofi;
+  theme = config.homeMods.theme;
   palette = theme.palette;
 in
 {
-  options.jfg.wofi = with lib.types; {
+  options.homeMods.wofi = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {

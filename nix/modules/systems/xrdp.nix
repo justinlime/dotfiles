@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
-let cfg = config.jfg.xrdp; in 
+let cfg = config.sysMods.xrdp; in 
 {
-  options.jfg.xrdp = with lib.types; {
+  options.sysMods.xrdp = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {

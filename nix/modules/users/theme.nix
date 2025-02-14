@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
-let cfg = config.jfg.theme; in 
+let cfg = config.homeMods.theme; in 
 {
-  options.jfg.theme = with lib.types; {
+  options.homeMods.theme = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
     name = lib.mkOption {
       default = "Catppuccin-GTK-Purple-Dark";

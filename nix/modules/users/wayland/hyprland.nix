@@ -1,12 +1,12 @@
 { pkgs, lib, config, jlib, ... }:
 let
   inherit (jlib) hexToRGBString;
-  cfg = config.jfg.hyprland;
-  theme = config.jfg.theme;
+  cfg = config.homeMods.hyprland;
+  theme = config.homeMods.theme;
   palette = theme.palette;
 in
 {
-  options.jfg.hyprland = with lib.types; {
+  options.homeMods.hyprland = with lib.types; {
     enable = lib.mkEnableOption "Enable";
     monitors = lib.mkOption {
       default = [ ", preferred, auto, 1" ];
@@ -14,9 +14,9 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    jfg.theme.enable = lib.mkForce true;
-    jfg.foot.enable = lib.mkForce true;
-    jfg.hypridle.enable = lib.mkForce true;
+    homeMods.theme.enable = lib.mkForce true;
+    homeMods.foot.enable = lib.mkForce true;
+    homeMods.hypridle.enable = lib.mkForce true;
     # Extra packages my hyprland config uses
     home.packages = with pkgs; [
       libnotify

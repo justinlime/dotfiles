@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
   let
-    cfg = config.jfg.usbautomount;
+    cfg = config.sysMods.usbautomount;
     mount = (pkgs.writeScriptBin "usb-mount.sh" ''
       #!/bin/sh
       PATH=$PATH:/run/current-system/sw/bin
@@ -109,11 +109,11 @@
     '');
 in
 {
-  options.jfg.usbautomount = with lib.types; {
+  options.sysMods.usbautomount = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
-    users.users.${config.jfg.system.username}.extraGroups = [ "adbusers" ];
+    users.users.${config.sysMods.system.username}.extraGroups = [ "adbusers" ];
     services.udev = {
       packages = with pkgs; [
         android-udev-rules

@@ -1,10 +1,10 @@
 { config, pkgs, username, lib, ... }:
-let cfg = config.jfg.mpd; in 
+let cfg = config.homeMods.mpd; in 
 {
-  options.jfg.mpd = with lib.types; {
+  options.homeMods.mpd = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
     musicDirectory = lib.mkOption {
-      default = "/home/${config.jfg.home.username}/music";  
+      default = "/home/${config.homeMods.home.username}/music";  
       type = str;
     };
   };

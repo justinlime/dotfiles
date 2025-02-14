@@ -1,11 +1,11 @@
 { pkgs, config, lib, jlib, ... }:
 let
-  cfg = config.jfg.waybar;
-  theme = config.jfg.theme;
+  cfg = config.homeMods.waybar;
+  theme = config.homeMods.theme;
   palette = theme.palette;
 in
 {
-  options.jfg.waybar = with lib.types; {
+  options.homeMods.waybar = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {

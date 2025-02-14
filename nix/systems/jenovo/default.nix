@@ -3,7 +3,7 @@
   imports = [ 
     ./hardware-configuration.nix 
   ];
-  jfg = {
+  sysMods = {
     system = rec {
       username = "justinlime";  
       flakeDirectory = "/home/${username}/dotfiles";

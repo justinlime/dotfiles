@@ -1,7 +1,7 @@
 { lib, config, inputs, pkgs, username, ... }:
-let cfg = config.jfg.emacs; in 
+let cfg = config.homeMods.emacs; in 
 {
-  options.jfg.emacs = {
+  options.homeMods.emacs = {
    enable = lib.mkEnableOption "Enable"; 
   };
 

@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  cfg = config.jfg.btop;
+  cfg = config.homeMods.btop;
   catppuccin-mocha = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "btop";
@@ -9,7 +9,7 @@ let
   };
 in
 {
-  options.jfg.btop = with lib.types; {
+  options.homeMods.btop = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
     update_ms = lib.mkOption {
       default = 500;

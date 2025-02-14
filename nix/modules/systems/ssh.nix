@@ -1,7 +1,7 @@
 { config, lib, hush, ... }:
-let cfg = config.jfg.ssh; in 
+let cfg = config.sysMods.ssh; in 
 {
-  options.jfg.ssh = with lib.types; {
+  options.sysMods.ssh = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
@@ -38,8 +38,8 @@ let cfg = config.jfg.ssh; in
         PermitRootLogin = "no";
         PermitEmptyPasswords = false;
         Protocol = 2;
-        AllowUsers = ["${config.jfg.system.username}"];
-        AllowGroups = ["${config.jfg.system.username}"];
+        AllowUsers = ["${config.sysMods.system.username}"];
+        AllowGroups = ["${config.sysMods.system.username}"];
         MaxAuthTries = 3;
         ChallengeResponseAuthentication = false;
         AllowTcpForwarding = "yes";

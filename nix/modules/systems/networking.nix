@@ -1,7 +1,7 @@
 { config, lib, ... }:
-let cfg = config.jfg.firewall; in 
+let cfg = config.sysMods.firewall; in 
 {
-  options.jfg.firewall = with lib.types; {
+  options.sysMods.firewall = with lib.types; {
     enable = lib.mkEnableOption "Enable";  
     TCPPorts = lib.mkOption {
       default = [ ];

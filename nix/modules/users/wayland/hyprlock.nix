@@ -1,12 +1,12 @@
 { lib, config, jlib, ... }:
 let
   inherit (jlib) hexToRGBString;
-  cfg = config.jfg.hyprlock;
-  theme = config.jfg.theme;
+  cfg = config.homeMods.hyprlock;
+  theme = config.homeMods.theme;
   palette = theme.palette;
 in
 {
-  options.jfg.hyprlock = with lib.types; {
+  options.homeMods.hyprlock = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {

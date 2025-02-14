@@ -1,7 +1,7 @@
 { config, lib, pkgs, inputs, profile,  ... }:
-let cfg = config.jfg.system; in 
+let cfg = config.sysMods.system; in 
 {
-  options.jfg.system = with lib.types; {
+  options.sysMods.system = with lib.types; {
     username = lib.mkOption {
       type = str;  
     }; 

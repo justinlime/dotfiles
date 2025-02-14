@@ -1,7 +1,7 @@
 { lib, inputs, config, pkgs, pkgs_stable, ... }:
-let cfg = config.jfg.nvim; in 
+let cfg = config.homeMods.nvim; in 
 {
-  options.jfg.nvim = {
+  options.homeMods.nvim = {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {

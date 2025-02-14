@@ -1,7 +1,7 @@
 { config, lib, ...}:
-let cfg = config.jfg.tmux; in 
+let cfg = config.homeMods.tmux; in 
 {
-  options.jfg.tmux= {
+  options.homeMods.tmux= {
    enable = lib.mkEnableOption "Enable"; 
   };
 

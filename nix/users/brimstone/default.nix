@@ -2,7 +2,7 @@
 {
   # Brimstone is my main everyday home configuration, including a number
   # of tools and services i use on a daily basis
-  jfg = {
+  homeMods = {
     home = rec {
       username = "justinlime";
       homeDirectory = "/home/${username}";

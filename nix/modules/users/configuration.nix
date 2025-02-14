@@ -1,7 +1,7 @@
 { config, lib, profile, inputs, pkgs, ... }:
-let cfg = config.jfg.home; in 
+let cfg = config.homeMods.home; in 
 {
-  options.jfg.home = with lib.types; {
+  options.homeMods.home = with lib.types; {
     username = lib.mkOption {
       type = str;
     };

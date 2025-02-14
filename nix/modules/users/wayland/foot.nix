@@ -1,15 +1,15 @@
 { config, lib, ... }:
 let
-  cfg = config.jfg.foot;
-  theme = config.jfg.theme;
+  cfg = config.homeMods.foot;
+  theme = config.homeMods.theme;
   palette = theme.palette;
 in 
 {
-  options.jfg.foot = with lib.types; {
+  options.homeMods.foot = with lib.types; {
     enable = lib.mkEnableOption  "Enable"; 
   };
   config = lib.mkIf cfg.enable {
-    jfg.theme.enable = lib.mkForce true;
+    homeMods.theme.enable = lib.mkForce true;
     programs.foot = {
       enable = true;
       server.enable = true;

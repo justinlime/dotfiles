@@ -1,7 +1,7 @@
 { config, lib, ... }:
-let cfg = config.jfg.hypridle; in
+let cfg = config.homeMods.hypridle; in
 {
-  options.jfg.hypridle = with lib.types; {
+  options.homeMods.hypridle = with lib.types; {
     enable = lib.mkEnableOption "Enable";  
     lockTimeout = lib.mkOption  {
       default = 300;

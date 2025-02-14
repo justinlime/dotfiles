@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
-let cfg = config.jfg.zsh; in 
+let cfg = config.homeMods.zsh; in 
 {
-  options.jfg.zsh = {
+  options.homeMods.zsh = {
    enable = lib.mkEnableOption "Enable"; 
   };
 

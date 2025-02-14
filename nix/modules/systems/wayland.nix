@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
-let cfg = config.jfg.wayland; in 
+let cfg = config.sysMods.wayland; in 
 {
-  options.jfg.wayland = with lib.types; {
+  options.sysMods.wayland = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {

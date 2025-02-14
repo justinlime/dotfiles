@@ -1,10 +1,10 @@
 { config, lib, ... }:
 let
-  cfg = config.jfg.mpv;
+  cfg = config.homeMods.mpv;
 in 
 {
 
-  options.jfg.mpv = {
+  options.homeMods.mpv = {
    enable = lib.mkEnableOption "Enable"; 
   };
   config = lib.mkIf cfg.enable {

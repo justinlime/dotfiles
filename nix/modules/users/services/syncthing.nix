@@ -1,7 +1,7 @@
 { config, lib, ... }:
-let cfg = config.jfg.syncthing; in 
+let cfg = config.homeMods.syncthing; in 
 {
-  options.jfg.syncthing = {
+  options.homeMods.syncthing = {
    enable = lib.mkEnableOption "Enable"; 
   };
   config = lib.mkIf cfg.enable {

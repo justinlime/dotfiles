@@ -1,7 +1,7 @@
 { config, lib, ... }:
-let cfg = config.jfg.smart; in 
+let cfg = config.sysMods.smart; in 
 {
-  options.jfg.smart = with lib.types; {
+  options.sysMods.smart = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {

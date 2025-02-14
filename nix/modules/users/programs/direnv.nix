@@ -1,7 +1,7 @@
 { config, lib, ... }:
-let cfg = config.jfg.direnv; in 
+let cfg = config.homeMods.direnv; in 
 {
-  options.jfg.direnv = {
+  options.homeMods.direnv = {
    enable = lib.mkEnableOption "Enable"; 
   };
   config = lib.mkIf cfg.enable {

@@ -2,7 +2,7 @@
 {
   # Janus is a home build for tools id be using typically on
   # a headless server of some kind
-  jfg = {
+  homeMods = {
     home = rec {
       username = "justinlime";
       homeDirectory = "/home/${username}";

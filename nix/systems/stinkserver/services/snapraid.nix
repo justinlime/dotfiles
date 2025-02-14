@@ -19,7 +19,7 @@
       d4 = "/drives/BTRFS3"; #12TB
     };
     contentFiles = [
-      "/home/${config.jfg.system.username}/.snapraid.content"
+      "/home/${config.sysMods.system.username}/.snapraid.content"
       "/drives/BTRFS0/.snapraid.content"
       "/drives/BTRFS1/.snapraid.content"
       "/drives/BTRFS2/.snapraid.content"

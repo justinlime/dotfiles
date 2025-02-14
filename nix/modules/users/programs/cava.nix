@@ -1,7 +1,7 @@
 { lib, config, ... }:
-let cfg = config.jfg.cava; in 
+let cfg = config.homeMods.cava; in 
 {
-  options.jfg.cava = {
+  options.homeMods.cava = {
    enable = lib.mkEnableOption "Enable"; 
   };
 
