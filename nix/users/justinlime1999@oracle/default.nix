@@ -1,15 +1,12 @@
 { pkgs,... }:
 {
-  # Janus is a home build for tools id be using typically on
-  # a headless server of some kind
   homeMods = {
     home = rec {
-      username = "justinlime";
+      username = "justinlime1999";
       homeDirectory = "/home/${username}";
       flakeDirectory = "/home/${username}/dotfiles";
     }; 
     emacs.enable = true;
-    nvim.enable = true; 
     zsh.enable = true;
     tmux.enable = true;
     btop.enable = true;

@@ -1,7 +1,5 @@
 { profile, inputs, username, flake_path, pkgs, pkgsStable, ... }:
 {
-  # Brimstone is my main everyday home configuration, including a number
-  # of tools and services i use on a daily basis
   homeMods = {
     home = rec {
       username = "justinlime";
