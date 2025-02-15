@@ -19,12 +19,18 @@ let cfg = config.homeMods.home; in
     programs.home-manager.enable = true;
     nixpkgs.config.allowUnfree = true; 
     fonts.fontconfig.enable = true;
-    # Enable flakes 
     nix = {
       package = pkgs.nix;
+      # Enable nix command and flakes
       settings.experimental-features = [ "nix-command" "flakes" ];
       # Pin registry to flake
       registry.nixpkgs.flake = inputs.nixpkgs;
+      # Automatic garbase collection
+      gc = {
+        automatic = true;  
+        frequency = "weekly";
+        options = "--delete-older-than 14d";
+      };
     }; 
     home = {
       username = cfg.username;

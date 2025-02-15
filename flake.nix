@@ -17,7 +17,7 @@
 
     # Prefix every string in a given LIST with a given FLAG, seperated by dots
     #
-    # EX: genProfileNames [ "brimstone" "janus" ] "x86_64-linux" => [ "brimstone.x86_64-linux" "janus.x86_64-linux"]
+    # EX: genProfileNames [ "justinlime@jenovo" "justinlime1999@oracle" ] "x86_64-linux" => [ "justinlime@jenovo.x86_64-linux" "justinlime1999@oracle.x86_64-linux"]
     genProfileNames = list: flag: (map (x: "${flag}.${x}") list);
 
     # Use the given FUNC to generate an attribute set, whose attribute name's are a profile,
@@ -28,7 +28,7 @@
 
     # Generate SYSTEM, PROFILENAME, and PKGS, based on a given profile.
     #
-    # EX: genParams "brimstone.x86_64-linux" => { profileName = "brimstone"; system = "x86_64-linux"; pkgs = nixpkgs.legacyPackages.x86-64_linux; }
+    # EX: genParams "justinlime@jenovo.x86_64-linux" => { profileName = "justinlime@jenovo"; system = "x86_64-linux"; pkgs = nixpkgs.legacyPackages.x86-64_linux; }
     genParams = profile: let split = splitString "." profile; in rec {
       profileName = elemAt split 0;            
       system =  elemAt split 1;         
@@ -42,12 +42,12 @@
     #
     # ${subdirname}.${system} 
     # 
-    # EX: brimstone.x86_64-linux, brimstone.aarch64-linux, jesktop.x86_64-linux
+    # EX: justinlime@jenovo.x86_64-linux, justinlime@jenovo.aarch64-linux, justinlime@jenovo.x86_64-darwin, etc.
     allHomeConfigurations = applyProfiles ./nix/users
       (profile:                               
         with (genParams profile);
         # Bootstrap a home-manager profile using something like:
-        # nix run --extra-experimental-features 'nix-command flakes' github:nix-community/home-manager -- switch --flake path:/home/justinlime/dotfiles#brimstone.x86_64-linux --experimental-features 'nix-command flakes'
+        # nix run --extra-experimental-features 'nix-command flakes' github:nix-community/home-manager -- switch --flake path:/home/justinlime/dotfiles#justinlime@jenovo.x86_64-linux --experimental-features 'nix-command flakes'
         #
         # After first rebuild and subsequent shell reload, you can rebuild with the "home-switch" alias instead
         home-manager.lib.homeManagerConfiguration {

@@ -20,6 +20,12 @@ let cfg = config.sysMods.system; in
       registry.nixpkgs.flake = inputs.nixpkgs;
       # Pin channel to flake
       nixPath = [ "nixpkgs=configflake:nixpkgs" ];
+      # Automatic garbase collection
+      gc = {
+        automatic = true;  
+        dates = "weekly";
+        options = "--delete-older-than 14d";
+      };
     };
 
     time.timeZone = "America/Chicago";
