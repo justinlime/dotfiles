@@ -1,9 +1,8 @@
 { pkgs, lib, config, jlib, ... }:
 let
-  inherit (jlib) hexToRGBString;
   cfg = config.homeMods.hyprland;
   theme = config.homeMods.theme;
-  palette = theme.palette;
+  palette = jlib.fullPalette theme.palette;
 in
 {
   options.homeMods.hyprland = with lib.types; {
@@ -68,8 +67,8 @@ in
           gaps_in = 4;
           gaps_out = 10;
           border_size = 2;
-          "col.active_border" = "rgb(${hexToRGBString "," palette.mauve})";
-          "col.inactive_border" = "rgba(${palette.crust}00)";
+          "col.active_border" = "rgb(${palette.rgbComma.mauve})";
+          "col.inactive_border" = "rgba(${palette.hex.crust}00)";
           allow_tearing = true;
           layout = "dwindle";
         };
@@ -80,8 +79,8 @@ in
             ignore_window = true;
             range = 50;
             render_power = 3;
-            color = "rgba(${palette.mauve}00)";
-            color_inactive = "rgba(${palette.crust}00)";
+            color = "rgba(${palette.hex.mauve}00)";
+            color_inactive = "rgba(${palette.hex.crust}00)";
           };
           blur = {
             enabled = true;

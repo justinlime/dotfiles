@@ -6,6 +6,7 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
   boot = {
+    supportedFilesystems = [ "ntfs" ];
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];

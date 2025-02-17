@@ -1,9 +1,8 @@
 { lib, config, jlib, ... }:
 let
-  inherit (jlib) hexToRGBString;
   cfg = config.homeMods.hyprlock;
   theme = config.homeMods.theme;
-  palette = theme.palette;
+  palette = jlib.fullPalette theme.palette;
 in
 {
   options.homeMods.hyprlock = with lib.types; {
@@ -44,9 +43,9 @@ in
             monitor = "";
             dots_center = true;
             fade_on_empty = false;
-            font_color = "rgb(${hexToRGBString "," palette.text})";
-            inner_color = "rgb(${hexToRGBString "," palette.crust})";
-            outer_color = "rgb(${hexToRGBString "," palette.crust})";
+            font_color = "rgb(${palette.rgbComma.text})";
+            inner_color = "rgb(${palette.rgbCommacrust})";
+            outer_color = "rgb(${palette.rgbComma.crust})";
             outline_thickness = 5;
             placeholder_text = "";
             shadow_passes = 0;
