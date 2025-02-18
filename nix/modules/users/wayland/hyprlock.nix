@@ -44,7 +44,7 @@ in
             dots_center = true;
             fade_on_empty = false;
             font_color = "rgb(${palette.rgbComma.text})";
-            inner_color = "rgb(${palette.rgbCommacrust})";
+            inner_color = "rgb(${palette.rgbComma.crust})";
             outer_color = "rgb(${palette.rgbComma.crust})";
             outline_thickness = 5;
             placeholder_text = "";
