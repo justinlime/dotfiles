@@ -77,6 +77,8 @@
   {
     homeConfigurations = allHomeConfigurations; 
     nixosConfigurations = allSystemConfigurations; 
+    homeManagerModules.default = { imports = [ ./nix/modules/users ]; };
+    nixosModules.default = { imports = [ ./nix/modules/systems ]; };
   };
 
   inputs = {
