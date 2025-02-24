@@ -77,6 +77,18 @@
       device = "/storage/pool"; 
       options = [ "bind" ];
     };
+    "/nfs/downloads" = {
+      device = "/drives/EXTERNAL0"; 
+      options = [ "bind" ];
+    };
+    "/nfs/users" = {
+      device = "/drives/NVME0/users"; 
+      options = [ "bind" ];
+    };
+    "/nfs/justinlime" = {
+      device = "/home/justinlime"; 
+      options = [ "bind" ];
+    };
   };
 
   swapDevices = [ ];
