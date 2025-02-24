@@ -14,6 +14,8 @@ let cfg = config.homeMods.emacs; in
       imagemagick
       zoxide
       ispell
+      # PDF viewing
+      ghostscript
       # Language Servers
       lua-language-server 
       csharp-ls

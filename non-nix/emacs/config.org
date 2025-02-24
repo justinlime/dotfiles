@@ -367,7 +367,7 @@
 (use-package evil-collection
   :after evil
   :config
-    (setq evil-collection-mode-list '(magit ement term minibuffer help dashboard dired ibuffer tetris))
+    (setq evil-collection-mode-list '(magit doc-view ement term minibuffer help dashboard dired ibuffer tetris))
     (evil-collection-init))
 #+end_src
 **** Evil Org Agenda
