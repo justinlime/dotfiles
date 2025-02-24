@@ -73,6 +73,10 @@
       fsType = "fuse.mergerfs";
       options = [ "minfreespace=100G" "category.create=mfs" ];
     };
+    "/nfs/pool" = {
+      device = "/storage/pool"; 
+      options = [ "bind" ];
+    };
   };
 
   swapDevices = [ ];

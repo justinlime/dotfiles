@@ -30,26 +30,32 @@
   };
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
-      fsType = "btrfs";
-      options = [ "subvol=root" "noatime" "compress=zstd:3" ];
+    fsType = "btrfs";
+    options = [ "subvol=root" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
-      fsType = "btrfs";
-      options = [ "subvol=home" "noatime" "compress=zstd:3" ];
+    fsType = "btrfs";
+    options = [ "subvol=home" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/nix" =
     { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
-      fsType = "btrfs";
-      options = [ "subvol=nix" "noatime" "compress=zstd:3" ];
+    fsType = "btrfs";
+    options = [ "subvol=nix" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/1220-07BB";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  fileSystems."/media/stinkserver" =
+    { device = "192.168.4.59:/"; 
+    fsType = "nfs";
+    options = [ "nfsvers=4.2" "x-systemd.automount" "noauto" ];
     };
 
   swapDevices = [ ];
