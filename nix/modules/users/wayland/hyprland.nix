@@ -145,6 +145,7 @@ in
           "$mainMod SHIFT,L,movewindow,r"
           "$mainMod SHIFT,K,movewindow,u"
           "$mainMod SHIFT,J,movewindow,d"
+          "$mainMod SHIFT,S,movetoworkspace,special"
           # Switch workspaces
           "$mainMod, 1, workspace, 1"
           "$mainMod, 2, workspace, 2"
@@ -156,6 +157,7 @@ in
           "$mainMod, 8, workspace, 8"
           "$mainMod, 9, workspace, 9"
           "$mainMod, 0, workspace, 10"
+          "$mainMod, s, togglespecialworkspace"
           # Switch active window to workspace
           "$mainMod SHIFT, 1, movetoworkspace, 1"
           "$mainMod SHIFT, 2, movetoworkspace, 2"
@@ -210,6 +212,7 @@ in
           "float,title:^(Confirm to replace files)$"
           "float,title:^(File Operation Progress)$"
           "float,title:^(mpv)$"
+          # "float,special"
           # Ensure tearing for specific games
           # All games run with gamescope
           "immediate, class:^(.gamescope-wrapped)$" 

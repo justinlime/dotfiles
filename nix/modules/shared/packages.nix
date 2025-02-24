@@ -21,6 +21,7 @@ with pkgs; [
   lm_sensors
   maxfetch
   git-crypt
+  cifs-utils
   # (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
   # (av1an.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
   # podman-tui

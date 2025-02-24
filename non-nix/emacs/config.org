@@ -257,7 +257,8 @@
 (setq blink-cursor-mode nil ; Exactly what is sounds like
       use-short-answers t ; Set y or n instead of yes or no for questions
       comment-empty-lines t ; Comment empty lines in selecetd region too
-      initial-scratch-message ";; The system plays us everyday
+      initial-major-mode 'org-mode
+      initial-scratch-message "* Scratch
 
 "
       display-line-numbers-type 'relative ; Realive line numbers
@@ -992,7 +993,7 @@ it can be passed in POS."
   :hook ((org-mode org-agenda-mode) . olivetti-mode)
   :config
     (set-face-attribute 'olivetti-fringe nil :background jl/bg-1) ; fringes/borders on the sides
-    (setq-default olivetti-body-width 0.70)
+    (setq-default olivetti-body-width 0.85)
     (remove-hook 'olivetti-mode-on-hook 'visual-line-mode))
 #+end_src
 ** Minibuffer

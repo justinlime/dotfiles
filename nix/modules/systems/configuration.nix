@@ -66,6 +66,7 @@ let cfg = config.sysMods.system; in
       variables = { EDITOR = "vim"; };
       pathsToLink = [ "/share/zsh" ];
     };
+    programs.ssh.startAgent = true;
 
     programs.zsh = {
       enable = true;
