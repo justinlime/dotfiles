@@ -18,7 +18,7 @@
     hyprlock.enable = true;
     hypridle.enable = true;
     waybar.enable = true;
-    wofi.enable = true;
+    rofi.enable = true;
     foot.enable = true;
     syncthing.enable = true;
     mpd.enable = true;

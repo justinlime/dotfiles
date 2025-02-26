@@ -125,7 +125,7 @@ in
           "$mainMod SHIFT, X, exit "
           # Launch
           "$mainMod, RETURN, exec, foot"
-          "$mainMod, D, exec, wofi"
+          "$mainMod, D, exec, rofi -show drun -show-icons -sort"
           ''$mainMod,P,exec,IMG=~/photos/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png && mkdir -p ~/photos/screenshots && grim -g "$(slurp -d)" $IMG && wl-copy < $IMG; notify-send -i $IMG Screenshot "Screenshot saved to ''${IMG} and copied to clipboard"''
           "$mainMod ,N,exec, swaync-client -t -sw"
           "$mainMod SHIFT,M,exec, hyprlock --immediate"
@@ -216,6 +216,7 @@ in
           # Ensure tearing for specific games
           # All games run with gamescope
           "immediate, class:^(.gamescope-wrapped)$" 
+          "stayfocused, class:(Rofi)$"
         ];
         layerrule = [
           "blur, waybar"

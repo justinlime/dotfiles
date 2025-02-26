@@ -55,7 +55,7 @@
   fileSystems."/media/stinkserver" =
     { device = "192.168.4.59:/"; 
     fsType = "nfs";
-    options = [ "nfsvers=4.2" "x-systemd.automount" "noauto" ];
+    options = [ "nfsvers=4.2" "x-systemd.automount" "_netdev" "noauto" ];
     };
 
   swapDevices = [ ];
