@@ -28,7 +28,7 @@ in
           alpha="1.0";
           background="${palette.crust}";
           # background="${custom.background}";
-          regular0="${palette.crust}";  # black
+          regular0="${palette.subtext0}";  # black
           regular1="${palette.red}";  # red
           regular2="${palette.green}";  # green
           regular3="${palette.yellow}";  # yellow

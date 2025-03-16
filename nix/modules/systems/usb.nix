@@ -39,11 +39,11 @@
           LABEL=''${ID_FS_LABEL}
           if [[ -z "''${LABEL}" ]]; then
               LABEL=''${DEVBASE}
-          elif grep -q " /media/''${LABEL} " /etc/mtab; then
+          elif grep -q " /mnt/''${LABEL} " /etc/mtab; then
               # Already in use, make a unique one
               LABEL+="-''${DEVBASE}"
           fi
-          MOUNT_POINT="/media/''${LABEL}"
+          MOUNT_POINT="/mnt/''${LABEL}"
 
           echo "Mount point: ''${MOUNT_POINT}"
 
@@ -81,11 +81,11 @@
               echo "**** Unmounted ''${DEVICE}"
           fi
 
-          # Delete all empty dirs in /media that aren't being used as mount
+          # Delete all empty dirs in /mnt that aren't being used as mount
           # points. This is kind of overkill, but if the drive was unmounted
           # prior to removal we no longer know its mount point, and we don't
           # want to leave it orphaned...
-          for f in /media/* ; do
+          for f in /mnt/* ; do
               if [[ -n $(find "$f" -maxdepth 0 -type d -empty) ]]; then
                   if ! grep -q " $f " /etc/mtab; then
                       echo "**** Removing mount point $f"

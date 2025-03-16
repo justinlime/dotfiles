@@ -14,45 +14,41 @@
       availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
       kernelModules = [ "dm-snapshot" ];
       luks.devices.root = {
-        device = "/dev/disk/by-uuid/a1bdc416-b09a-4e65-adb8-ff837d261076";
+        device = "/dev/disk/by-uuid/d1c78b64-7d41-4e25-a329-95a689b70a0c";
         preLVM = true;
       };
     };
     loader = {
       efi.canTouchEfiVariables = true;
-      grub = {
-        enable = true;
-        devices = [ "nodev" ];
-        efiSupport = true;
-        useOSProber = true;
-      };
+      systemd-boot.enable = true;
+      timeout = 7;
     };
   };
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
+    { device = "/dev/disk/by-uuid/12f2eb04-67cd-460b-a6a5-d51efd59e19c";
     fsType = "btrfs";
     options = [ "subvol=root" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
+    { device = "/dev/disk/by-uuid/12f2eb04-67cd-460b-a6a5-d51efd59e19c";
     fsType = "btrfs";
     options = [ "subvol=home" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/5b3f29ca-dbe0-4394-92c2-f0988091c641";
+    { device = "/dev/disk/by-uuid/12f2eb04-67cd-460b-a6a5-d51efd59e19c";
     fsType = "btrfs";
     options = [ "subvol=nix" "noatime" "compress=zstd:3" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/1220-07BB";
+    { device = "/dev/disk/by-uuid/8913-9ACA";
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/media/stinkserver" =
+  fileSystems."/mnt/stinkserver" =
     { device = "192.168.4.59:/"; 
     fsType = "nfs";
     options = [ "nfsvers=4.2" "x-systemd.automount" "_netdev" "noauto" ];
