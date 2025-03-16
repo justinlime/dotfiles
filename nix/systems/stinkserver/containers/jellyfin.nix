@@ -8,7 +8,7 @@
   virtualisation.oci-containers.containers = {
     jellyfin = {
      autoStart = true; 
-     image = "lscr.io/linuxserver/jellyfin:10.9.8";
+     image = "lscr.io/linuxserver/jellyfin:latest";
      environment = {
        TZ = "America/Chicago";
        PUID = "1000";
