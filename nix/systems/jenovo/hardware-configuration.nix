@@ -49,7 +49,7 @@
     };
 
   fileSystems."/mnt/stinkserver" =
-    { device = "192.168.4.59:/"; 
+    { device = "10.0.0.200:/"; 
     fsType = "nfs";
     options = [ "nfsvers=4.2" "x-systemd.automount" "_netdev" "noauto" ];
     };

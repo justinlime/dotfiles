@@ -13,7 +13,7 @@
        TZ = "America/Chicago";
        PUID = "1000";
        PGID = "100";
-       JELLYFIN_PublishedServerUrl = "http://192.168.4.59";
+       JELLYFIN_PublishedServerUrl = "http://10.0.0.200";
      };
      ports = [ "8096:8096" "8920:8920" "1900:1900/udp" "7359:7359/udp" ];
      volumes = [
@@ -38,23 +38,23 @@
         locations."/" = {
           proxyPass = "http://localhost:8096";
           extraConfig = ''
-            proxy_set_header Accept-Encoding "";
-            sub_filter 
-            '</body>' 
-            '<script plugin="Jellyscrub" version="1.0.0.0" src="/Trickplay/ClientScript"></script>
-            </body>';  
-            sub_filter_once on; 
+            # Proxy main Jellyfin traffic
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Forwarded-Protocol $scheme;
             proxy_set_header X-Forwarded-Host $http_host;
+            proxy_read_timeout 600s;
+            proxy_send_timeout 600s;
+            # Disable buffering when the nginx proxy gets very resource heavy upon streaming
+            proxy_buffering off;
           '';
         };
         locations."/socket" = {
           proxyPass = "http://localhost:8096";
           extraConfig = ''
+            # Proxy Jellyfin Websockets traffic
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
