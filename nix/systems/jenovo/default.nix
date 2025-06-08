@@ -28,6 +28,7 @@ in
   };
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
+    HandleLidSwitch=hibernate
   '';
   programs = {
     light.enable = true;

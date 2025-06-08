@@ -29,7 +29,7 @@ let cfg = config.homeMods.hypridle; in
           }
           {
             timeout = cfg.sleepTimeout;
-            on-timeout = "systemctl suspend";
+            on-timeout = "systemctl hibernate";
             on-resume = "hyprctl dispatch dpms on";
           }
         ];

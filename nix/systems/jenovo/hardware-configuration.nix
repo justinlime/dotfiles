@@ -9,6 +9,13 @@
     supportedFilesystems = [ "ntfs" ];
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "kvm-intel" ];
+    ##### Get resume offset
+    ## For non-btrfs:
+    # sudo filefrag -v /swapfile | awk '{if($1=="0:"){print $4}}'
+    ## For btrfs: 
+    # sudo btrfs inspect-internal map-swapfile -r swap_file
+    kernelParams = [ "resume_offset=22661317" ];
+    resumeDevice = "/dev/disk/by-uuid/12f2eb04-67cd-460b-a6a5-d51efd59e19c";
     extraModulePackages = [ ];
     initrd = {
       availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
@@ -54,7 +61,10 @@
     options = [ "nfsvers=4.2" "x-systemd.automount" "_netdev" "noauto" ];
     };
 
-  swapDevices = [ ];
+  swapDevices = [ {
+    device = "/swapfile";
+    size = 40 * 1024; # 40gb
+  } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
