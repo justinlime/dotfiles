@@ -8,9 +8,9 @@ let cfg = config.sysMods.wayland; in
     # Services needed for my desktop environment
     security.rtkit.enable = true; 
     services = {
+      displayManager.gdm.enable = true;
       xserver = {
         enable = true; 
-        displayManager.gdm.enable = true;
       };
       gnome.gnome-keyring.enable = true;
       gvfs = {

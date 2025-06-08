@@ -39,7 +39,7 @@ let cfg = config.homeMods.mpd; in
     home.packages = with pkgs; [
       libnotify
       mpc-cli
-      (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
+      (ffmpeg-full.override { withSvtav1 = true; })
       (pkgs.writeScriptBin "songinfo" ''
         music_dir="$HOME/music"
         previewdir="$XDG_CONFIG_HOME/ncmpcpp/previews"
