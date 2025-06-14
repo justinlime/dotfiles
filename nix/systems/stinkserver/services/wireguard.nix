@@ -21,7 +21,7 @@
           publicKey = "CL9FrOHvgHX5p6fWyY8JmXL6pMW0ninklTpdfGOuWCA=";
           presharedKeyFile = "/configs/wireguard-keys/oracle-psk";
           allowedIPs = [ "10.69.69.0/24" ];
-          endpoint = "158.101.111.126:42069";
+          endpoint = "justinlime.dev:42069";
           persistentKeepalive = 25;
         }
       ];
