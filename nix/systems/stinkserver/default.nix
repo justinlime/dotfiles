@@ -14,7 +14,7 @@
     ssh.enable = true;
     usbautomount.enable = true;
     virt.enable = true;
-    xrdp.enable = true;
+    gnomerdp.enable = true;
     firewall = {
       enable = true;  
       TCPPorts = [ 1313 ];
@@ -36,6 +36,7 @@
     mergerfs
     snapraid
     intel-gpu-tools
+    orca-slicer
     # (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
     linux-firmware
     # inputs.pipecord.packages.${pkgs.system}.default
