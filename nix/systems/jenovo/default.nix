@@ -26,10 +26,10 @@ in
       BothPorts = [ 1313 6969 1317 ];
     };
   };
-  services.logind.extraConfig = ''
-    HandlePowerKey=ignore
-    HandleLidSwitch=hibernate
-  '';
+  services.logind.settings.Login=  {
+    HandlePowerKey = "ignore";
+    HandleLidSwitch = "hibernate";
+  };
   programs = {
     light.enable = true;
   };

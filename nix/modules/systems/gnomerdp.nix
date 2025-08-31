@@ -18,7 +18,6 @@ let cfg = config.sysMods.gnomerdp; in
       gnome-tweaks
     ];
     systemd.services.display-manager.restartIfChanged = false;
-    services.gnome.gcr-ssh-agent.enable = false;
     services.displayManager.gdm = {
       enable = true;
       autoSuspend = false;

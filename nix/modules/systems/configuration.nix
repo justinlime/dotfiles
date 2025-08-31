@@ -13,6 +13,7 @@ let cfg = config.sysMods.system; in
   # Settings that will apply to all of my systems
   config = {
     nixpkgs.config.allowUnfree = true;
+    services.gnome.gcr-ssh-agent.enable = false;
     nix = {
       # Enable nix command and flakes
       settings.experimental-features = [ "nix-command" "flakes" ]; 
