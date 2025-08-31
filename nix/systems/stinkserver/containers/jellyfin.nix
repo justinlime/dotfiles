@@ -3,7 +3,7 @@
   systemd.tmpfiles.rules = [
     "d /configs/jellyfin 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
   ];
-  networking.firewall.allowedTCPPorts = [ 8096 ];
+  networking.firewall.allowedTCPPorts = [ 8096 80 443 ];
   networking.firewall.allowedUDPPorts = [ 7359 1900 ];
   virtualisation.oci-containers.containers = {
     jellyfin = {
@@ -24,48 +24,24 @@
        "/storage/pool/media/watch:/watch"
        "/storage/pool/media/listen:/listen"
     ];
-     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
+     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card1" ];
     };  
+  };
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "foo@bar.com";
   };
   services.nginx = {
     enable = true;
     virtualHosts = {
       "watch.stinkboys.com" = {
-        listen = [{
-          port = 90;
-          addr = "0.0.0.0";
-        }
-        ];
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
-          proxyPass = "http://localhost:8096";
-          extraConfig = ''
-            # Proxy main Jellyfin traffic
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Protocol $scheme;
-            proxy_set_header X-Forwarded-Host $http_host;
-            proxy_read_timeout 600s;
-            proxy_send_timeout 600s;
-            # Disable buffering when the nginx proxy gets very resource heavy upon streaming
-            proxy_buffering off;
-          '';
+          proxyPass = "http://127.0.0.1:8096";
         };
         locations."/socket" = {
           proxyPass = "http://localhost:8096";
-          extraConfig = ''
-            # Proxy Jellyfin Websockets traffic
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Protocol $scheme;
-            proxy_set_header X-Forwarded-Host $http_host;
-          '';
         };
       };
     };

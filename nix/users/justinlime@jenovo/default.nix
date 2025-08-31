@@ -26,7 +26,6 @@
     direnv.enable = true;
   };
   home.packages = with pkgs; [
-    orca-slicer
     brave 
     firefox
     gimp

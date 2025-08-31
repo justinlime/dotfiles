@@ -3,7 +3,7 @@
   networking.firewall.allowedTCPPorts = [ 90 ];
   security.acme = {
     acceptTerms = true;
-    defaults.email = "justinlime1999@gmail.com";
+    defaults.email = "foo@bar.com";
   };
   systemd.services.fileserver = {
     description="FileServer";

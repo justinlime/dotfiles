@@ -21,9 +21,18 @@
       BothPorts = [ 1313 ];
     };
   };
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    wireplumber.enable = true;
+  };
+  services.flatpak.enable = true;
   networking = {
    hostName = "stinkserver"; 
-   nameservers = ["9.9.9.9"];
    firewall = {
       allowedTCPPorts = [ 1313 ];
       allowedUDPPorts = [ 1313 ];
@@ -36,7 +45,6 @@
     mergerfs
     snapraid
     intel-gpu-tools
-    orca-slicer
     # (ffmpeg-full.override { withSvtav1 = true; svt-av1=pkgs.svt-av1-psy; })
     linux-firmware
     # inputs.pipecord.packages.${pkgs.system}.default

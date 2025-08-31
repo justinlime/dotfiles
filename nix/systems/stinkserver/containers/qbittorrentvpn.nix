@@ -20,7 +20,7 @@
        WEBUI_PORT_ENV = "8080";
        INCOMING_PORT_ENV = "8999";
        NAME_SERVERS = "9.9.9.9,149.112.112.112";
-       LAN_NETWORK = "10.0.0.0/24, 10.69.69.0/24";
+       LAN_NETWORK = "10.69.42.0/24";
      };
      ports = [ "8080:8080" "57529:57529" "57529:57529/udp" ];
      volumes = [

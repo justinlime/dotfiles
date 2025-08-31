@@ -7,7 +7,9 @@ let cfg = config.sysMods.gnomerdp; in
   config = lib.mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [ 3389 ];
     environment.systemPackages = with pkgs; [
+      gnomeExtensions.desktop-icons-ng-ding
       gnomeExtensions.dash-to-dock
+      gnomeExtensions.just-perfection
       gnomeExtensions.arcmenu
       gnomeExtensions.tray-icons-reloaded
       gnome-remote-desktop
@@ -15,7 +17,12 @@ let cfg = config.sysMods.gnomerdp; in
       firefox
       gnome-tweaks
     ];
-    services.displayManager.gdm.enable = true;
+    systemd.services.display-manager.restartIfChanged = false;
+    services.gnome.gcr-ssh-agent.enable = false;
+    services.displayManager.gdm = {
+      enable = true;
+      autoSuspend = false;
+    };
     services.desktopManager.gnome = {
       enable = true; 
       extraGSettingsOverrides = ''
