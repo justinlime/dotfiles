@@ -33,7 +33,7 @@ let cfg = config.sysMods.ssh; in
       openFirewall = true;
       settings = {
         LogLevel = "VERBOSE";
-        PasswordAuthentication = false;
+        PasswordAuthentication = true;
         KbdInteractiveAuthentication = false;
         PermitRootLogin = "no";
         PermitEmptyPasswords = false;
@@ -43,8 +43,12 @@ let cfg = config.sysMods.ssh; in
         MaxAuthTries = 3;
         ChallengeResponseAuthentication = false;
         AllowTcpForwarding = "yes";
-        UsePAM = false;
+        UsePAM = true;
       };
+      extraConfig = ''
+        Match Address 10.42.69.0/24,10.69.42.0/24
+          PasswordAuthentication yes
+      '';
     };
 };
 }

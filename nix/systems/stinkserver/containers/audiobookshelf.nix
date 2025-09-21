@@ -20,30 +20,20 @@
     ];
     };  
   };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "justinlime1999@gmail.com";
+  };
   services.nginx = {
     enable = true;
     virtualHosts = {
       "listen.stinkboys.com" = {
-        listen = [{
-          port = 90;
-          addr = "0.0.0.0";
-        }
-        ];
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
+          proxyWebsockets = true;
           proxyPass = "http://localhost:1337";
-          extraConfig = ''
-            # Proxy main Jellyfin traffic
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Protocol $scheme;
-            proxy_set_header X-Forwarded-Host $http_host;
-            proxy_read_timeout 600s;
-            proxy_send_timeout 600s;
-            # Disable buffering when the nginx proxy gets very resource heavy upon streaming
-            proxy_buffering off;
-          '';
         };
       };
     };

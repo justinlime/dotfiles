@@ -24,7 +24,7 @@
         "read only" = "no";
         "writeable" = "yes";
         "guest ok" = "no";
-        "create mask" = "0755";
+        "create mask" = "0644";
         "directory mask" = "0755";
         "valid users" = "justinlime";
         "follow symlinks" = "yes";

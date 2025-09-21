@@ -29,7 +29,7 @@
   };
   security.acme = {
     acceptTerms = true;
-    defaults.email = "foo@bar.com";
+    defaults.email = "justinlime1999@gmail.com";
   };
   services.nginx = {
     enable = true;
