@@ -4,6 +4,7 @@ let cfg = config.sysMods.gnomerdp; in
   options.sysMods.gnomerdp = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
+
   config = lib.mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [ 3389 ];
     environment.systemPackages = with pkgs; [

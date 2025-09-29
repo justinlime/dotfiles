@@ -92,8 +92,25 @@
   # networking.interfaces.enp3s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  environment.systemPackages = [ pkgs.nvtopPackages.full ];
+  systemd.services."limit-gpu-wattage" = {
+    description = "Limit nvidia wattage";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c '/run/current-system/sw/bin/nvidia-smi -pm 1 && /run/current-system/sw/bin/nvidia-smi -pl 275'"; # Replace with your actual command
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      open = true;
+      nvidiaSettings = true;
+    };
     graphics = {
       enable = true;
       extraPackages = with pkgs; [
