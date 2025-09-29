@@ -13,7 +13,6 @@
        TZ = "America/Chicago";
        PUID = "1000";
        PGID = "100";
-       JELLYFIN_PublishedServerUrl = "http://10.0.0.200";
      };
      ports = [ "8096:8096" "8920:8920" "1900:1900/udp" "7359:7359/udp" ];
      volumes = [
@@ -27,21 +26,27 @@
      extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card1" ];
     };  
   };
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "justinlime1999@gmail.com";
-  };
   services.nginx = {
     enable = true;
     virtualHosts = {
       "watch.stinkboys.com" = {
+        serverName = "watch.stinkboys.com";
         forceSSL = true;
         enableACME = true;
         locations."/" = {
+          recommendedProxySettings = true;
+          proxyWebsockets = true;
           proxyPass = "http://127.0.0.1:8096";
         };
-        locations."/socket" = {
-          proxyPass = "http://localhost:8096";
+      };
+      "watch.justin-li.me" = {
+        serverName = "watch.justin-li.me";
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          recommendedProxySettings = true;
+          proxyWebsockets = true;
+          proxyPass = "http://127.0.0.1:8096";
         };
       };
     };

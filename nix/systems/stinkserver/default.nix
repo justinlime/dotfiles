@@ -41,6 +41,10 @@
   users.users.${config.sysMods.system.username}.openssh.authorizedKeys.keys = [
     "${hush.ssh.public-keys.stinkserver}" 
   ];
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "justinlime1999@gmail.com";
+  };
   environment.systemPackages = with pkgs; [
     mergerfs
     snapraid

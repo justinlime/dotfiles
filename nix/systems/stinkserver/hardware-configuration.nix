@@ -41,53 +41,44 @@
     "/drives/BTRFS0" = { #20tb
       device = "/dev/disk/by-uuid/028f290f-d1f7-4b45-b346-47d7864a2e24";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
     "/drives/BTRFS1" = { #14tb
       device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
     "/drives/BTRFS2" = { #14tb 
       device = "/dev/disk/by-uuid/1cdfed35-299b-4b62-93a3-b69e3eebc90e";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
     "/drives/BTRFS3" = { #12tb
       device = "/dev/disk/by-uuid/b70381ba-3ddb-48ac-9f21-c0f7b342be78";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
     "/drives/PARITY0" = { #20tb parity
       device = "/dev/disk/by-uuid/27ab9146-6226-47fc-8d91-aedc210b9102";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
     "/drives/EXTERNAL0" = { #4TB External 
       device = "/dev/disk/by-uuid/78d1947e-0375-4ac3-ad0f-249803877899";
       fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" ];
+      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
     "/storage/pool" = {
       device = "/drives/BTRFS*";
       fsType = "fuse.mergerfs";
-      options = [ "minfreespace=100G" "category.create=mfs" ];
-    };
-    "/nfs/pool" = {
-      device = "/storage/pool"; 
-      options = [ "bind" ];
-    };
-    "/nfs/downloads" = {
-      device = "/drives/EXTERNAL0"; 
-      options = [ "bind" ];
-    };
-    "/nfs/users" = {
-      device = "/drives/NVME0/users"; 
-      options = [ "bind" ];
-    };
-    "/nfs/justinlime" = {
-      device = "/home/justinlime"; 
-      options = [ "bind" ];
+      options = [
+        "minfreespace=100G"
+        "category.create=mfs"
+        "x-systemd.requires=/drives/BTRFS0" "x-systemd.after=/drives/BTRFS0"
+        "x-systemd.requires=/drives/BTRFS1" "x-systemd.after=/drives/BTRFS1"
+        "x-systemd.requires=/drives/BTRFS2" "x-systemd.after=/drives/BTRFS2"
+        "x-systemd.requires=/drives/BTRFS3" "x-systemd.after=/drives/BTRFS3"
+      ];
     };
   };
 

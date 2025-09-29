@@ -14,7 +14,6 @@
      ports = [ "3000:3000" "222:22" ];
      volumes = [
        "/storage/pool/git:/data"
-       # "/etc/timezone:/etc/timezone:ro"
        "/etc/localtime:/etc/localtime:ro"
      ];
     };  
@@ -22,22 +21,14 @@
   services.nginx = {
     enable = true;
     virtualHosts = {
-      "git.justinlime.dev" = {
-        listen = [{
-          port = 90;
-          addr = "0.0.0.0";
-        }
-        ];
+      "git.justin-li.me" = {
+        serverName = "git.justin-li.me";
+        forceSSL = true;
+        enableACME = true;
         locations."/" = {
-          proxyPass = "http://localhost:3000";
-          extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Protocol $scheme;
-            proxy_set_header X-Forwarded-Host $http_host;
-          '';
+          recommendedProxySettings = true;
+          proxyWebsockets = true;
+          proxyPass = "http://127.0.0.1:3000";
         };
       };
     };
