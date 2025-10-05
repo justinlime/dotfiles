@@ -11,12 +11,8 @@
      ports = [ "4242:8080" ];
      volumes = [
        "/configs/open-webui/data:/app/backend/data"
-     ];
-     environment = {
-       "ENABLE_SIGNUP" = "False";
-       "WEBUI_NAME" = "StinkAI";
-     };
-   };  
+    ];
+    };  
   };
   services.nginx = {
     enable = true;
