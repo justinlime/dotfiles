@@ -19,4 +19,5 @@
   };
   networking.hostName = "jesktop";
   hardware.ledger.enable = true;
+  services.flatpak.enable = true;
 }

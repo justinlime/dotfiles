@@ -48,6 +48,9 @@ let cfg = config.sysMods.gaming; in
         goverlay
         mangohud
         protonup-qt
+        vkbasalt
+        lsfg-vk
+        lsfg-vk-ui
       ];
     };
   };
