@@ -1,5 +1,5 @@
 {
-  outputs = { nixpkgs, home-manager, ... }@inputs:
+  outputs = { nixpkgs, home-manager, lanzaboote, ... }@inputs:
   let
     inherit (builtins) head elemAt attrNames readDir; 
     inherit (nixpkgs.lib) importTOML flatten genAttrs splitString;
@@ -69,6 +69,7 @@
           inherit system;
           specialArgs = { inherit profile hush inputs; }; 
           modules = [
+            lanzaboote.nixosModules.lanzaboote 
             ./nix/modules/systems
             ./nix/systems/${profileName}
           ] ++ sharedModules;
@@ -93,6 +94,10 @@
     };
     fileserver = {
       url = "github:justinlime/go-fileserver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";  
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

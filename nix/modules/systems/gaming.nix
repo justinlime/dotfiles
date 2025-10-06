@@ -7,27 +7,20 @@ let cfg = config.sysMods.gaming; in
   config = lib.mkIf cfg.enable {
     # System
     users.users.${config.sysMods.system.username}.extraGroups = [ "gamemode" ];
+    fonts.packages = with pkgs; [ vista-fonts corefonts ];
     programs = {
       gamescope = {
         enable = true;
         # package = pkgsStable.gamescope;
       };
-      # Dont think this is really needed anymore
-      # gamemode = {
-      #   enable = true; 
-      #   enableRenice = true; 
-      #   settings = {
-      #     # custom = {
-      #       # Set the monitor to an unreachable location to lock the mouse to the monitor
-      #       # with the current version of gamescope it escapes :(
-      #       # start = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl keyword monitor DP-2,2560x1440@165,3840x0,1";
-      #       # end = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl keyword monitor DP-2,2560x1440@165,2560x0,1";
-      #     # }; 
-      #   };
-      # };
+      gamemode = {
+        enable = true; 
+        enableRenice = true; 
+      };
       steam = {
         enable = true;
-        gamescopeSession.enable = true;
+        # Runs steam in gamescope
+        # gamescopeSession.enable = true;
         package = pkgs.steam.override {
           # Taken from https://github.com/NixOS/nixpkgs/issues/162562#issuecomment-1523177264
           # Fixes gamescope from being borked on nix
@@ -49,9 +42,6 @@ let cfg = config.sysMods.gaming; in
           ];
         };
       };
-    };
-    hardware = {
-      graphics.enable = true; 
     };
     environment = {
       systemPackages = with pkgs; [

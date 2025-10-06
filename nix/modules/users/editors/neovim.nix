@@ -22,7 +22,7 @@ let cfg = config.homeMods.nvim; in
       nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
       nodePackages_latest.typescript-language-server #Javascript and Typescript
       nodePackages_latest.bash-language-server #Bash
-      nodePackages_latest.dockerfile-language-server-nodejs #Dockerfiles
+      # nodePackages_latest.dockerfile-language-server-nodejs #Dockerfiles
       nodePackages_latest.yaml-language-server #Yaml
     ];
     xdg.configFile = {
