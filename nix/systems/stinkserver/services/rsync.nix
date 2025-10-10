@@ -45,7 +45,7 @@ in
 
           mkdir -p "$DEST"
 
-          tar \
+          ${pkgs.gnutar}/bin/tar \
             --exclude='**/logs/**' \
             --exclude='*.jpg' \
             --exclude='*.png' \
@@ -59,12 +59,15 @@ in
             --exclude='*.opus' \
             --exclude='*.ogg' \
             --exclude='**/Backups/**' \
-            --exclude='jellyfin/cache/**' \
+            --exclude='whisper/**' \
+            --exclude='parakeet/**' \
             --exclude='jellyfin/data/**' \
+            --exclude='**/cache/**' \
+            --exclude='**/.cache/**' \
             --exclude='plex/**/Application Support/**' \
-            -I "zstd -19 -T$(nproc)" -cpvf "$BACKUP_FILE" "$SRC" 
+            -I "${pkgs.zstd}/bin/zstd -19 -T$(nproc)" -cpvf "$BACKUP_FILE" "$SRC" 
 
-          ${pkgs.rsync}/bin/rsync -avh -info=progress2 "$BACKUP_FILE" rsync://10.42.69.1/backups/stinkserver_container_configs
+          ${pkgs.rsync}/bin/rsync -avh --info=progress2 "$BACKUP_FILE" rsync://10.42.69.1/backups/stinkserver_container_configs
 
           rm -rf "$BACKUP_FILE"
         '';
