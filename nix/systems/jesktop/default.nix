@@ -11,6 +11,7 @@
     usbautomount.enable = true;
     virt.enable = true;
     kde.enable = true;
+    # gnome.enable = true;
     gaming.enable = true;
     firewall = {
       enable = true;  

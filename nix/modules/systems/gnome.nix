@@ -18,6 +18,7 @@ let cfg = config.sysMods.gnome; in
     xdg.portal = {
       enable = true;
     };
+    gtk.iconCache.enable = true;
     services = {
       pipewire = {
         enable = true;
@@ -36,7 +37,7 @@ let cfg = config.sysMods.gnome; in
         enable = true; 
         extraGSettingsOverrides = ''
           [org.gnome.mutter]
-          experimental-features=['scale-monitor-framebuffer']  
+          experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate' ]  
         ''; 
       };
     };

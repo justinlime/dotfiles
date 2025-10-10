@@ -11,7 +11,7 @@ let cfg = config.sysMods.gaming; in
     programs = {
       gamescope = {
         enable = true;
-        # package = pkgsStable.gamescope;
+        # package = inputs.gamescopeNixpkgs.legacyPackages."x86_64-linux".gamescope;
       };
       gamemode = {
         enable = true; 

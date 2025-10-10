@@ -72,6 +72,22 @@
         "type": "github"
       }
     },
+    "gamescopeNixpkgs": {
+      "locked": {
+        "lastModified": 1740963001,
+        "narHash": "sha256-5f2qfjJZDrNhgog+4LNeNz04qhGlSx+JnvWQXTl/uiQ=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8fcb6f1c4948305af52d19f887b89011ee2c080d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8fcb6f1c4948305af52d19f887b89011ee2c080d",
+        "type": "github"
+      }
+    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -222,6 +238,7 @@
     "root": {
       "inputs": {
         "fileserver": "fileserver",
+        "gamescopeNixpkgs": "gamescopeNixpkgs",
         "home-manager": "home-manager",
         "lanzaboote": "lanzaboote",
         "nixpkgs": "nixpkgs",

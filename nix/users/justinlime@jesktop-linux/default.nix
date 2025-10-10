@@ -9,8 +9,7 @@
     emacs.enable = true;
     nvim.enable = true; 
     zsh.enable = true;
-    # Breaks KDE for some reason
-    # theme.enable = true; 
+    theme.enable = true; 
     tmux.enable = true;
     btop.enable = true;
   };
