@@ -19,6 +19,7 @@ in
       flakeDirectory = "/home/${username}/dotfiles";
     }; 
     usbautomount.enable = true;
+    gnomerdp.enable = true;
     wayland.enable = true;
     virt.enable = true;
     firewall = {
@@ -36,6 +37,5 @@ in
   networking.hostName = "jenovo";
   hardware.ledger.enable = true;
   services = {
-    tlp.enable = true;
   };
 }

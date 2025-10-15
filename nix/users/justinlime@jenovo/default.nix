@@ -11,12 +11,6 @@
     zsh.enable = true;
     tmux.enable = true;
     btop.enable = true;
-    hyprland = {
-      enable = true;
-      monitors = [ "eDP-1,2880x1800@120,0x0,1.6" ];
-    }; 
-    hyprlock.enable = true;
-    hypridle.enable = true;
     waybar.enable = true;
     rofi.enable = true;
     foot.enable = true;
