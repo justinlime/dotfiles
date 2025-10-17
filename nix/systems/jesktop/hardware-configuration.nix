@@ -21,11 +21,11 @@
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
       kernelModules = [ ];
     };
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_cachyos;
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
   };
-
+  
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/c3b3f93e-4b42-4138-b89b-2889a0891ccb";
       fsType = "btrfs";
@@ -65,6 +65,7 @@
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     nvidia = {
+      package = config.boot.kernelPackages.nvidiaPackages.latest;
       modesetting.enable = true;
       powerManagement.enable = true;
       open = true;
