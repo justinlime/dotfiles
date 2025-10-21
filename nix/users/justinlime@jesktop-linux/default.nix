@@ -12,6 +12,7 @@
     theme.enable = true; 
     tmux.enable = true;
     btop.enable = true;
+    foot.enable = true;
   };
   home.packages = with pkgs; [
     brave 

@@ -50,6 +50,12 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
+  fileSystems."/drives/LinuxGames" =
+    { device = "/dev/disk/by-uuid/baf60c85-fbe9-4c02-83ee-6793e0fcd7ec";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "noatime" ];
+    };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

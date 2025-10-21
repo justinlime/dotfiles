@@ -21,7 +21,6 @@ in
           dpi-aware = "no";
         };
         cursor = {
-          color = "${palette.mauve} ${palette.mauve}";
           style = "beam";
         };
         colors = rec {
@@ -44,6 +43,7 @@ in
           bright5= regular5;   # bright magenta
           bright6= regular6;   # bright cyan
           bright7= regular7;   # bright white
+          cursor = "${palette.mauve} ${palette.mauve}";
         };
         tweak = {
           sixel = "yes";
