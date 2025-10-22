@@ -73,11 +73,9 @@ let cfg = config.homeMods.theme; in
   };
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.font.package ];
-    # qt = {
-    #   enable = true;
-    #   platformTheme.name = "gtk";
-    #   style.name = "gtk2";
-    # };
+     qt = {
+       enable = true;
+     };
     gtk = {
       enable = true;
       font.name = "${cfg.font.name} ${builtins.toString cfg.font.size}";

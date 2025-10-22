@@ -18,6 +18,7 @@ let cfg = config.homeMods.home; in
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
     nixpkgs.config.allowUnfree = true; 
+    nixpkgs.config.permittedInsecurePackages = [ "qtwebengine-5.15.19" ];
     fonts.fontconfig.enable = true;
     nix = {
       package = pkgs.nix;

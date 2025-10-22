@@ -24,8 +24,6 @@ let cfg = config.sysMods.virt; in
         allowedBridges = ["wlo1"];
         qemu = {
           swtpm.enable = true;
-          ovmf.enable = true;
-          ovmf.packages = [ pkgs.OVMFFull.fd ];
         };
       };
     };

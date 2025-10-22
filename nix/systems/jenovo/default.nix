@@ -1,26 +1,18 @@
 { pkgs, ... }:
-let
-  # Fix sound
-  conf = pkgs.fetchFromGitHub {
-    owner = "alsa-project"; 
-    repo = "alsa-ucm-conf";
-    rev = "c3314b9ca29861d19164d2b3987745b7170dab06";
-    hash = "sha256-e5QEd2sOQosr8xumGEanrh+KY3k09ZGqvylkKqriqlk=";
-  };
-in
 {
   imports = [ 
     ./hardware-configuration.nix 
+    ./suspend.nix
   ];
-  environment.sessionVariables.ALSA_CONFIG_UCM2 = "${conf}/ucm2";
   sysMods = {
     system = rec {
       username = "justinlime";  
       flakeDirectory = "/home/${username}/dotfiles";
     }; 
     usbautomount.enable = true;
-    gnomerdp.enable = true;
-    wayland.enable = true;
+    # gnomerdp.enable = true;
+    # wayland.enable = true;
+    kde.enable = true;
     virt.enable = true;
     firewall = {
       enable = true;  
@@ -29,7 +21,7 @@ in
   };
   services.logind.settings.Login=  {
     HandlePowerKey = "ignore";
-    HandleLidSwitch = "hibernate";
+    # HandleLidSwitch = "hibernate";
   };
   programs = {
     light.enable = true;

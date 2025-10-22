@@ -2,12 +2,20 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
-
+let
+  # Fix sound
+  conf = pkgs.fetchFromGitHub {
+    owner = "alsa-project"; 
+    repo = "alsa-ucm-conf";
+    rev = "c3314b9ca29861d19164d2b3987745b7170dab06";
+    hash = "sha256-e5QEd2sOQosr8xumGEanrh+KY3k09ZGqvylkKqriqlk=";
+  };
+in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
   boot = {
     supportedFilesystems = [ "ntfs" ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_17;
     kernelModules = [ "kvm-intel" ];
     ##### Get resume offset
     ## For non-btrfs:
@@ -55,12 +63,6 @@
     options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/mnt/stinkserver" =
-    { device = "10.0.0.200:/"; 
-    fsType = "nfs";
-    options = [ "nfsvers=4.2" "x-systemd.automount" "_netdev" "noauto" ];
-    };
-
   swapDevices = [ {
     device = "/swapfile";
     size = 40 * 1024; # 40gb
@@ -74,17 +76,21 @@
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+nixpkgs.config.packageOverrides = pkgs: {
+  intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
+};
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  services = {
-    scx = {
-      enable = true;  
-      scheduler = "scx_lavd";
-    };
-  };
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      vpl-gpu-rt          # for newer GPUs on NixOS >24.05 or unstable
-    ];
-  };
+  environment.sessionVariables = {
+    # LIBVA_DRIVER_NAME = "iHD"; # Force intel-media-driver
+      ALSA_CONFIG_UCM2 = "${conf}/ucm2";
+  }; 
+  services.xserver.videoDrivers = ["intel"];
+hardware.graphics = { 
+  enable = true;
+  extraPackages = with pkgs; [
+    # intel-media-driver # LIBVA_DRIVER_NAME=iHD
+    # intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+    # libvdpau-va-gl
+  ];
+};
 }
