@@ -8,7 +8,7 @@
   virtualisation.oci-containers.containers = {
     jellyfin = {
      autoStart = true; 
-     image = "lscr.io/linuxserver/jellyfin:latest";
+     image = "lscr.io/linuxserver/jellyfin:10.11.0";
      environment = {
        TZ = "America/Chicago";
        PUID = "1000";
@@ -44,8 +44,8 @@
         forceSSL = true;
         enableACME = true;
         locations."/" = {
-          recommendedProxySettings = true;
           proxyWebsockets = true;
+          recommendedProxySettings = true;
           proxyPass = "http://127.0.0.1:8096";
         };
       };
