@@ -5,6 +5,7 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
   boot = {
+    supportedFilesystems = [ "ntfs" ];
     # For secure boot
     lanzaboote = {
       enable = true;  
@@ -67,7 +68,13 @@
   # networking.interfaces.wlp11s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services = {
+    xserver.videoDrivers = [ "nvidia" ];
+    scx = {
+      enable = true;  
+      scheduler = "scx_lavd";
+    };
+  };
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     nvidia = {

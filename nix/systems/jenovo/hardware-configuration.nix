@@ -14,7 +14,7 @@
     # sudo filefrag -v /swapfile | awk '{if($1=="0:"){print $4}}'
     ## For btrfs: 
     # sudo btrfs inspect-internal map-swapfile -r swap_file
-    kernelParams = [ "resume_offset=22661317" ];
+    kernelParams = [ "intel_pstate=passive" "resume_offset=22661317" ];
     resumeDevice = "/dev/disk/by-uuid/12f2eb04-67cd-460b-a6a5-d51efd59e19c";
     extraModulePackages = [ ];
     initrd = {
@@ -75,6 +75,12 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  services = {
+    scx = {
+      enable = true;  
+      scheduler = "scx_lavd";
+    };
+  };
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
