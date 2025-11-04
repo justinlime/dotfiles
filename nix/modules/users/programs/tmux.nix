@@ -8,7 +8,7 @@ let cfg = config.homeMods.tmux; in
   config = lib.mkIf cfg.enable {
     programs.tmux = {
       enable = true;
-      prefix = "C-x";
+      prefix = "C-a";
       terminal = "xterm-256color";
       extraConfig = ''
         setw -g mouse on

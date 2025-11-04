@@ -23,7 +23,7 @@
        "/storage/pool/media/watch:/watch"
        "/storage/pool/media/listen:/listen"
     ];
-     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card1" ];
+     extraOptions = [ "--network=host" "--device=/dev/dri/a380-render:/dev/dri/renderD128" "--device=/dev/dri/a380-card:/dev/dri/card0" ];
     };  
   };
   services.nginx = {
