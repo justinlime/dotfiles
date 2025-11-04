@@ -22,7 +22,7 @@ EXTEND_TIMER_FILE="/dev/shm/extend-timer-4865"
 
 # the amount of time to wait in idle before entering hibernation
 # set this to zero (0) to disable this entirely.
-HIBERNATE_TIMER_MINS=90
+HIBERNATE_TIMER_MINS=480
 # set SWAP_WHEN_HIBERNATE to 1, to enable/disable swap before/after hibernation
 SWAP_WHEN_HIBERNATE=0
 # If SWAP_WHEN_HIBERNATE=1, then SWAP_DEV is used.

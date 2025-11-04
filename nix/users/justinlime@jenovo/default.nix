@@ -11,8 +11,7 @@
     zsh.enable = true;
     tmux.enable = true;
     btop.enable = true;
-    # waybar.enable = true;
-    # rofi.enable = true;
+    rofi.enable = true;
     foot.enable = true;
     syncthing.enable = true;
     mpd.enable = true;
