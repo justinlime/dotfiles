@@ -1,21 +1,21 @@
 { pkgs, lib, ... }:
 {
-  networking.firewall.allowedTCPPorts = [ 10300 ];
-  services.ollama = {
-    enable = true;  
-    package = pkgs.ollama.overrideAttrs (_: rec {
-      version = "0.12.7";
-      src = pkgs.fetchFromGitHub {
-        owner = "ollama";
-        repo = "ollama";
-        tag = "v${version}";
-        hash = "sha256-IIkt0UOGo/HLrnZRgICDWgzLLW1VoYvW/SvgyWWlBCY=";
-      };
-    });
-    openFirewall = true;
-    acceleration = "cuda";
-    host = "0.0.0.0";
-  };
+  # networking.firewall.allowedTCPPorts = [ 10300 ];
+  # services.ollama = {
+  #   enable = true;  
+  #   package = pkgs.ollama.overrideAttrs (_: rec {
+  #     version = "0.12.7";
+  #     src = pkgs.fetchFromGitHub {
+  #       owner = "ollama";
+  #       repo = "ollama";
+  #       tag = "v${version}";
+  #       hash = "sha256-IIkt0UOGo/HLrnZRgICDWgzLLW1VoYvW/SvgyWWlBCY=";
+  #     };
+  #   });
+  #   openFirewall = true;
+  #   acceleration = "cuda";
+  #   host = "0.0.0.0";
+  # };
   # services.wyoming.faster-whisper.servers."stinkai" = {
   #   enable = true;  
   #   device = "cpu";

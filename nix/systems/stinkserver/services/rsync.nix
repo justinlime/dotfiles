@@ -77,7 +77,6 @@ in
         # use a trailing / after the src dir, like:
         # rsync -avh /drives/NVME0/users/ /storage/pool/new_users
         script = ''
-          ${pkgs.rsync}/bin/rsync -avh /drives/NVME0/users /storage/pool --delete 
           ${pkgs.rsync}/bin/rsync -avh rsync://10.42.69.1/backups /storage/backups --delete 
           ${pkgs.rsync}/bin/rsync -avh /storage/backups /storage/pool/backups --delete 
         '';

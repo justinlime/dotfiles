@@ -1,4 +1,4 @@
-{ config, lib, ...}:
+{ config, lib, pkgs, ...}:
 let cfg = config.homeMods.tmux; in 
 {
   options.homeMods.tmux= {
@@ -8,10 +8,13 @@ let cfg = config.homeMods.tmux; in
   config = lib.mkIf cfg.enable {
     programs.tmux = {
       enable = true;
-      prefix = "C-a";
+      prefix = "M-s";
       terminal = "xterm-256color";
       extraConfig = ''
+        run-shell ${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux
+        run-shell ${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/catppuccin/catppuccin.tmux
         setw -g mouse on
+
         bind-key h select-pane -L
         bind-key j select-pane -D
         bind-key k select-pane -U

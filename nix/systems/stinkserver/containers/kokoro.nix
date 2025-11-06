@@ -7,6 +7,7 @@
      # image = "ghcr.io/remsky/kokoro-fastapi-cpu:latest";
      ports = [ "8880:8880" ];
      extraOptions = [ "--device=nvidia.com/gpu=all" ];
+     dependsOn = [ "vllm" ];
    };  
   };
 }

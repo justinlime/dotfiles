@@ -33,11 +33,6 @@
       device = "/dev/disk/by-uuid/B196-C4D9";
       fsType = "vfat";
     };
-    "/drives/NVME0" = {
-      device = "/dev/disk/by-uuid/466f73dd-c395-4b82-888e-d2ae99c286da";
-      fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" ];
-    };
     "/drives/BTRFS0" = { #20tb
       device = "/dev/disk/by-uuid/028f290f-d1f7-4b45-b346-47d7864a2e24";
       fsType = "btrfs";
