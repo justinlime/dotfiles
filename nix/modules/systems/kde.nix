@@ -5,6 +5,12 @@ let cfg = config.sysMods.kde; in
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      (pkgs.catppuccin-kde.override {
+        winDecStyles = [ "classic" ];
+        flavour = [ "mocha" ];
+        accents = [ "mauve" ];})
+    ];
     xdg.portal = {
       enable = true;
     };
