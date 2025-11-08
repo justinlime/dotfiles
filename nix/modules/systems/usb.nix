@@ -116,7 +116,7 @@ in
     users.users.${config.sysMods.system.username}.extraGroups = [ "adbusers" ];
     services.udev = {
       packages = with pkgs; [
-        android-udev-rules
+        # android-udev-rules
       ];
       extraRules = ''
         KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/bin/sh -c 'systemctl --no-block start automount-usbdrive@%k.service'"

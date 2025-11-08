@@ -11,7 +11,7 @@ let cfg = config.sysMods.virt; in
       virt-manager
       virt-viewer
       win-spice
-      win-virtio
+      virtio-win
       spice
       spice-gtk
       spice-protocol
