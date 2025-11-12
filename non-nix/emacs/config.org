@@ -38,6 +38,8 @@
     - [[#dired-subtree][Dired Subtree]]
     - [[#dired-sidetree][Dired Sidetree]]
     - [[#dired-async][Dired Async]]
+  - [[#gptel][GPTEL]]
+    - [[#gptel-magit][GPTEL Magit]]
   - [[#eglot][Eglot]]
   - [[#communication][Communication]]
     - [[#erc][ERC]]
@@ -367,7 +369,7 @@
 (use-package evil-collection
   :after evil
   :config
-    (setq evil-collection-mode-list '(magit doc-view ement term minibuffer help dashboard dired ibuffer tetris))
+    (setq evil-collection-mode-list '(magit doc-view ement term minibuffer help dashboard dired ibuffer tetris gptel))
     (evil-collection-init))
 #+end_src
 **** Evil Org Agenda
@@ -620,6 +622,27 @@
                     (dired-revert)
                     (hl-line-mode)
                     (hl-line-mode)))))))))
+#+end_src
+** GPTEL
+#+begin_src emacs-lisp
+(use-package gptel
+    :hook (gptel-mode . (lambda () (visual-line-mode)))
+    :config
+      (setq gptel-backend
+        (gptel-make-openai "vLLM"
+          :protocol "http"
+          :host "10.69.42.200:8282"
+          :stream t
+          :endpoint "/v1/chat/completions"
+          :key nil
+          :models '("QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ")))
+      (setq gptel-model "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"))
+#+end_src
+*** GPTEL Magit
+#+begin_src emacs-lisp
+(use-package gptel-magit
+  :ensure t
+  :hook (magit-mode . gptel-magit-install))
 #+end_src
 ** Eglot
 #+begin_src emacs-lisp
