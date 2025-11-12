@@ -1,4 +1,4 @@
-{ config, lib, hush, ... }:
+{ config, lib, ... }:
 let cfg = config.sysMods.ssh; in 
 {
   options.sysMods.ssh = with lib.types; {
@@ -14,7 +14,7 @@ let cfg = config.sysMods.ssh; in
         "172.16.0.0/12"
         "10.0.0.0/8"
         "127.0.0.0/8"
-      ] ++ hush.ssh.fail2ban.ignoreIPs;
+      ];
       jails = {
         sshd = {
           settings = {

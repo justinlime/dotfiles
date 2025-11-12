@@ -9,12 +9,6 @@
 
     sharedModules = [ ./nix/lib ];
 
-    # Shhhhh
-    # Semi-private files encrypted with git-crypt. Profiles relying on these files will fail if not decrypted first.
-    # Read all the files, and mush them into a top level hush attribute set; Expects TOML format
-    hush = let dir = ./hush; temp = {}; in
-      head (map (x: temp // (importTOML "${dir}/${x}")) (attrNames (readDir dir)));
-
     # Prefix every string in a given LIST with a given FLAG, seperated by dots
     #
     # EX: genProfileNames [ "justinlime@jenovo" "justinlime1999@oracle" ] "x86_64-linux" => [ "justinlime@jenovo.x86_64-linux" "justinlime1999@oracle.x86_64-linux"]
@@ -52,7 +46,7 @@
         # After first rebuild and subsequent shell reload, you can rebuild with the "home-switch" alias instead
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit profile hush inputs; };
+          extraSpecialArgs = { inherit profile inputs; };
           modules = [
             ./nix/modules/users
             ./nix/users/${profileName}
@@ -67,7 +61,7 @@
         # After first build and subsequent shell reload, you can rebuild with the "nix-switch" alias instead
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit profile hush inputs; }; 
+          specialArgs = { inherit profile inputs; }; 
           modules = [
             lanzaboote.nixosModules.lanzaboote 
             chaotic.nixosModules.default

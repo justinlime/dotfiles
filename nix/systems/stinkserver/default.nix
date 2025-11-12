@@ -1,4 +1,4 @@
-{ pkgs, config, hush, ... }:
+{ pkgs, config, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -38,9 +38,6 @@
       allowedUDPPorts = [ 1313 ];
    };
   };
-  users.users.${config.sysMods.system.username}.openssh.authorizedKeys.keys = [
-    "${hush.ssh.public-keys.stinkserver}" 
-  ];
   security.acme = {
     acceptTerms = true;
     defaults.email = "justinlime1999@gmail.com";
