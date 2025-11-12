@@ -30,7 +30,6 @@
     telegram-desktop
     vial
     imagemagick
-    jellyfin-media-player
     element-desktop
     scrcpy
   ];

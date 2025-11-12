@@ -38,7 +38,7 @@ let cfg = config.homeMods.mpd; in
     # ];
     home.packages = with pkgs; [
       libnotify
-      mpc-cli
+      mpc
       (ffmpeg-full.override { withSvtav1 = true; })
       (pkgs.writeScriptBin "songinfo" ''
         music_dir="$HOME/music"

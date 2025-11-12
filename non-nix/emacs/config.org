@@ -28,6 +28,7 @@
       - [[#evil-org-agenda][Evil Org Agenda]]
     - [[#keychord][Keychord]]
     - [[#which-key][Which Key]]
+  - [[#eat][Eat]]
   - [[#toggle-term][Toggle Term]]
   - [[#tramp][Tramp]]
   - [[#dired][Dired]]
@@ -407,6 +408,16 @@
       which-key-allow-imprecise-window-fit t
       which-key-separator " → " ))
 #+end_src
+** Eat
+#+begin_src emacs-lisp
+(use-package eat
+  :hook (eat-mode . (lambda ()
+    (display-line-numbers-mode -1)
+    (face-remap-set-base 'default :background jl/bg-0)
+    (face-remap-set-base 'fringe :background jl/bg-0)))
+  :config
+    (setq eat-term-name "xterm-256color"))
+#+end_src
 ** Toggle Term
 #+begin_src emacs-lisp
 (use-package toggle-term
@@ -417,7 +428,7 @@
   :hook (toggle-term-spawn . (lambda () (evil-insert 1)))
   :config
     (setq toggle-term-size 25)
-    (setq toggle-term-init-toggle '("term" . "term"))
+    (setq toggle-term-init-toggle '("eat" . "eat"))
     (setq toggle-term-use-persp t)
     (setq toggle-term-switch-upon-toggle t))
 #+end_src
@@ -427,7 +438,7 @@
   (persp-switch host)
   (let ((format-host (format formatter host host)))
     (find-file format-host))
-    (toggle-term-find "term" "term")
+    (toggle-term-find "eat" "eat")
     (mapc (lambda (char) (execute-kbd-macro (char-to-string char))) (format "ssh %s" host))
     (execute-kbd-macro (kbd "RET")))
 (defun jl/ssh-root (host)
