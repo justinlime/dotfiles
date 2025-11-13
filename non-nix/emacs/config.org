@@ -39,8 +39,10 @@
     - [[#dired-subtree][Dired Subtree]]
     - [[#dired-sidetree][Dired Sidetree]]
     - [[#dired-async][Dired Async]]
-  - [[#gptel][GPTEL]]
-    - [[#gptel-magit][GPTEL Magit]]
+  - [[#ai][AI]]
+    - [[#mcp][MCP]]
+    - [[#gptel][GPTEL]]
+      - [[#gptel-magit][GPTEL Magit]]
   - [[#eglot][Eglot]]
   - [[#communication][Communication]]
     - [[#erc][ERC]]
@@ -634,11 +636,22 @@
                     (hl-line-mode)
                     (hl-line-mode)))))))))
 #+end_src
-** GPTEL
+** AI
+*** MCP
+#+begin_src emacs-lisp
+(use-package mcp
+  :hook (after-init . mcp-hub-start-all-server)
+  :config
+    (setq mcp-hub-servers
+      '(("searxng" . (:url "http://10.69.42.200:9191/mcp")))))
+#+end_src
+*** GPTEL
 #+begin_src emacs-lisp
 (use-package gptel
-    :hook (gptel-mode . (lambda () (visual-line-mode)))
+    :hook (gptel-mode . visual-line-mode)
     :config
+      (require 'gptel-integrations)
+      (gptel-mcp-connect)
       (setq gptel-backend
         (gptel-make-openai "vLLM"
           :protocol "http"
@@ -650,11 +663,13 @@
       (setq gptel-model "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ")
       (setq gptel--system-message 
         "You are a LLM that lives in Emacs. Respond conciesly. 
-         Use ORG for all formatting instead of markdown. If code blocks are used,
-         ensure the appropriate language is used in the '#begin_src' tag.")
+         Use ORG for all responses. When writing code, wrap it in src blocks 
+         for the given language.
+         Use the Searxng tool to web search only if asked retrieve the 
+         most up to date information")
       (setq gptel-default-mode #'org-mode))
 #+end_src
-*** GPTEL Magit
+**** GPTEL Magit
 #+begin_src emacs-lisp
 (use-package gptel-magit
   :ensure t
