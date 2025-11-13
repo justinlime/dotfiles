@@ -647,7 +647,12 @@
           :endpoint "/v1/chat/completions"
           :key nil
           :models '("QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ")))
-      (setq gptel-model "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"))
+      (setq gptel-model "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ")
+      (setq gptel--system-message 
+        "You are a LLM that lives in Emacs. Respond conciesly. 
+         Use ORG for all formatting instead of markdown. If code blocks are used,
+         ensure the appropriate language is used in the '#begin_src' tag.")
+      (setq gptel-default-mode #'org-mode))
 #+end_src
 *** GPTEL Magit
 #+begin_src emacs-lisp
