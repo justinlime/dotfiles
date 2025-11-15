@@ -639,35 +639,43 @@
 ** AI
 *** MCP
 #+begin_src emacs-lisp
-(use-package mcp
-  :hook (after-init . mcp-hub-start-all-server)
-  :config
-    (setq mcp-hub-servers
-      '(("searxng" . (:url "http://10.69.42.200:9191/mcp")))))
+;; (use-package mcp
+;;   :hook (after-init . mcp-hub-start-all-server)
+;;   :config
+;;     (setq mcp-hub-servers
+;;       '(("searxng" . (:url "http://10.69.42.200:9191/mcp")))))
 #+end_src
 *** GPTEL
 #+begin_src emacs-lisp
 (use-package gptel
-    :hook (gptel-mode . visual-line-mode)
+  ;; how do I add multiple hooks to gptel mode instead of just
+  ;; visual-line-mode
+    :hook (gptel-mode . (lambda () (visual-line-mode) (gptel-highlight-mode)))
     :config
-      (require 'gptel-integrations)
-      (gptel-mcp-connect)
+      ;; (require 'gptel-integrations)
+      ;; (gptel-mcp-connect)
       (setq gptel-backend
-        (gptel-make-openai "vLLM"
+        (gptel-make-openai "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
           :protocol "http"
-          :host "10.69.42.200:8282"
+          :host "10.69.42.200:9420"
           :stream t
           :endpoint "/v1/chat/completions"
           :key nil
-          :models '("QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ")))
-      (setq gptel-model "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ")
-      (setq gptel--system-message 
+          :request-params '(:temp 0.7
+                            :min_p 0
+                            :top_p 0.8
+                            :top_k 20)
+          :models '("QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"))
+        gptel-temperature 0.7
+        gptel-stream t
+        gptel-model "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
+        gptel-default-mode #'org-mode
+        gptel--system-message 
         "You are a LLM that lives in Emacs. Respond conciesly. 
          Use ORG for all responses. When writing code, wrap it in src blocks 
          for the given language.
          Use the Searxng tool to web search only if asked retrieve the 
-         most up to date information")
-      (setq gptel-default-mode #'org-mode))
+         most up to date information"))
 #+end_src
 **** GPTEL Magit
 #+begin_src emacs-lisp
