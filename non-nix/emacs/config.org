@@ -25,7 +25,6 @@
     - [[#evil][Evil]]
       - [[#evil-mode][Evil Mode]]
       - [[#evil-collection][Evil Collection]]
-      - [[#evil-org-agenda][Evil Org Agenda]]
     - [[#keychord][Keychord]]
     - [[#which-key][Which Key]]
   - [[#eat][Eat]]
@@ -49,7 +48,6 @@
     - [[#ement][Ement]]
   - [[#term][Term]]
   - [[#org][Org]]
-    - [[#org-agenda][Org Agenda]]
     - [[#org-toc][Org Toc]]
     - [[#org-autolist][Org Autolist]]
     - [[#org-appear][Org Appear]]
@@ -109,7 +107,6 @@
     - [[#prism-mode][Prism Mode]]
     - [[#pulsar][Pulsar]]
     - [[#treesitter][Treesitter]]
-    - [[#additional-touches][Additional touches]]
 
 * General
 ** Late Init
@@ -248,6 +245,29 @@
       jl/acc-0 "#CBA6F7"
       jl/acc-1 "#89B4FA"
       jl/acc-2 "#cdd6f4")
+;; I mostly use themes just for the text highlighting, 
+;; pretty much everything else here
+(add-hook 'minibuffer-setup-hook (lambda ()
+  (face-remap-add-relative 'default
+                `(:background ,jl/bg-0))
+  (face-remap-add-relative 'fringe
+                `(:background ,jl/bg-0 :foreground ,jl/bg-0))))
+
+(add-hook 'post-command-hook (lambda ()
+  (set-cursor-color (if (derived-mode-p 'dired-mode) jl/acc-1 jl/acc-0))))
+
+(set-face-attribute 'line-number-current-line nil :foreground jl/acc-0)
+(set-face-attribute 'org-block nil :background jl/bg-0) ; src blocks
+(set-face-attribute 'org-block-begin-line nil :background jl/bg-0) ; #+begin_src
+(set-face-attribute 'org-block-end-line nil :background jl/bg-0) ; #+end_src
+(set-face-attribute 'mode-line nil :background jl/bg-0) ; mode line background
+(set-face-attribute 'mode-line-inactive nil :background jl/bg-0) ; mode line background on inactive buffers
+(set-face-attribute 'default nil :background jl/bg-1) ; emacs background
+(set-face-attribute 'fringe nil :background jl/bg-1) ; fringes/borders on the sides
+(set-face-attribute 'org-hide nil :foreground jl/bg-1) ; asterisks preceding org headings
+(set-face-attribute 'line-number nil :background jl/bg-1) ; line number background
+(set-face-attribute 'line-number-current-line nil :background jl/bg-1) ; current line number
+(set-face-attribute 'vertical-border nil :background jl/bg-0 :foreground jl/bg-0)
 #+end_src
 *** Misc
 #+begin_src emacs-lisp
@@ -372,15 +392,8 @@
 (use-package evil-collection
   :after evil
   :config
-    (setq evil-collection-mode-list '(magit doc-view ement term minibuffer help dashboard dired ibuffer tetris gptel))
+    (setq evil-collection-mode-list '(magit doc-view ement term minibuffer help dashboard dired ibuffer tetris gptel eat))
     (evil-collection-init))
-#+end_src
-**** Evil Org Agenda
-#+begin_src emacs-lisp
-(use-package evil-org
-  :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
 #+end_src
 *** Keychord
 #+begin_src emacs-lisp
@@ -394,25 +407,28 @@
 #+end_src 
 *** Which Key
 #+begin_src emacs-lisp 
-(use-package which-key
-  :config
-    (which-key-mode 1)
-    (setq which-key-side-window-location 'bottom
-      which-key-sort-order #'which-key-key-order-alpha
-      which-key-sort-uppercase-first nil
-      which-key-add-column-padding 1
-      which-key-max-display-columns nil
-      which-key-min-display-lines 6
-      which-key-side-window-slot -10
-      which-key-side-window-max-height 0.25
-      which-key-idle-delay 0.8
-      which-key-max-description-length 25
-      which-key-allow-imprecise-window-fit t
-      which-key-separator " → " ))
+(which-key-mode 1)
+(setq which-key-side-window-location 'bottom
+  which-key-sort-order #'which-key-key-order-alpha
+  which-key-sort-uppercase-first nil
+  which-key-add-column-padding 1
+  which-key-max-display-columns nil
+  which-key-min-display-lines 6
+  which-key-side-window-slot -10
+  which-key-side-window-max-height 0.25
+  which-key-idle-delay 0.8
+  which-key-max-description-length 25
+  which-key-allow-imprecise-window-fit t
+  which-key-separator " → " )
 #+end_src
 ** Eat
 #+begin_src emacs-lisp
 (use-package eat
+  :general (:keymaps 'eat-mode-map
+            :states 'insert
+              ; Send tab inputs properly to eat
+              "TAB" (lambda () (interactive) (eat--send-input nil "\t"))
+              "<tab>" (lambda () (interactive) (eat--send-input nil "\t")))
   :hook (eat-mode . (lambda ()
     (display-line-numbers-mode -1)
     (face-remap-set-base 'default :background jl/bg-0)
@@ -605,6 +621,8 @@
 (use-package dired-sidetree
   :vc (dired-sidetree :url "https://github.com/justinlime/dired-sidetree.el")
   :config
+    ;; (face-remap-set-base 'default :background jl/bg-0)
+    ;; (face-remap-set-base 'fringe :background jl/bg-0)
     (setq dired-sidetree-size 30
           dired-sidetree-side 'left)
   :general 
@@ -831,76 +849,6 @@
         (message "File created and linked..."))
     (message "You're in a not saved buffer! Save it first!")))
 #+end_src
-*** Org Agenda
-#+begin_src emacs-lisp
-(let ((dir "~/sync/notes/agenda"))
-  (if (file-directory-p dir)
-      (setq jl/org-agenda-dir dir)
-      (setq jl/org-agenda-dir (expand-file-name "org/agenda" user-emacs-directory))
-      (make-directory jl/org-agenda-dir t)))
-(setq org-agenda-files `(,jl/org-agenda-dir)
-      org-todo-keywords '((sequence
-        "TODO(t)"           ; Generalized
-        "IDEA(i)"           ; 
-        "WAIT(w)"           ; Something is holding up this task
-        "REMIND(r)"           ; Something is holding up this task
-        "|"                 ; The pipe necessary to separate "active" states and "inactive" states
-        "DONE(d)"           ; Task has been completed
-        "CANCELLED(c)")) ; Task has been cancelled
-      org-agenda-window-setup 'only-window
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-skip-timestamp-if-done t
-      org-agenda-skip-deadline-if-done t
-      org-agenda-start-day "-3d"
-      org-agenda-span 18
-      org-agenda-start-on-weekday nil
-      ;; Holidays
-      calendar-holidays
-        '((holiday-fixed 1 1 "New Year's Day")
-          (holiday-fixed 2 14 "Valentine's Day")
-          (holiday-fixed 4 1 "April Fools' Day")
-          (holiday-easter-etc -2 "Good Friday")
-          (holiday-easter-etc 0 "Easter Sunday")
-          (holiday-easter-etc 1 "Easter Monday")
-          (holiday-float 5 0 2 "Mother's Day")
-          (holiday-float 5 1 -1 "Memorial Day")
-          (holiday-float 6 0 3 "Father's Day")
-          (holiday-fixed 7 4 "Independence Day")
-          (holiday-float 9 1 1 "Labor Day")
-          (holiday-fixed 10 31 "Halloween")
-          (holiday-float 11 4 4 "Thanksgiving")
-          (holiday-fixed 12 24 "Christmas Eve")
-          (holiday-fixed 12 25 "Christmas Day")
-          (holiday-fixed 12 31 "New Year's Eve"))
-      org-agenda-category-icon-alist
-        '(("Birthday" ("" nil nil :ascent center))
-          ("Holiday" ("" nil nil :ascent center))
-          ("Agenda" ("" nil nil :ascent center))
-          ("Reminder" ("" nil nil :ascent center)))) 
-
-
-(add-hook 'org-agenda-mode-hook (lambda ()
-  (display-line-numbers-mode -1)))
-
-;; Archive all "Agenda" entries that are done automatically
-(add-hook 'org-after-todo-state-change-hook (lambda ()
-  (when (and (string= org-state "DONE")
-             (string= (org-get-category) "Agenda"))
-    (org-archive-subtree))))
-
-(set-face-attribute 'org-agenda-date-today nil :foreground "#89b4fa")
-
-(leader
-  "a" '(:ignore t :wk "Org Agenda")
-  "a a" '(org-agenda :wk "Display the org agenda view")
-  "a t" '(org-time-stamp :wk "Insert a timestamp")
-  "a p" '(org-priority :wk "Set the priority for a tag")
-  "a e" '((lambda () (interactive) (find-file (concat jl/org-agenda-dir "/agenda.org"))) :wk "Edit the org agenda file"))
-(general-define-key 
-  :keymaps 'calendar-mode-map
-  :states '(normal insert motion emacs)
-  "RET" #'org-calendar-select)
-#+end_src
 *** Org Toc
 #+begin_src emacs-lisp
 (use-package toc-org
@@ -1055,7 +1003,7 @@ it can be passed in POS."
 *** Olivetti
 #+begin_src emacs-lisp
 (use-package olivetti
-  :hook ((org-mode org-agenda-mode) . olivetti-mode)
+  :hook ((org-mode) . olivetti-mode)
   :config
     (set-face-attribute 'olivetti-fringe nil :background jl/bg-1) ; fringes/borders on the sides
     (setq-default olivetti-body-width 0.85)
@@ -1327,7 +1275,6 @@ it can be passed in POS."
     "sudo systemctl start justinlime"
     "sudo systemctl restart justinlime"
     "White Monster"
-    "https://stinkboys.com"
     "Stink Boys Inc. ©"
     "/home/justinlime/.config"
     "No emacs???"))) (nth (random (length ops)) ops)))
@@ -1765,31 +1712,3 @@ it can be passed in POS."
 ;;    '((cc "libtree-sitter-c")
 ;;      (gomod "libtree-sitter-go")))
 #+end_src
-*** Additional touches
-#+begin_src emacs-lisp
-;; I mostly use themes just for the text highlighting, 
-;; pretty much everything else here
-(add-hook 'minibuffer-setup-hook (lambda ()
-  (face-remap-add-relative 'default
-                `(:background ,jl/bg-0))
-  (face-remap-add-relative 'fringe
-                `(:background ,jl/bg-0 :foreground ,jl/bg-0))))
-
-(add-hook 'post-command-hook (lambda ()
-  (set-cursor-color (if (derived-mode-p 'dired-mode) jl/acc-1 jl/acc-0))))
-
-(set-face-attribute 'line-number-current-line nil :foreground jl/acc-0)
-(set-face-attribute 'org-block nil :background jl/bg-0) ; src blocks
-(set-face-attribute 'org-block-begin-line nil :background jl/bg-0) ; #+begin_src
-(set-face-attribute 'org-block-end-line nil :background jl/bg-0) ; #+end_src
-(set-face-attribute 'mode-line nil :background jl/bg-0) ; mode line background
-(set-face-attribute 'mode-line-inactive nil :background jl/bg-0) ; mode line background on inactive buffers
-(set-face-attribute 'default nil :background jl/bg-1) ; emacs background
-(set-face-attribute 'fringe nil :background jl/bg-1) ; fringes/borders on the sides
-(set-face-attribute 'org-hide nil :foreground jl/bg-1) ; asterisks preceding org headings
-(set-face-attribute 'line-number nil :background jl/bg-1) ; line number background
-(set-face-attribute 'line-number-current-line nil :background jl/bg-1) ; current line number
-(set-face-attribute 'vertical-border nil :background jl/bg-0 :foreground jl/bg-0)
-#+end_src
-
-
