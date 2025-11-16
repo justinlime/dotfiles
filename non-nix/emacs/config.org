@@ -662,6 +662,7 @@
           :endpoint "/v1/chat/completions"
           :key nil
           :request-params '(:temp 0.7
+                            :presence_penalty 1.5
                             :min_p 0
                             :top_p 0.8
                             :top_k 20)
@@ -674,8 +675,10 @@
         "You are a LLM that lives in Emacs. Respond conciesly. 
          Use ORG for all responses. When writing code, wrap it in src blocks 
          for the given language.
-         Use the Searxng tool to web search only if asked retrieve the 
-         most up to date information"))
+         
+         Use your internal knowledge to answer the question. 
+         Only use the websearch tool if the question requires external information, is time-sensitive, or if you are uncertain about the answer.
+"))
 #+end_src
 **** GPTEL Magit
 #+begin_src emacs-lisp

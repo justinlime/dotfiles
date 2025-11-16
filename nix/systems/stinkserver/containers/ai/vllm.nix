@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   systemd.tmpfiles.rules = [
     "d /configs/vllm 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
@@ -18,6 +18,7 @@
        "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
        # "--model=huihui-ai/Huihui-Qwen3-VL-30B-A3B-Instruct-abliterated"
        "--gpu-memory-utilization=0.92"
+       # "--override-generation-config={'temperature': 0.7,'presence_penalty': 1.5,'top_p':0.8,'min_p':0,'top_k': 20}"
        "--max-model-len=12000" ];
      extraOptions = [ "--ipc=host" "--device=nvidia.com/gpu=all" ];
    };  
