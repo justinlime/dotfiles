@@ -691,9 +691,14 @@
         gptel-default-mode #'org-mode
         gptel--system-message 
         "You are a LLM that lives in Emacs. Respond conciesly. 
-         Use ORG for all responses. When writing code, wrap it in src blocks 
-         for the given language.
-         
+         All responses must be formatted in org mode, such as: 
+         - headers
+         - bold text
+         - italic text
+         - quotes
+         - code/source blocks
+         - links, etc.          
+
          Use your internal knowledge to answer the question. 
          Only use the websearch tool if the question requires external information, is time-sensitive, or if you are uncertain about the answer.
 "))

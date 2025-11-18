@@ -3,6 +3,7 @@
   imports = [ 
     ./hardware-configuration.nix 
     ./suspend.nix
+    ./wireguard.nix
   ];
   sysMods = {
     system = rec {
