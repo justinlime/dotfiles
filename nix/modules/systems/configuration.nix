@@ -61,7 +61,7 @@ let cfg = config.sysMods.system; in
       };
 
       systemPackages = with pkgs; [
-        inputs.home-manager.packages.${pkgs.system}.home-manager
+        inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
       ] ++ (import ../shared/packages.nix pkgs inputs);
 
       variables = { EDITOR = "vim"; };

@@ -1,6 +1,6 @@
 { pkgs, inputs, ... }:
 let
-  pipecord = inputs.pipecord.packages.${pkgs.system}.default;
+  # pipecord = inputs.pipecord.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   systemd = {

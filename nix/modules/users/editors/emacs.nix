@@ -30,6 +30,7 @@ let cfg = config.homeMods.emacs; in
       # python311Packages.jedi-language-server #Python
       java-language-server
       typescript
+      pyright
       nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
       nodePackages_latest.bash-language-server
       # nodePackages_latest.dockerfile-language-server

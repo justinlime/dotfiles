@@ -9,7 +9,7 @@
       Restart="always";
       RestartSec="10s";
       LimitNOFILE=4096;
-      ExecStart="${inputs.fileserver.packages.${pkgs.system}.default}/bin/go-fileserver --port 6900 --dir /storage/fileshare --debug";
+      ExecStart="${inputs.fileserver.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/go-fileserver --port 6900 --dir /storage/fileshare --debug";
     };
     wantedBy = [ "default.target" ];
   };

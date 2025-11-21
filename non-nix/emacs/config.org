@@ -43,6 +43,7 @@
     - [[#gptel][GPTEL]]
       - [[#gptel-magit][GPTEL Magit]]
   - [[#eglot][Eglot]]
+    - [[#pyvenv][PyVenv]]
   - [[#communication][Communication]]
     - [[#erc][ERC]]
     - [[#ement][Ement]]
@@ -725,6 +726,12 @@
         typescript-ts-mode rust-ts-mode elixir-ts-mode
         nix-ts-mode csharp-ts-mode csharp-mode java-ts-mode c-ts-mode
         bash-ts-mode)) (eglot-ensure)))))
+#+end_src
+*** PyVenv
+#+begin_src emacs-lisp
+(use-package pyvenv
+  :config
+    (pyvenv-mode 1))
 #+end_src
 ** Communication 
 *** ERC

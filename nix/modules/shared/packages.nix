@@ -28,5 +28,5 @@ with pkgs; [
   # podman-tui
   fastfetch
   # (nerdfonts.override { fonts = [ "FiraCode" ]; })
-  # inputs.fileserver.packages.${pkgs.system}.default
+  # inputs.fileserver.packages.${pkgs.stdenv.hostPlatform.system}.default
 ]
