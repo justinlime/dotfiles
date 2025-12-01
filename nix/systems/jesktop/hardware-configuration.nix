@@ -8,9 +8,9 @@
     supportedFilesystems = [ "ntfs" ];
     # For secure boot
     lanzaboote = {
-      enable = true;  
-      pkiBundle = "/var/lib/sbctl";
-      configurationLimit = 4;
+     enable = true;  
+     pkiBundle = "/var/lib/sbctl";
+     configurationLimit = 4;
     };
     loader = {
       # Lanzaboote replaces systemdboot
@@ -28,36 +28,39 @@
   };
   
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/c3b3f93e-4b42-4138-b89b-2889a0891ccb";
+    { device = "/dev/disk/by-label/NIXOS";
       fsType = "btrfs";
       options = [ "compress=zstd" "subvol=root" "noatime" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/c3b3f93e-4b42-4138-b89b-2889a0891ccb";
+    { device = "/dev/disk/by-label/NIXOS";
       fsType = "btrfs";
       options = [ "compress=zstd" "subvol=home" "noatime" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/c3b3f93e-4b42-4138-b89b-2889a0891ccb";
+    { device = "/dev/disk/by-label/NIXOS";
       fsType = "btrfs";
       options = [ "compress=zstd" "subvol=nix" "noatime" ];
     };
-
+  fileSystems."/drives/LINUX_GAMES/games" =
+    { device = "/dev/disk/by-label/LINUX_GAMES";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd:1" "subvol=games" "noatime" ];
+    };
+  fileSystems."/swap" =
+    { device = "/dev/disk/by-label/NIXOS";
+      fsType = "btrfs";
+      options = [ "subvol=swap" "noatime" ];
+    };
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/CE1D-A20D";
+    { device = "/dev/disk/by-label/NIXOS_BOOT";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/drives/LinuxGames" =
-    { device = "/dev/disk/by-uuid/baf60c85-fbe9-4c02-83ee-6793e0fcd7ec";
-      fsType = "btrfs";
-      options = [ "compress=zstd" "noatime" ];
-    };
-
-  swapDevices = [ ];
+  swapDevices = [ { device = "/swap/swapfile"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
