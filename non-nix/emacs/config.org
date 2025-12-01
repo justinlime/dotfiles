@@ -674,7 +674,7 @@
       ;; (require 'gptel-integrations)
       ;; (gptel-mcp-connect)
       (setq gptel-backend
-        (gptel-make-openai "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
+        (gptel-make-openai "StinkGPT"
           :protocol "http"
           :host "10.69.42.200:9420"
           :stream t
@@ -685,10 +685,10 @@
                             :min_p 0
                             :top_p 0.8
                             :top_k 20)
-          :models '("QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"))
+          :models '("StinkGPT"))
         gptel-temperature 0.7
         gptel-stream t
-        gptel-model "QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
+        gptel-model "StinkGPT"
         gptel-default-mode #'org-mode
         gptel--system-message 
         "You are a LLM that lives in Emacs. Respond conciesly. 
