@@ -14,6 +14,8 @@ let cfg = config.homeMods.tmux; in
         run-shell ${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux
         run-shell ${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/catppuccin/catppuccin.tmux
         setw -g mouse on
+        set -g set-clipboard on
+        set -g base-index 1
 
         bind-key h select-pane -L
         bind-key j select-pane -D

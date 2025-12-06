@@ -730,8 +730,11 @@
 *** PyVenv
 #+begin_src emacs-lisp
 (use-package pyvenv
-  :config
-    (pyvenv-mode 1))
+  :hook 
+    (python-ts-mode . (lambda ()
+      (let ((venv-dir (concat (vc-root-dir) ".venv")))
+        (pyvenv-activate venv-dir)
+        (eglot-reconnect (eglot-current-server))))))
 #+end_src
 ** Communication 
 *** ERC

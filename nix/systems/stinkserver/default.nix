@@ -17,8 +17,8 @@
     gnomerdp.enable = true;
     firewall = {
       enable = true;  
-      TCPPorts = [ 1313 ];
-      BothPorts = [ 1313 ];
+      TCPPorts = [ 1313 1314 ];
+      BothPorts = [ 1313 1314 ];
     };
   };
   security.rtkit.enable = true;
@@ -34,8 +34,8 @@
   networking = {
    hostName = "stinkserver"; 
    firewall = {
-      allowedTCPPorts = [ 1313 ];
-      allowedUDPPorts = [ 1313 ];
+      allowedTCPPorts = [ 1313 1314];
+      allowedUDPPorts = [ 1313 1314 ];
    };
   };
   security.acme = {

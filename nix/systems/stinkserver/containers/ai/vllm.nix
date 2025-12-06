@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   systemd.tmpfiles.rules = [
     "d /configs/vllm 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
@@ -11,16 +11,32 @@
      volumes = [
        "/configs/vllm:/root/.cache/huggingface"
      ];
+     podman.sdnotify = "healthy";
      cmd = [
+       # "--tool-call-parser=hermes"
+       # "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
+       # "--enable-auto-tool-choice"
+       # "--gpu-memory-utilization=0.945"
+       # "--max-model-len=22400"
+       # "--dtype=float16"
+
        "--tool-call-parser=hermes"
-       "--enable-auto-tool-choice"
-       "--swap-space=8"
-       "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
        # "--model=huihui-ai/Huihui-Qwen3-VL-30B-A3B-Instruct-abliterated"
-       "--gpu-memory-utilization=0.92"
-       # "--override-generation-config={'temperature': 0.7,'presence_penalty': 1.5,'top_p':0.8,'min_p':0,'top_k': 20}"
-       "--max-model-len=12000" ];
-     extraOptions = [ "--ipc=host" "--device=nvidia.com/gpu=all" ];
+       "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
+       "--enable-auto-tool-choice"
+       "--served-model-name=StinkGPT"
+       "--gpu-memory-utilization=0.90"
+       "--max-model-len=12000"
+       "--max-num-seqs=8"
+     ];
+     extraOptions = [
+       "--ipc=host"
+       "--device=nvidia.com/gpu=all"
+       "--health-cmd=curl -f http://10.69.42.200:8282/health"
+       "--health-retries=10"
+       "--health-interval=30s"
+       "--health-start-period=240s"
+     ];
    };  
   };
 }

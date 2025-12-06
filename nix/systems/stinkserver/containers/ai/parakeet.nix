@@ -15,6 +15,7 @@
        "/configs/parakeet/data:/data"
      ];
      # extraOptions = [ "--device=nvidia.com/gpu=all" ];
+     # dependsOn = [ "vllm" ];
    };  
   };
 }
