@@ -17,8 +17,8 @@
     gnomerdp.enable = true;
     firewall = {
       enable = true;  
-      TCPPorts = [ 1313 1314 ];
-      BothPorts = [ 1313 1314 ];
+      TCPPorts = [ 1313 1314 5002 10200 ];
+      BothPorts = [ 1313 1314 5002 10200 ];
     };
   };
   security.rtkit.enable = true;
