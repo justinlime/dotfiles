@@ -31,6 +31,9 @@ let cfg = config.sysMods.gnomerdp; in
       ''; 
     };
     services.gnome.gnome-remote-desktop.enable = true;
+    systemd.services.gnome-remote-desktop = {
+      wantedBy = [ "graphical.target" ];
+    };
     # These commands must be run imperatively below for the first setup.
 
     # sudo -u gnome-remote-desktop winpr-makecert -silent -rdp -path ~gnome-remote-desktop rdp-tls
