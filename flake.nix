@@ -1,8 +1,8 @@
 {
   outputs = { nixpkgs, home-manager, lanzaboote, chaotic, ... }@inputs:
   let
-    inherit (builtins) head elemAt attrNames readDir; 
-    inherit (nixpkgs.lib) importTOML flatten genAttrs splitString;
+    inherit (builtins) elemAt attrNames readDir; 
+    inherit (nixpkgs.lib) flatten genAttrs splitString;
 
     # Supported Systems
     systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
@@ -11,19 +11,22 @@
 
     # Prefix every string in a given LIST with a given FLAG, seperated by dots
     #
-    # EX: genProfileNames [ "justinlime@jenovo" "justinlime1999@oracle" ] "x86_64-linux" => [ "justinlime@jenovo.x86_64-linux" "justinlime1999@oracle.x86_64-linux"]
-    genProfileNames = list: flag: (map (x: "${flag}.${x}") list);
+    # EX: getProfileNames [ "justinlime@jenovo" "justinlime1999@oracle" ] "x86_64-linux" => [ "justinlime@jenovo.x86_64-linux" "justinlime1999@oracle.x86_64-linux"]
+    getProfileNames = list: flag: (map (x: "${flag}.${x}") list);
 
-    # Use the given FUNC to generate an attribute set, whose attribute name's are a profile,
-    # based upon the names of the subdirs found in the given DIR, and the available systems.
-    applyProfiles = dir: func: (genAttrs
-        (flatten (map (genProfileNames systems)
+    # Generate a list of profile names based on the names of the subdirs in a given DIR
+    # Pass each profile name to a given FUNC
+    # FUNC should generate an attrset (like nixosSystem, or homeManagerConfiguration) using the profile name
+    # Each generated attrset is put into a top level attrset, whose attrnames are the generated profile names
+    # Returns the top level attrset
+    genProfiles = dir: func: (genAttrs
+        (flatten (map (getProfileNames systems)
           (attrNames (readDir dir)))) func);
 
-    # Generate SYSTEM, PROFILENAME, and PKGS, based on a given profile.
+    # Return an attrset of SYSTEM, PROFILENAME, and PKGS, based on a given profile.
     #
-    # EX: genParams "justinlime@jenovo.x86_64-linux" => { profileName = "justinlime@jenovo"; system = "x86_64-linux"; pkgs = nixpkgs.legacyPackages.x86-64_linux; }
-    genParams = profile: let split = splitString "." profile; in rec {
+    # EX: getParameters "justinlime@jenovo.x86_64-linux" => { profileName = "justinlime@jenovo"; system = "x86_64-linux"; pkgs = nixpkgs.legacyPackages.x86-64_linux; }
+    getParameters = profile: let split = splitString "." profile; in rec {
       profileName = elemAt split 0;            
       system =  elemAt split 1;         
       pkgs = nixpkgs.legacyPackages.${system};
@@ -37,9 +40,9 @@
     # ${subdirname}.${system} 
     # 
     # EX: justinlime@jenovo.x86_64-linux, justinlime@jenovo.aarch64-linux, justinlime@jenovo.x86_64-darwin, etc.
-    allHomeConfigurations = applyProfiles ./nix/users
+    allHomeConfigurations = genProfiles ./nix/users
       (profile:                               
-        with (genParams profile);
+        with (getParameters profile);
         # Bootstrap a home-manager profile using something like:
         # nix run --extra-experimental-features 'nix-command flakes' github:nix-community/home-manager -- switch --flake path:/home/justinlime/dotfiles#justinlime@jenovo.x86_64-linux --experimental-features 'nix-command flakes'
         #
@@ -52,9 +55,9 @@
             ./nix/users/${profileName}
           ] ++ sharedModules;
         });
-    allSystemConfigurations = applyProfiles ./nix/systems
+    allSystemConfigurations = genProfiles ./nix/systems
       (profile: 
-        with (genParams profile);
+        with (getParameters profile);
         # Bootstrap a system profile using something like:
         # nixos-rebuild switch --flake path:/home/justinlime/dotfiles#stinkserver.x86_64-linux 
         #

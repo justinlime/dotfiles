@@ -14,6 +14,7 @@ let cfg = config.sysMods.kde; in
     xdg.portal = {
       enable = true;
     };
+    programs.kdeconnect.enable = true;
     services = {
       # xserver.enable = true;
       displayManager.sddm = {
