@@ -13,6 +13,7 @@
        PGID = "100";
      };
      ports = [ "9705:9705" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/huntarr:/config"
      ];

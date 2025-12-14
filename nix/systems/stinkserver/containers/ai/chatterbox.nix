@@ -13,6 +13,7 @@
        "5002:5002"
        "10200:10200"
      ];
+     networks = [ "network" ];
      environment = {
        DEVICE = "cuda";
        DYTYPE = "float16";

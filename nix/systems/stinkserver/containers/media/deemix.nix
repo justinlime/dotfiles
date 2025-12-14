@@ -15,6 +15,7 @@
        DEEMIX_SINGLE_USER="true";
      };
      ports = [ "6595:6595" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/deemix:/config"
        "/storage/downloads/deemix:/downloads"

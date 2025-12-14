@@ -13,6 +13,7 @@
        PGID = "100";
      };
      ports = [ "8989:8989" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/sonarr:/config"
        "/storage/downloads:/downloads"

@@ -13,6 +13,7 @@
        PGID = "100";
      };
      ports = [ "1337:80" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/audiobookshelf:/config"
        "/configs/audiobookshelf:/metadata"

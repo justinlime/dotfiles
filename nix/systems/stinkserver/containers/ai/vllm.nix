@@ -8,6 +8,7 @@
      autoStart = true; 
      image = "vllm/vllm-openai:latest";
      ports = [ "8282:8000" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/vllm:/root/.cache/huggingface"
      ];

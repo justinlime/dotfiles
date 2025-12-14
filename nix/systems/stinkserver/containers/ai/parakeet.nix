@@ -11,6 +11,7 @@
      # image = "ghcr.io/tboby/wyoming-onnx-asr-gpu";
      image = "ghcr.io/tboby/wyoming-onnx-asr";
      ports = [ "10300:10300" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/parakeet/data:/data"
      ];

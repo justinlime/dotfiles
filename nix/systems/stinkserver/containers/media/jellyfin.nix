@@ -15,6 +15,7 @@
        PGID = "100";
      };
      ports = [ "8096:8096" "8920:8920" "1900:1900/udp" "7359:7359/udp" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/jellyfin:/config"
        "/storage/pool/media/watch/movies:/movies"
@@ -23,7 +24,7 @@
        "/storage/pool/media/watch:/watch"
        "/storage/pool/media/listen:/listen"
     ];
-     extraOptions = [ "--network=host" "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card0" ];
+     extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card0" ];
     };  
   };
   services.nginx = {

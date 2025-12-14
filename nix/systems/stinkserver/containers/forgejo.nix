@@ -9,6 +9,7 @@
        USER_GID = "100";
      };
      ports = [ "3000:3000" "222:22" ];
+     networks = [ "network" ];
      volumes = [
        "/storage/pool/git:/data"
        "/etc/localtime:/etc/localtime:ro"

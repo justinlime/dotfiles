@@ -14,6 +14,7 @@
        PGID = "100";
      };
      ports = [ "8081:8080" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/sabnzbd:/config"
        "/storage/downloads:/downloads"

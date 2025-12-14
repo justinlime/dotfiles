@@ -19,6 +19,7 @@
        "22000:22000/udp"
        "21027:21027/udp"
      ];
+     networks = [ "network" ];
      volumes = [
        "/configs/syncthing:/config"
        "/home/${config.sysMods.system.username}/sync/notes:/notes"

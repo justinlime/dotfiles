@@ -13,6 +13,7 @@
        PGID = "100";
      };
      ports = [ "4545:4545" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/requestrr:/config"
      ];

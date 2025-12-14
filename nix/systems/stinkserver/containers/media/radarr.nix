@@ -13,6 +13,7 @@
        PGID = "100";
      };
      ports = [ "7878:7878" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/radarr:/config"
        "/storage/downloads:/downloads"

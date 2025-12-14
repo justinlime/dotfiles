@@ -46,6 +46,14 @@
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
+  systemd.services.podman-create-pod = {
+    serviceConfig.Type = "oneshot";
+    wantedBy = [ "multi-user.target" ];
+    script = ''
+      ${pkgs.podman}/bin/podman network exists network || \
+      ${pkgs.podman}/bin/podman network create --subnet 192.168.69.0/24 network
+    '';
+  };
   environment.systemPackages = with pkgs; [
     mergerfs
     snapraid

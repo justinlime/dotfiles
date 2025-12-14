@@ -13,6 +13,7 @@
        PGID = "100";
      };
      ports = [ "32400:32400" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/plex:/config"
        "/storage/pool/media/watch/movies:/movies"

@@ -13,6 +13,7 @@
        PGID = "100";
      };
      ports = [ "9696:9696" ];
+     networks = [ "network" ];
      volumes = [
        "/configs/prowlarr:/config"
      ];
