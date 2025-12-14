@@ -676,7 +676,7 @@
       (setq gptel-backend
         (gptel-make-openai "StinkGPT"
           :protocol "http"
-          :host "10.69.42.200:9420"
+          :host "10.69.42.200:8282"
           :stream t
           :endpoint "/v1/chat/completions"
           :key nil
