@@ -42,6 +42,7 @@
     - [[#mcp][MCP]]
     - [[#gptel][GPTEL]]
       - [[#gptel-magit][GPTEL Magit]]
+      - [[#minuet][Minuet]]
   - [[#eglot][Eglot]]
     - [[#pyvenv][PyVenv]]
   - [[#communication][Communication]]
@@ -676,7 +677,7 @@
       (setq gptel-backend
         (gptel-make-openai "StinkGPT"
           :protocol "http"
-          :host "10.69.42.200:8282"
+          :host "stink.local:8282"
           :stream t
           :endpoint "/v1/chat/completions"
           :key nil
@@ -710,6 +711,54 @@
   :ensure t
   :hook (magit-mode . gptel-magit-install))
 #+end_src
+**** Minuet
+#+begin_src emacs-lisp
+(use-package minuet
+  :vc (minuet :url "https://github.com/milanglacier/minuet-ai.el"
+              :rev "10638b986ee83b15856f89fafac4ea9a689bf67f")
+  :bind
+    (("M-y" . #'minuet-complete-with-minibuffer) ;; use minibuffer for completion
+     ("M-i" . #'minuet-show-suggestion) ;; use overlay for completion
+     ("C-c m" . #'minuet-configure-provider)
+     :map minuet-active-mode-map
+     ;; These keymaps activate only when a minuet suggestion is displayed in the current buffer
+     ("M-p" . #'minuet-previous-suggestion) ;; invoke completion or cycle to next completion
+     ("M-n" . #'minuet-next-suggestion) ;; invoke completion or cycle to previous completion
+     ("M-A" . #'minuet-accept-suggestion) ;; accept whole completion
+     ;; Accept the first line of completion, or N lines with a numeric-prefix:
+     ;; e.g. C-u 2 M-a will accepts 2 lines of completion.
+     ("M-a" . #'minuet-accept-suggestion-line)
+     ("M-e" . #'minuet-dismiss-suggestion))
+    :config
+      (setq minuet-provider 'openai-fim-compatible)
+      (setq minuet-n-completions 1) 
+      (setq minuet-context-window 11000)
+      (setq minuet-request-timeout 10)
+      (setq minuet-auto-suggestion-mode t)
+
+
+      ;; (plist-put minuet-openai-fim-compatible-options :end-point "http://stink.local:1313/v1/completions")
+      (plist-put minuet-openai-fim-compatible-options :end-point "http://stink.local:8282/v1/completions")
+      (plist-put minuet-openai-fim-compatible-options :name "StinkGPT")
+      (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
+      (plist-put minuet-openai-fim-compatible-options :model "StinkGPT")
+      (minuet-set-optional-options minuet-openai-fim-compatible-options :stream t)
+      (minuet-set-optional-options minuet-openai-fim-compatible-options :temperature 0.2)
+      (minuet-set-optional-options minuet-openai-fim-compatible-options :top_p 0.8)
+      (minuet-set-optional-options minuet-openai-fim-compatible-options :min_p 0)
+      (minuet-set-optional-options minuet-openai-fim-compatible-options :top_k 20)
+      (minuet-set-nested-plist minuet-openai-fim-compatible-options nil :template :suffix)
+      (minuet-set-optional-options
+       minuet-openai-fim-compatible-options
+       :prompt
+       (defun minuet-llama-cpp-fim-qwen-prompt-function (ctx)
+           (format "<|fim_prefix|>%s\n%s<|fim_suffix|>%s<|fim_middle|>"
+                   (plist-get ctx :language-and-tab)
+                   (plist-get ctx :before-cursor)
+                   (plist-get ctx :after-cursor)))
+       :template))
+#+end_src
+
 ** Eglot
 #+begin_src emacs-lisp
 ;; Override the binary being used on startup
