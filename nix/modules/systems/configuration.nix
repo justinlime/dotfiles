@@ -97,6 +97,7 @@ let cfg = config.sysMods.system; in
         all-update = "sudo nix flake update ${cfg.flakeDirectory}# && all-switch";
       };
     };
+    services.udev.packages = with pkgs; [ qmk qmk-udev-rules qmk_hid vial ];
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

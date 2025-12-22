@@ -68,6 +68,7 @@
           modules = [
             lanzaboote.nixosModules.lanzaboote 
             chaotic.nixosModules.default
+            inputs.dms.nixosModules.dankMaterialShell
             ./nix/modules/systems
             ./nix/systems/${profileName}
           ] ++ sharedModules;
@@ -97,6 +98,10 @@
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote";  
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
