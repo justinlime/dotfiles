@@ -41,7 +41,7 @@ fi
 
 # Writes to stderr when program isn't available and exits
 # Writes to /dev/null when program is available
-{ which rfkill && which brightnessctl && which loginctl && which kscreen-doctor || exit 1; } >/dev/null
+{ which rfkill && which brightnessctl && which loginctl && which niri || exit 1; } >/dev/null
 
 if [ ! -f "$KBD_BRIGHTNESS_FILE" ] ; then
 	echo Could not find the keyboard brightness file.
@@ -158,7 +158,7 @@ _suspend() {
 	rfkill block wifi
 	rfkill block bluetooth
 	_set_backlight 0
-	kscreen-doctor --dpms off
+  niri msg output eDP-1 off
 	loginctl lock-session
 }
 
@@ -182,7 +182,7 @@ _wake() {
 
 	echo_if_debug "Entered wake"
 
-	kscreen-doctor --dpms on
+  niri msg output eDP-1 on
 
 	unblock_if_blocked_prev "$WIFI_ENABLED" "wifi"
 	unblock_if_blocked_prev "$BT_ENABLED" "bluetooth"

@@ -1,12 +1,13 @@
 { config, lib, pkgs, ... }:
-let cfg = config.sysMods.hyprland; in 
+let cfg = config.sysMods.niri; in 
 {
-  options.sysMods.hyprland = with lib.types; {
+  options.sysMods.niri = with lib.types; {
     enable = lib.mkEnableOption "Enable";
   };
 
   config = lib.mkIf cfg.enable {
     services.displayManager.ly.enable = true;
+    services.upower.enable = true;
     programs.dankMaterialShell = {
       enable = true;
       systemd = {
@@ -21,18 +22,20 @@ let cfg = config.sysMods.hyprland; in
       enableAudioWavelength = true;      # Audio visualizer (cava)
       enableCalendarEvents = true;       # Calendar integration (khal)
     };
-    programs.hyprland.enable = true;
+    programs.niri.enable = true;
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";  
-      HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
-        name = "hyprland-plugins";
-        paths = with pkgs.hyprlandPlugins; [
-          hyprscrolling 
-        ];
-      };
+      XDG_CURRENT_DESKTOP = "sway";
     };
+    programs.obs-studio.enable = true;
+    services.pipewire.enable = true;
     xdg.portal = {
       enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal
+        pkgs.xdg-desktop-portal-gtk
+        pkgs.xdg-desktop-portal-wlr
+      ];
     };
   };
 }

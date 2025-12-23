@@ -17,6 +17,7 @@
     mpd.enable = true;
     theme.enable = true;
     direnv.enable = true;
+    niri.enable = true;
   };
   home.packages = with pkgs; [
     brave 

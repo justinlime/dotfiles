@@ -13,7 +13,9 @@
     usbautomount.enable = true;
     # gnomerdp.enable = true;
     # wayland.enable = true;
-    kde.enable = true;
+    # kde.enable = true;
+
+    niri.enable = true;
     virt.enable = true;
     firewall = {
       enable = true;  
