@@ -29,6 +29,12 @@ let cfg = config.sysMods.gaming; in
       ];
     };
     programs = {
+      # VR
+      # Install SteamVR via steam as well. 
+      alvr = {
+        enable = true;  
+        openFirewall = true;
+      };
       gamescope = {
         enable = true;
         # package = inputs.gamescopeNixpkgs.legacyPackages."x86_64-linux".gamescope;
@@ -42,13 +48,19 @@ let cfg = config.sysMods.gaming; in
     };
     environment = {
       systemPackages = with pkgs; [
-        mangohud_git
-        mangojuice
-        lutris
-        heroic
+        # Compatibility
+        winetricks
+        wineWowPackages.stable
         gamescope-wsi
         protonup-qt
-        vkbasalt
+        steam-run
+        # Overlay
+        mangohud_git
+        mangojuice
+        # Additional Launchers
+        lutris
+        heroic
+        # Lossless Scaling
         lsfg-vk
         lsfg-vk-ui
       ];

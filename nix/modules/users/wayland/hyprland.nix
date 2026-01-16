@@ -1,8 +1,6 @@
 { pkgs, lib, config, jlib, inputs, ... }:
 let
   cfg = config.homeMods.hyprland;
-  theme = config.homeMods.theme;
-  palette = jlib.fullPalette theme.palette;
 in
 {
   options.homeMods.hyprland = with lib.types; {

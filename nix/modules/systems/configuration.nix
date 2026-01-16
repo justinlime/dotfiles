@@ -98,6 +98,7 @@ let cfg = config.sysMods.system; in
       };
     };
     services.udev.packages = with pkgs; [ qmk qmk-udev-rules qmk_hid vial ];
+    programs.nix-ld.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

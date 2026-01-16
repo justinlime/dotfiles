@@ -15,6 +15,7 @@ let cfg = config.sysMods.kde; in
       enable = true;
     };
     programs.kdeconnect.enable = true;
+    # environment.variables = { KWIM_DRM_USE_MODIFIERS = "0"; };
     services = {
       # xserver.enable = true;
       displayManager.sddm = {

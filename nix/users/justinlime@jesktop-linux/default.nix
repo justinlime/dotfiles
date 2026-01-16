@@ -14,6 +14,7 @@
     btop.enable = true;
     foot.enable = true;
     hyprland.enable = true;
+    ranger.enable = true; 
   };
   home.packages = with pkgs; [
     brave 

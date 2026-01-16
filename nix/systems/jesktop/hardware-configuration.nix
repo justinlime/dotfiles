@@ -10,7 +10,6 @@
     lanzaboote = {
      enable = true;  
      pkiBundle = "/var/lib/sbctl";
-     configurationLimit = 4;
     };
     loader = {
       # Lanzaboote replaces systemdboot
