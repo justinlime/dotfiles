@@ -18,14 +18,8 @@ let cfg = config.sysMods.gaming; in
       package = pkgs.ananicy-cpp;
       rulesProvider = pkgs.ananicy-rules-cachyos;
       extraRules = [
-        {
-          "name" = "gamescope";
-          "nice" = "-20";
-        }
-        {
-          "name" = "gamescope-wl";
-          "nice" = "-20";
-        }
+        { "name" = "gamescope"; "nice" = "-20"; }
+        { "name" = "gamescope-wl"; "nice" = "-20"; }
       ];
     };
     programs = {
@@ -47,6 +41,10 @@ let cfg = config.sysMods.gaming; in
       };
     };
     environment = {
+      variables = {
+       "KWIN_FORCE_SW_CURSOR" = "1"; 
+      #  "KWIN_DRM_NO_AMS" = "1"; 
+      };
       systemPackages = with pkgs; [
         # Compatibility
         winetricks

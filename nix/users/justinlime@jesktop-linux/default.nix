@@ -7,13 +7,13 @@
       flakeDirectory = "/home/${username}/dotfiles";
     }; 
     emacs.enable = true;
+    kde.enable = true;
     nvim.enable = true; 
     zsh.enable = true;
     theme.enable = true; 
     tmux.enable = true;
     btop.enable = true;
     foot.enable = true;
-    hyprland.enable = true;
     ranger.enable = true; 
   };
   home.packages = with pkgs; [

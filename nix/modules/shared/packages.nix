@@ -7,6 +7,8 @@ with pkgs; [
   coreutils-full
   zip
   unzip
+  unrar
+  p7zip
   bat
   duf
   btop

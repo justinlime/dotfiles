@@ -6,7 +6,6 @@ let cfg = config.sysMods.hyprland; in
   };
 
   config = lib.mkIf cfg.enable {
-<<<<<<< Updated upstream
     services.displayManager.ly.enable = true;
     programs.dankMaterialShell = {
       enable = true;
@@ -22,8 +21,7 @@ let cfg = config.sysMods.hyprland; in
       enableAudioWavelength = true;      # Audio visualizer (cava)
       enableCalendarEvents = true;       # Calendar integration (khal)
     };
-    programs.hyprland.enable = true;
-=======
+    # programs.hyprland.enable = true;
     programs = {
       obs-studio.enable = true;
       hyprland = {
@@ -31,7 +29,6 @@ let cfg = config.sysMods.hyprland; in
         xwayland.enable = true;
       };
     };
->>>>>>> Stashed changes
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";  
       MOZ_ENABLE_WAYLAND = "1";
