@@ -68,7 +68,7 @@
           modules = [
             lanzaboote.nixosModules.lanzaboote 
             chaotic.nixosModules.default
-            inputs.dms.nixosModules.dankMaterialShell
+            inputs.dms.nixosModules.dank-material-shell
             ./nix/modules/systems
             ./nix/systems/${profileName}
           ] ++ sharedModules;

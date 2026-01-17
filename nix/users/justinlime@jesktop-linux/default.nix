@@ -7,7 +7,6 @@
       flakeDirectory = "/home/${username}/dotfiles";
     }; 
     emacs.enable = true;
-    kde.enable = true;
     nvim.enable = true; 
     zsh.enable = true;
     theme.enable = true; 

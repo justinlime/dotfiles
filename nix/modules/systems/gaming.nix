@@ -42,8 +42,8 @@ let cfg = config.sysMods.gaming; in
     };
     environment = {
       variables = {
-       "KWIN_FORCE_SW_CURSOR" = "1"; 
-      #  "KWIN_DRM_NO_AMS" = "1"; 
+       # "KWIN_FORCE_SW_CURSOR" = "1"; 
+       # "KWIN_DRM_NO_AMS" = "1"; 
       };
       systemPackages = with pkgs; [
         # Compatibility
