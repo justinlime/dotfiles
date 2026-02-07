@@ -14,11 +14,12 @@
     ssh.enable = true;
     usbautomount.enable = true;
     virt.enable = true;
+    # kde.enable = true;
     gnomerdp.enable = true;
     firewall = {
       enable = true;  
-      TCPPorts = [ 1313 1314 5002 10200 ];
-      BothPorts = [ 1313 1314 5002 10200 ];
+      TCPPorts = [ 1313 1314 5002 10200 3999 ];
+      BothPorts = [ 1313 1314 5002 10200 3999 ];
     };
   };
   security.rtkit.enable = true;
@@ -34,7 +35,7 @@
   networking = {
    hostName = "stinkserver"; 
    firewall = {
-      allowedTCPPorts = [ 1313 1314];
+      allowedTCPPorts = [ 1313 1314 ];
       allowedUDPPorts = [ 1313 1314 ];
    };
   };

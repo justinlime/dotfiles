@@ -6,29 +6,22 @@
   virtualisation.oci-containers.containers = {
     vllm = {
      autoStart = true; 
-     image = "vllm/vllm-openai:latest";
+     image = "vllm/vllm-openai:nightly";
      ports = [ "8282:8000" ];
      networks = [ "network" ];
      volumes = [
        "/configs/vllm:/root/.cache/huggingface"
      ];
+
      podman.sdnotify = "healthy";
      cmd = [
-       # "--tool-call-parser=hermes"
-       # "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
-       # "--enable-auto-tool-choice"
-       # "--gpu-memory-utilization=0.945"
-       # "--max-model-len=22400"
-       # "--dtype=float16"
-
        "--tool-call-parser=hermes"
-       # "--model=huihui-ai/Huihui-Qwen3-VL-30B-A3B-Instruct-abliterated"
        "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
        "--enable-auto-tool-choice"
-       "--served-model-name=StinkGPT"
-       "--gpu-memory-utilization=0.90"
+       "--gpu-memory-utilization=0.89"
        "--max-model-len=12000"
        "--max-num-seqs=8"
+       "--served-model-name=StinkGPT"
      ];
      extraOptions = [
        "--ipc=host"
