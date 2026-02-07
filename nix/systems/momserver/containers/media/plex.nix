@@ -12,7 +12,7 @@
        PUID = "1000";
        PGID = "100";
      };
-     ports = [ "32400:32400" ];
+     ports = [ "32401:32400" ];
      networks = [ "network" ];
      volumes = [
        "/configs/plex:/config"
