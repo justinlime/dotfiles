@@ -4,11 +4,11 @@ let cfg = config.homeMods.theme; in
   options.homeMods.theme = with lib.types; {
     enable = lib.mkEnableOption "Enable"; 
     name = lib.mkOption {
-      default = "Catppuccin-GTK-Purple-Dark";
+      default = "Orchis-Dark";
       type = str;
     };
     package = lib.mkOption {
-      default = pkgs.magnetic-catppuccin-gtk.override { accent = [ "purple" ]; };
+      default = pkgs.orchis-theme;
       type = package;
     };
     font.name = lib.mkOption {
@@ -79,6 +79,7 @@ let cfg = config.homeMods.theme; in
     gtk = {
       enable = true;
       font.name = "${cfg.font.name} ${builtins.toString cfg.font.size}";
+      colorScheme = "dark";
       iconTheme = {
         name = cfg.icon.name;
         package = cfg.icon.package;
@@ -91,16 +92,16 @@ let cfg = config.homeMods.theme; in
         name = cfg.name;
         package = cfg.package;
       };
-      gtk3.extraConfig = {
-        Settings = ''
-          gtk-application-prefer-dark-theme=1
-        '';
-      };
-      gtk4.extraConfig = {
-        Settings = ''
-          gtk-application-prefer-dark-theme=1
-        '';
-      };
+      # gtk3.extraConfig = {
+      #   Settings = ''
+      #     gtk-application-prefer-dark-theme=1
+      #   '';
+      # };
+      # gtk4.extraConfig = {
+      #   Settings = ''
+      #     gtk-application-prefer-dark-theme=1
+      #   '';
+      # };
     };
   };
 }

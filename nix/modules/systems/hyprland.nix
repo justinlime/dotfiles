@@ -7,7 +7,7 @@ let cfg = config.sysMods.hyprland; in
 
   config = lib.mkIf cfg.enable {
     services.displayManager.ly.enable = true;
-    programs.dankMaterialShell = {
+    programs.dank-material-shell = {
       enable = true;
       systemd = {
         enable = true;             # Systemd service for auto-start

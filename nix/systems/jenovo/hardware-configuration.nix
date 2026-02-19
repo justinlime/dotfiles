@@ -4,18 +4,18 @@
 { config, lib, pkgs, modulesPath, ... }:
 let
   # Fix sound
-  # conf = pkgs.fetchFromGitHub {
-  #   owner = "alsa-project"; 
-  #   repo = "alsa-ucm-conf";
-  #   rev = "c3314b9ca29861d19164d2b3987745b7170dab06";
-  #   hash = "sha256-e5QEd2sOQosr8xumGEanrh+KY3k09ZGqvylkKqriqlk=";
-  # };
+  conf = pkgs.fetchFromGitHub {
+    owner = "alsa-project"; 
+    repo = "alsa-ucm-conf";
+    rev = "c3314b9ca29861d19164d2b3987745b7170dab06";
+    hash = "sha256-e5QEd2sOQosr8xumGEanrh+KY3k09ZGqvylkKqriqlk=";
+  };
 in
   {
     imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
     boot = {
       supportedFilesystems = [ "ntfs" ];
-      kernelPackages = pkgs.linuxPackages_6_17;
+      # kernelPackages = pkgs.linuxPackages_6_17;
       kernelModules = [ "kvm-intel" ];
       ##### Get resume offset
       ## For non-btrfs:
@@ -82,7 +82,7 @@ in
     hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     environment.sessionVariables = {
       # LIBVA_DRIVER_NAME = "iHD"; # Force intel-media-driver
-      # ALSA_CONFIG_UCM2 = "${conf}/ucm2";
+      ALSA_CONFIG_UCM2 = "${conf}/ucm2"; # Fix audio
     }; 
     services.xserver.videoDrivers = ["intel"];
     hardware.graphics = { 

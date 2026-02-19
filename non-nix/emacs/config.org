@@ -677,7 +677,7 @@
       (setq gptel-backend
         (gptel-make-openai "StinkGPT"
           :protocol "http"
-          :host "stink.local:8282"
+          :host "stink.internal:8282"
           :stream t
           :endpoint "/v1/chat/completions"
           :key nil
@@ -737,8 +737,7 @@
       (setq minuet-auto-suggestion-mode t)
 
 
-      ;; (plist-put minuet-openai-fim-compatible-options :end-point "http://stink.local:1313/v1/completions")
-      (plist-put minuet-openai-fim-compatible-options :end-point "http://stink.local:8282/v1/completions")
+      (plist-put minuet-openai-fim-compatible-options :end-point "http://stink.internal:8282/v1/completions")
       (plist-put minuet-openai-fim-compatible-options :name "StinkGPT")
       (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
       (plist-put minuet-openai-fim-compatible-options :model "StinkGPT")

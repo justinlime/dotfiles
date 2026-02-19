@@ -8,7 +8,13 @@ let cfg = config.sysMods.niri; in
   config = lib.mkIf cfg.enable {
     services.displayManager.ly.enable = true;
     services.upower.enable = true;
-    programs.dankMaterialShell = {
+# power-profiles-daemon
+    services.power-profiles-daemon.enable = true;
+    services.gvfs = {
+      enable = true;
+      package = pkgs.gnome.gvfs;
+    };
+    programs.dank-material-shell= {
       enable = true;
       systemd = {
         enable = true;             # Systemd service for auto-start
@@ -16,7 +22,6 @@ let cfg = config.sysMods.niri; in
       };
       # Core features
       enableSystemMonitoring = true;     # System monitoring widgets (dgop)
-      enableClipboard = true;            # Clipboard history manager
       enableVPN = true;                  # VPN management widget
       enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
       enableAudioWavelength = true;      # Audio visualizer (cava)
