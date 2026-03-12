@@ -34,7 +34,7 @@
           /usr/local/bin/netbird-entrypoint.sh &
           until ip link show wt0 > /dev/null 2>&1; do sleep 1; done
           sleep 3
-          ip link set dev wt0 mtu 1250
+          ip link set dev wt0 mtu 1350
           tc qdisc replace dev wt0 root cake
           wait
         ''
