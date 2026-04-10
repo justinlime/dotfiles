@@ -7,6 +7,7 @@
      environment = {
        USER_UID = "1000";
        USER_GID = "100";
+       ROOT_URL = "https://git.justin-li.me:443";  
      };
      ports = [ "3000:3000" "222:22" ];
      networks = [ "network" ];
@@ -15,20 +16,5 @@
        "/etc/localtime:/etc/localtime:ro"
      ];
     };  
-  };
-  services.nginx = {
-    enable = true;
-    virtualHosts = {
-      "git.justin-li.me" = {
-        serverName = "git.justin-li.me";
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "http://127.0.0.1:3000";
-        };
-      };
-    };
   };
 }

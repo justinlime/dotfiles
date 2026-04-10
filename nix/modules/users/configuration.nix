@@ -39,25 +39,37 @@ let cfg = config.homeMods.home; in
       # Pin channel to flake
       sessionVariables.NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
       shellAliases = {
-        home-switch = "home-manager switch --flake path:${cfg.flakeDirectory}#${profile}";
-        emacs = "COLORTERM=truecolor emacs -nw";
-        ga = "git add";
-        gs = "git status";
-        gb = "git branch";
-        gm = "git merge";
-        gpl = "git pull";
-        gplo = "git pull origin";
-        gps = "git push";
-        gpso = "git push origin";
-        gc = "git commit";
-        gcm = "git commit -m";
-        gch = "git checkout";
-        gchb = "git checkout -b";
-        gcoe = "git config user.email";
-        gcon = "git config user.name";
-        ls = "exa --group-directories-first";
-        cat = "bat -p";
-        cpr = "rsync -ah --info=progress2";
+        "home.switch" = "home-manager switch --flake path:${cfg.flakeDirectory}#${profile}";
+        "emacs" = "COLORTERM=truecolor emacs -nw";
+        "sjctl" = "sudo journalctl -u";
+        "ssctl.dis" = "sudo systemctl disable";
+        "ssctl.en" = "sudo systemctl enable";
+        "ssctl.start" = "sudo systemctl start";
+        "ssctl.stop" = "sudo systemctl stop";
+        "ssctl.res" = "sudo systemctl restart";
+        "jctl" = "journalctl -u";
+        "sctl.dis" = "systemctl --user disable";
+        "sctl.en" = "systemctl --user enable";
+        "sctl.start" = "systemctl --user start";
+        "sctl.stop" = "systemctl --user stop";
+        "sctl.res" = "systemctl --user restart";
+        "ga" = "git add";
+        "gs" = "git status";
+        "gr" = "git rebase";
+        "gb" = "git branch";
+        "gm" = "git merge";
+        "gpl" = "git pull";
+        "gplo" = "git pull origin";
+        "gps" = "git push";
+        "gpso" = "git push origin";
+        "gc" = "git commit";
+        "gcm" = "git commit -m";
+        "gca" = "git commit --amend";
+        "gcan" = "git commit --amend --no-edit";
+        "gch" = "git checkout";
+        "gchb" = "git checkout -b";
+        "gcoe" = "git config user.email";
+        "gcon" = "git config user.name";
       };
 
       packages = with pkgs; [
