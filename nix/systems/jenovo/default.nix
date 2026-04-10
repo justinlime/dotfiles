@@ -22,6 +22,7 @@
       BothPorts = [ 1313 6969 1317 ];
     };
   };
+  services.netbird.enable = true;
   services.logind.settings.Login=  {
     HandlePowerKey = "ignore";
     # HandleLidSwitch = "hibernate";

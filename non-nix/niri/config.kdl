@@ -321,6 +321,14 @@ window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
 }
+window-rule {
+    match app-id="Godot"
+    open-floating false
+}
+window-rule {
+    match app-id="org.godotengine.Editor"
+    open-floating false
+}
 
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
