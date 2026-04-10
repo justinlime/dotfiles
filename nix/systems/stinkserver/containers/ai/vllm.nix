@@ -1,36 +1,55 @@
 { lib, pkgs, ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/vllm 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
-  virtualisation.oci-containers.containers = {
-    vllm = {
-     autoStart = true; 
-     image = "vllm/vllm-openai:nightly";
-     ports = [ "8282:8000" ];
-     networks = [ "network" ];
-     volumes = [
-       "/configs/vllm:/root/.cache/huggingface"
-     ];
-
-     podman.sdnotify = "healthy";
-     cmd = [
-       "--tool-call-parser=hermes"
-       "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
-       "--enable-auto-tool-choice"
-       "--gpu-memory-utilization=0.89"
-       "--max-model-len=12000"
-       "--max-num-seqs=8"
-       "--served-model-name=StinkGPT"
-     ];
-     extraOptions = [
-       "--ipc=host"
-       "--device=nvidia.com/gpu=all"
-       "--health-cmd=curl -f http://10.69.42.200:8282/health"
-       "--health-retries=10"
-       "--health-interval=30s"
-       "--health-start-period=240s"
-     ];
-   };  
-  };
+  # systemd.tmpfiles.rules = [
+  #   "d /configs/vllm 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  # ];
+  # virtualisation.oci-containers.containers = {
+  #   vllm = {
+  #    autoStart = true; 
+  #    image = "vllm/vllm-openai:nightly";
+  #    ports = [ "8282:8000" ];
+  #    networks = [ "network" ];
+  #    volumes = [
+  #      "/configs/vllm:/root/.cache/huggingface"
+  #    ];
+  # 
+  #    podman.sdnotify = "healthy";
+  #    cmd = [
+  #      # "--tool-call-parser=hermes"
+  #      # "--model=QuantTrio/Qwen3-VL-30B-A3B-Instruct-AWQ"
+  #      # "--enable-auto-tool-choice"
+  #      # "--gpu-memory-utilization=0.89"
+  #      # "--max-model-len=12000"
+  #      # "--max-num-seqs=8"
+  #      # "--served-model-name=StinkGPT"
+  # 
+  #      "--reasoning-parser=qwen3"
+  #      "--tool-call-parser=qwen3_coder"
+  #      # "--model=QuantTrio/Qwen3.5-35B-A3B-AWQ"
+  #      # "--model=QuantTrio/Qwen3.5-27B-AWQ"
+  #      "--model=cyankiwi/Qwen3.5-27B-AWQ-4bit"
+  #      # "--speculative-config={\"method\":\"qwen3_next_mtp\",\"num_speculative_tokens\":2}"
+  #      "--enable-auto-tool-choice"
+  #      "--gpu-memory-utilization=0.85"
+  #      "--max-model-len=4000"
+  #      "--max-num-seqs=8"
+  #      "--enforce-eager"
+  #      # "--swap-space=16"
+  #      "--kv-cache-dtype=fp8"
+  #      # "--enable-prefix-caching"
+  #      "--served-model-name=StinkGPT"
+  #    ];
+  #    # environment = {
+  #    #   PYTORCH_ALLOC_CONF= "expandable_segments:True";
+  #    # };
+  #    extraOptions = [
+  #      "--ipc=host"
+  #      "--device=nvidia.com/gpu=all"
+  #      "--health-cmd=curl -f http://10.69.42.200:8282/health"
+  #      "--health-retries=10"
+  #      "--health-interval=30s"
+  #      "--health-start-period=240s"
+  #    ];
+  #  };  
+  # };
 }

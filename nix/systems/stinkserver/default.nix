@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, lib, config, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -18,8 +18,8 @@
     gnomerdp.enable = true;
     firewall = {
       enable = true;  
-      TCPPorts = [ 1313 1314 5002 10200 3999 ];
-      BothPorts = [ 1313 1314 5002 10200 3999 ];
+      TCPPorts = [ 1313 1314 5002 10200 3999 51820 8281 ];
+      BothPorts = [ 1313 1314 5002 10200 3999 51820 8281 ];
     };
   };
   security.rtkit.enable = true;

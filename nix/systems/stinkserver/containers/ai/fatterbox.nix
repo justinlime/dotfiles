@@ -25,7 +25,7 @@
        "/configs/fatterbox/voices:/chatter/voices"
      ];
      extraOptions = [ "--device=nvidia.com/gpu=all" ];
-     dependsOn = [ "vllm" ];
+     # dependsOn = [ "vllm" ];
    };  
   };
 }

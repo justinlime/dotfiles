@@ -16,6 +16,10 @@
         "--cap-add=SYS_RESOURCE"
         "--cap-add=NET_RAW"
         "--device=/dev/net/tun:/dev/net/tun"
+        "--health-cmd=ip link show wt0"
+        "--health-interval=5s"
+        "--health-retries=15"
+        "--health-start-period=10s"
       ];
       environment = {
         "NB_MANAGEMENT_URL" = "https://netbird.justin-li.me";

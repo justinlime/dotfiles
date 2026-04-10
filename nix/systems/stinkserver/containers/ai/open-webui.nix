@@ -21,29 +21,4 @@
      ];
     };  
   };
-  services.nginx = {
-    enable = true;
-    virtualHosts = {
-      "ai.justin-li.me" = {
-        serverName = "ai.justin-li.me";
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "http://127.0.0.1:4242";
-        };
-      };
-      "chat.justin-li.me" = {
-        serverName = "chat.justin-li.me";
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "http://127.0.0.1:4242";
-        };
-      };
-    };
-  };
 }

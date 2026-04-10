@@ -23,7 +23,6 @@ let cfg = config.sysMods.firewall; in
         enable = true;
         allowedTCPPorts = cfg.TCPPorts ++ cfg.BothPorts;
         allowedUDPPorts = cfg.UDPPorts ++ cfg.BothPorts;
-        checkReversePath = false; 
       };
     };
   };
