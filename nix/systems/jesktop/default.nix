@@ -20,8 +20,16 @@
       BothPorts = [ 1313 6969 1317 ];
     };
   };
+  nixpkgs.config.cudaSupport = true;
+  programs.obs-studio = {
+    enable = true; 
+    enableVirtualCamera = true;
+    # package = (pkgs.obs-studio.override {
+    #   cudaSupport = true;
+    # });
+  };
   networking.hostName = "jesktop";
   hardware.ledger.enable = true;
   services.flatpak.enable = true;
-  environment.systemPackages = [ pkgs.nvtopPackages.full ];
+  environment.systemPackages = [ pkgs.nvtopPackages.full pkgs.discord ];
 }

@@ -6,25 +6,22 @@
     ];
   boot = {
     supportedFilesystems = [ "ntfs" ];
-    # For secure boot
-    lanzaboote = {
-     enable = true;  
-     pkiBundle = "/var/lib/sbctl";
-    };
     loader = {
-      # Lanzaboote replaces systemdboot
-      systemd-boot.enable = lib.mkForce false;
-      efi.canTouchEfiVariables = true;
-      timeout = 7;
+      limine = {
+        enable = true;
+        efiInstallAsRemovable = true;
+        secureBoot.enable = true;
+      };
     };
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
       kernelModules = [ ];
     };
-    kernelPackages = pkgs.linuxPackages_cachyos;
-    kernelModules = [ "kvm-amd" ];
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelModules = [ "kvm-amd" "ntsync" ];
     extraModulePackages = [ ];
   };
+  systemd.tmpfiles.rules = [ "f /dev/ntsync 0666 root root -" ];
   
   fileSystems."/" =
     { device = "/dev/disk/by-label/NIXOS";
@@ -68,6 +65,7 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp11s0.useDHCP = lib.mkDefault true;
+  environment.systemPackages = [ pkgs.sbctl ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   services = {

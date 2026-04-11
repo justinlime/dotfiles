@@ -32,7 +32,7 @@ let cfg = config.sysMods.gaming; in
       gamescope = {
         enable = true;
         # package = inputs.gamescopeNixpkgs.legacyPackages."x86_64-linux".gamescope;
-        package = pkgs.gamescope_git;
+        # package = pkgs.gamescope_git;
       };
       steam = {
         enable = true;
@@ -53,7 +53,7 @@ let cfg = config.sysMods.gaming; in
         protonup-qt
         steam-run
         # Overlay
-        mangohud_git
+        mangohud
         mangojuice
         # Additional Launchers
         lutris
@@ -61,6 +61,14 @@ let cfg = config.sysMods.gaming; in
         # Lossless Scaling
         lsfg-vk
         lsfg-vk-ui
+        (steamtinkerlaunch.overrideAttrs (oldAttrs: {
+          src = fetchFromGitHub {
+            owner = "zany130";
+            repo = "steamtinkerlaunch";
+            rev = "a635314cb384b3a1ea8a3312e1c3ff9a7811a2af";
+            hash = "sha256-a/929+wiDGa9O1zQvLa98IEovoboglpoKKyF4xxx7B0=";
+          };
+        }))
       ];
     };
   };

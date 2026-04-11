@@ -1,5 +1,5 @@
 {
-  outputs = { nixpkgs, home-manager, lanzaboote, chaotic, ... }@inputs:
+  outputs = { nixpkgs, home-manager, ... }@inputs:
   let
     inherit (builtins) elemAt attrNames readDir; 
     inherit (nixpkgs.lib) flatten genAttrs splitString;
@@ -66,8 +66,6 @@
           inherit system;
           specialArgs = { inherit profile inputs; }; 
           modules = [
-            lanzaboote.nixosModules.lanzaboote 
-            chaotic.nixosModules.default
             inputs.dms.nixosModules.dank-material-shell
             ./nix/modules/systems
             ./nix/systems/${profileName}
@@ -83,7 +81,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -94,10 +91,6 @@
     };
     fileserver = {
       url = "github:justinlime/go-fileserver";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote";  
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dms = {
