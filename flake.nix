@@ -97,5 +97,9 @@
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    llamacpp = {
+      url = "github:justinlime/llama-cpp";  
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 }

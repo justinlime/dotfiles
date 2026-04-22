@@ -35,8 +35,9 @@
   networking = {
    hostName = "stinkserver"; 
    firewall = {
-      allowedTCPPorts = [ 1313 1314 ];
-      allowedUDPPorts = [ 1313 1314 ];
+     allowedTCPPortRanges = [ { from = 1300; to = 1320; } ];
+     allowedTCPPorts = [ 1313 1314 ];
+     allowedUDPPorts = [ 1313 1314 ];
    };
   };
   security.acme = {
