@@ -42,6 +42,24 @@
         "type": "github"
       }
     },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1730504689,
+        "narHash": "sha256-hgmguH29K2fvs9szpq2r3pz2/8cJd2LPS+b4tfNFCwE=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "506278e768c2a08bec68eb62932193e341f55c90",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -62,6 +80,27 @@
         "type": "github"
       }
     },
+    "llamacpp": {
+      "inputs": {
+        "flake-parts": "flake-parts",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775754125,
+        "narHash": "sha256-4udYhEvii0xPmRiKXYWLhPakPDd1mJppnEFY6uWdv8s=",
+        "owner": "justinlime",
+        "repo": "llama-cpp",
+        "rev": "8590cbff961dbaf1d3a9793fd11d402e248869b9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justinlime",
+        "repo": "llama-cpp",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1770197578,
@@ -76,6 +115,18 @@
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
+      }
+    },
+    "nixpkgs-lib": {
+      "locked": {
+        "lastModified": 1730504152,
+        "narHash": "sha256-lXvH/vOfb4aGYyvFmZK/HlsNsr/0CVWlwYvo2rxJk3s=",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/cc2f28000298e1269cea6612cd06ec9979dd5d7f.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/cc2f28000298e1269cea6612cd06ec9979dd5d7f.tar.gz"
       }
     },
     "pipecord": {
@@ -125,6 +176,7 @@
         "dms": "dms",
         "fileserver": "fileserver",
         "home-manager": "home-manager",
+        "llamacpp": "llamacpp",
         "nixpkgs": "nixpkgs",
         "pipecord": "pipecord"
       }

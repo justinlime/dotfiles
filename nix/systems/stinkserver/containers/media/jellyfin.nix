@@ -8,7 +8,7 @@
   virtualisation.oci-containers.containers = {
     jellyfin = {
      autoStart = true; 
-     image = "lscr.io/linuxserver/jellyfin:10.11.0";
+     image = "lscr.io/linuxserver/jellyfin:latest";
      environment = {
        TZ = "America/Chicago";
        PUID = "1000";
@@ -26,30 +26,5 @@
     ];
      extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card0" ];
     };  
-  };
-  services.nginx = {
-    enable = true;
-    virtualHosts = {
-      "watch.stinkboys.com" = {
-        serverName = "watch.stinkboys.com";
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "http://127.0.0.1:8096";
-        };
-      };
-      "watch.justin-li.me" = {
-        serverName = "watch.justin-li.me";
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyWebsockets = true;
-          recommendedProxySettings = true;
-          proxyPass = "http://127.0.0.1:8096";
-        };
-      };
-    };
   };
 }
