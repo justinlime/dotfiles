@@ -7,10 +7,10 @@
   boot = {
     supportedFilesystems = [ "ntfs" ];
     loader = {
-      limine = {
+      systemd-boot = {
         enable = true;
-        efiInstallAsRemovable = true;
-        secureBoot.enable = true;
+        # efiInstallAsRemovable = true;
+        # secureBoot.enable = true;
       };
     };
     initrd = {
@@ -21,7 +21,6 @@
     kernelModules = [ "kvm-amd" "ntsync" ];
     extraModulePackages = [ ];
   };
-  systemd.tmpfiles.rules = [ "f /dev/ntsync 0666 root root -" ];
   
   fileSystems."/" =
     { device = "/dev/disk/by-label/NIXOS";

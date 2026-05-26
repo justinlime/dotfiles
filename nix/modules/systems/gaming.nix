@@ -9,26 +9,31 @@ let cfg = config.sysMods.gaming; in
     users.users.${config.sysMods.system.username}.extraGroups = [ "gamemode" ];
     # Windows Fonts and shit
     fonts.packages = with pkgs; [ vista-fonts corefonts ];
-    services.scx = {
-      enable = lib.mkForce true;      
-      scheduler = "scx_lavd";
-    };
-    services.ananicy = {
-      enable = true;  
-      package = pkgs.ananicy-cpp;
-      rulesProvider = pkgs.ananicy-rules-cachyos;
-      extraRules = [
-        { "name" = "gamescope"; "nice" = "-20"; }
-        { "name" = "gamescope-wl"; "nice" = "-20"; }
-      ];
-    };
-    programs = {
-      # VR
+    services= {
+      scx = {
+        enable = lib.mkForce true;      
+        scheduler = "scx_lavd";
+      };
+      ananicy = {
+        enable = true;  
+        package = pkgs.ananicy-cpp;
+        rulesProvider = pkgs.ananicy-rules-cachyos;
+        extraRules = [
+          { "name" = "gamescope"; "nice" = "-20"; }
+          { "name" = "gamescope-wl"; "nice" = "-20"; }
+        ];
+      };
       # Install SteamVR via steam as well. 
-      alvr = {
+      # Add this launch option to games:
+      # PRESSURE_VESSEL_FILESYSTEMS_RW=$XDG_RUNTIME_DIR/wivrn/comp_ipc %command%
+      wivrn = {
         enable = true;  
         openFirewall = true;
+        autoStart = true;
+        package = (pkgs.wivrn.override { cudaSupport = true; });
       };
+    };
+    programs = {
       gamescope = {
         enable = true;
         # package = inputs.gamescopeNixpkgs.legacyPackages."x86_64-linux".gamescope;
@@ -48,7 +53,7 @@ let cfg = config.sysMods.gaming; in
       systemPackages = with pkgs; [
         # Compatibility
         winetricks
-        wineWowPackages.stable
+        # wineWow64Packages.stable
         gamescope-wsi
         protonup-qt
         steam-run
@@ -56,19 +61,11 @@ let cfg = config.sysMods.gaming; in
         mangohud
         mangojuice
         # Additional Launchers
-        lutris
+        # lutris
         heroic
         # Lossless Scaling
         lsfg-vk
         lsfg-vk-ui
-        (steamtinkerlaunch.overrideAttrs (oldAttrs: {
-          src = fetchFromGitHub {
-            owner = "zany130";
-            repo = "steamtinkerlaunch";
-            rev = "a635314cb384b3a1ea8a3312e1c3ff9a7811a2af";
-            hash = "sha256-a/929+wiDGa9O1zQvLa98IEovoboglpoKKyF4xxx7B0=";
-          };
-        }))
       ];
     };
   };

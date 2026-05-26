@@ -105,13 +105,17 @@ let cfg = config.sysMods.system; in
         "gchb" = "git checkout -b";
         "gcoe" = "git config user.email";
         "gcon" = "git config user.name";
-        "all.switch" = "nix-switch && home-switch";
+        "all.switch" = "nix.switch && home.switch";
         "nix.switch" = "sudo nixos-rebuild switch --flake path:${cfg.flakeDirectory}#${profile}";
         "all.update" = "sudo nix flake update ${cfg.flakeDirectory}# && all-switch";
       };
     };
     services.udev.packages = with pkgs; [ qmk qmk-udev-rules qmk_hid vial ];
-    programs.nix-ld.enable = true;
+    programs.nix-ld = {
+      enable = true;
+      libraries = pkgs.steam-run.args.multiPkgs pkgs;
+    }; 
+
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

@@ -31,5 +31,5 @@
   networking.hostName = "jesktop";
   hardware.ledger.enable = true;
   services.flatpak.enable = true;
-  environment.systemPackages = [ pkgs.nvtopPackages.full pkgs.discord ];
+  environment.systemPackages = [ pkgs.nvtopPackages.full pkgs.discord  pkgs.love ];
 }
