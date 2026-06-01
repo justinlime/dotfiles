@@ -23,7 +23,7 @@ in
         cursor = {
           style = "beam";
         };
-        colors = rec {
+        colors-dark = rec {
           alpha="1.0";
           background="${palette.crust}";
           # background="${custom.background}";

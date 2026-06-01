@@ -39,7 +39,7 @@ let cfg = config.sysMods.system; in
       users.${cfg.username} = {
         isNormalUser = true;
         initialPassword = "gigachad";
-        extraGroups = [ "wheel" "storage" "video" "plugdev" "${cfg.username}" ];
+        extraGroups = [ "wheel" "gamemode" "storage" "video" "plugdev" "${cfg.username}" ];
       };
     };
 

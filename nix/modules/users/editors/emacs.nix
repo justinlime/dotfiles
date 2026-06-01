@@ -31,10 +31,10 @@ let cfg = config.homeMods.emacs; in
       java-language-server
       typescript
       pyright
-      nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
-      nodePackages_latest.bash-language-server
+      vscode-langservers-extracted #HTML,CSS, JSON
+      bash-language-server
       # nodePackages_latest.dockerfile-language-server
-      nodePackages_latest.yaml-language-server
+      yaml-language-server
       # Fonts
       roboto
       nerd-fonts.fira-code

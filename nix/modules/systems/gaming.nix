@@ -10,19 +10,10 @@ let cfg = config.sysMods.gaming; in
     # Windows Fonts and shit
     fonts.packages = with pkgs; [ vista-fonts corefonts ];
     services= {
-      scx = {
-        enable = lib.mkForce true;      
-        scheduler = "scx_lavd";
-      };
-      ananicy = {
-        enable = true;  
-        package = pkgs.ananicy-cpp;
-        rulesProvider = pkgs.ananicy-rules-cachyos;
-        extraRules = [
-          { "name" = "gamescope"; "nice" = "-20"; }
-          { "name" = "gamescope-wl"; "nice" = "-20"; }
-        ];
-      };
+      # scx = {
+      #   enable = lib.mkForce true;      
+      #   scheduler = "scx_lavd";
+      # };
       # Install SteamVR via steam as well. 
       # Add this launch option to games:
       # PRESSURE_VESSEL_FILESYSTEMS_RW=$XDG_RUNTIME_DIR/wivrn/comp_ipc %command%
@@ -34,6 +25,19 @@ let cfg = config.sysMods.gaming; in
       };
     };
     programs = {
+      gamemode = {
+        enable = true;
+        settings = {
+          general = {
+            renice = 10;
+          };
+          custom = {
+            start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
+            end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
+          };
+        }
+        ;  
+      };
       gamescope = {
         enable = true;
         # package = inputs.gamescopeNixpkgs.legacyPackages."x86_64-linux".gamescope;
@@ -41,8 +45,11 @@ let cfg = config.sysMods.gaming; in
       };
       steam = {
         enable = true;
-        # Runs steam in gamescope
-        # gamescopeSession.enable = true;
+        package = pkgs.steam.override {
+          extraPkgs = pkgs: with pkgs; [
+            gamemode
+          ];
+        };
       };
     };
     environment = {

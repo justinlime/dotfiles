@@ -17,9 +17,12 @@
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
       kernelModules = [ ];
     };
-    kernelPackages = pkgs.linuxPackages_latest;
-    kernelModules = [ "kvm-amd" "ntsync" ];
-    extraModulePackages = [ ];
+    kernelPackages = pkgs.linuxPackages_6_18;
+    # Conflicts with Zenergy
+    blacklistedKernelModules = [ "k10temp" ];
+    extraModulePackages = [ config.boot.kernelPackages.zenergy ];
+    # Zenergy is for CPU temps in mangohud
+    kernelModules = [ "kvm-amd" "ntsync" "zenergy" ];
   };
   
   fileSystems."/" =
@@ -71,13 +74,13 @@
     xserver.videoDrivers = [ "nvidia" ];
     scx = {
       enable = true;  
-      scheduler = "scx_lavd";
+      scheduler = "scx_bpfland";
     };
   };
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
       modesetting.enable = true;
       powerManagement.enable = true;
       open = true;

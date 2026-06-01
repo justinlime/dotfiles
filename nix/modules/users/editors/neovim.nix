@@ -18,12 +18,11 @@ let cfg = config.homeMods.nvim; in
       clang-tools #C
       #pkgs_stable.python311Packages.jedi-language-server #Python
       # haskellPackages.hls # Haskell
-      nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
-      nodePackages_latest.vscode-langservers-extracted #HTML,CSS, JSON
-      nodePackages_latest.typescript-language-server #Javascript and Typescript
-      nodePackages_latest.bash-language-server #Bash
+      vscode-langservers-extracted #HTML,CSS, JSON
+      typescript-language-server #Javascript and Typescript
+      bash-language-server #Bash
       # nodePackages_latest.dockerfile-language-server-nodejs #Dockerfiles
-      nodePackages_latest.yaml-language-server #Yaml
+      yaml-language-server #Yaml
     ];
     xdg.configFile = {
       "nvim".source = "${inputs.self}/non-nix/nvim";

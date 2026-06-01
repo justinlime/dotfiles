@@ -20,6 +20,7 @@ let cfg = config.homeMods.home; in
     nixpkgs.config.allowUnfree = true; 
     # nixpkgs.config.permittedInsecurePackages = [ "qtwebengine-5.15.19" ];
     fonts.fontconfig.enable = true;
+    gtk.gtk4.theme = null;
     nix = {
       package = pkgs.nix;
       # Enable nix command and flakes
