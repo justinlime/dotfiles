@@ -31,5 +31,6 @@
   networking.hostName = "jesktop";
   hardware.ledger.enable = true;
   services.flatpak.enable = true;
+  environment.sessionVariables.DOTNET_ROOT = "${pkgs.dotnet-aspnetcore_9}/share/dotnet/";
   environment.systemPackages = [ pkgs.nvtopPackages.full pkgs.discord  pkgs.love ];
 }

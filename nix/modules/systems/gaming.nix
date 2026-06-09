@@ -52,6 +52,14 @@ let cfg = config.sysMods.gaming; in
         };
       };
     };
+    # Fix Lutris, TODO: remove when this isn't needed
+    nixpkgs.overlays = [
+      (_: prev: {
+        openldap = prev.openldap.overrideAttrs {
+          doCheck = !prev.stdenv.hostPlatform.isi686;
+        };
+      })
+    ];
     environment = {
       variables = {
        # "KWIN_FORCE_SW_CURSOR" = "1"; 
@@ -68,7 +76,7 @@ let cfg = config.sysMods.gaming; in
         mangohud
         mangojuice
         # Additional Launchers
-        # lutris
+        lutris
         heroic
         # Lossless Scaling
         lsfg-vk

@@ -16,7 +16,7 @@ in
       settings = {
         main = {
           term = "xterm-256color";
-          font = "${theme.font.name}:size=${builtins.toString theme.font.size}";
+          font = "${theme.font.name}:size=${toString theme.font.size}";
           pad = "15x15 center";
           dpi-aware = "no";
         };
