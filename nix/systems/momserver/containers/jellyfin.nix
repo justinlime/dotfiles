@@ -20,26 +20,8 @@
        "/configs/jellyfin:/config"
        "/storage/pool/media/watch/movies:/movies"
        "/storage/pool/media/watch/tv:/tv"
-       "/storage/pool/media/watch/anime:/anime"
-       "/storage/pool/media/watch:/watch"
-       "/storage/pool/media/listen:/listen"
     ];
-     extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card0" ];
+     extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card0:/dev/dri/card0" ];
     };  
-  };
-  services.nginx = {
-    enable = true;
-    virtualHosts = {
-      "watch.baffuto.justin-li.me" = {
-        serverName = "watch.baffuto.justin-li.me";
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyWebsockets = true;
-          recommendedProxySettings = true;
-          proxyPass = "http://127.0.0.1:8096";
-        };
-      };
-    };
   };
 }
