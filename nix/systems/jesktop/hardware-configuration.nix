@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, inputs, ... }:
 
 {
   imports =
@@ -7,10 +7,38 @@
   boot = {
     supportedFilesystems = [ "ntfs" ];
     loader = {
-      systemd-boot = {
+      limine = {
         enable = true;
-        # efiInstallAsRemovable = true;
-        # secureBoot.enable = true;
+        resolution = "3840x2160";
+        maxGenerations = 10;
+        secureBoot = {
+          enable = true;  
+          autoGenerateKeys = true;
+          autoEnrollKeys = {
+            enable = true;  
+            extraArgs = [
+              "--microsoft"
+              "--firmware-builtin"
+            ];
+          };
+        };
+        # UUID of the Windows EFI partition
+        # Use chainloading to prevent any microsoft files in our Linux EFI
+        # Windows has wiped my shit too many times
+        extraEntries = ''
+          /Windows
+            protocol: efi_chainload
+            path: uuid(940bf089-1ebb-4374-a0ad-0f99230ecbb7):/EFI/Microsoft/Boot/bootmgfw.efi
+        '';
+        style = {
+          interface = {
+            branding = "Jesktop";
+          };
+          wallpapers = [
+            "${inputs.self}/assets/decay.png"
+            "${inputs.self}/assets/floral.png"
+          ];
+        };
       };
     };
     initrd = {
