@@ -68,6 +68,7 @@
           modules = [
             inputs.dms.nixosModules.dank-material-shell
             ./nix/modules/systems
+            inputs.nvidia-pstated.nixosModules.default
             ./nix/systems/${profileName}
           ] ++ sharedModules;
        });
@@ -81,6 +82,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nvidia-pstated = {
+      url = "github:sasha0552/nvidia-pstated"; 
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

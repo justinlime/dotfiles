@@ -8,7 +8,7 @@ let cfg = config.homeMods.emacs; in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       # Runtime
-      emacs30-pgtk
+      emacs31-pgtk
       tree-sitter
       gcc 
       imagemagick

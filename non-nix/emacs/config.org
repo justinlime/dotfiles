@@ -1629,6 +1629,7 @@ it can be passed in POS."
   :vc (pulsar :url "https://github.com/protesilaos/pulsar")
   :config 
     (set-face-attribute 'pulsar-generic nil :background jl/acc-0)
+    (setq pulsar-tty-color "#CBA6F7")
     (pulsar-global-mode 1)
     (setq pulsar-pulse-functions
           '(evil-scroll-up

@@ -145,6 +145,40 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/cc2f28000298e1269cea6612cd06ec9979dd5d7f.tar.gz"
       }
     },
+    "nvapi-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1718895301,
+        "narHash": "sha256-XA3/Gttf4CQFMGbSz+Tp4E2tgunQbUKpd2bnJOFeO5k=",
+        "type": "tarball",
+        "url": "https://download.nvidia.com/XFree86/nvapi-open-source-sdk/R555-OpenSource.tar"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://download.nvidia.com/XFree86/nvapi-open-source-sdk/R555-OpenSource.tar"
+      }
+    },
+    "nvidia-pstated": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nvapi-src": "nvapi-src"
+      },
+      "locked": {
+        "lastModified": 1762121785,
+        "narHash": "sha256-/YdeBZoUhx5P4S43IIVnBqgWry/DjoXCqMSxtgz+oNw=",
+        "owner": "sasha0552",
+        "repo": "nvidia-pstated",
+        "rev": "c67815c7723b2c394c67fb78d12d319d421e376d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sasha0552",
+        "repo": "nvidia-pstated",
+        "type": "github"
+      }
+    },
     "pipecord": {
       "inputs": {
         "nixpkgs": [
@@ -172,6 +206,7 @@
         "home-manager": "home-manager",
         "llamacpp": "llamacpp",
         "nixpkgs": "nixpkgs",
+        "nvidia-pstated": "nvidia-pstated",
         "pipecord": "pipecord"
       }
     }

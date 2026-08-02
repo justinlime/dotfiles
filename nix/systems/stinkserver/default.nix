@@ -18,8 +18,8 @@
     gnomerdp.enable = true;
     firewall = {
       enable = true;  
-      TCPPorts = [ 1313 1314 5002 10200 3999 51820 8281 ];
-      BothPorts = [ 1313 1314 5002 10200 3999 51820 8281 ];
+      TCPPorts = [ 1313 1314 5002 10200 3999 51820 8281 8280 ];
+      BothPorts = [ 1313 1314 5002 10200 3999 51820 8281 8280 ];
     };
   };
   security.rtkit.enable = true;
@@ -31,6 +31,11 @@
     pulse.enable = true;
     wireplumber.enable = true;
   };
+  # services.nvidia-pstated = {
+  #   enable = true; 
+  #   # performanceStateLow = 12;
+  # };
+
   services.flatpak.enable = true;
   networking = {
    hostName = "stinkserver"; 
@@ -48,6 +53,7 @@
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
+  environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}" ];
   systemd.services.podman-create-pod = {
     serviceConfig.Type = "oneshot";
     wantedBy = [ "multi-user.target" ];
@@ -56,6 +62,7 @@
       ${pkgs.podman}/bin/podman network create --subnet 192.168.69.0/24 network
     '';
   };
+
   environment.systemPackages = with pkgs; [
     mergerfs
     snapraid

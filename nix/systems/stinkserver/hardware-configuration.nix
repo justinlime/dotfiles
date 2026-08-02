@@ -98,7 +98,7 @@
     description = "Limit nvidia wattage";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c '/run/current-system/sw/bin/nvidia-smi -pm 1 && /run/current-system/sw/bin/nvidia-smi -pl 220'"; # Replace with your actual command
+      ExecStart = "${pkgs.bash}/bin/bash -c '/run/current-system/sw/bin/nvidia-smi -pm 1 && /run/current-system/sw/bin/nvidia-smi -pl 300'"; # Replace with your actual command
     };
     wantedBy = [ "multi-user.target" ];
   };
@@ -108,7 +108,6 @@
       enable = true;  
     };
     nvidia = {
-      modesetting.enable = true;
       powerManagement.enable = true;
       open = true;
       nvidiaSettings = true;
