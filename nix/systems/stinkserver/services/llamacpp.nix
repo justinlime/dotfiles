@@ -5,7 +5,7 @@
   #   host = "0.0.0.0";
   #   port = 8281;
   #   openFirewall = true;
-  #   model = "/configs/llama-cpp/gemma-4-26B-A4B-it-UD-IQ4_XS.gguf";
+  #   model = "/containers/llama-cpp/gemma-4-26B-A4B-it-UD-IQ4_XS.gguf";
   #   extraFlags = [
   #     "--alias" "StinkGPT"
   #     "--n-gpu-layers" "99"

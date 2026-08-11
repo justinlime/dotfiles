@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   # systemd.tmpfiles.rules = [
-  #   "d /configs/llama-cpp 0755 justinlime justinlime -"
+  #   "d /containers/llama-cpp 0755 justinlime justinlime -"
   # ];
   # virtualisation.oci-containers.containers = {
   #   llama-cpp = {
@@ -10,7 +10,7 @@
   #     ports = [ "8281:8080" ];
   #     networks = [ "network" ];
   #     volumes = [
-  #       "/configs/llama-cpp:/root/.cache/llama.cpp"
+  #       "/containers/llama-cpp:/root/.cache/llama.cpp"
   #     ];
   #     podman.sdnotify = "healthy";
   #     cmd = [

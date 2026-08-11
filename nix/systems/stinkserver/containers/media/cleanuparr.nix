@@ -1,8 +1,5 @@
 { ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/cleanuparr 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
   virtualisation.oci-containers.containers = {
     cleanuparr = {
      autoStart = true; 
@@ -16,7 +13,7 @@
      ports = [ "11011:11011" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/cleanuparr:/config"
+       "/containers/cleanuparr:/config"
      ];
    };  
   };

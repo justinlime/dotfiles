@@ -1,8 +1,5 @@
 { ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/requestrr 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
   virtualisation.oci-containers.containers = {
     requestrr = {
      autoStart = true; 
@@ -15,7 +12,7 @@
      ports = [ "4545:4545" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/requestrr:/config"
+       "/containers/requestrr:/config"
      ];
    };  
   };

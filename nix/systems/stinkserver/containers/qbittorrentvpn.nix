@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   systemd.tmpfiles.rules = [
-    "d /configs/qbittorrentvpn 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+    "d /containers/qbittorrentvpn 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
   ];
   # If the logs look correct, but the webgui is still not accessible, its probably a
   # LAN_NETWORK misconfiguration
@@ -25,7 +25,7 @@
      ports = [ "8080:8080" "57529:57529" "57529:57529/udp" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/qbittorrentvpn:/config"
+       "/containers/qbittorrentvpn:/config"
        "/storage/downloads:/downloads"
      ];
      extraOptions = [ "--privileged" ];

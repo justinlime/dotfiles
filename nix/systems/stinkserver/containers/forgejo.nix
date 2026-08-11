@@ -12,9 +12,9 @@
      ports = [ "3000:3000" "222:22" ];
      networks = [ "network" ];
      volumes = [
-       "/storage/pool/git/git:/data/git"
-       "/configs/forgejo/gitea:/data/gitea"
-       "/configs/forgejo/ssh:/data/ssh"
+       "/storage/pool/git/:/data/git"
+       "/containers/forgejo/gitea:/data/gitea"
+       "/containers/forgejo/ssh:/data/ssh"
        "/etc/localtime:/etc/localtime:ro"
      ];
     };  

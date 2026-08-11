@@ -1,10 +1,5 @@
 { ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/immich 0755 justinlime justinlime -"
-    "d /configs/immich/machinelearning 0755 justinlime justinlime -"
-    "d /configs/immich/db 0755 justinlime justinlime -"
-  ];
   virtualisation.oci-containers.containers = {
     immich-server = {
       autoStart = true;
@@ -21,6 +16,7 @@
       };
       volumes = [
         "/storage/pool/media/photos:/data"
+        "/storage/pool/media/photos/external-upload:/external-upload"
         "/etc/localtime:/etc/localtime:ro"
       ];
       extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card1" ];
@@ -32,7 +28,7 @@
       image = "ghcr.io/immich-app/immich-machine-learning:v3.0.3";
       networks = [ "network" ];
       volumes = [
-        "/configs/immich/machinelearning:/cache"
+        "/containers/immich/machinelearning:/cache"
       ];
       extraOptions = [ "--cpus=4" ];
     };
@@ -53,7 +49,7 @@
       };
       networks = [ "network" ];
       volumes = [
-        "/configs/immich/db:/var/lib/postgresql/data"
+        "/containers/immich/db:/var/lib/postgresql/data"
       ];
       extraOptions = [ "--shm-size=128mb" ];
     };

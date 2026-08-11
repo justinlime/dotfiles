@@ -1,26 +1,15 @@
 { ... }:
-
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/authentik 0755 justinlime justinlime -"
-    "d /configs/authentik/postgresql 0755 justinlime justinlime -"
-    "d /configs/authentik/redis 0755 justinlime justinlime -"
-    "d /configs/authentik/media 0755 justinlime justinlime -"
-    "d /configs/authentik/certs 0755 justinlime justinlime -"
-    "d /configs/authentik/templates 0755 justinlime justinlime -"
-  ];
-
   virtualisation.oci-containers.containers = {
-
     authentik-postgres = {
       autoStart = true;
       image = "docker.io/library/postgres:16-alpine";
       networks = [ "network" ];
       environmentFiles = [
-        "/configs/authentik/authentik.env"
+        "/containers/authentik/authentik.env"
       ];
       volumes = [
-        "/configs/authentik/postgresql:/var/lib/postgresql/data"
+        "/containers/authentik/postgresql:/var/lib/postgresql/data"
       ];
       extraOptions = [
         "--health-cmd=pg_isready -d authentik -U authentik"
@@ -37,7 +26,7 @@
       image = "docker.io/library/redis:alpine";
       networks = [ "network" ];
       volumes = [
-        "/configs/authentik/redis:/data"
+        "/containers/authentik/redis:/data"
       ];
       extraOptions = [
         "--health-cmd=redis-cli ping"
@@ -55,7 +44,7 @@
       cmd = [ "server" ];
       networks = [ "network" ];
       environmentFiles = [
-        "/configs/authentik/authentik.env"
+        "/containers/authentik/authentik.env"
       ];
       ports = [
         "9001:9000"
@@ -69,7 +58,7 @@
         AUTHENTIK_REDIS__HOST = "authentik-redis";
       };
       volumes = [
-        "/configs/authentik/data:/data"
+        "/containers/authentik/data:/data"
       ];
     };
 
@@ -81,7 +70,7 @@
       user = "root";
       networks = [ "network" ];
       environmentFiles = [
-        "/configs/authentik/authentik.env"
+        "/containers/authentik/authentik.env"
       ];
       dependsOn = [
         "authentik-postgres"
@@ -92,9 +81,9 @@
         AUTHENTIK_POSTGRESQL__HOST = "authentik-postgres";
       };
       volumes = [
-        "/configs/authentik/media:/media"
-        "/configs/authentik/certs:/certs"
-        "/configs/authentik/templates:/templates"
+        "/containers/authentik/media:/media"
+        "/containers/authentik/certs:/certs"
+        "/containers/authentik/templates:/templates"
       ];
     };
 

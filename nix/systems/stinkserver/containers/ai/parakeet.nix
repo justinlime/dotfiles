@@ -1,9 +1,5 @@
 { pkgs, ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/parakeet 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-    "d /configs/parakeet/data 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
   virtualisation.oci-containers.containers = {
     parakeet = {
      autoStart = true; 
@@ -13,7 +9,7 @@
      ports = [ "10300:10300" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/parakeet/data:/data"
+       "/containers/parakeet/data:/data"
      ];
      # extraOptions = [ "--device=nvidia.com/gpu=all" ];
      # dependsOn = [ "vllm" ];

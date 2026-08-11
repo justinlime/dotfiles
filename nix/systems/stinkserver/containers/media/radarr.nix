@@ -1,8 +1,5 @@
 { ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/radarr 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
   virtualisation.oci-containers.containers = {
     radarr = {
      autoStart = true; 
@@ -15,7 +12,7 @@
      ports = [ "7878:7878" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/radarr:/config"
+       "/containers/radarr:/config"
        "/storage/downloads:/downloads"
        "/storage/pool/media/watch/movies:/movies"
      ];

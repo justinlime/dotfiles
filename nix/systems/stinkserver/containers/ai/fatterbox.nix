@@ -1,9 +1,9 @@
 { ... }:
 {
   # systemd.tmpfiles.rules = [
-  #   "d /configs/fatterbox 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  #   # "d /configs/fatterbox/venv 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  #   "d /configs/fatterbox/voices 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  #   "d /containers/fatterbox 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  #   # "d /containers/fatterbox/venv 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  #   "d /containers/fatterbox/voices 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
   # ];
   # virtualisation.oci-containers.containers = {
   #   fatterbox = {
@@ -22,7 +22,7 @@
   #      FATTERBOX_TEMPERATURE = "0.8";
   #    };
   #    volumes = [
-  #      "/configs/fatterbox/voices:/chatter/voices"
+  #      "/containers/fatterbox/voices:/chatter/voices"
   #    ];
   #    extraOptions = [ "--device=nvidia.com/gpu=all" ];
   #    # dependsOn = [ "vllm" ];

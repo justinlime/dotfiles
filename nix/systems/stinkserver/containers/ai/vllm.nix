@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   # systemd.tmpfiles.rules = [
-  #   "d /configs/vllm 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
+  #   "d /containers/vllm 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
   # ];
   # virtualisation.oci-containers.containers = {
   #   vllm = {
@@ -10,7 +10,7 @@
   #    ports = [ "8282:8000" ];
   #    networks = [ "network" ];
   #    volumes = [
-  #      "/configs/vllm:/root/.cache/huggingface"
+  #      "/containers/vllm:/root/.cache/huggingface"
   #    ];
   # 
   #    podman.sdnotify = "healthy";

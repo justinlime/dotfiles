@@ -9,12 +9,12 @@
       '';
       # postShutdown = ''
       # '';
-      privateKeyFile = "/configs/wireguard-keys/stinkserver.priv";
+      privateKeyFile = "/containers/wireguard-keys/stinkserver.priv";
       peers = [
         {
           name = "Oracle";
           publicKey = "CL9FrOHvgHX5p6fWyY8JmXL6pMW0ninklTpdfGOuWCA=";
-          presharedKeyFile = "/configs/wireguard-keys/oracle.psk";
+          presharedKeyFile = "/containers/wireguard-keys/oracle.psk";
           endpoint = "158.101.111.126:42069";
           persistentKeepalive = 10;
           allowedIPs = [ "10.42.69.0/24" ];

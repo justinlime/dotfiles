@@ -1,8 +1,5 @@
 { ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/sonarr 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
   virtualisation.oci-containers.containers = {
     sonarr = {
      autoStart = true; 
@@ -15,7 +12,7 @@
      ports = [ "8989:8989" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/sonarr:/config"
+       "/containers/sonarr:/config"
        "/storage/downloads:/downloads"
        "/storage/pool/media/watch/tv:/tv"
      ];

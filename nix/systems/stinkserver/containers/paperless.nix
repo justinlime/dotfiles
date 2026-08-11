@@ -1,14 +1,6 @@
 { ... }:
 
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/paperless 0755 justinlime justinlime -"
-    "d /configs/paperless/data 0755 justinlime justinlime -"
-    "d /configs/paperless/db 0755 justinlime justinlime -"
-    "d /configs/paperless/redisdata 0755 justinlime justinlime -"
-    "d /configs/paperless/paperless-gpt/prompts 0755 justinlime justinlime -"
-    "d /configs/paperless/paperless-gpt/config 0755 justinlime justinlime -"
-  ];
 
   virtualisation.oci-containers.containers = {
 
@@ -17,7 +9,7 @@
       image = "docker.io/valkey/valkey:9-alpine";
       networks = [ "network" ];
       volumes = [
-        "/configs/paperless/redisdata:/data"
+        "/containers/paperless/redisdata:/data"
       ];
     };
 
@@ -31,7 +23,7 @@
         POSTGRES_PASSWORD = "paperless";
       };
       volumes = [
-        "/configs/paperless/db:/var/lib/postgresql"
+        "/containers/paperless/db:/var/lib/postgresql"
       ];
     };
 
@@ -41,7 +33,7 @@
       ports = [ "8888:8000" ];
       networks = [ "network" ];
       environmentFiles = [
-        "/configs/paperless/paperless.env"
+        "/containers/paperless/paperless.env"
       ];
       dependsOn = [
         "paperless-db"
@@ -56,7 +48,7 @@
         PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS="true";
       };
       volumes = [
-        "/configs/paperless/data:/usr/src/paperless/data"
+        "/containers/paperless/data:/usr/src/paperless/data"
         "/storage/pool/documents/docs:/usr/src/paperless/media"
         "/storage/pool/documents/export:/usr/src/paperless/export"
         "/storage/pool/documents/consume:/usr/src/paperless/consume"
@@ -70,7 +62,7 @@
     paperless-gpt = {
       autoStart = true;
       environmentFiles = [
-        "/configs/paperless/paperless.env"
+        "/containers/paperless/paperless.env"
       ];
       image = "icereed/paperless-gpt:latest";
       networks = [ "network" ];
@@ -98,8 +90,8 @@
         LOG_LEVEL = "info";
       };
       volumes = [
-        "/configs/paperless/paperless-gpt/prompts:/app/prompts"
-        "/configs/paperless/paperless-gpt/config:/app/config"
+        "/containers/paperless/paperless-gpt/prompts:/app/prompts"
+        "/containers/paperless/paperless-gpt/config:/app/config"
       ];
       ports = [
         "8094:8080"

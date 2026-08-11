@@ -1,8 +1,5 @@
 { ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/plex 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
   virtualisation.oci-containers.containers = {
     plex = {
      autoStart = true; 
@@ -15,7 +12,7 @@
      ports = [ "32400:32400" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/plex:/config"
+       "/containers/plex:/config"
        "/storage/pool/media/watch/movies:/movies"
        "/storage/pool/media/watch/tv:/tv"
        "/storage/pool/media/watch/anime:/anime"

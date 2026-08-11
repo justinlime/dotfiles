@@ -25,13 +25,18 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/98e9a525-6849-4392-90fb-8ef02d6520c0";
+      device = "/dev/disk/by-label/ROOT";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" ];
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/B196-C4D9";
+      device = "/dev/disk/by-label/BOOT";
       fsType = "vfat";
+    };
+    "/containers" = { # Container configs
+      device = "/dev/disk/by-label/ROOT";
+      fsType = "btrfs";
+      options = [ "subvol=containers" "compress-force=zstd:1" "noatime" "x-systemd.device-timeout=300s" ];
     };
     "/drives/R1-BTRFS-0" = { #20tb
       device = "/dev/disk/by-label/R1-BTRFS-0";

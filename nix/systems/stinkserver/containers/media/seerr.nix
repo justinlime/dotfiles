@@ -1,8 +1,5 @@
 { ... }:
 {
-  systemd.tmpfiles.rules = [
-    "d /configs/seerr 0755 justinlime justinlime -" #The - disables automatic cleanup, so the file wont be removed after a period
-  ];
   virtualisation.oci-containers.containers = {
     seerr = {
      autoStart = true; 
@@ -14,7 +11,7 @@
      ports = [ "5055:5055" ];
      networks = [ "network" ];
      volumes = [
-       "/configs/seerr:/app/config"
+       "/containers/seerr:/app/config"
      ];
      extraOptions = [ "--init" ];
    };  
