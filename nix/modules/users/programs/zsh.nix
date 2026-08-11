@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 let cfg = config.homeMods.zsh; in 
 {
   options.homeMods.zsh = {
@@ -7,18 +7,30 @@ let cfg = config.homeMods.zsh; in
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
+      inputs.iris.packages.${pkgs.stdenv.hostPlatform.system}.default
       fzf
       eza
       fd
       zoxide
     ];
+    xdg.configFile = {
+      "iris/config.toml".source = "${inputs.self}/non-nix/iris/config.toml";  
+    };
     programs.zsh = {
       enable = true;
       autocd = true;
       autosuggestion.enable = true;
       enableCompletion = true;
       syntaxHighlighting.enable = true;
+      oh-my-zsh = {
+        enable = true;  
+        plugins = [ "vi-mode" ];
+      };
       initContent = ''
+        if command -v iris >/dev/null 2>&1; then
+          alias i="iris"
+        fi
+        VI_MODE_SET_CURSOR=true
         setopt appendhistory
         parse_git_branch() {
           git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'

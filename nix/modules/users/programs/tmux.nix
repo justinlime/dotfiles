@@ -17,6 +17,8 @@ let cfg = config.homeMods.tmux; in
         set -g set-clipboard on
         set -g base-index 1
 
+        bind-key q kill-pane
+
         bind-key h select-pane -L
         bind-key j select-pane -D
         bind-key k select-pane -U
@@ -29,6 +31,15 @@ let cfg = config.homeMods.tmux; in
         bind-key -r J resize-pane -D 5
         bind-key -r K resize-pane -U 5
         bind-key -r L resize-pane -R 5
+
+        set-window-option -g mode-keys vi
+        bind-key -T copy-mode-vi v send-key -X begin-selection
+        bind-key -T copy-mode-vi y send-key -X copy-selection-and-cancel
+        bind-key -T copy-mode-vi k send-keys -X scroll-up
+        bind-key -T copy-mode-vi j send-keys -X scroll-down
+        bind-key -T copy-mode-vi C-u send-keys -X halfpage-up
+        bind-key -T copy-mode-vi C-d send-keys -X halfpage-down
+        bind-key -T copy-mode-vi Escape send-keys -X cancel
       '';
     };
   };

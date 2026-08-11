@@ -66,7 +66,6 @@
     - [[#consult][Consult]]
   - [[#completion][Completion]]
     - [[#corfu][Corfu]]
-      - [[#corfu-terminal][Corfu Terminal]]
     - [[#cape][Cape]]
     - [[#orderless][Orderless]]
   - [[#git][Git]]
@@ -1221,14 +1220,6 @@ it can be passed in POS."
             (corfu-quit))
           (corfu-insert)))))
 #+end_src
-**** Corfu Terminal
-#+begin_src emacs-lisp
-(use-package corfu-terminal
-  :if (not window-system)
-  :after corfu
-  :config
-    (corfu-terminal-mode 1))
-#+end_src
 *** Cape
 #+begin_src emacs-lisp
 (use-package cape :defer t)
@@ -1534,7 +1525,9 @@ it can be passed in POS."
 #+end_src
 *** Markdown Mode
 #+begin_src emacs-lisp
-(use-package markdown-mode :mode "\\.md\\'")
+(use-package markdown-mode 
+  :mode "\\.md\\'" 
+  :config (setq markdown-hide-markup t))
 #+end_src
 ** Style
 *** Themes

@@ -82,6 +82,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    iris = {
+      url = "github:versenilvis/iris/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    }; 
     nvidia-pstated = {
       url = "github:sasha0552/nvidia-pstated"; 
       inputs.nixpkgs.follows = "nixpkgs";

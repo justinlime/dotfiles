@@ -33,8 +33,8 @@
       device = "/dev/disk/by-uuid/B196-C4D9";
       fsType = "vfat";
     };
-    "/drives/BTRFS0" = { #20tb
-      device = "/dev/disk/by-uuid/028f290f-d1f7-4b45-b346-47d7864a2e24";
+    "/drives/R1-BTRFS-0" = { #20tb
+      device = "/dev/disk/by-label/R1-BTRFS-0";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
@@ -53,24 +53,20 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
-    "/drives/PARITY0" = { #20tb parity
-      device = "/dev/disk/by-uuid/27ab9146-6226-47fc-8d91-aedc210b9102";
-      fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
-    };
-    "/drives/EXTERNAL0" = { #4TB External 
+    "/drives/EXTERNAL0" = { #4TB
       device = "/dev/disk/by-uuid/78d1947e-0375-4ac3-ad0f-249803877899";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
     "/storage/pool" = {
-      device = "/drives/BTRFS*";
+      # device = "/drives/BTRFS*";
+      device = "/drives/R1-BTRFS-0:/drives/BTRFS1:/drives/BTRFS2:/drives/BTRFS3";
       fsType = "fuse.mergerfs";
       options = [
         "minfreespace=100G"
         "category.create=mfs"
         "x-systemd.device-timeout=300s"
-        "x-systemd.requires=/drives/BTRFS0" "x-systemd.after=/drives/BTRFS0"
+        "x-systemd.requires=/drives/R1-BTRFS-0" "x-systemd.after=/drives/R1-BTRFS-0"
         "x-systemd.requires=/drives/BTRFS1" "x-systemd.after=/drives/BTRFS1"
         "x-systemd.requires=/drives/BTRFS2" "x-systemd.after=/drives/BTRFS2"
         "x-systemd.requires=/drives/BTRFS3" "x-systemd.after=/drives/BTRFS3"

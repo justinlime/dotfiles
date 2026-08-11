@@ -14,6 +14,7 @@
         "server string" = "stinkserver";
         "netbios name" = "stinkserver";
         "change notify" = "yes";
+        "change notify timeout" = 5;
         "kernel change notify" = "yes";
         "security" = "user";
         "guest account" = "nobody";
