@@ -43,18 +43,13 @@
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
-    "/drives/BTRFS1" = { #14tb
-      device = "/dev/disk/by-uuid/37a5c38c-0faf-40df-84ee-037340a90d6f";
+    "/drives/R1-BTRFS-1" = { #20tb
+      device = "/dev/disk/by-label/R1-BTRFS-1";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
-    "/drives/BTRFS2" = { #14tb 
-      device = "/dev/disk/by-uuid/1cdfed35-299b-4b62-93a3-b69e3eebc90e";
-      fsType = "btrfs";
-      options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
-    };
-    "/drives/BTRFS3" = { #12tb
-      device = "/dev/disk/by-uuid/b70381ba-3ddb-48ac-9f21-c0f7b342be78";
+    "/drives/R1-BTRFS-2" = { #20tb
+      device = "/dev/disk/by-label/R1-BTRFS-2";
       fsType = "btrfs";
       options = [ "compress-force=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };
@@ -65,16 +60,16 @@
     };
     "/storage/pool" = {
       # device = "/drives/BTRFS*";
-      device = "/drives/R1-BTRFS-0:/drives/BTRFS1:/drives/BTRFS2:/drives/BTRFS3";
+      # =NC
+      device = "/drives/R1-BTRFS-0:/drives/R1-BTRFS-1:/drives/R1-BTRFS-2";
       fsType = "fuse.mergerfs";
       options = [
         "minfreespace=100G"
         "category.create=mfs"
         "x-systemd.device-timeout=300s"
         "x-systemd.requires=/drives/R1-BTRFS-0" "x-systemd.after=/drives/R1-BTRFS-0"
-        "x-systemd.requires=/drives/BTRFS1" "x-systemd.after=/drives/BTRFS1"
-        "x-systemd.requires=/drives/BTRFS2" "x-systemd.after=/drives/BTRFS2"
-        "x-systemd.requires=/drives/BTRFS3" "x-systemd.after=/drives/BTRFS3"
+        "x-systemd.requires=/drives/R1-BTRFS-1" "x-systemd.after=/drives/R1-BTRFS-1"
+        "x-systemd.requires=/drives/R1-BTRFS-2" "x-systemd.after=/drives/R1-BTRFS-2"
       ];
     };
   };
