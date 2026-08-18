@@ -425,15 +425,21 @@
 #+begin_src emacs-lisp
 (use-package evil-ghostel
   :ensure t
+  :config
+    (setq ghostel-escape 'terminal)
   :after (ghostel evil)
   :hook (ghostel-mode . evil-ghostel-mode))
   
 (use-package ghostel
   :hook (ghostel-mode . (lambda () (display-line-numbers-mode -1)))
+  :general 
+    (:keymaps 'ghostel-semi-char-mode-map
+     :states 'insert
+       "TAB" #'(lambda () (interactive) (insert "\t"))
+       "<tab>" #'(lambda () (interactive) (insert "\t")))
   :ensure t
   :config 
-    (set-face-attribute 'ghostel-default nil
-                    :background "#11111B")
+    (set-face-attribute 'ghostel-default nil :background "#11111B")
     (setq ghostel-ssh-install-terminfo t))
 #+end_src
 ** Toggle Term

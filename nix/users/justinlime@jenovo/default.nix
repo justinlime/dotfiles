@@ -24,7 +24,6 @@
     firefox
     gimp
     mpv
-    neofetch
     obs-studio
     prismlauncher
     speedtest-cli

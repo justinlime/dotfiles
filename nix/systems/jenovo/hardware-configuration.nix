@@ -14,6 +14,22 @@ in
   {
     imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
     boot = {
+      loader = {
+        limine = {
+          enable = true;
+          resolution = "2880x1800";
+          maxGenerations = 10;
+          style = {
+            interface = {
+              branding = "Jesktop";
+            };
+            wallpapers = [
+              "${inputs.self}/assets/decay.png"
+              "${inputs.self}/assets/floral.png"
+            ];
+          };
+        };
+      };
       supportedFilesystems = [ "ntfs" ];
       kernelPackages = pkgs.linuxPackages_6_18;
       kernelModules = [ "kvm-intel" ];
@@ -23,10 +39,10 @@ in
       ## For btrfs: 
       # sudo btrfs inspect-internal map-swapfile -r swap_file
       kernelParams = [ "intel_pstate=passive" "resume_offset=22661317" ];
-      kernelPatches = [{
-          name = "lenovo-slim7i-aura-edition-suspend-fans-fix";
-          patch = "${inputs.self}/nix/systems/jenovo/lenovo-slim7i-aura-edition-suspend-fans-fix.patch";
-      }];
+      # kernelPatches = [{
+      #     name = "lenovo-slim7i-aura-edition-suspend-fans-fix";
+      #     patch = "${inputs.self}/nix/systems/jenovo/lenovo-slim7i-aura-edition-suspend-fans-fix.patch";
+      # }];
       resumeDevice = "/dev/disk/by-uuid/12f2eb04-67cd-460b-a6a5-d51efd59e19c";
       extraModulePackages = [ ];
       initrd = {
@@ -36,11 +52,6 @@ in
           device = "/dev/disk/by-uuid/d1c78b64-7d41-4e25-a329-95a689b70a0c";
           preLVM = true;
         };
-      };
-      loader = {
-        efi.canTouchEfiVariables = true;
-        systemd-boot.enable = true;
-        timeout = 7;
       };
     };
     fileSystems."/" =

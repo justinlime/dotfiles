@@ -6,3 +6,4 @@ window-padding-y = 10,10
 clipboard-read = allow
 clipboard-write = allow
 copy-on-select = true
+confirm-close-surface = false

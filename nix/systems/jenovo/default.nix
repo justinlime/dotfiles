@@ -27,9 +27,6 @@
     HandlePowerKey = "ignore";
     # HandleLidSwitch = "hibernate";
   };
-  programs = {
-    light.enable = true;
-  };
   networking.hostName = "jenovo";
   hardware.ledger.enable = true;
   services = {
