@@ -374,7 +374,7 @@ binds {
     Alt+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Alt+Return hotkey-overlay-title="Open a Terminal" { spawn "foot"; }
+    Alt+Return hotkey-overlay-title="Open a Terminal" { spawn "ghostty"; }
     Alt+D hotkey-overlay-title="Run an Application" { spawn-sh "dms ipc call spotlight toggle"; }
     Alt+N hotkey-overlay-title="Run an Application" { spawn-sh "dms ipc call widget toggle notepadButton"; }
     Alt+Shift+M hotkey-overlay-title="Lock the Screen: swaylock" { spawn-sh "dms ipc call lock lock"; }

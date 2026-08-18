@@ -12,7 +12,7 @@
     theme.enable = true; 
     tmux.enable = true;
     btop.enable = true;
-    foot.enable = true;
+    ghostty.enable = true;
     ranger.enable = true; 
   };
   home.packages = with pkgs; [

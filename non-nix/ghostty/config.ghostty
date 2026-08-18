@@ -1,0 +1,8 @@
+theme = catppuccin-mocha.conf
+shell-integration = zsh
+shell-integration-features = ssh-env,sudo,title,cursor
+window-padding-x = 10,10
+window-padding-y = 10,10
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = true

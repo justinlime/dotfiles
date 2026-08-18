@@ -12,7 +12,7 @@
     tmux.enable = true;
     btop.enable = true;
     rofi.enable = true;
-    foot.enable = true;
+    ghostty.enable = true;
     syncthing.enable = true;
     mpd.enable = true;
     theme.enable = true;

@@ -7,7 +7,7 @@ in
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
-    homeMods.foot.enable = lib.mkForce true;
+    homeMods.ghostty.enable = lib.mkForce true;
     xdg.configFile = {
       "niri/config.kdl".source = "${inputs.self}/non-nix/niri/config.kdl";
     };

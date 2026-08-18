@@ -7,7 +7,7 @@ in
     enable = lib.mkEnableOption "Enable";
   };
   config = lib.mkIf cfg.enable {
-    homeMods.foot.enable = lib.mkForce true;
+    homeMods.ghostty.enable = lib.mkForce true;
     wayland.windowManager.hyprland = {
       enable = true;
       extraConfig = builtins.readFile "${inputs.self}/non-nix/hypr/hyprland.conf";
