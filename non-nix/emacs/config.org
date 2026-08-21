@@ -39,14 +39,7 @@
     - [[#dired-sidetree][Dired Sidetree]]
     - [[#dired-async][Dired Async]]
   - [[#ai][AI]]
-    - [[#eca][ECA]]
-    - [[#gptel][GPTEL]]
-      - [[#gptel-magit][GPTEL Magit]]
-  - [[#eglot][Eglot]]
     - [[#pyvenv][PyVenv]]
-  - [[#communication][Communication]]
-    - [[#erc][ERC]]
-    - [[#ement][Ement]]
   - [[#term][Term]]
   - [[#org][Org]]
     - [[#org-toc][Org Toc]]
@@ -55,7 +48,6 @@
     - [[#org-modern][Org Modern]]
     - [[#org-last-modified][Org Last Modified]]
     - [[#org-roam][Org Roam]]
-    - [[#org-roam-ui][Org Roam UI]]
     - [[#olivetti][Olivetti]]
   - [[#minibuffer][Minibuffer]]
     - [[#vertico][Vertico]]
@@ -161,9 +153,7 @@
 
 ;; Disables all startup warnings, and kills message buffer, comment this out when debugging
 (setq warning-minimum-level :emergency)
-(setq-default message-log-max nil)
-(add-hook 'emacs-startup-hook (lambda () ;Kills the warning buffer for even emergency messages
-  (kill-buffer (get-buffer "*Messages*"))))
+(setq-default message-log-max 1000)
 #+end_src
 **** File litter
 #+begin_src emacs-lisp
@@ -426,7 +416,7 @@
 (use-package evil-ghostel
   :ensure t
   :config
-    (setq ghostel-escape 'terminal)
+    (setq evil-ghostel-escape 'terminal)
   :after (ghostel evil)
   :hook (ghostel-mode . evil-ghostel-mode))
   
@@ -445,15 +435,18 @@
 ** Toggle Term
 #+begin_src emacs-lisp
 (use-package toggle-term
-  :vc (toggle-term :url "https://github.com/justinlime/toggle-term.el")
+  :vc (toggle-term :url "https://github.com/justinlime/toggle-term.el"
+                   :branch "main")
   :general
     (leader
-      "t t" '(toggle-term-toggle :wk "Toggle the active toggle-term")
-      "t f" '(toggle-term-find :wk "Find a toggle-term, or create a new one"))
+      "t t" '(toggle-term-toggle-bottom :wk "Toggle the active toggle-term")
+      "t f" '(toggle-term-find :wk "Find a toggle-term, or create a new one")
+      "t r" '(toggle-term-toggle-right :wk "Toggle the rightmost active toggle-term"))
   :hook (toggle-term-spawn . (lambda () (evil-insert 1)))
   :config
     (setq toggle-term-size 25)
     (setq toggle-term-init-toggle '("ghostel" . "ghostel"))
+    (setq toggle-term-types '(ghostel term shell eshell ielm))
     (setq toggle-term-use-persp t)
     (setq toggle-term-switch-upon-toggle t))
 #+end_src
@@ -662,76 +655,6 @@
                     (hl-line-mode)))))))))
 #+end_src
 ** AI
-*** ECA
-#+begin_src emacs-lisp
-(use-package eca
-  :vc (:url "https://github.com/editor-code-assistant/eca-emacs" :rev :newest))
-#+end_src
-
-*** GPTEL
-#+begin_src emacs-lisp
-(use-package gptel
-  ;; how do I add multiple hooks to gptel mode instead of just
-  ;; visual-line-mode
-    :hook (gptel-mode . (lambda () (visual-line-mode) (gptel-highlight-mode)))
-    :config
-      ;; (require 'gptel-integrations)
-      ;; (gptel-mcp-connect)
-      (setq gptel-backend
-        (gptel-make-openai "StinkGPT"
-          :protocol "http"
-          :host "stink.internal:8282"
-          :stream t
-          :endpoint "/v1/chat/completions"
-          :key nil
-          :request-params '(:temp 0.7
-                            :presence_penalty 1.5
-                            :min_p 0
-                            :top_p 0.8
-                            :top_k 20)
-          :models '("StinkGPT"))
-        gptel-temperature 0.7
-        gptel-stream t
-        gptel-model "StinkGPT"
-        gptel-default-mode #'org-mode
-        gptel--system-message 
-        "You are a LLM that lives in Emacs. Respond conciesly. 
-         All responses must be formatted in org mode, such as: 
-         - headers
-         - bold text
-         - italic text
-         - quotes
-         - code/source blocks
-         - links, etc.          
-
-         Use your internal knowledge to answer the question. 
-         Only use the websearch tool if the question requires external information, is time-sensitive, or if you are uncertain about the answer.
-"))
-#+end_src
-**** GPTEL Magit
-#+begin_src emacs-lisp
-(use-package gptel-magit
-  :ensure t
-  :hook (magit-mode . gptel-magit-install))
-#+end_src
-
-** Eglot
-#+begin_src emacs-lisp
-;; Override the binary being used on startup
-(setq eglot-events-buffer-size 0)
-(with-eval-after-load 'eglot
-  (mapc (lambda (server-remap) (add-to-list 'eglot-server-programs server-remap))
-    '(((java-ts-mode java-mode) . ("java-language-server"))
-      ((nix-ts-mode nix-mode) . ("nixd")))))
-;; Enable modes for eglot
-(add-hook 'find-file-hook (lambda ()
-  (unless (file-remote-p (buffer-file-name)) 
-    (when (member major-mode 
-      '(go-ts-mode python-ts-mode js-ts-mode
-        typescript-ts-mode rust-ts-mode elixir-ts-mode
-        nix-ts-mode csharp-ts-mode csharp-mode java-ts-mode c-ts-mode
-        bash-ts-mode)) (eglot-ensure)))))
-#+end_src
 *** PyVenv
 #+begin_src emacs-lisp
 (use-package pyvenv
@@ -740,49 +663,6 @@
       (let ((venv-dir (concat (vc-root-dir) ".venv")))
         (pyvenv-activate venv-dir)
         (eglot-reconnect (eglot-current-server))))))
-#+end_src
-** Communication 
-*** ERC
-#+begin_src emacs-lisp
-(leader 
-  "m i" '((lambda () (interactive) (persp-switch "irc") (switch-to-buffer (erc-tls))) :wk "IRC with erc-tls"))
-
-(setq erc-prompt (lambda () (concat (buffer-name) " > " ))
-      erc-fill-column 120
-      erc-fill-function 'erc-fill-static
-      erc-fill-static-center 20)
-
-(use-package erc-hl-nicks 
-  :after erc
-  :config
-    (add-to-list 'erc-modules 'hl-nicks))
-
-(use-package erc-image
-  :after erc
-  :config
-    (add-to-list 'erc-modules 'image)
-    (setq erc-image-inline-rescale 300))
-
-(use-package emojify
-  :hook (erc-mode . emojify-mode))
-
-(add-hook 'erc-mode-hook (lambda ()
-  (toggle-truncate-lines) ; truncate lines in erc mode
-  (persp-add-buffer (current-buffer)) ; fix erc buffers not being listed in buffer menu when using perspective.el
-  (corfu-mode -1)
-  (display-line-numbers-mode -1)))
-#+end_src
-*** Ement
-#+begin_src emacs-lisp
-;; connect with @<username>:host.org
-(use-package ement
-  :hook (ement-room-mode . (lambda () (display-line-numbers-mode -1)))
-  :general
-    (leader 
-      "m m" '((lambda () (interactive) (persp-switch "matrix") (ement-connect)) :wk "Matrix with ement"))
-    (:keymaps 'ement-room-minibuffer-map :states 'insert "RET" #'newline)
-  :config
-    (setq ement-notify-dbus-p nil))
 #+end_src
 ** Term
 #+begin_src  emacs-lisp
@@ -1008,17 +888,6 @@ it can be passed in POS."
                   :unnarrowed t)))
     (org-roam-db-autosync-mode 1)
     (require 'org-roam-protocol))
-#+end_src
-
-*** Org Roam UI
-#+begin_src emacs-lisp
-(use-package org-roam-ui
-  :general
-    (leader
-      "r u" '(org-roam-ui-open :wk "Open the roam UI"))
-  :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-open-on-start nil))
 #+end_src
 *** Olivetti
 #+begin_src emacs-lisp
@@ -1556,7 +1425,7 @@ it can be passed in POS."
   :config
     (set-face-attribute 'doom-modeline nil :background jl/bg-0) ; doom mode line background
     (doom-modeline-mode 1)
-    (display-battery-mode 1)
+    (display-battery-mode -1)
     (display-time-mode))
 #+end_src
 *** Nerd Icons

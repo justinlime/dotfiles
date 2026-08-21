@@ -79,12 +79,14 @@
     size = 64 * 1024; #64GB
   }];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp3s0.useDHCP = lib.mkDefault true;
+  networking = {
+    useDHCP = lib.mkDefault true;
+    bridges."br0".interfaces = [ "enp3s0" ];
+    interfaces."enp3s0".useDHCP = false;   # enp3s0 becomes the slave
+    interfaces."br0".useDHCP = true;       # host's DHCP address now comes via the bridge
+    firewall.trustedInterfaces = [ "br0" "wg0" ];
+    networkmanager.unmanaged = [ "enp3s0" "br0" ];
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -94,7 +96,7 @@
     description = "Limit nvidia wattage";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c '/run/current-system/sw/bin/nvidia-smi -pm 1 && /run/current-system/sw/bin/nvidia-smi -pl 300'"; # Replace with your actual command
+      ExecStart = "${pkgs.bash}/bin/bash -c '/run/current-system/sw/bin/nvidia-smi -pm 1 && /run/current-system/sw/bin/nvidia-smi -pl 250'"; # Replace with your actual command
     };
     wantedBy = [ "multi-user.target" ];
   };

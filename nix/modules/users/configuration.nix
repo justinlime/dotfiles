@@ -1,6 +1,5 @@
 { config, lib, profile, inputs, pkgs, ... }:
-let cfg = config.homeMods.home; in 
-{
+let cfg = config.homeMods.home; in {
   options.homeMods.home = with lib.types; {
     username = lib.mkOption {
       type = str;
@@ -37,6 +36,7 @@ let cfg = config.homeMods.home; in
     home = {
       username = cfg.username;
       homeDirectory = cfg.homeDirectory;
+      preferXdgDirectories = true;
       # Pin channel to flake
       sessionVariables.NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
       shellAliases = {
