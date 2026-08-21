@@ -40,8 +40,8 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/drives/BTRFS0" =
-    { device = "/dev/disk/by-label/BTRFS0";
+  fileSystems."/drives/BTRFS1" =
+    { device = "/dev/disk/by-label/BTRFS1";
       fsType = "btrfs";
       options = [ "compress=zstd:1" "noatime" "autodefrag" "x-systemd.device-timeout=300s" ];
     };

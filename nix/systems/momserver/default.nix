@@ -12,7 +12,6 @@
     }; 
     smart.enable = true;
     ssh.enable = true;
-    usbautomount.enable = true;
     virt.enable = true;
     gnomerdp.enable = true;
     firewall = {
