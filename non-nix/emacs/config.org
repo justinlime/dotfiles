@@ -446,7 +446,7 @@
   :config
     (setq toggle-term-size 25)
     (setq toggle-term-init-toggle '("ghostel" . "ghostel"))
-    (setq toggle-term-types '(ghostel term shell eshell ielm))
+    (setq toggle-term-types '(ghostel))
     (setq toggle-term-use-persp t)
     (setq toggle-term-switch-upon-toggle t))
 #+end_src

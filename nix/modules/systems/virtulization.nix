@@ -21,8 +21,11 @@ let cfg = config.sysMods.virt; in
       spiceUSBRedirection.enable = true;
       libvirtd = {
         enable = true;
+        onBoot = "start";
+        onShutdown = "shutdown";
         allowedBridges = ["wlo1"];
         qemu = {
+          # Enable OMVF for UEFI and TPM emulation
           swtpm.enable = true;
         };
       };

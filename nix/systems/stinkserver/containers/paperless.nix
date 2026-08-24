@@ -30,7 +30,7 @@
     paperless-webserver = {
       autoStart = true;
       image = "ghcr.io/paperless-ngx/paperless-ngx:latest";
-      ports = [ "8888:8000" ];
+      ports = [ "8880:8000" ];
       networks = [ "network" ];
       environmentFiles = [
         "/containers/paperless/paperless.env"
@@ -55,7 +55,7 @@
       ];
       podman.sdnotify = "healthy";
       extraOptions = [
-       "--health-cmd=curl -f http://10.69.42.200:8888"
+       "--health-cmd=curl -f http://127.0.0.1:8000"
       ];
     };
 

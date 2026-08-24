@@ -19,7 +19,7 @@
         "/storage/pool/media/photos/external-upload:/external-upload"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" "--device=/dev/dri/card1:/dev/dri/card1" ];
+      extraOptions = [ "--device=/dev/dri/intel-A380-render:/dev/dri/renderD128" ];
     };
     immich-machine-learning = {
       autoStart = true;

@@ -21,7 +21,7 @@
        "/storage/pool/media/watch:/watch"
        "/storage/pool/media/listen:/listen"
     ];
-     extraOptions = [ "--device=/dev/dri/renderD128:/dev/dri/renderD128" ];
+     extraOptions = [ "--device=/dev/dri/intel-A380-render:/dev/dri/renderD128" ];
     };  
   };
 }
