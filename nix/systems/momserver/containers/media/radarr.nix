@@ -18,7 +18,6 @@
        "/configs/radarr:/config"
        "/storage/downloads:/downloads"
        "/storage/pool/media/watch/movies:/movies"
-       "/storage/pool/media/watch:/movies"
      ];
    };  
   };

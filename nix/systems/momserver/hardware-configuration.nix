@@ -47,13 +47,13 @@
     };
 
   fileSystems."/storage/pool" = {
-     device = "/drives/BTRFS*";
+     device = "/drives/BTRFS1";
      fsType = "fuse.mergerfs";
      options = [
        "minfreespace=100G"
        "category.create=mfs"
        "x-systemd.device-timeout=300s"
-       "x-systemd.requires=/drives/BTRFS0" "x-systemd.after=/drives/BTRFS0"
+       "x-systemd.requires=/drives/BTRFS1" "x-systemd.after=/drives/BTRFS1"
      ];
    };
 
