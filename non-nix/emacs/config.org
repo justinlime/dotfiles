@@ -39,6 +39,7 @@
     - [[#dired-sidetree][Dired Sidetree]]
     - [[#dired-async][Dired Async]]
   - [[#ai][AI]]
+    - [[#eglot][Eglot]]
     - [[#pyvenv][PyVenv]]
   - [[#term][Term]]
   - [[#org][Org]]
@@ -429,6 +430,7 @@
        "<tab>" #'(lambda () (interactive) (insert "\t")))
   :ensure t
   :config 
+    (setq ghostel-detect-password-prompts nil)
     (set-face-attribute 'ghostel-default nil :background "#11111B")
     (setq ghostel-ssh-install-terminfo t))
 #+end_src
@@ -655,6 +657,22 @@
                     (hl-line-mode)))))))))
 #+end_src
 ** AI
+*** Eglot
+#+begin_src emacs-lisp
+(setq eglot-events-buffer-size 0)
+(with-eval-after-load 'eglot
+  (mapc (lambda (server-remap) (add-to-list 'eglot-server-programs server-remap))
+    '(((java-ts-mode java-mode) . ("java-language-server"))
+      ((nix-ts-mode nix-mode) . ("nixd")))))
+;; Enable modes for eglot
+(add-hook 'find-file-hook (lambda ()
+  (unless (file-remote-p (buffer-file-name)) 
+    (when (member major-mode 
+      '(go-ts-mode python-ts-mode js-ts-mode
+        typescript-ts-mode rust-ts-mode elixir-ts-mode
+        nix-ts-mode csharp-ts-mode csharp-mode java-ts-mode c-ts-mode
+        bash-ts-mode)) (eglot-ensure)))))
+#+end_src
 *** PyVenv
 #+begin_src emacs-lisp
 (use-package pyvenv
