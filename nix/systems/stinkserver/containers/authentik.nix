@@ -40,7 +40,7 @@
 
     authentik-server = {
       autoStart = true;
-      image = "ghcr.io/goauthentik/server:2026.2";
+      image = "ghcr.io/goauthentik/server:2026.8";
       cmd = [ "server" ];
       networks = [ "network" ];
       environmentFiles = [
@@ -59,13 +59,14 @@
       };
       volumes = [
         "/containers/authentik/data:/data"
+        "/containers/authentik/media:/media"
       ];
     };
 
 
     authentik-worker = {
       autoStart = true;
-      image = "ghcr.io/goauthentik/server:2026.2";
+      image = "ghcr.io/goauthentik/server:2026.8";
       cmd = [ "worker" ];
       user = "root";
       networks = [ "network" ];
@@ -89,7 +90,7 @@
 
     # authentik-ldap = {
     #   autoStart = true;
-    #   image = "ghcr.io/goauthentik/ldap:2026.2";
+    #   image = "ghcr.io/goauthentik/ldap:2026.5";
     #   networks = [ "network" ];
     #   ports = [
     #     "389:3389"   # LDAP
